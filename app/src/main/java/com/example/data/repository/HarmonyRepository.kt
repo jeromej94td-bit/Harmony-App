@@ -1,0 +1,166 @@
+package com.example.data.repository
+
+import com.example.data.api.GeminiClient
+import com.example.data.db.HarmonyDatabase
+import com.example.data.model.AnswerEntity
+import com.example.data.model.ChatMessageEntity
+import com.example.data.model.CoupleStatsEntity
+import com.example.data.model.MomentEntity
+import com.example.data.model.ProfileEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+
+class HarmonyRepository(private val db: HarmonyDatabase) {
+
+    val profileFlow: Flow<ProfileEntity?> = db.profileDao().getProfile()
+    val answersFlow: Flow<List<AnswerEntity>> = db.answerDao().getAllAnswers()
+    val chatMessagesFlow: Flow<List<ChatMessageEntity>> = db.chatDao().getAllMessages()
+    val momentsFlow: Flow<List<MomentEntity>> = db.momentDao().getAllMoments()
+    val statsFlow: Flow<CoupleStatsEntity?> = db.coupleStatsDao().getStats()
+
+    suspend fun ensureInitialData() {
+        // Initialize profile if not present
+        val existingProfile = db.profileDao().getProfile().firstOrNull()
+        if (existingProfile == null) {
+            db.profileDao().insertOrUpdateProfile(
+                ProfileEntity(
+                    id = 1,
+                    userName = "Jerome",
+                    partnerName = "Alex",
+                    startDate = System.currentTimeMillis() - (830L * 24 * 3600 * 1000),
+                    simulatorEnabled = true
+                )
+            )
+        }
+
+        // Initialize chat messages if empty
+        val messages = db.chatDao().getAllMessages().firstOrNull()
+        if (messages.isNullOrEmpty()) {
+            val now = System.currentTimeMillis()
+            db.chatDao().insertMessage(ChatMessageEntity(sender = "them", text = "Hey du 💕 wie war dein Tag?", timestamp = now - 3 * 3600000))
+            db.chatDao().insertMessage(ChatMessageEntity(sender = "me", text = "Stressig — aber jetzt wird’s besser ☺️", timestamp = now - 3 * 3600000 + 60000))
+            db.chatDao().insertMessage(ChatMessageEntity(sender = "them", text = "Ich hab schon an unser Wiedersehen gedacht 🥹", timestamp = now - 2 * 3600000))
+        }
+
+        // Initialize moments if empty
+        val moments = db.momentDao().getAllMoments().firstOrNull()
+        if (moments.isNullOrEmpty()) {
+            val now = System.currentTimeMillis()
+            db.momentDao().insertMoment(
+                MomentEntity(
+                    title = "Unser erstes Videodate",
+                    content = "Vier Stunden geredet und die Zeit vergessen.",
+                    emoji = "🥰",
+                    timestamp = now - (40L * 24 * 3600 * 1000)
+                )
+            )
+            db.momentDao().insertMoment(
+                MomentEntity(
+                    title = "Überraschungspaket",
+                    content = "Kekse und ein Brief — ich musste weinen vor Freude.",
+                    emoji = "💌",
+                    timestamp = now - (12L * 24 * 3600 * 1000)
+                )
+            )
+        }
+
+        // Initialize stats if empty
+        val stats = db.coupleStatsDao().getStats().firstOrNull()
+        if (stats == null) {
+            db.coupleStatsDao().insertOrUpdateStats(CoupleStatsEntity(id = 1, visitedCities = 7, visitedCountries = 3))
+        }
+    }
+
+    suspend fun updateProfile(userName: String, partnerName: String, startDate: Long) {
+        val current = db.profileDao().getProfile().firstOrNull() ?: ProfileEntity()
+        db.profileDao().insertOrUpdateProfile(
+            current.copy(
+                userName = userName,
+                partnerName = partnerName,
+                startDate = startDate
+            )
+        )
+    }
+
+    suspend fun setSimulatorEnabled(enabled: Boolean) {
+        val current = db.profileDao().getProfile().firstOrNull() ?: ProfileEntity()
+        db.profileDao().insertOrUpdateProfile(current.copy(simulatorEnabled = enabled))
+    }
+
+    suspend fun saveAnswer(packId: String, questionIndex: Int, answerText: String) {
+        db.answerDao().insertAnswer(
+            AnswerEntity(
+                packId = packId,
+                questionIndex = questionIndex,
+                answerText = answerText
+            )
+        )
+    }
+
+    suspend fun sendChatMessage(text: String, sender: String = "me") {
+        db.chatDao().insertMessage(ChatMessageEntity(sender = sender, text = text))
+    }
+
+    suspend fun addMoment(title: String, content: String, emoji: String = "💕") {
+        db.momentDao().insertMoment(MomentEntity(title = title, content = content, emoji = emoji))
+    }
+
+    suspend fun updateStats(cities: Int, countries: Int) {
+        db.coupleStatsDao().insertOrUpdateStats(CoupleStatsEntity(id = 1, visitedCities = cities, visitedCountries = countries))
+    }
+
+    // --- GEMINI AI FEATURES ---
+
+    suspend fun rephraseGfk(draftText: String): Result<String> {
+        val prompt = """
+            Formuliere den folgenden Entwurf für eine Nachricht an meinen Partner nach der Gewaltfreien Kommunikation (Rosenberg) um: Beobachtung ohne Bewertung, Gefühl, Bedürfnis, Bitte. Warmherzig, natürlich, alltagstauglich, auf Deutsch. Gib NUR den umformulierten Text aus.
+
+            Entwurf: "$draftText"
+        """.trimIndent()
+
+        return GeminiClient.generateText(prompt)
+    }
+
+    suspend fun generateRelationshipCoachAnalysis(
+        userName: String,
+        partnerName: String,
+        recentChats: List<ChatMessageEntity>,
+        answers: List<AnswerEntity>
+    ): Result<String> {
+        val chatSummary = recentChats.takeLast(15).joinToString("\n") { m ->
+            val senderName = if (m.sender == "me") userName else partnerName
+            "$senderName: ${m.text}"
+        }
+
+        val answerSummary = answers.takeLast(20).joinToString("\n") { a ->
+            "Paket '${a.packId}' (Frage #${a.questionIndex + 1}): ${a.answerText}"
+        }
+
+        val prompt = """
+            Beziehungsdaten von $userName und $partnerName (Fernbeziehung):
+
+            Chats:
+            ${chatSummary.ifBlank { "(noch keine)" }}
+
+            Beantwortete Fragen:
+            ${answerSummary.ifBlank { "(noch keine)" }}
+
+            Erstelle als einfühlsamer Beziehungscoach auf Basis der Gottman-Forschung eine kurze Analyse auf Deutsch, gegliedert in:
+            1. 📈 Kommunikationsmuster
+            2. 💪 Eure Stärken
+            3. 🌱 Ein konkreter Tipp für mehr Nähe trotz Distanz
+        """.trimIndent()
+
+        return GeminiClient.generateText(prompt)
+    }
+
+    suspend fun generateDateIdeas(userName: String, partnerName: String, wishes: String): Result<String> {
+        val prompt = """
+            Generiere drei kreative, konkrete Date-Ideen für ein Paar in einer Fernbeziehung ($userName und $partnerName).
+            Wünsche: ${wishes.ifBlank { "keine besonderen" }}.
+            Die Ideen sollen per Videocall ODER beim nächsten Treffen funktionieren, Nähe schaffen und konkrete Vorbereitungsschritte enthalten. Auf Deutsch, ohne Einleitung.
+        """.trimIndent()
+
+        return GeminiClient.generateText(prompt)
+    }
+}

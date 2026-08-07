@@ -1,0 +1,105 @@
+package com.example.data.db
+
+import android.content.Context
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.data.model.AnswerEntity
+import com.example.data.model.ChatMessageEntity
+import com.example.data.model.CoupleStatsEntity
+import com.example.data.model.MomentEntity
+import com.example.data.model.ProfileEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ProfileDao {
+    @Query("SELECT * FROM profiles WHERE id = 1 LIMIT 1")
+    fun getProfile(): Flow<ProfileEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateProfile(profile: ProfileEntity)
+}
+
+@Dao
+interface AnswerDao {
+    @Query("SELECT * FROM answers")
+    fun getAllAnswers(): Flow<List<AnswerEntity>>
+
+    @Query("SELECT * FROM answers WHERE packId = :packId")
+    fun getAnswersForPack(packId: String): Flow<List<AnswerEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAnswer(answer: AnswerEntity)
+}
+
+@Dao
+interface ChatDao {
+    @Query("SELECT * FROM chat_messages ORDER BY timestamp ASC")
+    fun getAllMessages(): Flow<List<ChatMessageEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMessage(message: ChatMessageEntity)
+}
+
+@Dao
+interface MomentDao {
+    @Query("SELECT * FROM moments ORDER BY timestamp DESC")
+    fun getAllMoments(): Flow<List<MomentEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMoment(moment: MomentEntity)
+
+    @Query("DELETE FROM moments WHERE id = :id")
+    suspend fun deleteMoment(id: Long)
+}
+
+@Dao
+interface CoupleStatsDao {
+    @Query("SELECT * FROM couple_stats WHERE id = 1 LIMIT 1")
+    fun getStats(): Flow<CoupleStatsEntity?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOrUpdateStats(stats: CoupleStatsEntity)
+}
+
+@Database(
+    entities = [
+        ProfileEntity::class,
+        AnswerEntity::class,
+        ChatMessageEntity::class,
+        MomentEntity::class,
+        CoupleStatsEntity::class
+    ],
+    version = 1,
+    exportSchema = false
+)
+abstract class HarmonyDatabase : RoomDatabase() {
+    abstract fun profileDao(): ProfileDao
+    abstract fun answerDao(): AnswerDao
+    abstract fun chatDao(): ChatDao
+    abstract fun momentDao(): MomentDao
+    abstract fun coupleStatsDao(): CoupleStatsDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: HarmonyDatabase? = null
+
+        fun getInstance(context: Context): HarmonyDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    HarmonyDatabase::class.java,
+                    "harmony_database"
+                )
+                    .fallbackToDestructiveMigration(true)
+                    .build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Harmony",
+  "description": "Fragen & Spiele für Paare - Beziehung verfeinern und gemeinsam wachsen",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

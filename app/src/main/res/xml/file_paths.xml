@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Export-Textdateien -->
+    <cache-path
+        name="exports"
+        path="exports/" />
+    <!-- Importierte Bilder aus dem Dev Studio -->
+    <files-path
+        name="dev_assets"
+        path="dev_assets/" />
+</paths>

@@ -1,0 +1,6 @@
+{
+  "name": "Harmony",
+  "description": "Fragen & Spiele für Paare — Stärke eure Beziehung jeden Tag",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
