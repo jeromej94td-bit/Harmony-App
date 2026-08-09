@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.data.model.ProfileEntity
+import com.example.ui.AppLanguage
+import com.example.ui.tr
 import com.example.ui.components.HarmonyCard
 import com.example.ui.components.formatTimestamp
 import com.example.ui.theme.HarmonyBg
@@ -63,6 +65,8 @@ import java.util.Locale
 @Composable
 fun ProfileSheet(
     profile: ProfileEntity,
+    language: AppLanguage = AppLanguage.GERMAN,
+    onLanguageChange: (AppLanguage) -> Unit = {},
     coachLoading: Boolean,
     coachResult: String?,
     dateIdeasLoading: Boolean,
@@ -112,7 +116,7 @@ fun ProfileSheet(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Invite-Code: HRM-8731 · alles freigeschaltet",
+                    text = tr("Invite-Code: HRM-8731 · alles freigeschaltet", "Invite code: HRM-8731 · everything unlocked"),
                     fontSize = 12.sp,
                     color = HarmonyMuted
                 )
@@ -124,14 +128,14 @@ fun ProfileSheet(
             HarmonyCard {
                 Column {
                     Text(
-                        text = "✨ KI-Beziehungscoach",
+                        text = tr("✨ KI-Beziehungscoach", "✨ AI relationship coach"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Analysiert eure Antworten & Chats nach Gottman und GFK.",
+                        text = tr("Analysiert eure Antworten & Chats nach Gottman und GFK.", "Analyzes your answers and chats using Gottman and NVC."),
                         fontSize = 12.5.sp,
                         color = HarmonyMuted,
                         lineHeight = 16.sp
@@ -151,9 +155,9 @@ fun ProfileSheet(
                         if (coachLoading) {
                             CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Analysiere eure Muster...", color = Color.White, fontSize = 13.5.sp)
+                            Text(text = tr("Analysiere eure Muster...", "Analyzing your patterns..."), color = Color.White, fontSize = 13.5.sp)
                         } else {
-                            Text(text = "Analyse starten", color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                            Text(text = tr("Analyse starten", "Start analysis"), color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -194,7 +198,7 @@ fun ProfileSheet(
                     OutlinedTextField(
                         value = dateWishText,
                         onValueChange = { dateWishText = it },
-                        placeholder = { Text("Wünsche? z.B. günstig, draußen", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Wünsche? z.B. günstig, draußen", "Wishes? e.g. affordable, outdoors"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("date_wishes_input"),
@@ -221,9 +225,9 @@ fun ProfileSheet(
                         if (dateIdeasLoading) {
                             CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Sammle Ideen...", color = Color.White, fontSize = 13.5.sp)
+                            Text(text = tr("Sammle Ideen...", "Collecting ideas..."), color = Color.White, fontSize = 13.5.sp)
                         } else {
-                            Text(text = "Ideen generieren", color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                            Text(text = tr("Ideen generieren", "Generate ideas"), color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -254,7 +258,7 @@ fun ProfileSheet(
             HarmonyCard {
                 Column {
                     Text(
-                        text = "Profil",
+                        text = tr("Profil", "Profile"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
@@ -272,7 +276,7 @@ fun ProfileSheet(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "Partner-Simulator", fontSize = 13.5.sp, color = HarmonyText)
+                        Text(text = tr("Partner-Simulator", "Partner simulator"), fontSize = 13.5.sp, color = HarmonyText)
                         Switch(
                             checked = profile.simulatorEnabled,
                             onCheckedChange = { onToggleSimulator() },
@@ -295,7 +299,47 @@ fun ProfileSheet(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.06f))
                     ) {
-                        Text(text = "Bearbeiten", color = HarmonyText, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        Text(text = tr("Bearbeiten", "Edit"), color = HarmonyText, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Language
+            HarmonyCard {
+                Column {
+                    Text(
+                        text = tr("Sprache", "Language"),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = HarmonyText
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Button(
+                            onClick = { onLanguageChange(AppLanguage.GERMAN) },
+                            modifier = Modifier.weight(1f).height(42.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (language == AppLanguage.GERMAN) HarmonyPink else Color.White.copy(alpha = 0.06f)
+                            )
+                        ) {
+                            Text(tr("Deutsch", "German"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Button(
+                            onClick = { onLanguageChange(AppLanguage.ENGLISH) },
+                            modifier = Modifier.weight(1f).height(42.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (language == AppLanguage.ENGLISH) HarmonyPink else Color.White.copy(alpha = 0.06f)
+                            )
+                        ) {
+                            Text(tr("Englisch", "English"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
@@ -313,14 +357,14 @@ fun ProfileSheet(
                         ) {
                             Column {
                                 Text(
-                                    text = "🛠️ Entwickler-Modus",
+                                    text = tr("🛠️ Entwickler-Modus", "🛠️ Developer mode"),
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = HarmonyText
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text(
-                                    text = "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen",
+                                    text = tr("Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen", "Edit games and destinations, import folders, adjust images"),
                                     fontSize = 11.5.sp,
                                     color = HarmonyMuted
                                 )
@@ -339,7 +383,7 @@ fun ProfileSheet(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurple)
                         ) {
-                            Text(text = "Entwickler Studio Öffnen", color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                            Text(text = tr("Entwickler Studio Öffnen", "Open Developer Studio"), color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -354,7 +398,7 @@ fun ProfileSheet(
                     .testTag("close_profile_sheet_button")
             ) {
                 Text(
-                    text = "Schließen",
+                    text = tr("Schließen", "Close"),
                     color = HarmonyPink,
                     fontSize = 13.5.sp,
                     fontWeight = FontWeight.ExtraBold
@@ -381,14 +425,14 @@ fun ProfileSheet(
             ) {
                 Column {
                     Text(
-                        text = "Profil bearbeiten",
+                        text = tr("Profil bearbeiten", "Edit profile"),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Namen und Startdatum eurer Beziehung.",
+                        text = tr("Namen und Startdatum eurer Beziehung.", "Your names and relationship start date."),
                         fontSize = 13.sp,
                         color = HarmonyMuted
                     )
@@ -397,7 +441,7 @@ fun ProfileSheet(
                     OutlinedTextField(
                         value = userEdit,
                         onValueChange = { userEdit = it },
-                        placeholder = { Text("Dein Name", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Dein Name", "Your name"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("edit_user_name_input"),
@@ -414,7 +458,7 @@ fun ProfileSheet(
                     OutlinedTextField(
                         value = partnerEdit,
                         onValueChange = { partnerEdit = it },
-                        placeholder = { Text("Name Partnerin", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Name Partnerin", "Partner's name"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("edit_partner_name_input"),
@@ -431,7 +475,7 @@ fun ProfileSheet(
                     OutlinedTextField(
                         value = startEdit,
                         onValueChange = { startEdit = it },
-                        placeholder = { Text("Zusammen seit (TT.MM.JJJJ)", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Zusammen seit (TT.MM.JJJJ)", "Together since (DD.MM.YYYY)"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("edit_start_date_input"),
