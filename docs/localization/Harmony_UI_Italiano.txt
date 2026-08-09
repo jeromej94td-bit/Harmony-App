@@ -82,31 +82,31 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0020. DE: unterhaltung
       EN: Entertainment
-      IT: intrattenimento
+      IT: Intrattenimento
 
 0021. DE: dasoderdas
       EN: This or That
-      IT: questo o quello
+      IT: Questo o quello
 
 0022. DE: hochzeit
       EN: Wedding
-      IT: matrimonio
+      IT: Matrimonio
 
 0023. DE: kinder
       EN: Children
-      IT: bambini
+      IT: Bambini
 
 0024. DE: reden
       EN: Discussion
-      IT: parlare
+      IT: Parlare
 
 0025. DE: reisen
       EN: Travel
-      IT: viaggio
+      IT: Viaggio
 
 0026. DE: familie
       EN: Family
-      IT: famiglia
+      IT: Famiglia
 
 0027. DE: Zuhause & Alltag
       EN: Home & Everyday Life
@@ -858,11 +858,11 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0214. DE: Selbst kochen
       EN: Cook at Home
-      IT: Cucina te stesso
+      IT: Cucinare a casa
 
 0215. DE: Bestellen
       EN: Order In
-      IT: Ordine
+      IT: Ordinare
 
 0216. DE: Verlobungsringe
       EN: Engagement Rings
@@ -2238,7 +2238,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0559. DE: ⚡ Test
       EN: ⚡ Test
-      IT: ⚡Prova
+      IT: ⚡ Prova
 
 0560. DE: 📤 Export
       EN: 📤 Export
@@ -2914,7 +2914,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0728. DE: Gemüsebeet
       EN: Vegetable Garden
-      IT: orto
+      IT: Orto
 
 0729. DE: Hängematte
       EN: Hammock
@@ -3458,7 +3458,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0864. DE: Fertig: {PAKETE} Pakete · {BILDER} Bilder · {DETAILS}
       EN: Done: {PACKS} packs · {IMAGES} images · {DETAILS}
-      IT: Fatto: {PACKAGES} Pacchetti · {IMAGES} Immagini · {DETAILS}
+      IT: Fatto: {PAKETE} pacchetti · {BILDER} immagini · {DETAILS}
 
 0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
       EN: 🎉 {COUNT} packs/chains and images imported successfully!
@@ -3510,11 +3510,11 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0877. DE: 6 Monate im {ORT}
       EN: 6 months in {PLACE}
-      IT: 6 mesi a {LOCATION}
+      IT: 6 mesi a {ORT}
 
 0878. DE: 1 Jahr lang in {ORT}
       EN: 1 year in {PLACE}
-      IT: 1 anno a {LOCATION}
+      IT: 1 anno a {ORT}
 
 0879. DE: Weil du {OPTION} gewählt hast …
       EN: Because you chose {OPTION}…
@@ -3570,7 +3570,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0892. DE: Jerome
       EN: Jerome
-      IT: Girolamo
+      IT: Jerome
 
 0893. DE: Alex
       EN: Alex
