@@ -986,7 +986,7 @@ fun TotResultsView(
             }
 
             Text(
-                text = pack.title,
+                text = contentText(pack.title),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.White
