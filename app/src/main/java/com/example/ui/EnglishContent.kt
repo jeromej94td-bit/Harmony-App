@@ -2,6 +2,7 @@ package com.example.ui
 
 /** Exact, reviewed English copy for every built-in and generated Harmony content item. */
 internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
+    "Tiere" to "Animals",
     // Categories, topics and shared labels
     "Wer würde eher?" to "Who's more likely?",
     "Zeichnen" to "Drawing",
