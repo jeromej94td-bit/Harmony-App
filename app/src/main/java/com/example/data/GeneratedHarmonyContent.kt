@@ -1,30 +1,37 @@
 package com.example.data
 
 /**
- * ============================================================
- *  AUTO-GENERIERT — NICHT VON HAND BEARBEITEN
- * ============================================================
- *
- * Diese Datei wird vom Dev Studio (Tab "Export") überschrieben.
- * Ablauf:
- *   1. In der App: Bilder-Ordner importieren, Paare prüfen, testen
- *   2. Tab "Export" -> "Für AI Studio exportieren"
- *   3. Die erzeugte .txt in Google AI Studio hochladen
- *      mit dem Hinweis: "Ersetze GeneratedHarmonyContent.kt komplett"
- *
- * VERSION ist ein Zeitstempel. Ändert er sich, schreibt die App beim
- * nächsten Start alle Base64-Bilder einmalig in den internen Speicher.
+ * Generierter Harmony-Inhalt: Eis als "Das oder das"-Spiel.
+ * Die Bilddateien liegen als Android-Drawable-Ressourcen vor und
+ * werden in TotImageProvider explizit den Optionen zugeordnet.
  */
 object GeneratedHarmonyContent {
-
-    const val VERSION: Long = 0L
+    const val VERSION: Long = 1786230000000L
 
     val CATEGORIES: List<GenCategory> = emptyList()
 
-    val PACKS: List<GenPack> = emptyList()
+    val PACKS: List<GenPack> = listOf(
+        GenPack(
+            id = "custom_gourmet_eissorten",
+            title = "Gourmet Eis-Sorten",
+            cat = "tot",
+            topic = "unterhaltung",
+            type = "tot",
+            tags = listOf("dasoderdas", "unterhaltung"),
+            pairs = listOf(
+                "Vanille" to "Schokolade",
+                "Erdbeere" to "Zitrone",
+                "Stracciatella" to "Pistazie",
+                "Mango Sorbet" to "Himbeere",
+                "Salted Caramel" to "Cookie Dough",
+                "Hazelnut" to "White Chocolate",
+                "Walnuss" to "Banane"
+            ),
+            questions = emptyList()
+        )
+    )
 
     val LINK_PACKS: List<GenLinkPack> = emptyList()
 
-    /** Option-Name -> Base64 (JPEG). Lazy, damit beim Start nichts geladen wird. */
     val IMAGES: Map<String, String> by lazy { emptyMap() }
 }
