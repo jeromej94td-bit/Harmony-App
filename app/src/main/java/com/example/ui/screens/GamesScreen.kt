@@ -280,7 +280,7 @@ fun TopicProgressCard(
                 Brush.linearGradient(
                     listOf(
                         HarmonySurface2.copy(alpha = 0.98f),
-                        accent.copy(alpha = 0.10f + pulse * 0.06f),
+                        accent.copy(alpha = 0.14f + pulse * 0.10f),
                         HarmonySurface.copy(alpha = 0.98f)
                     )
                 )
@@ -289,9 +289,9 @@ fun TopicProgressCard(
                 width = 1.35.dp,
                 brush = Brush.linearGradient(
                     listOf(
-                        accent.copy(alpha = pulse),
-                        HarmonyLine,
-                        accent.copy(alpha = pulse * 0.62f)
+                        accent.copy(alpha = 0.58f + pulse * 0.24f),
+                        accent.copy(alpha = 0.18f),
+                        accent.copy(alpha = 0.40f + pulse * 0.18f)
                     )
                 ),
                 shape = cardShape
@@ -330,7 +330,7 @@ fun TopicProgressCard(
                             .clip(RoundedCornerShape(5.dp))
                             .background(
                                 Brush.horizontalGradient(
-                                    listOf(accent, accent.copy(alpha = 0.62f), HarmonyPurpleLight)
+                                    listOf(accent, accent.copy(alpha = 0.78f), accent.copy(alpha = 0.46f))
                                 )
                             )
                     )
@@ -350,14 +350,15 @@ fun TopicProgressCard(
 }
 
 private fun topicAccent(topicId: String): Color = when (topicId) {
-    "aufwaermen" -> Color(0xFFFFC46B)
-    "beziehung" -> Color(0xFFFF6B8F)
-    "sex" -> Color(0xFFFF8A65)
-    "moral" -> Color(0xFFB79AFF)
-    "geld" -> Color(0xFF7BD8CB)
-    "kennen" -> Color(0xFFC89BE0)
-    "reisen" -> Color(0xFF9DB2FF)
-    "familie" -> Color(0xFFFFB6A3)
-    "hobbys" -> Color(0xFF8DE0D0)
-    else -> HarmonyPinkSoft
+    // Gedämpfte Edelsteinpalette: bewusst hochwertig, klar unterscheidbar, nie neon.
+    "aufwaermen" -> Color(0xFFC39A4B) // Antikgold
+    "beziehung" -> Color(0xFFB66A78) // Dusty Rose
+    "sex" -> Color(0xFFA8614E) // Terrakotta
+    "moral" -> Color(0xFF76678F) // Amethyst
+    "geld" -> Color(0xFF6F8C76) // Salbeigrün
+    "kennen" -> Color(0xFFA47A5B) // Kupfer
+    "reisen" -> Color(0xFF617A99) // Saphirblau
+    "familie" -> Color(0xFF8C895C) // Olive
+    "hobbys" -> Color(0xFF4F8580) // Petrol
+    else -> Color(0xFF98758A)
 }
