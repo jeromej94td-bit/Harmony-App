@@ -188,7 +188,7 @@ fun ProfileSheet(
             HarmonyCard {
                 Column {
                     Text(
-                        text = "💡 KI-Date-Ideen",
+                        text = tr("💡 KI-Date-Ideen", "💡 AI date ideas"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
@@ -265,9 +265,9 @@ fun ProfileSheet(
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    ProfileRow(label = "Dein Name", value = profile.userName)
-                    ProfileRow(label = "Partnerin", value = profile.partnerName)
-                    ProfileRow(label = "Zusammen seit", value = formatTimestamp(profile.startDate))
+                    ProfileRow(label = tr("Dein Name", "Your name"), value = profile.userName)
+                    ProfileRow(label = tr("Partnerin", "Partner"), value = profile.partnerName)
+                    ProfileRow(label = tr("Zusammen seit", "Together since"), value = formatTimestamp(profile.startDate))
 
                     Row(
                         modifier = Modifier
