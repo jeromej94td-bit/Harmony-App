@@ -29,6 +29,22 @@ object TotImageProvider {
 
 
     private val directMap: Map<String, Any> = mapOf(
+        // ★ Gourmet Eis-Sorten — generierte lokale Bilder
+        "Vanille" to R.drawable.eis_vanille,
+        "Schokolade" to R.drawable.eis_schokolade,
+        "Erdbeere" to R.drawable.eis_erdbeere,
+        "Zitrone" to R.drawable.eis_zitrone,
+        "Stracciatella" to R.drawable.eis_stracciatella,
+        "Pistazie" to R.drawable.eis_pistazie,
+        "Mango Sorbet" to R.drawable.eis_mango_sorbet,
+        "Himbeere" to R.drawable.eis_himbeere,
+        "Salted Caramel" to R.drawable.eis_salted_caramel,
+        "Cookie Dough" to R.drawable.eis_cookie_dough,
+        "Hazelnut" to R.drawable.eis_hazelnut,
+        "White Chocolate" to R.drawable.eis_white_chocolate,
+        "Walnuss" to R.drawable.eis_walnuss,
+        "Banane" to R.drawable.eis_banane,
+
         // ★ Reiseziele
         "Paris, Frankreich" to "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&auto=format&fit=crop&q=80",
         "Rom, Italien" to "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&auto=format&fit=crop&q=80",
