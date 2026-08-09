@@ -61,6 +61,20 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     private val db = HarmonyDatabase.getInstance(application)
     private val repository = HarmonyRepository(db)
+    private val _appLanguage = MutableStateFlow(LanguageStore.get(application))
+
+    private fun copy(german: String, english: String): String {
+        val language = _appLanguage.value
+        val localized = localizedContent(german, language)
+        return if (localized != german || language != AppLanguage.ENGLISH) localized else english
+    }
+
+    private fun errorDetail(error: Throwable): String =
+        localizedContent(error.localizedMessage ?: error.javaClass.simpleName, _appLanguage.value)
+
+    fun setAppLanguage(language: AppLanguage) {
+        _appLanguage.value = language
+    }
 
     private val _selectedTab = MutableStateFlow(0)
     private val _packFilter = MutableStateFlow("all")
@@ -190,7 +204,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun sendWidget(name: String, emoji: String) {
-        showToast("$emoji „$name\" an Alex gesendet")
+        showToast(copy("$emoji „$name\" an Alex gesendet", "$emoji “$name” sent to Alex"))
     }
 
     // --- QUIZ RUNNER ---
@@ -289,7 +303,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     // --- CHAT ---
 
-    private val SIM_REPLIES = listOf(
+    private val SIM_REPLIES_DE = listOf(
         "Das klingt schön 🥰",
         "Ich vermiss dich gerade richtig",
         "Erzähl mir mehr davon 💕",
@@ -305,7 +319,8 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             val profile = uiState.value.profile
             if (profile.simulatorEnabled) {
                 delay(1200)
-                val reply = SIM_REPLIES[Random().nextInt(SIM_REPLIES.size)]
+                val replies = SIM_REPLIES_DE.map { localizedContent(it, _appLanguage.value) }
+                val reply = replies[Random().nextInt(replies.size)]
                 repository.sendChatMessage(reply, sender = "them")
             }
         }
@@ -320,9 +335,11 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         _gfkLoading.value = true
         _gfkResult.value = null
         viewModelScope.launch {
-            val result = repository.rephraseGfk(draftText)
+            val result = repository.rephraseGfk(draftText, _appLanguage.value)
             _gfkLoading.value = false
-            _gfkResult.value = result.getOrElse { "Fehler bei der Umformulierung: ${it.localizedMessage}" }
+            _gfkResult.value = result.getOrElse {
+                copy("Fehler bei der Umformulierung: ${errorDetail(it)}", "Rephrasing failed: ${errorDetail(it)}")
+            }
         }
     }
 
@@ -341,7 +358,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.addMoment(title, content)
             _isAddMomentOpen.value = false
-            showToast("Moment gespeichert 💞")
+            showToast(copy("Moment gespeichert 💞", "Moment saved 💞"))
         }
     }
 
@@ -374,7 +391,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.updateProfile(userName, partnerName, startDate)
             _isEditProfileOpen.value = false
-            showToast("Profil gespeichert")
+            showToast(copy("Profil gespeichert", "Profile saved"))
         }
     }
 
@@ -389,10 +406,13 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
                 userName = profile.userName,
                 partnerName = profile.partnerName,
                 recentChats = chats,
-                answers = answers
+                answers = answers,
+                language = _appLanguage.value
             )
             _coachLoading.value = false
-            _coachResult.value = result.getOrElse { "Fehler bei der Analyse: ${it.localizedMessage}" }
+            _coachResult.value = result.getOrElse {
+                copy("Fehler bei der Analyse: ${errorDetail(it)}", "Analysis failed: ${errorDetail(it)}")
+            }
         }
     }
 
@@ -404,10 +424,13 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             val result = repository.generateDateIdeas(
                 userName = profile.userName,
                 partnerName = profile.partnerName,
-                wishes = wishes
+                wishes = wishes,
+                language = _appLanguage.value
             )
             _dateIdeasLoading.value = false
-            _dateIdeasResult.value = result.getOrElse { "Fehler bei der Ideengenerierung: ${it.localizedMessage}" }
+            _dateIdeasResult.value = result.getOrElse {
+                copy("Fehler bei der Ideengenerierung: ${errorDetail(it)}", "Idea generation failed: ${errorDetail(it)}")
+            }
         }
     }
 }

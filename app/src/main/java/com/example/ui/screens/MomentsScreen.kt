@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.contentText
 import com.example.ui.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,7 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
+import com.example.ui.components.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -142,7 +143,7 @@ fun MomentsScreen(
                             verticalAlignment = Alignment.Top
                         ) {
                             Text(
-                                text = "${moment.emoji} ${moment.title}",
+                                text = "${moment.emoji} ${contentText(moment.title)}",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyText

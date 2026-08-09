@@ -7,6 +7,7 @@ import com.example.data.model.ChatMessageEntity
 import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
+import com.example.ui.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -111,8 +112,12 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
 
     // --- GEMINI AI FEATURES ---
 
-    suspend fun rephraseGfk(draftText: String): Result<String> {
-        val prompt = """
+    suspend fun rephraseGfk(draftText: String, language: AppLanguage): Result<String> {
+        val prompt = if (language != AppLanguage.GERMAN) """
+            Rephrase the following draft message to my partner using Nonviolent Communication (Rosenberg): observation without judgment, feeling, need, and request. Keep it warm, natural, and suitable for everyday use. Reply in ${language.englishName} and output ONLY the rewritten message.
+
+            Draft: "$draftText"
+        """.trimIndent() else """
             Formuliere den folgenden Entwurf für eine Nachricht an meinen Partner nach der Gewaltfreien Kommunikation (Rosenberg) um: Beobachtung ohne Bewertung, Gefühl, Bedürfnis, Bitte. Warmherzig, natürlich, alltagstauglich, auf Deutsch. Gib NUR den umformulierten Text aus.
 
             Entwurf: "$draftText"
@@ -125,7 +130,8 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         userName: String,
         partnerName: String,
         recentChats: List<ChatMessageEntity>,
-        answers: List<AnswerEntity>
+        answers: List<AnswerEntity>,
+        language: AppLanguage
     ): Result<String> {
         val chatSummary = recentChats.takeLast(15).joinToString("\n") { m ->
             val senderName = if (m.sender == "me") userName else partnerName
@@ -133,10 +139,27 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         }
 
         val answerSummary = answers.takeLast(20).joinToString("\n") { a ->
-            "Paket '${a.packId}' (Frage #${a.questionIndex + 1}): ${a.answerText}"
+            if (language != AppLanguage.GERMAN) {
+                "Pack '${a.packId}' (question #${a.questionIndex + 1}): ${a.answerText}"
+            } else {
+                "Paket '${a.packId}' (Frage #${a.questionIndex + 1}): ${a.answerText}"
+            }
         }
 
-        val prompt = """
+        val prompt = if (language != AppLanguage.GERMAN) """
+            Relationship data for $userName and $partnerName (long-distance relationship):
+
+            Chats:
+            ${chatSummary.ifBlank { "(none yet)" }}
+
+            Answered questions:
+            ${answerSummary.ifBlank { "(none yet)" }}
+
+            As an empathetic relationship coach drawing on Gottman research, create a concise analysis in ${language.englishName}, organized into:
+            1. 📈 Communication patterns
+            2. 💪 Your strengths
+            3. 🌱 One practical tip for feeling closer despite the distance
+        """.trimIndent() else """
             Beziehungsdaten von $userName und $partnerName (Fernbeziehung):
 
             Chats:
@@ -154,8 +177,12 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         return GeminiClient.generateText(prompt)
     }
 
-    suspend fun generateDateIdeas(userName: String, partnerName: String, wishes: String): Result<String> {
-        val prompt = """
+    suspend fun generateDateIdeas(userName: String, partnerName: String, wishes: String, language: AppLanguage): Result<String> {
+        val prompt = if (language != AppLanguage.GERMAN) """
+            Generate three creative, specific date ideas for a long-distance couple ($userName and $partnerName).
+            Preferences: ${wishes.ifBlank { "none specified" }}.
+            The ideas should work either over video call or during their next visit, create emotional closeness, and include specific preparation steps. Reply in ${language.englishName} without an introduction.
+        """.trimIndent() else """
             Generiere drei kreative, konkrete Date-Ideen für ein Paar in einer Fernbeziehung ($userName und $partnerName).
             Wünsche: ${wishes.ifBlank { "keine besonderen" }}.
             Die Ideen sollen per Videocall ODER beim nächsten Treffen funktionieren, Nähe schaffen und konkrete Vorbereitungsschritte enthalten. Auf Deutsch, ohne Einleitung.

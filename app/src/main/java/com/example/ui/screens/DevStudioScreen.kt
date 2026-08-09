@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.contentText
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -56,7 +57,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
+import com.example.ui.components.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -619,14 +620,14 @@ private fun StagedRowItem(
         )
         Column {
             IconButton(onClick = onUp, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.ArrowUpward, "Nach oben", tint = HarmonyMuted, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.ArrowUpward, contentText("Nach oben"), tint = HarmonyMuted, modifier = Modifier.size(16.dp))
             }
             IconButton(onClick = onDown, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.ArrowDownward, "Nach unten", tint = HarmonyMuted, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.ArrowDownward, contentText("Nach unten"), tint = HarmonyMuted, modifier = Modifier.size(16.dp))
             }
         }
         IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-            Icon(Icons.Default.Delete, "Entfernen", tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))
+            Icon(Icons.Default.Delete, contentText("Entfernen"), tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))
         }
     }
 }
@@ -690,7 +691,7 @@ private fun DevPacksTab(
                     .background(HarmonySurface)
                     .border(1.dp, HarmonyPurpleLight, RoundedCornerShape(12.dp))
             ) {
-                Icon(Icons.Default.Palette, "Kategorien & Farben", tint = HarmonyPurpleLight)
+                Icon(Icons.Default.Palette, contentText("Kategorien & Farben"), tint = HarmonyPurpleLight)
             }
             IconButton(
                 onClick = { creatingNew = true },
@@ -699,7 +700,7 @@ private fun DevPacksTab(
                     .clip(RoundedCornerShape(12.dp))
                     .background(HarmonyPurple)
             ) {
-                Icon(Icons.Default.Add, "Neues Spiel", tint = Color.White)
+                Icon(Icons.Default.Add, contentText("Neues Spiel"), tint = Color.White)
             }
         }
 
@@ -794,14 +795,14 @@ private fun DevPacksTab(
                         }
 
                         IconButton(onClick = { editingPack = pack }) {
-                            Icon(Icons.Default.Edit, "Bearbeiten", tint = HarmonyPurpleLight)
+                            Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyPurpleLight)
                         }
                         if (DeveloperDataManager.isEditable(pack.id)) {
                             IconButton(onClick = {
                                 DeveloperDataManager.deletePack(context, pack.id)
                                 onChanged("'${pack.title}' gelöscht.")
                             }) {
-                                Icon(Icons.Default.Delete, "Löschen", tint = Color(0xFFFF5252))
+                                Icon(Icons.Default.Delete, contentText("Löschen"), tint = Color(0xFFFF5252))
                             }
                         }
                     }
@@ -968,7 +969,7 @@ private fun EditPackSheet(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, "Schließen", tint = HarmonyMuted)
+                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
                     }
                     Text(
                         if (isNew) "Neues Spiel" else "Spiel bearbeiten",
@@ -1077,7 +1078,7 @@ private fun EditPackSheet(
                                         )
                                         Spacer(Modifier.width(6.dp))
                                         Text(
-                                            "${cat.emoji} ${cat.name}",
+                                            "${cat.emoji} ${contentText(cat.name)}",
                                             fontSize = 11.5.sp,
                                             color = if (sel) Color.White else HarmonyText
                                         )
@@ -1248,7 +1249,7 @@ private fun PairEditor(
         ) {
             Text("Paar ${index + 1}", fontSize = 11.sp, color = HarmonyMuted, fontWeight = FontWeight.Bold)
             IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Delete, "Paar löschen", tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Delete, contentText("Paar löschen"), tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
             }
         }
         Spacer(Modifier.height(4.dp))
@@ -1360,7 +1361,7 @@ private fun QuestionEditor(
         ) {
             Text("Frage ${index + 1}", fontSize = 11.sp, color = HarmonyMuted, fontWeight = FontWeight.Bold)
             IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Delete, "Frage löschen", tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Delete, contentText("Frage löschen"), tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
             }
         }
         OutlinedTextField(
@@ -1541,7 +1542,7 @@ private fun DevImagesTab(
                                 localVersion++
                                 onChanged("Eigenes Bild für '$name' entfernt.")
                             }) {
-                                Icon(Icons.Default.Delete, "Zurücksetzen", tint = Color(0xFFFF5252))
+                                Icon(Icons.Default.Delete, contentText("Zurücksetzen"), tint = Color(0xFFFF5252))
                             }
                         }
                     }
@@ -1592,7 +1593,7 @@ private fun DevTestTab(
                         val details = if (pack.type == "tot") "${pack.pairs.size} Paare"
                         else "${pack.questions.size} Fragen"
                         val catObj = categories.find { it.id == pack.cat }
-                        val catName = catObj?.let { "${it.emoji} ${it.name}" } ?: pack.cat
+                        val catName = catObj?.let { "${it.emoji} ${contentText(it.name)}" } ?: pack.cat
                         Text("$catName · $details", fontSize = 12.sp, color = HarmonyMuted)
                     }
                     Button(
@@ -2085,13 +2086,13 @@ private fun DevLinkPacksTab(
                                     isCreatingNew = false
                                     activeLinkPackForEdit = linkPack
                                 }) {
-                                    Icon(Icons.Default.Edit, "Bearbeiten", tint = HarmonyMuted)
+                                    Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyMuted)
                                 }
                                 IconButton(onClick = {
                                     DeveloperDataManager.deleteLinkPack(context, linkPack.id)
                                     onChanged("Kette '${linkPack.title}' gelöscht.")
                                 }) {
-                                    Icon(Icons.Default.Delete, "Löschen", tint = HarmonyPink)
+                                    Icon(Icons.Default.Delete, contentText("Löschen"), tint = HarmonyPink)
                                 }
                             }
                         }
@@ -2175,7 +2176,7 @@ private fun DevLinkPackEditorDialog(
                 ) {
                     Text("🔗 Ketten-Bauer", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, "Schließen", tint = HarmonyMuted)
+                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
                     }
                 }
 
@@ -2214,7 +2215,7 @@ private fun DevLinkPackEditorDialog(
                                                 mutable[idx - 1] = tmp
                                                 steps = mutable
                                             }) {
-                                                Icon(Icons.Default.ArrowUpward, "Nach oben", tint = HarmonyMuted, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.ArrowUpward, contentText("Nach oben"), tint = HarmonyMuted, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                         if (idx < steps.lastIndex) {
@@ -2225,14 +2226,14 @@ private fun DevLinkPackEditorDialog(
                                                 mutable[idx + 1] = tmp
                                                 steps = mutable
                                             }) {
-                                                Icon(Icons.Default.ArrowDownward, "Nach unten", tint = HarmonyMuted, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.ArrowDownward, contentText("Nach unten"), tint = HarmonyMuted, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                         if (steps.size > 1) {
                                             IconButton(onClick = {
                                                 steps = steps.filterIndexed { i, _ -> i != idx }
                                             }) {
-                                                Icon(Icons.Default.Delete, "Löschen", tint = HarmonyPink, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.Delete, contentText("Löschen"), tint = HarmonyPink, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                     }
@@ -2497,7 +2498,11 @@ private fun DevSlotEditor(
                                 .clickable { onSlotChanged(slot.copy(pairIndex = pIdx)) }
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
-                            Text("${pIdx + 1}: ${pair.first} / ${pair.second}", fontSize = 11.sp, color = if (sel) Color.White else HarmonyMuted)
+                            Text(
+                                "${pIdx + 1}: ${contentText(pair.first)} / ${contentText(pair.second)}",
+                                fontSize = 11.sp,
+                                color = if (sel) Color.White else HarmonyMuted
+                            )
                         }
                     }
                 }
@@ -2664,7 +2669,7 @@ fun CategoryManagerDialog(
                 ) {
                     Text("🏷️ Kategorien & Farben", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, "Schließen", tint = HarmonyMuted)
+                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
                     }
                 }
 
@@ -2703,9 +2708,14 @@ fun CategoryManagerDialog(
                                             .background(catColor)
                                     )
                                     Spacer(Modifier.width(10.dp))
-                                    Text("${cat.emoji}  ${cat.name}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = HarmonyText)
+                                    Text(
+                                        "${cat.emoji}  ${contentText(cat.name)}",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = HarmonyText
+                                    )
                                 }
-                                Icon(Icons.Default.Edit, "Bearbeiten", tint = HarmonyPurpleLight, modifier = Modifier.size(18.dp))
+                                Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyPurpleLight, modifier = Modifier.size(18.dp))
                             }
                         }
                     }

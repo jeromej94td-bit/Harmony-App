@@ -93,8 +93,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
     }
 
     val context = LocalContext.current
-    var languageName by rememberSaveable { mutableStateOf(LanguageStore.get(context).name) }
-    val language = runCatching { AppLanguage.valueOf(languageName) }.getOrDefault(AppLanguage.GERMAN)
+    var languageCode by rememberSaveable { mutableStateOf(LanguageStore.get(context).code) }
+    val language = AppLanguage.fromStored(languageCode)
 
     CompositionLocalProvider(LocalAppLanguage provides language) {
         AmbientBackground {
@@ -190,7 +190,11 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     ProfileSheet(
                         profile = uiState.profile,
                         language = language,
-                        onLanguageChange = { next -> languageName = next.name; LanguageStore.set(context, next) },
+                        onLanguageChange = { next ->
+                            languageCode = next.code
+                            LanguageStore.set(context, next)
+                            viewModel.setAppLanguage(next)
+                        },
                         coachLoading = uiState.coachLoading,
                         coachResult = uiState.coachResult,
                         dateIdeasLoading = uiState.dateIdeasLoading,

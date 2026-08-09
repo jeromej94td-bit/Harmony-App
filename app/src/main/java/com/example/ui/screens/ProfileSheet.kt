@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,7 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
+import com.example.ui.components.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -47,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.data.model.ProfileEntity
 import com.example.ui.AppLanguage
+import com.example.ui.TranslationCatalog
 import com.example.ui.tr
 import com.example.ui.components.HarmonyCard
 import com.example.ui.components.formatTimestamp
@@ -316,29 +320,29 @@ fun ProfileSheet(
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(
+                    LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Button(
-                            onClick = { onLanguageChange(AppLanguage.GERMAN) },
-                            modifier = Modifier.weight(1f).height(50.dp),
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (language == AppLanguage.GERMAN) HarmonyPink else Color.White.copy(alpha = 0.06f)
-                            )
-                        ) {
-                            Text(tr("Deutsch", "German"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                        }
-                        Button(
-                            onClick = { onLanguageChange(AppLanguage.ENGLISH) },
-                            modifier = Modifier.weight(1f).height(50.dp),
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (language == AppLanguage.ENGLISH) HarmonyPink else Color.White.copy(alpha = 0.06f)
-                            )
-                        ) {
-                            Text(tr("Englisch", "English"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        items(
+                            AppLanguage.entries.filter(TranslationCatalog::hasCompletePack),
+                            key = { it.code }
+                        ) { option ->
+                            Button(
+                                onClick = { onLanguageChange(option) },
+                                modifier = Modifier.widthIn(min = 116.dp).height(50.dp),
+                                shape = CircleShape,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (language == option) HarmonyPink else Color.White.copy(alpha = 0.06f)
+                                )
+                            ) {
+                                Text(
+                                    if (language == AppLanguage.ENGLISH) option.englishName else option.nativeName,
+                                    color = Color.White,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }

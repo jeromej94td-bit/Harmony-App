@@ -38,7 +38,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import com.example.ui.components.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

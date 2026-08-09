@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import com.example.ui.tr
+import com.example.ui.contentText
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -34,7 +35,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
+import com.example.ui.components.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -235,7 +236,7 @@ fun ChatScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.AutoAwesome,
-                    contentDescription = "GFK Brücke",
+                    contentDescription = contentText("GFK Brücke"),
                     tint = HarmonyPinkSoft,
                     modifier = Modifier.size(20.dp)
                 )
@@ -279,7 +280,7 @@ fun ChatScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Senden",
+                    contentDescription = contentText("Senden"),
                     tint = Color.White,
                     modifier = Modifier.size(18.dp)
                 )
