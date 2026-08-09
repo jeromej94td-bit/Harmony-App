@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -70,15 +71,15 @@ fun MomentsScreen(
     val milestoneTargets = listOf(100, 365, 500, 730, 1000, 1095)
     val computedMilestones = milestoneTargets.filter { daysTogether >= it }.map { d ->
         val milestoneTitle = when (d) {
-            365 -> "1 Jahr zusammen 🎉"
-            730 -> "2 Jahre zusammen 🎉"
-            1095 -> "3 Jahre zusammen 🎉"
-            else -> "$d Tage zusammen 💞"
+            365 -> tr("1 Jahr zusammen 🎉", "Together for 1 year 🎉")
+            730 -> tr("2 Jahre zusammen 🎉", "Together for 2 years 🎉")
+            1095 -> tr("3 Jahre zusammen 🎉", "Together for 3 years 🎉")
+            else -> tr("$d Tage zusammen 💞", "$d days together 💞")
         }
         MomentEntity(
             id = -d.toLong(),
             title = milestoneTitle,
-            content = "Ein Harmony-Meilenstein eurer Liebe.",
+            content = tr("Ein Harmony-Meilenstein eurer Liebe.", "A Harmony milestone in your love story."),
             emoji = "🏆",
             timestamp = profile.startDate + (d * dayMs),
             isMilestone = true
@@ -101,7 +102,7 @@ fun MomentsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Momente",
+                text = tr("Momente", "Moments"),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
@@ -110,7 +111,7 @@ fun MomentsScreen(
                 onClick = onOpenAddMoment,
                 modifier = Modifier.testTag("add_moment_button")
             ) {
-                Text(text = "+ Hinzufügen", color = HarmonyPink, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                Text(text = tr("+ Hinzufügen", "+ Add"), color = HarmonyPink, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
             }
         }
 
@@ -122,7 +123,7 @@ fun MomentsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Noch keine Momente.\nHaltet euer erstes Erlebnis fest 💞",
+                    text = tr("Noch keine Momente.\nHaltet euer erstes Erlebnis fest 💞", "No moments yet.\nCapture your first memory 💞"),
                     color = HarmonyMuted,
                     fontSize = 13.5.sp,
                     lineHeight = 20.sp,
@@ -186,14 +187,14 @@ fun MomentsScreen(
             ) {
                 Column {
                     Text(
-                        text = "Moment festhalten",
+                        text = tr("Moment festhalten", "Capture a moment"),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Was wollt ihr nie vergessen?",
+                        text = tr("Was wollt ihr nie vergessen?", "What do you never want to forget?"),
                         fontSize = 13.sp,
                         color = HarmonyMuted
                     )
@@ -202,7 +203,7 @@ fun MomentsScreen(
                     OutlinedTextField(
                         value = titleInput,
                         onValueChange = { titleInput = it },
-                        placeholder = { Text("Titel", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Titel", "Title"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("moment_title_input"),
@@ -219,7 +220,7 @@ fun MomentsScreen(
                     OutlinedTextField(
                         value = contentInput,
                         onValueChange = { contentInput = it },
-                        placeholder = { Text("Was ist passiert?", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Was ist passiert?", "What happened?"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
@@ -244,7 +245,7 @@ fun MomentsScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                         ) {
-                            Text(text = "Abbrechen", color = HarmonyText)
+                            Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText)
                         }
                         Button(
                             onClick = { onAddMoment(titleInput, contentInput) },
@@ -253,7 +254,7 @@ fun MomentsScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                         ) {
-                            Text(text = "Hinzufügen", color = Color.White)
+                            Text(text = tr("Hinzufügen", "Add"), color = Color.White)
                         }
                     }
                 }
