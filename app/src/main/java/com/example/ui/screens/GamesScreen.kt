@@ -79,12 +79,12 @@ fun GamesScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(bottom = 90.dp)
+            .padding(bottom = 112.dp)
     ) {
         // Section Title
         Text(
             text = tr("Fragen & Spiele", "Questions & Games"),
-            fontSize = 20.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)
@@ -102,7 +102,7 @@ fun GamesScreen(
         // Categories Header
         Text(
             text = tr("Kategorien", "Categories"),
-            fontSize = 17.sp,
+            fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
@@ -152,7 +152,7 @@ fun GamesScreen(
         // Topics Progress Header
         Text(
             text = tr("Themen", "Topics"),
-            fontSize = 17.sp,
+            fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
@@ -189,7 +189,7 @@ fun FilterChipsRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         val filters = listOf(
             "all" to tr("Alle", "All"),
@@ -212,12 +212,12 @@ fun FilterChipsRow(
                         CircleShape
                     )
                     .clickable { onFilterSelected(filterKey) }
-                    .padding(horizontal = 14.dp, vertical = 8.dp)
+                    .padding(horizontal = 17.dp, vertical = 11.dp)
                     .testTag("filter_chip_$filterKey")
             ) {
                 Text(
                     text = label,
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (isSelected) Color.White else HarmonyMuted
                 )
@@ -230,12 +230,12 @@ fun FilterChipsRow(
 fun CategoryRailCard(category: Category, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .size(width = 104.dp, height = 112.dp)
+            .size(width = 126.dp, height = 148.dp)
             .clip(RoundedCornerShape(18.dp))
             .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
             .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
-            .padding(12.dp)
+            .padding(16.dp)
             .testTag("category_card_${category.id}")
     ) {
         Column(
@@ -245,7 +245,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
             Text(text = category.emoji, fontSize = 24.sp)
             Text(
                 text = contentText(category.name),
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
                 lineHeight = 15.sp
@@ -299,7 +299,7 @@ fun TopicProgressCard(
                 shape = cardShape
             )
             .clickable(onClick = onClick)
-            .padding(14.dp)
+            .padding(18.dp)
             .testTag("topic_card_${topic.id}")
     ) {
         Row(
@@ -343,7 +343,7 @@ fun TopicProgressCard(
 
             Text(
                 text = if (percentage >= 100) "✓" else "$percentage%",
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = if (percentage >= 100) accent else HarmonyMuted
             )
