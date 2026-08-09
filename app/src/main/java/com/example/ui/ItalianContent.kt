@@ -799,7 +799,7 @@ internal val EXACT_ITALIAN_CONTENT: Map<String, String> = mapOf(
     "Analysiert eure Antworten & Chats nach Gottman und GFK." to "Analizza le tue risposte e chat secondo Gottman e GFK.",
     "Wünsche? z.B. günstig, draußen" to "Desideri? per esempio. economico, fuori",
     "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen" to "Modifica giochi e città, carica cartelle, regola immagini",
-    "🔥 Tägliche Aktivität" to "�� Attività quotidiana",
+    "🔥 Tägliche Aktivität" to "🔥 Attività quotidiana",
     "+ Hinzufügen" to "+ Aggiungi",
     "Noch keine Momente. ↵ Haltet euer erstes Erlebnis fest 💞" to "Nessun momento ancora. ↵ Cattura la tua prima esperienza 💞",
     "Ein Harmony-Meilenstein eurer Liebe." to "Una pietra miliare dell'armonia del vostro amore.",
