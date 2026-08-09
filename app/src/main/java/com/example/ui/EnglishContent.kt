@@ -6,6 +6,7 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "Wer würde eher?" to "Who's more likely?",
     "Zeichnen" to "Drawing",
     "Das oder das?" to "This or That?",
+    "Das oder das" to "This or That",
     "Zustimmen oder Ablehnen" to "Agree or Disagree",
     "Ich habe noch nie" to "Never Have I Ever",
     "Was magst du lieber?" to "Which Do You Prefer?",
@@ -413,6 +414,7 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "Stracciatella" to "Stracciatella", "Pistazie" to "Pistachio", "Mango Sorbet" to "Mango Sorbet",
     "Himbeere" to "Raspberry", "Salted Caramel" to "Salted Caramel", "Cookie Dough" to "Cookie Dough",
     "Hazelnut" to "Hazelnut", "White Chocolate" to "White Chocolate", "Walnuss" to "Walnut", "Banane" to "Banana",
+    "6 Monate im Altbau mit Charme" to "6 Months in a Charming Period Home",
 
     // Dev Studio and every supporting mini-feature
     "📂 Ordner" to "📂 Folder", "📝 Spiele" to "📝 Games", "🔗 Ketten" to "🔗 Chains",
@@ -495,7 +497,7 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "Linke Option (0)" to "Left Option (0)", "Rechte Option (1)" to "Right Option (1)",
     "🏷️ Kategorien & Farben" to "🏷️ Categories & Colors",
     "Titel des Ketten-Spiels" to "Chain Game Title", "Unbenannte Kette" to "Untitled Chain",
-    "Gewählt" to "Selected", "Verworfen" to "Rejected", "Freier Text" to "Free Text",
+    "Verworfen" to "Rejected", "Freier Text" to "Free Text",
     "Satzmuster (z.B. 1 Jahr lang in {})" to "Sentence Pattern (e.g. 1 year in {})",
     "Standardbild" to "Default Image", "eigen" to "custom",
     "Eis" to "Ice Cream", "Eissorten" to "Ice Cream Flavors",
@@ -521,8 +523,8 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "Zusammen seit" to "Together Since", "Partner-Simulator" to "Partner Simulator",
     "Sprache" to "Language", "Deutsch" to "German", "Englisch" to "English",
     "Entwickler-Modus" to "Developer Mode", "Entwickler Studio Öffnen" to "Open Developer Studio",
-    "Schließen" to "Close", "Profil bearbeiten" to "Edit Profile", "Name Partnerin" to "Partner's Name",
-    "Speichern" to "Save", "Abbrechen" to "Cancel", "Hinzufügen" to "Add", "Momente" to "Moments",
+    "Profil bearbeiten" to "Edit Profile", "Name Partnerin" to "Partner's Name",
+    "Hinzufügen" to "Add", "Momente" to "Moments",
     "Was ist passiert?" to "What Happened?", "oder" to "or", "Zurück" to "Back",
     "Deine eigene Antwort" to "Your Own Answer", "Deine Antwort..." to "Your Answer...", "Übernehmen" to "Save",
     "Antwortähnlichkeit" to "Answer Similarity", "Diskutiert eure Antworten" to "Discuss Your Answers",
@@ -550,6 +552,9 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "🔥 Tägliche Aktivität" to "🔥 Daily Activity", "+ Hinzufügen" to "+ Add",
     "Noch keine Momente.\nHaltet euer erstes Erlebnis fest 💞" to
         "No moments yet.\nCapture your first memory together 💞",
+    "Ein Harmony-Meilenstein eurer Liebe." to "A Harmony Milestone in Your Love Story.",
+    "Was wollt ihr nie vergessen?" to "What Do You Never Want to Forget?",
+    "🟠 Du bist dran" to "🟠 Your Turn",
     "Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid." to
         "Answer questions at the same time — answers become visible only after you have both finished.",
     "Wir" to "Profile",
@@ -573,5 +578,5 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "KI-Beziehungscoach" to "AI Relationship Coach", "KI-Date-Ideen" to "AI Date Ideas",
     "Analyse starten" to "Start Analysis", "Ideen generieren" to "Generate Ideas",
     "Namen und Startdatum eurer Beziehung." to "Your names and relationship start date.",
-    "Fertig" to "Done", "Quiz verlassen?" to "Leave Quiz?", "Weiter spielen" to "Keep Playing"
+    "Fertig" to "Done", "Weiter spielen" to "Keep Playing"
 )

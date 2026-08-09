@@ -65,6 +65,18 @@ private fun exactEnglish(text: String): String =
 
 /** Localizes variable-bearing app messages without translating isolated words. */
 internal fun localizeEnglishDynamicContent(text: String): String? {
+    // Cards and list headers often decorate a complete content label with an emoji.
+    // Translate the complete label after the decoration; never translate isolated words.
+    Regex("^([\\p{So}\\p{Sk}\\uFE0F\\u200D]+\\s+)(.+)$").matchEntire(text)?.let {
+        TranslationCatalog.exact(it.groupValues[2], AppLanguage.ENGLISH)?.let { translated ->
+            return it.groupValues[1] + translated
+        }
+    }
+    Regex("^(\\d+[.)]\\s+)(.+)$").matchEntire(text)?.let {
+        TranslationCatalog.exact(it.groupValues[2], AppLanguage.ENGLISH)?.let { translated ->
+            return it.groupValues[1] + translated
+        }
+    }
     Regex("^(\\d+) Bilder geladen — Namen prüfen, dann erstellen\\.$").matchEntire(text)?.let {
         return "${it.groupValues[1]} images loaded — review the names, then create the pack."
     }
