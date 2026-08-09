@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.tr
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -113,7 +114,7 @@ fun ChatScreen(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = "✨ GFK-Brücke",
+                            text = tr("✨ GFK-Brücke", "✨ NVC bridge"),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = HarmonyText
@@ -122,7 +123,7 @@ fun ChatScreen(
 
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.",
+                        text = tr("Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.", "Reframes your draft using observation, feeling, need, and request."),
                         fontSize = 12.sp,
                         color = HarmonyMuted,
                         lineHeight = 16.sp
@@ -132,7 +133,7 @@ fun ChatScreen(
                     OutlinedTextField(
                         value = gfkDraftText,
                         onValueChange = { gfkDraftText = it },
-                        placeholder = { Text("Was möchtest du eigentlich sagen?", color = HarmonyMuted) },
+                        placeholder = { Text(tr("Was möchtest du eigentlich sagen?", "What do you actually want to say?"), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("gfk_draft_input"),
@@ -158,9 +159,9 @@ fun ChatScreen(
                         if (gfkLoading) {
                             CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Formuliere um...", color = Color.White, fontSize = 13.sp)
+                            Text(text = tr("Formuliere um...", "Reframing..."), color = Color.White, fontSize = 13.sp)
                         } else {
-                            Text(text = "Umformulieren", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            Text(text = tr("Umformulieren", "Reframe"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -195,7 +196,7 @@ fun ChatScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                         ) {
-                            Text(text = "In Chat einfügen", color = HarmonyText, fontSize = 13.sp)
+                            Text(text = tr("In Chat einfügen", "Insert into chat"), color = HarmonyText, fontSize = 13.sp)
                         }
                     }
                 }
@@ -245,7 +246,7 @@ fun ChatScreen(
             OutlinedTextField(
                 value = chatInputText,
                 onValueChange = { chatInputText = it },
-                placeholder = { Text("Nachricht an $partnerName...", color = HarmonyMuted) },
+                placeholder = { Text(tr("Nachricht an $partnerName...", "Message to $partnerName..."), color = HarmonyMuted) },
                 modifier = Modifier
                     .weight(1f)
                     .testTag("chat_input_field"),
