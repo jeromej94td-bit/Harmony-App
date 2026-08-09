@@ -3178,7 +3178,7 @@ CONTENUTO INTEGRATO AGGIUNTIVO
 
 0792. DE: 🔥 Tägliche Aktivität
       EN: 🔥 Daily Activity
-      IT: �� Attività quotidiana
+      IT: 🔥 Attività quotidiana
 
 0793. DE: + Hinzufügen
       EN: + Add
