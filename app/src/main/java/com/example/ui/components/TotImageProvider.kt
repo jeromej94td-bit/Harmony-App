@@ -277,6 +277,30 @@ object TotImageProvider {
     private val generatedOverrides = mutableMapOf<String, Any>()
     private val aliases = mutableMapOf<String, String>()
 
+    /**
+     * Resolves only an explicitly registered key and never returns the generic fallback.
+     * This lets a stable, language-independent asset key be attempted before a legacy
+     * display-text key without mistaking the fallback image for a successful lookup.
+     */
+    private fun getExplicitImageOrNull(text: String, visited: Set<String> = emptySet()): Any? {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return null
+        val lower = trimmed.lowercase()
+        if (lower in visited) return null
+
+        val targetText = aliases[trimmed] ?: aliases[lower]
+        if (targetText != null && !targetText.equals(trimmed, ignoreCase = true)) {
+            getExplicitImageOrNull(targetText, visited + lower)?.let { return it }
+        }
+
+        userOverrides[trimmed]?.let { return resolve(it) }
+        userOverrides[lower]?.let { return resolve(it) }
+        generatedOverrides[trimmed]?.let { return resolve(it) }
+        generatedOverrides[lower]?.let { return resolve(it) }
+        directMap[trimmed]?.let { return it }
+        return null
+    }
+
     fun setAlias(aliasText: String, sourceText: String) {
         val aTrim = aliasText.trim()
         val sTrim = sourceText.trim()
@@ -432,5 +456,17 @@ object TotImageProvider {
             "freund" in lower || "liebe" in lower || "paar" in lower -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
             else -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
         }
+    }
+
+    /**
+     * Language-safe image lookup.
+     *
+     * New content can register an image under [assetKey]. Existing German-keyed images
+     * continue to work through [legacyAssetKey]. The localized label is deliberately not
+     * accepted here, so switching to English or any future locale cannot change the image.
+     */
+    fun getImageUrl(assetKey: String, legacyAssetKey: String): Any {
+        getExplicitImageOrNull(assetKey)?.let { return it }
+        return getImageUrl(legacyAssetKey)
     }
 }

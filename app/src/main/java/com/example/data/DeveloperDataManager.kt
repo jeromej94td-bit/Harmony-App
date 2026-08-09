@@ -6,6 +6,8 @@ import com.example.data.model.Category
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.Question
 import com.example.data.model.QuestionPack
+import com.example.data.model.TotChoiceSide
+import com.example.data.model.totChoiceAt
 import com.example.ui.components.TotImageProvider
 import org.json.JSONArray
 import org.json.JSONObject
@@ -365,6 +367,23 @@ object DeveloperDataManager {
         TotImageProvider.clearGeneratedImages()
         generatedImages.forEach { (name, path) -> TotImageProvider.setGeneratedImage(name, path) }
         imageOverrides.forEach { (name, path) -> TotImageProvider.setCustomImage(name, path) }
+
+        // Migrate text-keyed image data into stable per-card asset keys at runtime.
+        // The legacy entries remain available for old exports, while every renderer can
+        // now resolve the same image regardless of the selected display language.
+        HarmonyPacksData.PACKS.filter { it.type == "tot" }.forEach { pack ->
+            pack.pairs.indices.forEach { pairIndex ->
+                listOf(TotChoiceSide.FIRST, TotChoiceSide.SECOND).forEach { side ->
+                    val choice = pack.totChoiceAt(pairIndex, side)
+                    generatedImages[choice.legacyAssetKey]?.let { path ->
+                        TotImageProvider.setGeneratedImage(choice.assetKey, path)
+                    }
+                    imageOverrides[choice.legacyAssetKey]?.let { path ->
+                        TotImageProvider.setCustomImage(choice.assetKey, path)
+                    }
+                }
+            }
+        }
     }
 
     // ===============================================================

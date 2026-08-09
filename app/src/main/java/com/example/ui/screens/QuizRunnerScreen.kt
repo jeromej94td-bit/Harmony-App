@@ -74,6 +74,9 @@ import coil.request.ImageRequest
 import com.example.data.LinkEngine
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
+import com.example.data.model.TotChoiceIdentity
+import com.example.data.model.TotChoiceSide
+import com.example.data.model.totChoiceAt
 import com.example.ui.ActivePackRun
 import com.example.ui.contentText
 import com.example.ui.tr
@@ -296,7 +299,8 @@ fun QuizRunnerScreen(
                         }
                     } else if (pack.type == "tot") {
                         // This or That Mode
-                        val pair = pack.pairs.getOrNull(activeRun.currentIndex) ?: ("" to "")
+                        val firstChoice = pack.totChoiceAt(activeRun.currentIndex, TotChoiceSide.FIRST)
+                        val secondChoice = pack.totChoiceAt(activeRun.currentIndex, TotChoiceSide.SECOND)
                         val selectedAns = activeRun.currentAnswers[activeRun.currentIndex]
                         val caption = LinkEngine.captionFor(pack.id, activeRun.currentIndex)
 
@@ -322,8 +326,8 @@ fun QuizRunnerScreen(
                             }
 
                             TotCardPairView(
-                                firstText = pair.first,
-                                secondText = pair.second,
+                                firstChoice = firstChoice,
+                                secondChoice = secondChoice,
                                 selectedAns = selectedAns,
                                 onPick = { chosen ->
                                     onPickTot(chosen)
@@ -730,8 +734,8 @@ fun QuizOptionButton(
 
 @Composable
 fun TotCardPairView(
-    firstText: String,
-    secondText: String,
+    firstChoice: TotChoiceIdentity,
+    secondChoice: TotChoiceIdentity,
     selectedAns: String?,
     onPick: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -822,11 +826,12 @@ fun TotCardPairView(
         ) {
             // Top Card (tilted -3.2f)
             TotStyledCard(
-                text = contentText(firstText),
+                choice = firstChoice,
+                displayText = contentText(firstChoice.answerValue),
                 tagAlignment = Alignment.TopStart,
-                isSelected = selectedAns == firstText,
+                isSelected = selectedAns == firstChoice.answerValue,
                 rotationAngle = -3.2f + topExtraRotation.value,
-                onClick = { handlePick(firstText) },
+                onClick = { handlePick(firstChoice.answerValue) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
@@ -836,11 +841,12 @@ fun TotCardPairView(
 
             // Bottom Card (tilted +3.2f)
             TotStyledCard(
-                text = contentText(secondText),
+                choice = secondChoice,
+                displayText = contentText(secondChoice.answerValue),
                 tagAlignment = Alignment.BottomStart,
-                isSelected = selectedAns == secondText,
+                isSelected = selectedAns == secondChoice.answerValue,
                 rotationAngle = 3.2f + bottomExtraRotation.value,
-                onClick = { handlePick(secondText) },
+                onClick = { handlePick(secondChoice.answerValue) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
@@ -874,7 +880,8 @@ fun TotCardPairView(
 
 @Composable
 fun TotStyledCard(
-    text: String,
+    choice: TotChoiceIdentity,
+    displayText: String,
     tagAlignment: Alignment,
     isSelected: Boolean,
     rotationAngle: Float,
@@ -882,7 +889,9 @@ fun TotStyledCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val imageUrl = remember(text, TotImageProvider.version) { TotImageProvider.getImageUrl(text) }
+    val imageUrl = remember(choice.assetKey, choice.legacyAssetKey, TotImageProvider.version) {
+        TotImageProvider.getImageUrl(choice.assetKey, choice.legacyAssetKey)
+    }
     val imageRequest = remember(imageUrl) {
         ImageRequest.Builder(context)
             .data(imageUrl)
@@ -904,7 +913,7 @@ fun TotStyledCard(
     ) {
         AsyncImage(
             model = imageRequest,
-            contentDescription = text,
+            contentDescription = displayText,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
@@ -924,7 +933,7 @@ fun TotStyledCard(
         )
 
         // Destination Tag Pill
-        if (com.example.data.DevAssetStore.isUserFacingLabel(text)) {
+        if (com.example.data.DevAssetStore.isUserFacingLabel(displayText)) {
             Box(
                 modifier = Modifier
                     .align(tagAlignment)
@@ -934,7 +943,7 @@ fun TotStyledCard(
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = text,
+                    text = displayText,
                     fontSize = 14.5.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF1E1E1E),
@@ -1081,6 +1090,8 @@ fun TotResultsView(
 
             pack.pairs.forEachIndexed { index, pair ->
                 val myAns = activeRun.currentAnswers[index]
+                val firstChoice = pack.totChoiceAt(index, TotChoiceSide.FIRST)
+                val secondChoice = pack.totChoiceAt(index, TotChoiceSide.SECOND)
 
                 Box(
                     modifier = Modifier
@@ -1114,7 +1125,8 @@ fun TotResultsView(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             SideBySideTotCard(
-                                text = contentText(pair.first),
+                                choice = firstChoice,
+                                displayText = contentText(firstChoice.answerValue),
                                 isSelected = myAns == pair.first,
                                 modifier = Modifier
                                     .weight(1f)
@@ -1122,7 +1134,8 @@ fun TotResultsView(
                             )
 
                             SideBySideTotCard(
-                                text = contentText(pair.second),
+                                choice = secondChoice,
+                                displayText = contentText(secondChoice.answerValue),
                                 isSelected = myAns == pair.second,
                                 modifier = Modifier
                                     .weight(1f)
@@ -1158,12 +1171,15 @@ fun TotResultsView(
 
 @Composable
 fun SideBySideTotCard(
-    text: String,
+    choice: TotChoiceIdentity,
+    displayText: String,
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val imageUrl = remember(text, TotImageProvider.version) { TotImageProvider.getImageUrl(text) }
+    val imageUrl = remember(choice.assetKey, choice.legacyAssetKey, TotImageProvider.version) {
+        TotImageProvider.getImageUrl(choice.assetKey, choice.legacyAssetKey)
+    }
     val imageRequest = remember(imageUrl) {
         ImageRequest.Builder(context)
             .data(imageUrl)
@@ -1182,7 +1198,7 @@ fun SideBySideTotCard(
     ) {
         AsyncImage(
             model = imageRequest,
-            contentDescription = text,
+            contentDescription = displayText,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
@@ -1220,9 +1236,9 @@ fun SideBySideTotCard(
             }
         }
 
-        if (com.example.data.DevAssetStore.isUserFacingLabel(text)) {
+        if (com.example.data.DevAssetStore.isUserFacingLabel(displayText)) {
             Text(
-                text = text,
+                text = displayText,
                 fontSize = 12.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
