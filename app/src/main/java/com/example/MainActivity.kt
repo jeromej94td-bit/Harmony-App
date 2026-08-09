@@ -14,11 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.ui.AppLanguage
 import com.example.ui.HarmonyViewModel
+import com.example.ui.LanguageStore
+import com.example.ui.LocalAppLanguage
 import com.example.ui.components.AmbientBackground
 import com.example.ui.components.HarmonyBottomNav
 import com.example.ui.components.HarmonyToast
@@ -84,7 +93,12 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
         }
     }
 
-    AmbientBackground {
+    val context = LocalContext.current
+    var languageName by rememberSaveable { mutableStateOf(LanguageStore.get(context).name) }
+    val language = runCatching { AppLanguage.valueOf(languageName) }.getOrDefault(AppLanguage.GERMAN)
+
+    CompositionLocalProvider(LocalAppLanguage provides language) {
+        AmbientBackground {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = androidx.compose.ui.graphics.Color.Transparent,
@@ -176,6 +190,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                 if (uiState.isProfileSheetOpen) {
                     ProfileSheet(
                         profile = uiState.profile,
+                        language = language,
+                        onLanguageChange = { next -> languageName = next.name; LanguageStore.set(context, next) },
                         coachLoading = uiState.coachLoading,
                         coachResult = uiState.coachResult,
                         dateIdeasLoading = uiState.dateIdeasLoading,
@@ -212,5 +228,6 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                 }
             }
         }
+    }
     }
 }
