@@ -468,7 +468,7 @@ fun QuizRunnerScreen(
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Text(
-                                text = q?.q ?: "",
+                                text = contentText(q?.q ?: ""),
                                 fontSize = 26.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = Color.White,
@@ -488,7 +488,7 @@ fun QuizRunnerScreen(
 
                                 QuizOptionButton(
                                     number = optIdx + 1,
-                                    text = if (isSelected && isOwn) selectedAns ?: optText else optText,
+                                    text = contentText(if (isSelected && isOwn) selectedAns ?: optText else optText),
                                     isSelected = isSelected,
                                     isOwn = isOwn,
                                     onClick = {
