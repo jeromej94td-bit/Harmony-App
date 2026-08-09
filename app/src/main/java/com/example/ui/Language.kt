@@ -36,12 +36,78 @@ fun tr(german: String, english: String): String =
 
 fun localizedContent(text: String, language: AppLanguage): String {
     if (language == AppLanguage.GERMAN) return text
-    return ENGLISH_CONTENT[text.trim()] ?: text
+    return ENGLISH_CONTENT[text.trim()] ?: translateGermanContent(text)
 }
 
 @Composable
 fun contentText(text: String): String =
     localizedContent(text, LocalAppLanguage.current)
+
+private fun translateGermanContent(text: String): String {
+    if (!looksGerman(text)) return text
+    var result = text
+    EXACT_CONTENT_TRANSLATIONS.entries
+        .sortedByDescending { it.key.length }
+        .forEach { (german, english) ->
+            result = result.replace(german, english, ignoreCase = true)
+        }
+    GERMAN_WORD_TRANSLATIONS.entries
+        .sortedByDescending { it.key.length }
+        .forEach { (german, english) ->
+            result = Regex("\\b${Regex.escape(german)}\\b", RegexOption.IGNORE_CASE)
+                .replace(result, english)
+        }
+    return result
+}
+
+private fun looksGerman(text: String): Boolean =
+    text.any { it in "ÄÖÜäöüß" } ||
+        Regex("(?i)\\b(der|die|das|wir|ihr|euch|uns|mit|für|und|oder|wenn|werden|haben|sein|nicht|mehr|eine|einen|einem|einer|zu|von|im|in|auf|vor|über|dass|wie|was|wer|kann|können|müssen|möchte|möchtest)\\b")
+            .containsMatchIn(text)
+
+private val EXACT_CONTENT_TRANSLATIONS = mapOf(
+    "Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken?" to "Can we afford all the costs of one child/several children?",
+    "Möglicherweise müssen wir Einsparungen vornehmen" to "We may need to make some savings",
+    "Werden wir genug Zeit für das Kind / die Kinder haben?" to "Will we have enough time for the child / children?",
+    "Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat." to "Yes, we will make sure family time comes first.",
+    "Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?" to "How will we find time for our relationship when the baby is here?",
+    "Regelmäßige Rendezvous oder gemeinsame Zeit" to "Regular dates or quality time together",
+    "Diskutiert eure Antworten" to "Discuss your answers",
+    "Was ist dein Lieblingswetter?" to "What is your favorite type of weather?"
+)
+
+private val GERMAN_WORD_TRANSLATIONS = mapOf(
+    "möglicherweise" to "maybe", "müssen" to "must", "muss" to "must", "wir" to "we",
+    "ihr" to "you", "euch" to "you", "uns" to "us", "mein" to "my", "meine" to "my",
+    "dein" to "your", "deine" to "your", "unser" to "our", "unsere" to "our",
+    "der" to "the", "die" to "the", "das" to "the", "den" to "the", "dem" to "the",
+    "ein" to "a", "eine" to "a", "einen" to "a", "einem" to "a", "einer" to "a",
+    "und" to "and", "oder" to "or", "aber" to "but", "wenn" to "if", "dass" to "that",
+    "für" to "for", "mit" to "with", "ohne" to "without", "von" to "from",
+    "zu" to "to", "im" to "in", "in" to "in", "auf" to "on", "vor" to "before",
+    "nach" to "after", "über" to "about", "auch" to "also", "noch" to "still",
+    "nicht" to "not", "nur" to "only", "mehr" to "more", "alle" to "all",
+    "allem" to "everything", "wie" to "how", "was" to "what", "wer" to "who",
+    "wann" to "when", "warum" to "why", "kann" to "can", "können" to "can",
+    "werden" to "will", "wird" to "will", "habe" to "have", "haben" to "have",
+    "hat" to "has", "sein" to "be", "sind" to "are", "ist" to "is",
+    "finde" to "find", "finden" to "find", "geben" to "give", "gibt" to "gives",
+    "machen" to "make", "machen" to "make", "gehen" to "go", "kommen" to "come",
+    "sprechen" to "talk", "reden" to "talk", "besprechen" to "discuss",
+    "teilen" to "share", "lieben" to "love", "liebe" to "love", "mag" to "like",
+    "möchte" to "would like", "möchtest" to "would you like", "brauchen" to "need",
+    "genug" to "enough", "zeit" to "time", "kosten" to "costs", "kind" to "child",
+    "kinder" to "children", "familie" to "family", "beziehung" to "relationship",
+    "partner" to "partner", "baby" to "baby", "haus" to "house", "tag" to "day",
+    "tage" to "days", "frage" to "question", "fragen" to "questions",
+    "antwort" to "answer", "antworten" to "answers", "gemeinsam" to "together",
+    "regelmäßig" to "regular", "neu" to "new", "alt" to "old", "gut" to "good",
+    "schön" to "beautiful", "wichtig" to "important", "bereit" to "ready",
+    "möglich" to "possible", "besser" to "better", "lieber" to "prefer",
+    "erste" to "first", "letzte" to "last", "jeden" to "every", "jeder" to "every",
+    "etwas" to "something", "nichts" to "nothing", "alles" to "everything",
+    "viele" to "many", "einem" to "a", "einer" to "a"
+)
 
 private val ENGLISH_CONTENT = mapOf(
     "Fragen & Spiele" to "Questions & Games",
