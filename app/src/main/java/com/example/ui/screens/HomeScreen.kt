@@ -341,6 +341,9 @@ fun PaddingPackCard(
     }
 }
 
+private fun packAccent(categoryId: String): Color =
+    HarmonyPacksData.CATEGORIES.find { it.id == categoryId }?.tagColorHex?.let { Color(it) } ?: HarmonyPink
+
 @Composable
 fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
     Row(
@@ -353,7 +356,7 @@ fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
                 )
             )
             .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(18.dp))
-            .padding(14.dp),
+            .padding(18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "💞", fontSize = 24.sp)
@@ -361,16 +364,16 @@ fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
         Column {
             Text(
                 text = "Verbinde dich mit $partnerName",
-                fontSize = 13.5.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = "Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.",
-                fontSize = 12.sp,
+                fontSize = 13.5.sp,
                 color = HarmonyMuted,
-                lineHeight = 16.sp
+                lineHeight = 19.sp
             )
         }
     }
@@ -384,7 +387,7 @@ fun WidgetCard(title: String, emoji: String, onClick: () -> Unit, modifier: Modi
             .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
             .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
-            .padding(vertical = 14.dp, horizontal = 8.dp)
+            .padding(vertical = 18.dp, horizontal = 10.dp)
             .testTag("widget_$title"),
         contentAlignment = Alignment.Center
     ) {
@@ -393,7 +396,7 @@ fun WidgetCard(title: String, emoji: String, onClick: () -> Unit, modifier: Modi
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = title,
-                fontSize = 11.5.sp,
+                fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
                 lineHeight = 14.sp
@@ -421,7 +424,7 @@ fun StatCard(value: String, label: String, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = label,
-                fontSize = 11.sp,
+                fontSize = 12.5.sp,
                 color = HarmonyMuted,
                 fontWeight = FontWeight.SemiBold
             )
