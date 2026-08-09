@@ -286,7 +286,7 @@ fun QuizRunnerScreen(
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Text(
-                                    text = "Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.",
+                                    text = tr("Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.", "Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together."),
                                     fontSize = 14.sp,
                                     color = Color.White.copy(alpha = 0.7f),
                                     textAlign = TextAlign.Center,
