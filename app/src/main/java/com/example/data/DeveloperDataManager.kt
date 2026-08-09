@@ -123,8 +123,18 @@ object DeveloperDataManager {
         val p = prefs(context)
         val storedVersion = p.getLong(KEY_GEN_VERSION, -1L)
 
-        if (storedVersion != GeneratedHarmonyContent.VERSION) {
-            // Neuer Export: Base64 einmalig auf die Platte schreiben.
+        val storedImagePaths = try {
+            JSONObject(p.getString(KEY_GEN_IMAGES, "{}") ?: "{}")
+        } catch (e: Exception) {
+            JSONObject()
+        }
+        val needsImageRepair = GeneratedHarmonyContent.IMAGES.keys.any { key ->
+            val path = storedImagePaths.optString(key, "")
+            path.isBlank() || !File(path).exists()
+        }
+
+        if (storedVersion != GeneratedHarmonyContent.VERSION || needsImageRepair) {
+            // Neue oder fehlende Bilder: Base64 erneut sicher auf die Platte schreiben.
             val written = JSONObject()
             GeneratedHarmonyContent.IMAGES.forEach { (name, base64) ->
                 val path = DevAssetStore.writeBase64(context, "gen_${DevAssetStore.slug(name)}", base64)
@@ -138,12 +148,9 @@ object DeveloperDataManager {
                 .putString(KEY_GEN_IMAGES, written.toString())
                 .apply()
         } else {
-            // Schon geschrieben: nur die Pfade laden, Base64 bleibt ungeladen.
-            try {
-                val obj = JSONObject(p.getString(KEY_GEN_IMAGES, "{}") ?: "{}")
-                obj.keys().forEach { key -> generatedImages[key] = obj.getString(key) }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            // Vorhandene, gültige Pfade laden.
+            storedImagePaths.keys().forEach { key ->
+                generatedImages[key] = storedImagePaths.getString(key)
             }
         }
     }
