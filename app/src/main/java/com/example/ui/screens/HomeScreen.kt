@@ -40,6 +40,8 @@ import com.example.data.model.HarmonyPacksData
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.components.CategoryTag
+import com.example.ui.contentText
+import com.example.ui.tr
 import com.example.ui.components.HarmonyCard
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyBg
@@ -91,7 +93,7 @@ fun HomeScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "🔥 Tägliche Aktivität",
+                text = tr("🔥 Tägliche Aktivität", "🔥 Daily activity"),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
@@ -119,7 +121,7 @@ fun HomeScreen(
 
         // Recommendations Section
         Text(
-            text = "Für dich empfohlen",
+            text = tr("Für dich empfohlen", "Recommended for you"),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -139,7 +141,7 @@ fun HomeScreen(
 
         // Quick Widgets Section
         Text(
-            text = "Widgets",
+            text = tr("Widgets", "Widgets"),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -153,21 +155,21 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             WidgetCard(
-                title = "Du fehlst mir",
+                title = tr("Du fehlst mir", "I miss you"),
                 emoji = "🥺",
-                onClick = { onSendWidget("Du fehlst mir", "🥺") },
+                onClick = { onSendWidget(tr("Du fehlst mir", "I miss you"), "🥺") },
                 modifier = Modifier.weight(1f)
             )
             WidgetCard(
-                title = "Denke an dich",
+                title = tr("Denke an dich", "Thinking of you"),
                 emoji = "💭",
-                onClick = { onSendWidget("Ich denke an dich", "💭") },
+                onClick = { onSendWidget(tr("Ich denke an dich", "Thinking of you"), "💭") },
                 modifier = Modifier.weight(1f)
             )
             WidgetCard(
-                title = "Kuss senden",
+                title = tr("Kuss senden", "Send a kiss"),
                 emoji = "😘",
-                onClick = { onSendWidget("Kuss", "😘") },
+                onClick = { onSendWidget(tr("Kuss", "Kiss"), "😘") },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -176,7 +178,7 @@ fun HomeScreen(
 
         // Couple Statistics Section
         Text(
-            text = "Paar-Statistiken",
+            text = tr("Paar-Statistiken", "Couple statistics"),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -189,8 +191,8 @@ fun HomeScreen(
                 .padding(horizontal = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            StatCard(value = daysTogether.toString(), label = "Gemeinsame Tage", modifier = Modifier.weight(1f))
-            StatCard(value = totalAnswersCount.toString(), label = "Beantwortete Fragen", modifier = Modifier.weight(1f))
+            StatCard(value = daysTogether.toString(), label = tr("Gemeinsame Tage", "Days together"), modifier = Modifier.weight(1f))
+            StatCard(value = totalAnswersCount.toString(), label = tr("Beantwortete Fragen", "Questions answered"), modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -201,8 +203,8 @@ fun HomeScreen(
                 .padding(horizontal = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            StatCard(value = stats.visitedCities.toString(), label = "Besuchte Städte", modifier = Modifier.weight(1f))
-            StatCard(value = stats.visitedCountries.toString(), label = "Besuchte Länder", modifier = Modifier.weight(1f))
+            StatCard(value = stats.visitedCities.toString(), label = tr("Besuchte Städte", "Cities visited"), modifier = Modifier.weight(1f))
+            StatCard(value = stats.visitedCountries.toString(), label = tr("Besuchte Länder", "Countries visited"), modifier = Modifier.weight(1f))
         }
     }
 }
@@ -226,7 +228,7 @@ fun PaddingPackCard(
         Column {
             Row {
                 pack.tags.forEach { tag ->
-                    CategoryTag(tag = tag, modifier = Modifier.padding(end = 6.dp))
+                    CategoryTag(tag = contentText(tag), modifier = Modifier.padding(end = 6.dp))
                 }
             }
 
@@ -237,7 +239,7 @@ fun PaddingPackCard(
             }
 
             Text(
-                text = "$packEmoji  ${pack.title}",
+                text = "$packEmoji  ${contentText(pack.title)}",
                 fontSize = 16.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
