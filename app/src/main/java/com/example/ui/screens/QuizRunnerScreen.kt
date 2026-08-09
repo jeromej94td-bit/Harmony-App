@@ -340,7 +340,7 @@ fun QuizRunnerScreen(
                                 .verticalScroll(scrollState)
                                 .padding(vertical = 12.dp)
                         ) {
-                            CategoryTag(tag = pack.tags.firstOrNull() ?: "reden")
+                            CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "reden"))
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
                                 text = contentText(pack.title),
@@ -464,7 +464,7 @@ fun QuizRunnerScreen(
                                 .verticalScroll(scrollState),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            CategoryTag(tag = pack.tags.firstOrNull() ?: "unterhaltung")
+                            CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "unterhaltung"))
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Text(
@@ -476,7 +476,7 @@ fun QuizRunnerScreen(
                             )
                             Spacer(modifier = Modifier.height(26.dp))
 
-                            val options = (q?.options ?: emptyList()) + "Schreibe deine eigene Antwort"
+                            val options = (q?.options ?: emptyList()) + tr("Schreibe deine eigene Antwort", "Write your own answer")
 
                             options.forEachIndexed { optIdx, optText ->
                                 val isOwn = optIdx == options.size - 1
@@ -536,7 +536,7 @@ fun QuizRunnerScreen(
                                 shape = CircleShape,
                                 colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                             ) {
-                                Text(text = "Fertig", fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                                Text(text = tr("Fertig", "Done"), fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }
@@ -623,7 +623,7 @@ fun QuizRunnerScreen(
                             OutlinedTextField(
                                 value = textInput,
                                 onValueChange = { textInput = it },
-                                placeholder = { Text("Deine Antwort...", color = HarmonyMuted) },
+                                placeholder = { Text(tr("Deine Antwort...", "Your answer..."), color = HarmonyMuted) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .testTag("own_answer_input"),
