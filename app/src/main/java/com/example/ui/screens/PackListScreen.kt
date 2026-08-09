@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.contentText
 import com.example.ui.tr
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,8 +42,8 @@ fun PackListScreen(
     val topic = HarmonyPacksData.TOPICS.find { it.id == selectedTopicId }
     val category = HarmonyPacksData.CATEGORIES.find { it.id == selectedCategoryId }
     val titleText = when {
-        topic != null -> "${topic.emoji} ${topic.name}"
-        category != null -> "${category.emoji} ${category.name}"
+        topic != null -> "${topic.emoji} ${contentText(topic.name)}"
+        category != null -> "${category.emoji} ${contentText(category.name)}"
         else -> tr("Alle Pakete", "All packs")
     }
 
@@ -111,7 +112,7 @@ fun PackListScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = tr("Hier ist gerade nichts.\nWechsle den Filter oder choose another topic.""),
+                    text = tr("Hier ist gerade nichts.\nWechsle den Filter oder wähle ein anderes Thema.", "Nothing here right now.\nChange the filter or choose another topic."),
                     color = HarmonyMuted,
                     fontSize = 13.5.sp,
                     lineHeight = 20.sp,
