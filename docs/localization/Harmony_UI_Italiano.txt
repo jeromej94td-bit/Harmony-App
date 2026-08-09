@@ -3394,7 +3394,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0848. DE: Hochzeit
       EN: Wedding
-      IT: matrimonio
+      IT: Matrimonio
 
 0849. DE: Kinder
       EN: Children
@@ -3406,55 +3406,55 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0851. DE: {ANZAHL} Bilder geladen — Namen prüfen, dann erstellen.
       EN: {COUNT} images loaded — review the names, then create the pack.
-      IT: {NUMERO} immagini caricate: controlla i nomi, quindi crea.
+      IT: {ANZAHL} immagini caricate: controlla i nomi, quindi crea.
 
 0852. DE: {ANZAHL} Bilder geladen.
       EN: {COUNT} images loaded.
-      IT: {NUMBER} immagini caricate.
+      IT: {ANZAHL} immagini caricate.
 
 0853. DE: {ANZAHL} Paare aus {ANZAHL} Bildern
       EN: {COUNT} pairs from {COUNT} images
-      IT: {NUMBER} coppie di {NUMBER} immagini
+      IT: {ANZAHL} coppie di {ANZAHL} immagini
 
 0854. DE: Bild {NUMMER} von {ANZAHL}…
       EN: Image {NUMBER} of {COUNT}…
-      IT: Immagine {NUMBER} di {NUMBER}…
+      IT: Immagine {NUMMER} di {ANZAHL}…
 
 0855. DE: Speichere Bild {NUMMER} von {ANZAHL}…
       EN: Saving image {NUMBER} of {COUNT}…
-      IT: Salva immagine {NUMBER} da {NUMBER}…
+      IT: Salva immagine {NUMMER} da {ANZAHL}…
 
 0856. DE: Paar {NUMMER}
       EN: Pair {NUMBER}
-      IT: Accoppia {NUMERO}
+      IT: Accoppia {NUMMER}
 
 0857. DE: Frage {NUMMER}
       EN: Question {NUMBER}
-      IT: Domanda {NUMERO}
+      IT: Domanda {NUMMER}
 
 0858. DE: Schritt {NUMMER}
       EN: Step {NUMBER}
-      IT: Passaggio {NUMERO}
+      IT: Passaggio {NUMMER}
 
 0859. DE: {ANZAHL} Paare
       EN: {COUNT} pairs
-      IT: {NUMERO} paia
+      IT: {ANZAHL} paia
 
 0860. DE: {ANZAHL} Fragen
       EN: {COUNT} questions
-      IT: {NUMERO} domande
+      IT: {ANZAHL} domande
 
 0861. DE: {ANZAHL} Schritt(e)
       EN: {COUNT} steps
-      IT: {NUMBER} passaggio/i
+      IT: {ANZAHL} passaggio/i
 
 0862. DE: {ANZAHL} Paare · {ANZAHL} Fragen
       EN: {COUNT} pairs · {COUNT} questions
-      IT: {NUMERO} coppie · {NUMERO} domande
+      IT: {ANZAHL} coppie · {ANZAHL} domande
 
 0863. DE: {ANZAHL} Einträge
       EN: {COUNT} entries
-      IT: {NUMERO} voci
+      IT: {ANZAHL} voci
 
 0864. DE: Fertig: {PAKETE} Pakete · {BILDER} Bilder · {DETAILS}
       EN: Done: {PACKS} packs · {IMAGES} images · {DETAILS}
@@ -3462,39 +3462,39 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
       EN: 🎉 {COUNT} packs/chains and images imported successfully!
-      IT: 🎉 {NUMERO} pacchetti/catene e immagini importati con successo!
+      IT: 🎉 {ANZAHL} pacchetti/catene e immagini importati con successo!
 
 0866. DE: 🎉 '{TITEL}' angelegt · {ANZAHL} Paare spielbereit
       EN: 🎉 '{TITLE}' created · {COUNT} pairs ready to play
-      IT: 🎉 '{TITLE}' creato · {NUMBER} coppie pronte per giocare
+      IT: 🎉 '{TITEL}' creato · {ANZAHL} coppie pronte per giocare
 
 0867. DE: • A: {OPTION} (Bild: {BILD})
       EN: • A: {OPTION} (Image: {IMAGE})
-      IT: • A: {OPZIONE} (Immagine: {IMAGE})
+      IT: • A: {OPTION} (Immagine: {BILD})
 
 0868. DE: • B: {OPTION} (Bild: {BILD})
       EN: • B: {OPTION} (Image: {IMAGE})
-      IT: • B: {OPZIONE} (Immagine: {IMAGE})
+      IT: • B: {OPTION} (Immagine: {BILD})
 
 0869. DE: '{TITEL}' gelöscht.
       EN: '{TITLE}' deleted.
-      IT: "{TITOLO}" eliminato.
+      IT: "{TITEL}" eliminato.
 
 0870. DE: '{TITEL}' gespeichert.
       EN: '{TITLE}' saved.
-      IT: "{TITOLO}" salvato.
+      IT: "{TITEL}" salvato.
 
 0871. DE: Kategorie '{TITEL}' gespeichert.
       EN: Category '{TITLE}' saved.
-      IT: Categoria "{TITLE}" salvata.
+      IT: Categoria "{TITEL}" salvata.
 
 0872. DE: Kette '{TITEL}' gespeichert.
       EN: Chain '{TITLE}' saved.
-      IT: Catena "{TITLE}" salvata.
+      IT: Catena "{TITEL}" salvata.
 
 0873. DE: Kette '{TITEL}' gelöscht.
       EN: Chain '{TITLE}' deleted.
-      IT: Catena "{TITLE}" eliminata.
+      IT: Catena "{TITEL}" eliminata.
 
 0874. DE: Bild für '{OPTION}' gesetzt.
       EN: Image set for '{OPTION}'.
@@ -3518,7 +3518,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0879. DE: Weil du {OPTION} gewählt hast …
       EN: Because you chose {OPTION}…
-      IT: Poiché hai scelto {OPZIONE}...
+      IT: Poiché hai scelto {OPTION}...
 
 0880. DE: Verbinde dich mit {PARTNER}, um die Antwort zu sehen
       EN: Connect with {PARTNER} to see the answer
@@ -3534,23 +3534,23 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0883. DE: Fehler bei der Umformulierung: {FEHLER}
       EN: Rewriting failed: {ERROR}
-      IT: Errore di riformulazione: {ERROR}
+      IT: Errore di riformulazione: {FEHLER}
 
 0884. DE: Fehler bei der Analyse: {FEHLER}
       EN: Analysis failed: {ERROR}
-      IT: Errore di analisi: {ERROR}
+      IT: Errore di analisi: {FEHLER}
 
 0885. DE: Fehler bei der Ideengenerierung: {FEHLER}
       EN: Idea generation failed: {ERROR}
-      IT: Errore nella generazione dell'idea: {ERROR}
+      IT: Errore nella generazione dell'idea: {FEHLER}
 
 0886. DE: {EMOJI} {INHALT}
       EN: {EMOJI} {LOCALIZED CONTENT}
-      IT: {EMOJI} {CONTENUTO}
+      IT: {EMOJI} {INHALT}
 
 0887. DE: {NUMMER}. {INHALT}
       EN: {NUMBER}. {LOCALIZED CONTENT}
-      IT: {NUMERO}. {CONTENUTO}
+      IT: {NUMMER}. {INHALT}
 
 0888. DE: HARMONY
       EN: HARMONY
