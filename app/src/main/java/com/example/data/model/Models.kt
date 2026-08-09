@@ -275,7 +275,15 @@ object HarmonyPacksData {
                 "Altbau mit Charme" to "Neubau mit Smart Home",
                 "Offene Wohnküche" to "Separate Küche",
                 "Prasselnder Kamin" to "Fußbodenheizung",
-                "Großer Garten" to "Sonnige Dachterrasse"
+                "Großer Garten" to "Sonnige Dachterrasse",
+                "Stadtvilla" to "Landhaus",
+                "Glasfassade" to "Natursteinfassade",
+                "Penthouse mit Ausblick" to "Haus am See",
+                "Minimalistisches Interieur" to "Landhausstil",
+                "Bibliothek" to "Heimkino",
+                "Innenpool" to "Wellnessbad",
+                "Große Fensterfront" to "Privater Innenhof",
+                "Tiny House" to "Mehrgenerationenhaus"
             )
         ),
 
@@ -290,7 +298,15 @@ object HarmonyPacksData {
                 "Großer Außenpool" to "Outdoor-Whirlpool",
                 "Moderne Grillstation" to "Gemütliche Feuerstelle",
                 "Eigenes Gemüsebeet" to "Bunte Blumenwiese",
-                "Entspannte Hängematte" to "Stilvolles Outdoor-Sofa"
+                "Entspannte Hängematte" to "Stilvolles Outdoor-Sofa",
+                "Infinity-Pool" to "Naturteich",
+                "Outdoor-Küche" to "Pizzaofen",
+                "Pergola mit Lounge" to "Wintergarten",
+                "Kräuterbeet" to "Obstgarten",
+                "Dachgarten mit Lounge" to "Mediterraner Innenhof",
+                "Feuerstelle" to "Außenkamin",
+                "Spielbereich für Kinder" to "Sportplatz",
+                "Gewächshaus" to "Saunahaus"
             )
         ),
 
@@ -335,7 +351,15 @@ object HarmonyPacksData {
                 "Klassisch Solitär" to "Vintage verspielt",
                 "Gelbgold" to "Weißgold",
                 "Großer Stein" to "Filigran & schlicht",
-                "Diamant" to "Farbedelstein"
+                "Diamant" to "Farbedelstein",
+                "Platin" to "Roségold",
+                "Drei-Stein-Ring" to "Moderner Solitär",
+                "Ovaler Diamant" to "Runder Diamant",
+                "Schmal & zart" to "Markant & breit",
+                "Moissanit" to "Saphir",
+                "Vintage Art déco" to "Modern geometrisch",
+                "Gravur innen" to "Diamanten im Band",
+                "Ohne Stein" to "Statement-Ring"
             )
         ),
 
