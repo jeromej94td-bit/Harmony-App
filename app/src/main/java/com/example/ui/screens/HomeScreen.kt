@@ -82,7 +82,7 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(bottom = 90.dp)
+            .padding(bottom = 112.dp)
     ) {
         // Daily Activity Header
         Row(
@@ -94,7 +94,7 @@ fun HomeScreen(
         ) {
             Text(
                 text = tr("🔥 Tägliche Aktivität", "🔥 Daily activity"),
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
             )
@@ -109,7 +109,7 @@ fun HomeScreen(
             modifier = Modifier.padding(horizontal = 18.dp)
         )
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // Connect banner
         ConnectBanner(
@@ -122,10 +122,10 @@ fun HomeScreen(
         // Recommendations Section
         Text(
             text = tr("Für dich empfohlen", "Recommended for you"),
-            fontSize = 17.sp,
+            fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
         )
 
         recommendedPacks.forEach { pack ->
@@ -142,10 +142,10 @@ fun HomeScreen(
         // Quick Widgets Section
         Text(
             text = tr("Widgets", "Widgets"),
-            fontSize = 17.sp,
+            fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
         )
 
         Row(
@@ -179,10 +179,10 @@ fun HomeScreen(
         // Couple Statistics Section
         Text(
             text = tr("Paar-Statistiken", "Couple statistics"),
-            fontSize = 17.sp,
+            fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
         )
 
         Row(
@@ -240,7 +240,7 @@ fun PaddingPackCard(
 
             Text(
                 text = "$packEmoji  ${contentText(pack.title)}",
-                fontSize = 16.5.sp,
+                fontSize = 18.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
                 lineHeight = 22.sp
