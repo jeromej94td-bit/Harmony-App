@@ -302,7 +302,7 @@ fun PaddingPackCard(
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = if (isDone) "ERGEBNISSE" else "BEANTWORTE",
+                        text = if (isDone) tr("ERGEBNISSE", "RESULTS") else tr("BEANTWORTE", "ANSWER"),
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = HarmonyPink,
@@ -363,14 +363,14 @@ fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
-                text = "Verbinde dich mit $partnerName",
+                text = tr("Verbinde dich mit $partnerName", "Connect with $partnerName"),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.",
+                text = tr("Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.", "Answer questions at the same time — answers become visible when you are both finished."),
                 fontSize = 13.5.sp,
                 color = HarmonyMuted,
                 lineHeight = 19.sp
