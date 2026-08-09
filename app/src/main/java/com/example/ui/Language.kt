@@ -10,7 +10,8 @@ import androidx.compose.runtime.compositionLocalOf
  */
 enum class AppLanguage(val code: String, val nativeName: String, val englishName: String) {
     GERMAN("de", "Deutsch", "German"),
-    ENGLISH("en", "English", "English");
+    ENGLISH("en", "English", "English"),
+    ITALIAN("it", "Italiano", "Italian");
 
     companion object {
         fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
@@ -172,6 +173,110 @@ internal fun localizeEnglishDynamicContent(text: String): String? {
     if (text.contains(" · ")) {
         val translated = text.split(" · ").joinToString(" · ") {
             TranslationCatalog.translate(it, AppLanguage.ENGLISH) ?: it
+        }
+        if (translated != text) return translated
+    }
+    return null
+}
+
+
+private fun exactItalian(text: String): String =
+    TranslationCatalog.exact(text, AppLanguage.ITALIAN) ?: text
+
+/** Localizes variable-bearing app messages without producing mixed-language Italian copy. */
+internal fun localizeItalianDynamicContent(text: String): String? {
+    Regex("^([\\p{So}\\p{Sk}\\uFE0F\\u200D]+\\s+)(.+)$").matchEntire(text)?.let {
+        TranslationCatalog.exact(it.groupValues[2], AppLanguage.ITALIAN)?.let { translated ->
+            return it.groupValues[1] + translated
+        }
+    }
+    Regex("^(\\d+[.)]\\s+)(.+)$").matchEntire(text)?.let {
+        TranslationCatalog.exact(it.groupValues[2], AppLanguage.ITALIAN)?.let { translated ->
+            return it.groupValues[1] + translated
+        }
+    }
+    Regex("^(\\d+) Bilder geladen — Namen prüfen, dann erstellen\\.$").matchEntire(text)?.let {
+        return "${it.groupValues[1]} immagini caricate — controlla i nomi e poi crea il pacchetto."
+    }
+    Regex("^(\\d+) Bilder geladen\\.$").matchEntire(text)?.let {
+        return "${it.groupValues[1]} immagini caricate."
+    }
+    Regex("^(\\d+) Paare aus (\\d+) Bildern$").matchEntire(text)?.let {
+        return "${it.groupValues[1]} coppie da ${it.groupValues[2]} immagini"
+    }
+    Regex("^Bild (\\d+) von (\\d+)…$").matchEntire(text)?.let {
+        return "Immagine ${it.groupValues[1]} di ${it.groupValues[2]}…"
+    }
+    Regex("^Speichere Bild (\\d+) von (\\d+)…$").matchEntire(text)?.let {
+        return "Salvataggio immagine ${it.groupValues[1]} di ${it.groupValues[2]}…"
+    }
+    Regex("^Paar (\\d+)$").matchEntire(text)?.let { return "Coppia ${it.groupValues[1]}" }
+    Regex("^Frage (\\d+)$").matchEntire(text)?.let { return "Domanda ${it.groupValues[1]}" }
+    Regex("^Schritt (\\d+)$").matchEntire(text)?.let { return "Passaggio ${it.groupValues[1]}" }
+    Regex("^(\\d+) Paare$").matchEntire(text)?.let { return "${it.groupValues[1]} coppie" }
+    Regex("^(\\d+) Fragen$").matchEntire(text)?.let { return "${it.groupValues[1]} domande" }
+    Regex("^(\\d+) Schritt\\(e\\)$").matchEntire(text)?.let { return "${it.groupValues[1]} passaggi" }
+    Regex("^(\\d+) Paare · (\\d+) Fragen$").matchEntire(text)?.let {
+        return "${it.groupValues[1]} coppie · ${it.groupValues[2]} domande"
+    }
+    Regex("^(\\d+) Einträge$").matchEntire(text)?.let { return "${it.groupValues[1]} elementi" }
+    Regex("^Fertig: (\\d+) Pakete · (\\d+) Bilder · (.+)$").matchEntire(text)?.let {
+        return "Fatto: ${it.groupValues[1]} pacchetti · ${it.groupValues[2]} immagini · ${it.groupValues[3]}"
+    }
+    Regex("^🎉 (\\d+) Pakete/Ketten & Bilder erfolgreich eingespielt!$").matchEntire(text)?.let {
+        return "🎉 ${it.groupValues[1]} pacchetti/catene e immagini importati con successo!"
+    }
+    Regex("^🎉 '(.+)' angelegt · (\\d+) Paare spielbereit$").matchEntire(text)?.let {
+        return "🎉 '${exactItalian(it.groupValues[1])}' creato · ${it.groupValues[2]} coppie pronte da giocare"
+    }
+    Regex("^• ([AB]): (.+) \\(Bild: (.+)\\)$").matchEntire(text)?.let {
+        return "• ${it.groupValues[1]}: ${exactItalian(it.groupValues[2])} (Immagine: ${it.groupValues[3]})"
+    }
+    Regex("^([AB]): (.+)$").matchEntire(text)?.let {
+        return "${it.groupValues[1]}: ${exactItalian(it.groupValues[2])}"
+    }
+    Regex("^'(.+)' gelöscht\\.$").matchEntire(text)?.let {
+        return "'${exactItalian(it.groupValues[1])}' eliminato."
+    }
+    Regex("^'(.+)' gespeichert\\.$").matchEntire(text)?.let {
+        return "'${exactItalian(it.groupValues[1])}' salvato."
+    }
+    Regex("^Kategorie '(.+)' gespeichert\\.$").matchEntire(text)?.let {
+        return "Categoria '${exactItalian(it.groupValues[1])}' salvata."
+    }
+    Regex("^Kette '(.+)' gespeichert\\.$").matchEntire(text)?.let {
+        return "Catena '${exactItalian(it.groupValues[1])}' salvata."
+    }
+    Regex("^Kette '(.+)' gelöscht\\.$").matchEntire(text)?.let {
+        return "Catena '${exactItalian(it.groupValues[1])}' eliminata."
+    }
+    Regex("^Bild für '(.+)' gesetzt\\.$").matchEntire(text)?.let {
+        return "Immagine impostata per '${exactItalian(it.groupValues[1])}'."
+    }
+    Regex("^Eigenes Bild für '(.+)' entfernt\\.$").matchEntire(text)?.let {
+        return "Immagine personalizzata rimossa per '${exactItalian(it.groupValues[1])}'."
+    }
+    Regex("^Verbinde dich mit (.+), um die Antwort zu sehen$").matchEntire(text)?.let {
+        return "Connettiti con ${it.groupValues[1]} per vedere la risposta"
+    }
+    Regex("^Verbinde dich mit (.+)$").matchEntire(text)?.let {
+        return "Connettiti con ${it.groupValues[1]}"
+    }
+    Regex("^Deine Antworten sind gespeichert\\. Sobald (.+) das Paket beendet, werden beide Antworten gemeinsam sichtbar\\.$").matchEntire(text)?.let {
+        return "Le tue risposte sono state salvate. Quando ${it.groupValues[1]} completerà il pacchetto, entrambe le risposte saranno visibili insieme."
+    }
+    Regex("^Fehler bei der Umformulierung: (.+)$").matchEntire(text)?.let {
+        return "Errore nella riformulazione: ${it.groupValues[1]}"
+    }
+    Regex("^Fehler bei der Analyse: (.+)$").matchEntire(text)?.let {
+        return "Errore nell'analisi: ${it.groupValues[1]}"
+    }
+    Regex("^Fehler bei der Ideengenerierung: (.+)$").matchEntire(text)?.let {
+        return "Errore nella generazione di idee: ${it.groupValues[1]}"
+    }
+    if (text.contains(" · ")) {
+        val translated = text.split(" · ").joinToString(" · ") {
+            TranslationCatalog.translate(it, AppLanguage.ITALIAN) ?: it
         }
         if (translated != text) return translated
     }
