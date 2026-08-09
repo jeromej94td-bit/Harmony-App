@@ -4,6 +4,14 @@ Italiano
 Fonte: catalogo UI e contenuti Harmony. I nomi degli utenti, i nomi dei partner e i contenuti creati dagli utenti restano dati variabili e non vengono tradotti automaticamente.
 I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'esecuzione.
 
+==============================================================================
+CONTENUTO INTEGRATO AGGIUNTIVO
+==============================================================================
+
+0896. DE: Tiere
+      EN: Animals
+      IT: Animali
+
 0001. DE: Wer würde eher?
       EN: Who's more likely?
       IT: Chi preferirebbe?
