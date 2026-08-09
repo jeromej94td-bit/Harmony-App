@@ -157,7 +157,7 @@ fun QuizRunnerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 6.dp),
+                            .padding(horizontal = 16.dp, vertical = 9.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -200,7 +200,7 @@ fun QuizRunnerScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 14.dp),
+                            .padding(horizontal = 20.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
@@ -1118,7 +1118,7 @@ fun TotResultsView(
                                 isSelected = myAns == pair.first,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(180.dp)
+                                    .height(210.dp)
                             )
 
                             SideBySideTotCard(
@@ -1126,7 +1126,7 @@ fun TotResultsView(
                                 isSelected = myAns == pair.second,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(180.dp)
+                                    .height(210.dp)
                             )
                         }
                     }
