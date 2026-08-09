@@ -226,6 +226,18 @@ fun PaddingPackCard(
         onClick = { onStartPack(pack.id) }
     ) {
         Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(5.dp)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(packAccent(pack.cat), packAccent(pack.cat).copy(alpha = 0.35f))
+                        )
+                    )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             Row {
                 pack.tags.forEach { tag ->
                     CategoryTag(tag = contentText(tag), modifier = Modifier.padding(end = 6.dp))
