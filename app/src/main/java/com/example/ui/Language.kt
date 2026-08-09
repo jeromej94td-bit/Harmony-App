@@ -45,6 +45,13 @@ fun contentText(text: String): String =
 
 private val ENGLISH_CONTENT = mapOf(
     "Fragen & Spiele" to "Questions & Games",
+    "unterhaltung" to "Entertainment",
+    "dasoderdas" to "This or That",
+    "hochzeit" to "Wedding",
+    "kinder" to "Children",
+    "reden" to "Discussion",
+    "reisen" to "Travel",
+    "familie" to "Family",
     "Kategorien" to "Categories",
     "Tägliche Aktivität" to "Daily activity",
     "Für dich empfohlen" to "Recommended for you",
