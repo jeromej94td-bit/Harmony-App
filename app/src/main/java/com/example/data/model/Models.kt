@@ -174,10 +174,16 @@ object HarmonyPacksData {
             topic = "beziehung",
             type = "quiz",
             questions = listOf(
-                Question("Zu welcher Tageszeit stellst du dir den Antrag vor?", listOf("Sonnenaufgang", "Mitten am Tag", "Sonnenuntergang", "Nachts unter Sternen")),
-                Question("Welche Jahreszeit passt am besten?", listOf("Frühling", "Sommer", "Herbst", "Winter")),
-                Question("Soll Musik dabei laufen?", listOf("Ja, unser Lied", "Live-Musik", "Lieber nur wir und Stille")),
-                Question("Wer sollte es als Erstes erfahren?", listOf("Unsere Eltern", "Beste Freunde", "Social Media", "Niemand — erstmal nur wir"))
+                Question("Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?", listOf("Übertrieben und großartig", "Mittelweg mit besonderen Details", "Einfach und intim")),
+                Question("Was hältst du von Requisiten (z.B. Schilder, Luftballons, etc.)?", listOf("Liebe sie, macht mehr Spaß", "Vielleicht ein oder zwei", "Nein, zu ablenkend")),
+                Question("Möchtest du, dass der Moment sofort in den sozialen Medien geteilt wird?", listOf("Ja, sofort teilen", "Nein, erstmal privat halten", "Erst nur enge Freunde/Familie")),
+                Question("Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?", listOf("Sehr wichtig, es sollte persönlich sein", "Etwas, eine kleine Note wäre schön", "Nicht nötig, lieber klassisch bleiben")),
+                Question("Würdest du einen Antrag im Urlaub bevorzugen (mit Reisen verbunden)?", listOf("Ja, in einer aufregenden Stadt oder Sehenswürdigkeit", "Vielleicht, wenn es machbar ist", "Nein, lieber vor Ort")),
+                Question("Wie lange nach dem Antrag möchtest du mit anderen feiern?", listOf("Am selben Tag mit Freunden/Familie", "Etwa eine Woche später, erst mal nur wir", "Keine Party nötig, privat halten")),
+                Question("Hättest du gerne einen geschriebenen Brief als Teil des Antrags?", listOf("Ja, etwas zum Lesen und Aufbewahren", "Vielleicht, aber mündlich reicht", "Nein, einfach halten")),
+                Question("Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?", listOf("Ja, Traditionen einbinden", "Ein paar kulturelle Anklänge sind okay", "Nein, modern halten")),
+                Question("Was ist das Wichtigste beim Antrag?", listOf("Die Umgebung und Atmosphäre", "Die Worte und Emotionen", "Der Ring und die Geste")),
+                Question("Möchtest du, dass Haustiere beim Antrag dabei sind?", listOf("Ja, sie gehören zur Familie!", "Vielleicht, wenn es passt", "Nein, nur wir"))
             )
         ),
 
