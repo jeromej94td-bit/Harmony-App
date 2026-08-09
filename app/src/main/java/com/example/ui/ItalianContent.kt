@@ -7,6 +7,7 @@ package com.example.ui
  * names, messages and answers intentionally remain unchanged at runtime.
  */
 internal val EXACT_ITALIAN_CONTENT: Map<String, String> = mapOf(
+    "Tiere" to "Animali",
     "Wer würde eher?" to "Chi preferirebbe?",
     "Zeichnen" to "Disegno",
     "Das oder das?" to "Questo o quello?",
