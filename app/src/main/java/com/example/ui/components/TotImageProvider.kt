@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.R
+import com.example.ui.EXACT_ENGLISH_CONTENT
+import com.example.ui.EXACT_ITALIAN_CONTENT
 import java.io.File
 
 /**
@@ -276,6 +278,18 @@ object TotImageProvider {
     private val userOverrides = mutableMapOf<String, Any>()
     private val generatedOverrides = mutableMapOf<String, Any>()
     private val aliases = mutableMapOf<String, String>()
+
+    init {
+        // Option labels are localized for display, but image resources are keyed by
+        // their canonical German source. Register both shipped locales up front so
+        // every renderer — including legacy screens that only pass display text —
+        // resolves the same image after a language switch.
+        (EXACT_ENGLISH_CONTENT.entries + EXACT_ITALIAN_CONTENT.entries).forEach { (source, localized) ->
+            if (!source.equals(localized, ignoreCase = true)) {
+                setAlias(localized, source)
+            }
+        }
+    }
 
     /**
      * Resolves only an explicitly registered key and never returns the generic fallback.
