@@ -232,8 +232,16 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
         modifier = Modifier
             .size(width = 126.dp, height = 148.dp)
             .clip(RoundedCornerShape(18.dp))
-            .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
-            .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
+            .background(
+                Brush.linearGradient(
+                    listOf(
+                        Color(category.tagColorHex).copy(alpha = 0.34f),
+                        HarmonySurface2,
+                        HarmonySurface
+                    )
+                )
+            )
+            .border(1.dp, Color(category.tagColorHex).copy(alpha = 0.58f), RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
             .testTag("category_card_${category.id}")
