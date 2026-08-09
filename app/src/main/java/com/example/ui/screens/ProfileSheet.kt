@@ -499,7 +499,7 @@ fun ProfileSheet(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                         ) {
-                            Text(text = "Abbrechen", color = HarmonyText)
+                            Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText)
                         }
                         Button(
                             onClick = {
@@ -515,7 +515,7 @@ fun ProfileSheet(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                         ) {
-                            Text(text = "Speichern", color = Color.White)
+                            Text(text = tr("Speichern", "Save"), color = Color.White)
                         }
                     }
                 }
