@@ -75,6 +75,9 @@ import com.example.data.LinkEngine
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.ActivePackRun
+import com.example.ui.AppLanguage
+import com.example.ui.contentText
+import com.example.ui.tr
 import com.example.ui.components.CategoryTag
 import com.example.ui.components.TotImageProvider
 import com.example.ui.theme.HarmonyBg
@@ -169,7 +172,7 @@ fun QuizRunnerScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Zurück",
+                                contentDescription = tr("Zurück", "Back"),
                                 tint = Color.White,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -177,7 +180,7 @@ fun QuizRunnerScreen(
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = stringResource(R.string.das_oder_das_title),
+                                text = tr("Das oder das?", "This or That?"),
                                 fontSize = 21.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -211,7 +214,7 @@ fun QuizRunnerScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Zurück",
+                                contentDescription = tr("Zurück", "Back"),
                                 tint = Color.White,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -277,7 +280,7 @@ fun QuizRunnerScreen(
                                 Text(text = "💞", fontSize = 56.sp)
                                 Spacer(modifier = Modifier.height(14.dp))
                                 Text(
-                                    text = "Fertig!",
+                                    text = tr("Fertig!", "Done!"),
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
@@ -310,7 +313,7 @@ fun QuizRunnerScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        text = caption,
+                                        text = contentText(caption),
                                         fontSize = 13.5.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = Color.White,
@@ -341,7 +344,7 @@ fun QuizRunnerScreen(
                             CategoryTag(tag = pack.tags.firstOrNull() ?: "reden")
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
-                                text = pack.title,
+                                text = contentText(pack.title),
                                 fontSize = 21.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -353,7 +356,7 @@ fun QuizRunnerScreen(
 
                                 Column(modifier = Modifier.padding(bottom = 18.dp)) {
                                     Text(
-                                        text = "${qIdx + 1}. ${question.q}",
+                                        text = "${qIdx + 1}. ${contentText(question.q)}",
                                         fontSize = 14.5.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White,
@@ -391,7 +394,7 @@ fun QuizRunnerScreen(
                                             }
                                             Spacer(modifier = Modifier.width(9.dp))
                                             Text(
-                                                text = mineAns,
+                                                text = contentText(mineAns),
                                                 fontSize = 13.sp,
                                                 color = Color.White,
                                                 lineHeight = 18.sp
@@ -408,7 +411,7 @@ fun QuizRunnerScreen(
                                                 .padding(11.dp)
                                         ) {
                                             Text(
-                                                text = "✎ Tippe, um zu antworten",
+                                                text = tr("✎ Tippe, um zu antworten", "✎ Tap to answer"),
                                                 fontSize = 12.5.sp,
                                                 color = HarmonyMuted
                                             )
@@ -442,7 +445,7 @@ fun QuizRunnerScreen(
                                         }
                                         Spacer(modifier = Modifier.width(9.dp))
                                         Text(
-                                            text = "Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen",
+                                            text = tr("Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen", "Connect with ${profile.partnerName} to see the answer"),
                                             fontSize = 13.sp,
                                             color = HarmonyMuted
                                         )
@@ -522,7 +525,7 @@ fun QuizRunnerScreen(
                                 shape = CircleShape,
                                 colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                             ) {
-                                Text(text = "Zurück", fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                                Text(text = tr("Zurück", "Back"), fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         } else if (pack.type == "disc") {
                             Button(
@@ -553,14 +556,14 @@ fun QuizRunnerScreen(
                     ) {
                         Column {
                             Text(
-                                text = "Quiz verlassen?",
+                                text = tr("Quiz verlassen?", "Leave quiz?"),
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyText
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.",
+                                text = tr("Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.", "Are you sure you want to leave? Your progress will be saved."),
                                 fontSize = 13.sp,
                                 color = HarmonyMuted,
                                 lineHeight = 18.sp
@@ -576,7 +579,7 @@ fun QuizRunnerScreen(
                                     shape = CircleShape,
                                     colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                                 ) {
-                                    Text(text = "Weiter spielen", color = HarmonyText)
+                                    Text(text = tr("Weiter spielen", "Keep playing"), color = HarmonyText)
                                 }
                                 Button(
                                     onClick = onCloseRunner,
@@ -584,7 +587,7 @@ fun QuizRunnerScreen(
                                     shape = CircleShape,
                                     colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                                 ) {
-                                    Text(text = "Quiz verlassen", color = Color.White)
+                                    Text(text = tr("Quiz verlassen", "Leave quiz"), color = Color.White)
                                 }
                             }
                         }
@@ -605,14 +608,14 @@ fun QuizRunnerScreen(
                     ) {
                         Column {
                             Text(
-                                text = "Deine eigene Antwort",
+                                text = tr("Deine eigene Antwort", "Your own answer"),
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyText
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "Schreib frei, was dir wirklich dazu einfällt.",
+                                text = tr("Schreib frei, was dir wirklich dazu einfällt.", "Write what truly comes to mind."),
                                 fontSize = 13.sp,
                                 color = HarmonyMuted
                             )
@@ -645,7 +648,7 @@ fun QuizRunnerScreen(
                                     shape = CircleShape,
                                     colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                                 ) {
-                                    Text(text = "Abbrechen", color = HarmonyText)
+                                    Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText)
                                 }
                                 Button(
                                     onClick = {
@@ -657,7 +660,7 @@ fun QuizRunnerScreen(
                                     shape = CircleShape,
                                     colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                                 ) {
-                                    Text(text = "Übernehmen", color = Color.White)
+                                    Text(text = tr("Übernehmen", "Save"), color = Color.White)
                                 }
                             }
                         }
@@ -820,7 +823,7 @@ fun TotCardPairView(
         ) {
             // Top Card (tilted -3.2f)
             TotStyledCard(
-                text = firstText,
+                text = contentText(firstText),
                 tagAlignment = Alignment.TopStart,
                 isSelected = selectedAns == firstText,
                 rotationAngle = -3.2f + topExtraRotation.value,
@@ -834,7 +837,7 @@ fun TotCardPairView(
 
             // Bottom Card (tilted +3.2f)
             TotStyledCard(
-                text = secondText,
+                text = contentText(secondText),
                 tagAlignment = Alignment.BottomStart,
                 isSelected = selectedAns == secondText,
                 rotationAngle = 3.2f + bottomExtraRotation.value,
@@ -861,7 +864,7 @@ fun TotCardPairView(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = oderText,
+                text = contentText(oderText),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF231127)
@@ -977,7 +980,7 @@ fun TotResultsView(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Zurück",
+                    contentDescription = tr("Zurück", "Back"),
                     tint = Color.White,
                     modifier = Modifier.size(18.dp)
                 )
@@ -1027,7 +1030,7 @@ fun TotResultsView(
             ) {
                 Text(text = "✓", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Ergebnisse", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+                Text(text = tr("Ergebnisse", "Results"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
             }
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -1045,7 +1048,7 @@ fun TotResultsView(
             ) {
                 Text(text = "💬", fontSize = 13.sp)
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Diskussion", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+                Text(text = tr("Diskussion", "Discussion"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
             }
         }
 
@@ -1067,7 +1070,7 @@ fun TotResultsView(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "Antwortähnlichkeit",
+                        text = tr("Antwortähnlichkeit", "Answer similarity"),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyPink
@@ -1112,7 +1115,7 @@ fun TotResultsView(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             SideBySideTotCard(
-                                text = pair.first,
+                                text = contentText(pair.first),
                                 isSelected = myAns == pair.first,
                                 modifier = Modifier
                                     .weight(1f)
@@ -1120,7 +1123,7 @@ fun TotResultsView(
                             )
 
                             SideBySideTotCard(
-                                text = pair.second,
+                                text = contentText(pair.second),
                                 isSelected = myAns == pair.second,
                                 modifier = Modifier
                                     .weight(1f)
@@ -1137,14 +1140,14 @@ fun TotResultsView(
                     .padding(horizontal = 18.dp, vertical = 20.dp)
             ) {
                 Text(
-                    text = "Diskutiert eure Antworten",
+                    text = tr("Diskutiert eure Antworten", "Discuss your answers"),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!",
+                    text = tr("Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!", "Did you discover surprising differences? Talk about why you prefer certain options!"),
                     fontSize = 13.5.sp,
                     color = HarmonyMuted,
                     lineHeight = 20.sp
