@@ -22,7 +22,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0005. DE: Zustimmen oder Ablehnen
       EN: Agree or Disagree
-      IT: Accettare o rifiutare
+      IT: D'accordo / Non d'accordo
 
 0006. DE: Ich habe noch nie
       EN: Never Have I Ever
@@ -50,7 +50,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0012. DE: Beziehung
       EN: Relationship
-      IT: relazione
+      IT: Relazione
 
 0013. DE: Sex & Liebe
       EN: Sex & Love
@@ -74,7 +74,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0018. DE: Familie
       EN: Family
-      IT: famiglia
+      IT: Famiglia
 
 0019. DE: Hobbys
       EN: Hobbies
@@ -142,7 +142,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0035. DE: Schlafzimmer
       EN: Bedroom
-      IT: camera da letto
+      IT: Camera da letto
 
 0036. DE: Wohnzimmer
       EN: Living room
@@ -262,7 +262,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0065. DE: Vorlieben für den Antrag
       EN: Proposal Preferences
-      IT: Preferenze per l'applicazione
+      IT: Preferenze per la proposta
 
 0066. DE: Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?
       EN: Would you prefer an extravagant proposal or something understated?
@@ -854,7 +854,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0213. DE: Herzhaft
       EN: Savory
-      IT: caloroso
+      IT: Salato
 
 0214. DE: Selbst kochen
       EN: Cook at Home
@@ -1250,7 +1250,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0312. DE: Zusammenziehen
       EN: Moving in together
-      IT: Contrattualistica
+      IT: Andare a convivere
 
 0313. DE: Einfach mehr Alltag
       EN: Simply sharing more everyday life
@@ -2790,7 +2790,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0697. DE: 🔗 Ketten-Bauer
       EN: 🔗 Chain Builder
-      IT: 🔗Pedone a catena
+      IT: 🔗 Creatore di catene
 
 0698. DE: Linke Karte (Seite A)
       EN: Left Card (Side A)
@@ -2854,7 +2854,7 @@ I segnaposto come {PARTNER}, {COUNT} e {OPTION} vengono sostituiti durante l'ese
 
 0713. DE: eigen
       EN: custom
-      IT: possedere
+      IT: Personalizzato
 
 0714. DE: Eis
       EN: Ice Cream
