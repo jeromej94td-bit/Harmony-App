@@ -75,7 +75,6 @@ import com.example.data.LinkEngine
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.ActivePackRun
-import com.example.ui.AppLanguage
 import com.example.ui.contentText
 import com.example.ui.tr
 import com.example.ui.components.CategoryTag
