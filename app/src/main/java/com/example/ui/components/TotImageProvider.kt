@@ -258,6 +258,27 @@ object TotImageProvider {
         return value
     }
 
+    private fun iceCreamImageKey(text: String): String? {
+        val lower = text.trim().lowercase()
+        return when {
+            "vanille" in lower -> "Vanille"
+            "schokolade" in lower || "chocolate" in lower -> "Schokolade"
+            "erdbeer" in lower -> "Erdbeere"
+            "zitrone" in lower || "lemon" in lower -> "Zitrone"
+            "stracciatella" in lower -> "Stracciatella"
+            "pistaz" in lower -> "Pistazie"
+            "mango" in lower -> "Mango Sorbet"
+            "himbeer" in lower || "raspberry" in lower -> "Himbeere"
+            "salted caramel" in lower || "salzkaramell" in lower -> "Salted Caramel"
+            "cookie dough" in lower -> "Cookie Dough"
+            "hazelnut" in lower || "haselnuss" in lower -> "Hazelnut"
+            "white chocolate" in lower || "weiße schokolade" in lower -> "White Chocolate"
+            "walnuss" in lower -> "Walnuss"
+            "banane" in lower || "banana" in lower -> "Banane"
+            else -> null
+        }
+    }
+
     fun getImageUrl(text: String): Any {
         val trimmed = text.trim()
         val lower = trimmed.lowercase()
@@ -276,7 +297,19 @@ object TotImageProvider {
         generatedOverrides[trimmed]?.let { return resolve(it) }
         generatedOverrides[lower]?.let { return resolve(it) }
 
-        // 3. Fest eingebaut
+        // 3. Eingebettete/generated Bilder: robuste Sorten-Aliase.
+        // Der Content darf z.B. "Vanille Bourbon" oder "Belgische Schokolade"
+        // anzeigen, während das Bild unter "Vanille" bzw. "Schokolade" gespeichert ist.
+        iceCreamImageKey(trimmed)?.let { key ->
+            generatedOverrides[key]?.let { return resolve(it) }
+            generatedOverrides[key.lowercase()]?.let { return resolve(it) }
+        }
+        generatedOverrides.entries.firstOrNull { (key, _) ->
+            val canonical = key.trim().lowercase()
+            canonical.length >= 4 && (lower.contains(canonical) || canonical.contains(lower))
+        }?.value?.let { return resolve(it) }
+
+        // 4. Fest eingebaut
         directMap[text]?.let { return it }
         directMap[trimmed]?.let { return it }
 
