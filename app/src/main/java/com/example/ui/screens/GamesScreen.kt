@@ -44,6 +44,8 @@ import com.example.data.model.Category
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.Topic
 import com.example.ui.components.HarmonyCard
+import com.example.ui.contentText
+import com.example.ui.tr
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyBg
 import com.example.ui.theme.HarmonyLine
@@ -81,7 +83,7 @@ fun GamesScreen(
     ) {
         // Section Title
         Text(
-            text = "Fragen & Spiele",
+            text = tr("Fragen & Spiele", "Questions & Games"),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -99,7 +101,7 @@ fun GamesScreen(
 
         // Categories Header
         Text(
-            text = "Kategorien",
+            text = tr("Kategorien", "Categories"),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -130,7 +132,7 @@ fun GamesScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "🔥 Tägliche Aktivität",
+                text = tr("🔥 Tägliche Aktivität", "🔥 Daily activity"),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
@@ -149,7 +151,7 @@ fun GamesScreen(
 
         // Topics Progress Header
         Text(
-            text = "Themen",
+            text = tr("Themen", "Topics"),
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
@@ -190,9 +192,9 @@ fun FilterChipsRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         val filters = listOf(
-            "all" to "Alle",
-            "open" to "🟠 Du bist dran",
-            "done" to "✅ Beantwortet"
+            "all" to tr("Alle", "All"),
+            "open" to tr("🟠 Du bist dran", "🟠 Your turn"),
+            "done" to tr("✅ Beantwortet", "✅ Answered")
         )
 
         filters.forEach { (filterKey, label) ->
@@ -242,7 +244,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
         ) {
             Text(text = category.emoji, fontSize = 24.sp)
             Text(
-                text = category.name,
+                text = contentText(category.name),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
@@ -309,7 +311,7 @@ fun TopicProgressCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = topic.name,
+                    text = contentText(topic.name),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = HarmonyText
