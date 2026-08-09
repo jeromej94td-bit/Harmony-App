@@ -208,7 +208,11 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
             "hochzeit", "wedding" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, tr("Hochzeit", "Wedding"))
             "kinder", "children" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, tr("Kinder", "Children"))
             "reden", "discussion" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, tr("Reden vor...", "Talk Before..."))
-            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, tag.replaceFirstChar { it.uppercase() })
+            else -> Triple(
+                Color.White.copy(alpha = 0.12f),
+                HarmonyText,
+                contentText(tag).replaceFirstChar { it.uppercase() }
+            )
         }
     }
 
@@ -220,7 +224,7 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
             .padding(horizontal = 9.dp, vertical = 4.dp)
     ) {
         Text(
-            text = label.uppercase(Locale.GERMAN),
+            text = label.uppercase(Locale.ROOT),
             fontSize = 9.5.sp,
             fontWeight = FontWeight.ExtraBold,
             color = fg,
