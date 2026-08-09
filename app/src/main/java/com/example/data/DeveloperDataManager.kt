@@ -55,8 +55,19 @@ object DeveloperDataManager {
 
     fun init(context: Context) {
         loadData(context)
+        migrateRefreshedChoicePacks()
         installGenerated(context)
         syncWithHarmonyData()
+    }
+
+    /**
+     * The three built-in visual choice packs were deliberately redesigned.
+     * If an older Dev Studio export persisted the former four-pair version,
+     * let the refreshed default pack take over without affecting other custom content.
+     */
+    private fun migrateRefreshedChoicePacks() {
+        val refreshedIds = setOf("traumhaus", "aussen", "ringe")
+        customPacks.removeAll { it.id in refreshedIds && it.pairs.size < 12 }
     }
 
     private fun prefs(context: Context) =
