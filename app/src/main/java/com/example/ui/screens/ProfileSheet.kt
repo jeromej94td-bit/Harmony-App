@@ -147,7 +147,7 @@ fun ProfileSheet(
                         enabled = !coachLoading,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(46.dp)
+                            .height(52.dp)
                             .testTag("run_coach_button"),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
@@ -217,7 +217,7 @@ fun ProfileSheet(
                         enabled = !dateIdeasLoading,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(46.dp)
+                            .height(52.dp)
                             .testTag("run_date_ideas_button"),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
@@ -294,7 +294,7 @@ fun ProfileSheet(
                         onClick = onOpenEditProfile,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(44.dp)
+                            .height(52.dp)
                             .testTag("edit_profile_button"),
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.06f))
@@ -322,7 +322,7 @@ fun ProfileSheet(
                     ) {
                         Button(
                             onClick = { onLanguageChange(AppLanguage.GERMAN) },
-                            modifier = Modifier.weight(1f).height(42.dp),
+                            modifier = Modifier.weight(1f).height(50.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = if (language == AppLanguage.GERMAN) HarmonyPink else Color.White.copy(alpha = 0.06f)
@@ -332,7 +332,7 @@ fun ProfileSheet(
                         }
                         Button(
                             onClick = { onLanguageChange(AppLanguage.ENGLISH) },
-                            modifier = Modifier.weight(1f).height(42.dp),
+                            modifier = Modifier.weight(1f).height(50.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = if (language == AppLanguage.ENGLISH) HarmonyPink else Color.White.copy(alpha = 0.06f)
@@ -378,7 +378,7 @@ fun ProfileSheet(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(44.dp)
+                                .height(52.dp)
                                 .testTag("open_dev_studio_button"),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurple)
