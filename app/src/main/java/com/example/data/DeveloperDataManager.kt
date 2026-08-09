@@ -68,6 +68,8 @@ object DeveloperDataManager {
     private fun migrateRefreshedChoicePacks() {
         val refreshedIds = setOf("traumhaus", "aussen", "ringe")
         customPacks.removeAll { it.id in refreshedIds && it.pairs.size < 12 }
+        // Replace the old persisted quiz so existing installs receive all 10 questions.
+        customPacks.removeAll { it.id == "antragvor" }
     }
 
     private fun prefs(context: Context) =
