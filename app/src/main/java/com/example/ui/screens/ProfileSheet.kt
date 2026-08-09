@@ -65,8 +65,6 @@ import java.util.Locale
 @Composable
 fun ProfileSheet(
     profile: ProfileEntity,
-    language: AppLanguage = AppLanguage.GERMAN,
-    onLanguageChange: (AppLanguage) -> Unit = {},
     coachLoading: Boolean,
     coachResult: String?,
     dateIdeasLoading: Boolean,
@@ -80,6 +78,8 @@ fun ProfileSheet(
     onRunCoach: () -> Unit,
     onRunDateIdeas: (String) -> Unit,
     onOpenDevStudio: (() -> Unit)? = null,
+    language: AppLanguage = AppLanguage.GERMAN,
+    onLanguageChange: (AppLanguage) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
