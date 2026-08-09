@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -97,8 +98,13 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
     val language = AppLanguage.fromStored(languageCode)
 
     CompositionLocalProvider(LocalAppLanguage provides language) {
-        AmbientBackground {
-        Scaffold(
+        // Recreate the complete navigation tree when the locale changes. Some screens
+        // keep derived labels and lists in remember/rememberSaveable; without a locale
+        // key those cached German values can survive while the bottom navigation has
+        // already switched to English or Italian.
+        key(language.code) {
+            AmbientBackground {
+                Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = androidx.compose.ui.graphics.Color.Transparent,
             topBar = {
@@ -118,8 +124,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     )
                 }
             }
-        ) { innerPadding ->
-            Box(
+                ) { innerPadding ->
+                    Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
@@ -229,8 +235,9 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onSaveOwnAnswer = { ansText -> viewModel.saveOwnAnswer(ansText) }
                     )
                 }
+                    }
+                }
             }
         }
-    }
     }
 }
