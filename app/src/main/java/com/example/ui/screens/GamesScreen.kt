@@ -23,6 +23,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +51,7 @@ import com.example.ui.theme.HarmonyMuted
 import com.example.ui.theme.HarmonyPink
 import com.example.ui.theme.HarmonyPinkSoft
 import com.example.ui.theme.HarmonyPurple
+import com.example.ui.theme.HarmonyPurpleLight
 import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
@@ -251,12 +259,43 @@ fun TopicProgressCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val accent = topicAccent(topic.id)
+    val pulseTransition = rememberInfiniteTransition(label = "topic_pulse_${topic.id}")
+    val pulse by pulseTransition.animateFloat(
+        initialValue = 0.42f,
+        targetValue = 0.82f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "topic_glow_${topic.id}"
+    )
+    val cardShape = RoundedCornerShape(18.dp)
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
-            .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
-            .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
+            .clip(cardShape)
+            .background(
+                Brush.linearGradient(
+                    listOf(
+                        HarmonySurface2.copy(alpha = 0.98f),
+                        accent.copy(alpha = 0.10f + pulse * 0.06f),
+                        HarmonySurface.copy(alpha = 0.98f)
+                    )
+                )
+            )
+            .border(
+                width = 1.35.dp,
+                brush = Brush.linearGradient(
+                    listOf(
+                        accent.copy(alpha = pulse),
+                        HarmonyLine,
+                        accent.copy(alpha = pulse * 0.62f)
+                    )
+                ),
+                shape = cardShape
+            )
             .clickable(onClick = onClick)
             .padding(14.dp)
             .testTag("topic_card_${topic.id}")
@@ -289,7 +328,11 @@ fun TopicProgressCard(
                             .fillMaxWidth(percentage.coerceIn(0, 100) / 100f)
                             .height(5.dp)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple)))
+                            .background(
+                                Brush.horizontalGradient(
+                                    listOf(accent, accent.copy(alpha = 0.62f), HarmonyPurpleLight)
+                                )
+                            )
                     )
                 }
             }
@@ -300,8 +343,21 @@ fun TopicProgressCard(
                 text = if (percentage >= 100) "✓" else "$percentage%",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = if (percentage >= 100) HarmonyTeal else HarmonyMuted
+                color = if (percentage >= 100) accent else HarmonyMuted
             )
         }
     }
+}
+
+private fun topicAccent(topicId: String): Color = when (topicId) {
+    "aufwaermen" -> Color(0xFFFFC46B)
+    "beziehung" -> Color(0xFFFF6B8F)
+    "sex" -> Color(0xFFFF8A65)
+    "moral" -> Color(0xFFB79AFF)
+    "geld" -> Color(0xFF7BD8CB)
+    "kennen" -> Color(0xFFC89BE0)
+    "reisen" -> Color(0xFF9DB2FF)
+    "familie" -> Color(0xFFFFB6A3)
+    "hobbys" -> Color(0xFF8DE0D0)
+    else -> HarmonyPinkSoft
 }
