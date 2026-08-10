@@ -579,5 +579,7 @@ internal val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "KI-Beziehungscoach" to "AI Relationship Coach", "KI-Date-Ideen" to "AI Date Ideas",
     "Analyse starten" to "Start Analysis", "Ideen generieren" to "Generate Ideas",
     "Namen und Startdatum eurer Beziehung." to "Your names and relationship start date.",
-    "Fertig" to "Done", "Weiter spielen" to "Keep Playing"
+    "Fertig" to "Done", "Weiter spielen" to "Keep Playing",
+    "Export teilen" to "Share export",
+    "Bilder teilen" to "Share images"
 )
