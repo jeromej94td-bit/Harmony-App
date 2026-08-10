@@ -3154,7 +3154,7 @@ CONTENIDO INTEGRADO ADICIONAL
 
 0784. DE: Hier ist gerade nichts. ↵ Wechsle den Filter oder wähle ein anderes Thema.
       EN: There is nothing here right now. ↵ Change the filter or choose another topic.
-      ES-419: No hay nada aquí ahora mismo. ↵ Cambia el filtro o elige un tema diferente.
+      ES-419: No hay nada aquí ahora mismo. ↵ Cambia el filtro o elige otro tema.
 
 0785. DE: ✨ GFK-Brücke
       EN: ✨ NVC Bridge
@@ -3194,7 +3194,7 @@ CONTENIDO INTEGRADO ADICIONAL
 
 0794. DE: Noch keine Momente. ↵ Haltet euer erstes Erlebnis fest 💞
       EN: No moments yet. ↵ Capture your first memory together 💞
-      ES-419: Aún no hay momentos. ↵ Captura tu primera experiencia 💞
+      ES-419: Aún no hay momentos. ↵ Guarden juntos su primer recuerdo 💞
 
 0795. DE: Ein Harmony-Meilenstein eurer Liebe.
       EN: A Harmony Milestone in Your Love Story.
