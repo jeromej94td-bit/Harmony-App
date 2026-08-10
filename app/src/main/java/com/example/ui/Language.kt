@@ -11,7 +11,9 @@ import androidx.compose.runtime.compositionLocalOf
 enum class AppLanguage(val code: String, val nativeName: String, val englishName: String) {
     GERMAN("de", "Deutsch", "German"),
     ENGLISH("en", "English", "English"),
-    ITALIAN("it", "Italiano", "Italian");
+    ITALIAN("it", "Italiano", "Italian"),
+    SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish"),
+    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)");
 
     companion object {
         fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
