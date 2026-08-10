@@ -7,6 +7,7 @@ import com.example.R
 import com.example.ui.EXACT_ENGLISH_CONTENT
 import com.example.ui.EXACT_FRENCH_CONTENT
 import com.example.ui.EXACT_ITALIAN_CONTENT
+import com.example.ui.EXACT_JAPANESE_CONTENT
 import com.example.ui.EXACT_SPANISH_LATIN_AMERICA_CONTENT
 import com.example.ui.EXACT_SPANISH_SPAIN_CONTENT
 import java.io.File
@@ -291,6 +292,7 @@ object TotImageProvider {
             EXACT_ENGLISH_CONTENT.entries +
                 EXACT_FRENCH_CONTENT.entries +
                 EXACT_ITALIAN_CONTENT.entries +
+                EXACT_JAPANESE_CONTENT.entries +
                 EXACT_SPANISH_LATIN_AMERICA_CONTENT.entries +
                 EXACT_SPANISH_SPAIN_CONTENT.entries
         ).forEach { (source, localized) ->
