@@ -9,6 +9,7 @@ import androidx.core.content.FileProvider
 import com.example.data.model.QuestionPack
 import com.example.ui.AppLanguage
 import com.example.ui.LanguageStore
+import com.example.ui.localizedContent
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -287,7 +288,7 @@ object DevExporter {
             putExtra(Intent.EXTRA_SUBJECT, file.name)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        val chooserTitle = if (LanguageStore.get(context) == AppLanguage.ENGLISH) "Share Export" else "Export teilen"
+        val chooserTitle = localizedContent("Export teilen", LanguageStore.get(context))
         context.startActivity(Intent.createChooser(intent, chooserTitle).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
@@ -309,7 +310,7 @@ object DevExporter {
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        val chooserTitle = if (LanguageStore.get(context) == AppLanguage.ENGLISH) "Share Images" else "Bilder teilen"
+        val chooserTitle = localizedContent("Bilder teilen", LanguageStore.get(context))
         context.startActivity(Intent.createChooser(intent, chooserTitle).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
