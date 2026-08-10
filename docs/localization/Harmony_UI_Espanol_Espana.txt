@@ -14,3588 +14,3588 @@ CONTENIDO INTEGRADO ADICIONAL
 
 0897. DE: Export teilen
       EN: Share export
-      ES-ES: ¿Quién lo haría?
+      ES-ES: Compartir exportación
 
 0898. DE: Bilder teilen
       EN: Share images
-      ES-ES: Dibujar
+      ES-ES: Compartir imágenes
 
 0001. DE: Wer würde eher?
       EN: Who's more likely?
-      ES-ES: ¿Esto o aquello?
+      ES-ES: ¿Quién lo haría?
 
 0002. DE: Zeichnen
       EN: Drawing
-      ES-ES: Esto o aquello
+      ES-ES: Dibujar
 
 0003. DE: Das oder das?
       EN: This or That?
-      ES-ES: De acuerdo / En desacuerdo
+      ES-ES: ¿Esto o aquello?
 
 0004. DE: Das oder das
       EN: This or That
-      ES-ES: Yo nunca
+      ES-ES: Esto o aquello
 
 0005. DE: Zustimmen oder Ablehnen
       EN: Agree or Disagree
-      ES-ES: ¿Qué prefieres?
+      ES-ES: De acuerdo / En desacuerdo
 
 0006. DE: Ich habe noch nie
       EN: Never Have I Ever
-      ES-ES: Responde con una foto
+      ES-ES: Yo nunca
 
 0007. DE: Was magst du lieber?
       EN: Which Do You Prefer?
-      ES-ES: Conversaciones profundas
+      ES-ES: ¿Qué prefieres?
 
 0008. DE: Antwort mit einem Foto
       EN: Answer with a Photo
-      ES-ES: Hablar antes de...
+      ES-ES: Responde con una foto
 
 0009. DE: Tiefe Gespräche
       EN: Deep Conversations
-      ES-ES: Para entrar en calor
+      ES-ES: Conversaciones profundas
 
 0010. DE: Reden vor ...
       EN: Talk Before...
-      ES-ES: Relación
+      ES-ES: Hablar antes de...
 
 0011. DE: Aufwärmen
       EN: Warm-up
-      ES-ES: Sexo y amor
+      ES-ES: Para entrar en calor
 
 0012. DE: Beziehung
       EN: Relationship
-      ES-ES: Valores morales
+      ES-ES: Relación
 
 0013. DE: Sex & Liebe
       EN: Sex & Love
-      ES-ES: Dinero y finanzas
+      ES-ES: Sexo y amor
 
 0014. DE: Moralische Werte
       EN: Moral Values
-      ES-ES: Conocerse mejor
+      ES-ES: Valores morales
 
 0015. DE: Geld & Finanzen
       EN: Money & Finances
-      ES-ES: Viajar
+      ES-ES: Dinero y finanzas
 
 0016. DE: Einander kennenlernen
       EN: Getting to Know Each Other
-      ES-ES: Familia
+      ES-ES: Conocerse mejor
 
 0017. DE: Reisen
       EN: Travel
-      ES-ES: Pasatiempos
+      ES-ES: Viajar
 
 0018. DE: Familie
       EN: Family
-      ES-ES: Entretenimiento
+      ES-ES: Familia
 
 0019. DE: Hobbys
       EN: Hobbies
-      ES-ES: Esto o aquello
+      ES-ES: Pasatiempos
 
 0020. DE: unterhaltung
       EN: Entertainment
-      ES-ES: Boda
+      ES-ES: Entretenimiento
 
 0021. DE: dasoderdas
       EN: This or That
-      ES-ES: Hijos
+      ES-ES: Esto o aquello
 
 0022. DE: hochzeit
       EN: Wedding
-      ES-ES: Hablar
+      ES-ES: Boda
 
 0023. DE: kinder
       EN: Children
-      ES-ES: Viajes
+      ES-ES: Hijos
 
 0024. DE: reden
       EN: Discussion
-      ES-ES: Familia
+      ES-ES: Hablar
 
 0025. DE: reisen
       EN: Travel
-      ES-ES: Hogar y vida cotidiana
+      ES-ES: Viajes
 
 0026. DE: familie
       EN: Family
-      ES-ES: ¿Qué es lo que más te gusta de tu casa?
+      ES-ES: Familia
 
 0027. DE: Zuhause & Alltag
       EN: Home & Everyday Life
-      ES-ES: La comodidad y la paz.
+      ES-ES: Hogar y vida cotidiana
 
 0028. DE: Was gefällt dir an deinem Zuhause am besten?
       EN: What do you like most about your home?
-      ES-ES: Que todo tiene mi estilo
+      ES-ES: ¿Qué es lo que más te gusta de tu casa?
 
 0029. DE: Die Gemütlichkeit und Ruhe
       EN: The comfort and peace
-      ES-ES: La gente que vive allí
+      ES-ES: La comodidad y la paz.
 
 0030. DE: Dass alles meinen Stil hat
       EN: That everything reflects my style
-      ES-ES: La vista afuera
+      ES-ES: Que todo tiene mi estilo
 
 0031. DE: Die Menschen, die darin wohnen
       EN: The people who live there
-      ES-ES: ¿Qué habitación dice más de ti?
+      ES-ES: La gente que vive allí
 
 0032. DE: Der Blick nach draußen
       EN: The view outside
-      ES-ES: Cocina
+      ES-ES: La vista afuera
 
 0033. DE: Welcher Raum sagt am meisten über dich aus?
       EN: Which room says the most about you?
-      ES-ES: dormitorio
+      ES-ES: ¿Qué habitación dice más de ti?
 
 0034. DE: Küche
       EN: Kitchen
-      ES-ES: Sala de estar
+      ES-ES: Cocina
 
 0035. DE: Schlafzimmer
       EN: Bedroom
-      ES-ES: mi lugar de trabajo
+      ES-ES: dormitorio
 
 0036. DE: Wohnzimmer
       EN: Living room
-      ES-ES: ¿Qué cambiarías inmediatamente si el dinero no fuera un problema?
+      ES-ES: Sala de estar
 
 0037. DE: Mein Arbeitsplatz
       EN: My workspace
-      ES-ES: cocina mas grande
+      ES-ES: mi lugar de trabajo
 
 0038. DE: Was würdest du sofort ändern, wenn Geld keine Rolle spielt?
       EN: What would you change immediately if money were no object?
-      ES-ES: Un balcón o jardín
+      ES-ES: ¿Qué cambiarías inmediatamente si el dinero no fuera un problema?
 
 0039. DE: Größere Küche
       EN: A larger kitchen
-      ES-ES: Mejor ubicación
+      ES-ES: cocina mas grande
 
 0040. DE: Ein Balkon oder Garten
       EN: A balcony or garden
-      ES-ES: Nada - encaja así
+      ES-ES: Un balcón o jardín
 
 0041. DE: Bessere Lage
       EN: A better location
-      ES-ES: ¿Cómo es tu domingo perfecto en casa?
+      ES-ES: Mejor ubicación
 
 0042. DE: Nichts — es passt so
       EN: Nothing — it's perfect as it is
-      ES-ES: Dormir hasta tarde y no hacer nada
+      ES-ES: Nada - encaja así
 
 0043. DE: Wie sieht dein perfekter Sonntag zuhause aus?
       EN: What does your perfect Sunday at home look like?
-      ES-ES: Cocinar e invitar a amigos.
+      ES-ES: ¿Cómo es tu domingo perfecto en casa?
 
 0044. DE: Ausschlafen und nichts tun
       EN: Sleeping in and doing nothing
-      ES-ES: Maratón de series en el sofá
+      ES-ES: Dormir hasta tarde y no hacer nada
 
 0045. DE: Kochen und Freunde einladen
       EN: Cooking and inviting friends over
-      ES-ES: Limpiar y abordar proyectos.
+      ES-ES: Cocinar e invitar a amigos.
 
 0046. DE: Serienmarathon auf dem Sofa
       EN: A TV marathon on the sofa
-      ES-ES: La propuesta de matrimonio perfecta
+      ES-ES: Maratón de series en el sofá
 
 0047. DE: Aufräumen und Projekte angehen
       EN: Tidying up and tackling projects
-      ES-ES: ¿Qué tipo de lugar te gustaría para una propuesta?
+      ES-ES: Limpiar y abordar proyectos.
 
 0048. DE: Der perfekte Heiratsantrag
       EN: The Perfect Proposal
-      ES-ES: En casa, acogedor y privado.
+      ES-ES: La propuesta de matrimonio perfecta
 
 0049. DE: Welche Umgebung würdest du dir für einen Antrag wünschen?
       EN: What setting would you want for a proposal?
-      ES-ES: Exterior con la naturaleza como telón de fondo
+      ES-ES: ¿Qué tipo de lugar te gustaría para una propuesta?
 
 0050. DE: Zu Hause, gemütlich und privat
       EN: At home, cozy and private
-      ES-ES: Restaurante u hotel elegante
+      ES-ES: En casa, acogedor y privado.
 
 0051. DE: Draußen mit der Natur als Kulisse
       EN: Outdoors with nature as the backdrop
-      ES-ES: ¿Prefieres una propuesta pública o privada?
+      ES-ES: Exterior con la naturaleza como telón de fondo
 
 0052. DE: Schickes Restaurant oder Hotel
       EN: An elegant restaurant or hotel
-      ES-ES: solo nosotros dos
+      ES-ES: Restaurante u hotel elegante
 
 0053. DE: Magst du einen öffentlichen oder privaten Antrag lieber?
       EN: Would you prefer a public or private proposal?
-      ES-ES: Con familiares y amigos cercanos.
+      ES-ES: ¿Prefieres una propuesta pública o privada?
 
 0054. DE: Nur wir beide
       EN: Just the two of us
-      ES-ES: En un lugar público con muchos espectadores.
+      ES-ES: solo nosotros dos
 
 0055. DE: Mit Familie und engen Freunden
       EN: With family and close friends
-      ES-ES: ¿Debería ser una sorpresa la propuesta?
+      ES-ES: Con familiares y amigos cercanos.
 
 0056. DE: An einem öffentlichen Ort mit vielen Zuschauern
       EN: In a public place with lots of people watching
-      ES-ES: Si, completamente sorprendente
+      ES-ES: En un lugar público con muchos espectadores.
 
 0057. DE: Soll der Antrag eine Überraschung sein?
       EN: Should the proposal be a surprise?
-      ES-ES: Es mejor discutir más o menos de antemano.
+      ES-ES: ¿Debería ser una sorpresa la propuesta?
 
 0058. DE: Ja, komplett überraschend
       EN: Yes, a complete surprise
-      ES-ES: decidimos juntos
+      ES-ES: Si, completamente sorprendente
 
 0059. DE: Lieber vorher grob absprechen
       EN: I'd rather discuss the basics beforehand
-      ES-ES: ¿Qué tan importante es para ti que se capture el momento?
+      ES-ES: Es mejor discutir más o menos de antemano.
 
 0060. DE: Wir entscheiden es gemeinsam
       EN: We'll decide together
-      ES-ES: Muy importante: fotos y vídeos.
+      ES-ES: decidimos juntos
 
 0061. DE: Wie wichtig ist dir, dass der Moment festgehalten wird?
       EN: How important is it to you that the moment is captured?
-      ES-ES: Con unas cuantas fotos del móvil basta
+      ES-ES: ¿Qué tan importante es para ti que se capture el momento?
 
 0062. DE: Sehr wichtig — Fotos und Video
       EN: Very important — photos and video
-      ES-ES: Para nada, el momento es nuestro.
+      ES-ES: Muy importante: fotos y vídeos.
 
 0063. DE: Ein paar Handyfotos reichen
       EN: A few phone photos are enough
-      ES-ES: Preferencias para la propuesta
+      ES-ES: Con unas cuantas fotos del móvil basta
 
 0064. DE: Gar nicht, der Moment gehört uns
       EN: Not at all — the moment is ours
-      ES-ES: ¿Prefieres una propuesta extravagante o algo sutil?
+      ES-ES: Para nada, el momento es nuestro.
 
 0065. DE: Vorlieben für den Antrag
       EN: Proposal Preferences
-      ES-ES: Exagerado e impresionante
+      ES-ES: Preferencias para la propuesta
 
 0066. DE: Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?
       EN: Would you prefer an extravagant proposal or something understated?
-      ES-ES: Punto medio con detalles especiales
+      ES-ES: ¿Prefieres una propuesta extravagante o algo sutil?
 
 0067. DE: Übertrieben und großartig
       EN: Over-the-top and spectacular
-      ES-ES: Sencillo e íntimo
+      ES-ES: Exagerado e impresionante
 
 0068. DE: Mittelweg mit besonderen Details
       EN: A balanced approach with special details
-      ES-ES: ¿Qué opinas de los accesorios (por ejemplo, carteles, globos, etc.)?
+      ES-ES: Punto medio con detalles especiales
 
 0069. DE: Einfach und intim
       EN: Simple and intimate
-      ES-ES: Ámalos, más divertido
+      ES-ES: Sencillo e íntimo
 
 0070. DE: Was hältst du von Requisiten (z.B. Schilder, Luftballons, etc.)?
       EN: What do you think about props, such as signs or balloons?
-      ES-ES: Tal vez uno o dos
+      ES-ES: ¿Qué opinas de los accesorios (por ejemplo, carteles, globos, etc.)?
 
 0071. DE: Liebe sie, macht mehr Spaß
       EN: I love them — they make it more fun
-      ES-ES: No, distrae demasiado
+      ES-ES: Ámalos, más divertido
 
 0072. DE: Vielleicht ein oder zwei
       EN: Maybe one or two
-      ES-ES: ¿Quieres que el momento se comparta instantáneamente en las redes sociales?
+      ES-ES: Tal vez uno o dos
 
 0073. DE: Nein, zu ablenkend
       EN: No, they're too distracting
-      ES-ES: Sí, comparte inmediatamente
+      ES-ES: No, distrae demasiado
 
 0074. DE: Möchtest du, dass der Moment sofort in den sozialen Medien geteilt wird?
       EN: Would you want the moment shared on social media right away?
-      ES-ES: No, mantenlo en privado por ahora.
+      ES-ES: ¿Quieres que el momento se comparta instantáneamente en las redes sociales?
 
 0075. DE: Ja, sofort teilen
       EN: Yes, share it right away
-      ES-ES: Al principio solo amigos/familiares cercanos
+      ES-ES: Sí, comparte inmediatamente
 
 0076. DE: Nein, erstmal privat halten
       EN: No, keep it private at first
-      ES-ES: ¿Qué tan importante es para ti que la propuesta refleje tus aficiones o intereses?
+      ES-ES: No, mantenlo en privado por ahora.
 
 0077. DE: Erst nur enge Freunde/Familie
       EN: Close friends and family first
-      ES-ES: Muy importante, debe ser personal.
+      ES-ES: Al principio solo amigos/familiares cercanos
 
 0078. DE: Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?
       EN: How important is it that the proposal reflects your hobbies or interests?
-      ES-ES: Algo, un pequeño toque estaría bien.
+      ES-ES: ¿Qué tan importante es para ti que la propuesta refleje tus aficiones o intereses?
 
 0079. DE: Sehr wichtig, es sollte persönlich sein
       EN: Very important — it should feel personal
-      ES-ES: No es necesario, es mejor seguir siendo clásico.
+      ES-ES: Muy importante, debe ser personal.
 
 0080. DE: Etwas, eine kleine Note wäre schön
       EN: Somewhat — a small personal touch would be lovely
-      ES-ES: ¿Preferirías una propuesta de matrimonio durante un viaje?
+      ES-ES: Algo, un pequeño toque estaría bien.
 
 0081. DE: Nicht nötig, lieber klassisch bleiben
       EN: Not necessary — I'd prefer to keep it classic
-      ES-ES: Sí, en una ciudad o atracción emocionante.
+      ES-ES: No es necesario, es mejor seguir siendo clásico.
 
 0082. DE: Würdest du einen Antrag im Urlaub bevorzugen (mit Reisen verbunden)?
       EN: Would you prefer a proposal while on vacation?
-      ES-ES: Tal vez, si es factible
+      ES-ES: ¿Preferirías una propuesta de matrimonio durante un viaje?
 
 0083. DE: Ja, in einer aufregenden Stadt oder Sehenswürdigkeit
       EN: Yes, in an exciting city or at a landmark
-      ES-ES: No, mejor en el sitio
+      ES-ES: Sí, en una ciudad o atracción emocionante.
 
 0084. DE: Vielleicht, wenn es machbar ist
       EN: Maybe, if it's practical
-      ES-ES: ¿Cuánto tiempo después de la propuesta quieres celebrar con los demás?
+      ES-ES: Tal vez, si es factible
 
 0085. DE: Nein, lieber vor Ort
       EN: No, I'd rather stay local
-      ES-ES: El mismo día con amigos/familia
+      ES-ES: No, mejor en el sitio
 
 0086. DE: Wie lange nach dem Antrag möchtest du mit anderen feiern?
       EN: How soon after the proposal would you want to celebrate with others?
-      ES-ES: Aproximadamente una semana después, al principio solo nosotros.
+      ES-ES: ¿Cuánto tiempo después de la propuesta quieres celebrar con los demás?
 
 0087. DE: Am selben Tag mit Freunden/Familie
       EN: The same day with friends and family
-      ES-ES: No es necesaria una fiesta, mantenla en privado
+      ES-ES: El mismo día con amigos/familia
 
 0088. DE: Etwa eine Woche später, erst mal nur wir
       EN: About a week later — just us at first
-      ES-ES: ¿Te gustaría recibir una carta como parte de la propuesta?
+      ES-ES: Aproximadamente una semana después, al principio solo nosotros.
 
 0089. DE: Keine Party nötig, privat halten
       EN: No party needed — keep it private
-      ES-ES: Sí, algo para leer y conservar.
+      ES-ES: No es necesaria una fiesta, mantenla en privado
 
 0090. DE: Hättest du gerne einen geschriebenen Brief als Teil des Antrags?
       EN: Would you like a handwritten letter as part of the proposal?
-      ES-ES: Tal vez, pero verbalmente es suficiente.
+      ES-ES: ¿Te gustaría recibir una carta como parte de la propuesta?
 
 0091. DE: Ja, etwas zum Lesen und Aufbewahren
       EN: Yes, something to read and keep
-      ES-ES: No, solo mantenlo
+      ES-ES: Sí, algo para leer y conservar.
 
 0092. DE: Vielleicht, aber mündlich reicht
       EN: Maybe, but spoken words are enough
-      ES-ES: ¿La propuesta debería incluir elementos culturales o tradicionales?
+      ES-ES: Tal vez, pero verbalmente es suficiente.
 
 0093. DE: Nein, einfach halten
       EN: No, keep it simple
-      ES-ES: Sí, incorporar tradiciones.
+      ES-ES: No, solo mantenlo
 
 0094. DE: Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?
       EN: Should the proposal include cultural or traditional elements?
-      ES-ES: Algunas referencias culturales están bien.
+      ES-ES: ¿La propuesta debería incluir elementos culturales o tradicionales?
 
 0095. DE: Ja, Traditionen einbinden
       EN: Yes, include traditions
-      ES-ES: No, mantenlo moderno.
+      ES-ES: Sí, incorporar tradiciones.
 
 0096. DE: Ein paar kulturelle Anklänge sind okay
       EN: A few cultural touches would be nice
-      ES-ES: ¿Qué es lo más importante de una propuesta de matrimonio?
+      ES-ES: Algunas referencias culturales están bien.
 
 0097. DE: Nein, modern halten
       EN: No, keep it modern
-      ES-ES: El medio ambiente y la atmósfera
+      ES-ES: No, mantenlo moderno.
 
 0098. DE: Was ist das Wichtigste beim Antrag?
       EN: What matters most in a proposal?
-      ES-ES: Las palabras y las emociones
+      ES-ES: ¿Qué es lo más importante de una propuesta de matrimonio?
 
 0099. DE: Die Umgebung und Atmosphäre
       EN: The setting and atmosphere
-      ES-ES: El anillo y el gesto.
+      ES-ES: El medio ambiente y la atmósfera
 
 0100. DE: Die Worte und Emotionen
       EN: The words and emotions
-      ES-ES: ¿Te gustaría que las mascotas participaran en la propuesta?
+      ES-ES: Las palabras y las emociones
 
 0101. DE: Der Ring und die Geste
       EN: The ring and the gesture
-      ES-ES: ¡Sí, son familia!
+      ES-ES: El anillo y el gesto.
 
 0102. DE: Möchtest du, dass Haustiere beim Antrag dabei sind?
       EN: Would you want pets to be part of the proposal?
-      ES-ES: Tal vez, si encaja
+      ES-ES: ¿Te gustaría que las mascotas participaran en la propuesta?
 
 0103. DE: Ja, sie gehören zur Familie!
       EN: Yes, they're part of the family!
-      ES-ES: No, solo nosotros
+      ES-ES: ¡Sí, son familia!
 
 0104. DE: Vielleicht, wenn es passt
       EN: Maybe, if it feels right
-      ES-ES: Discutir antes de tener hijos.
+      ES-ES: Tal vez, si encaja
 
 0105. DE: Nein, nur wir
       EN: No, just us
-      ES-ES: ¿Podemos cubrir todos los costos de uno o varios niños? 💰
+      ES-ES: No, solo nosotros
 
 0106. DE: Diskutiere vor dem Kinderkriegen
       EN: Discuss Before Having Children
-      ES-ES: Es posible que necesitemos ahorrar
+      ES-ES: Discutir antes de tener hijos.
 
 0107. DE: Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken? 💰
       EN: Can we afford all the costs of one or more children? 💰
-      ES-ES: ¿Tendremos suficiente tiempo para el niño o los niños? ⏳
+      ES-ES: ¿Podemos cubrir todos los costos de uno o varios niños? 💰
 
 0108. DE: Möglicherweise müssen wir Einsparungen vornehmen
       EN: We may need to make some savings
-      ES-ES: Sí, nos aseguraremos de que el tiempo en familia sea una prioridad.
+      ES-ES: Es posible que necesitemos ahorrar
 
 0109. DE: Werden wir genug Zeit für das Kind / die Kinder haben? ⏳
       EN: Will we have enough time for our child or children? ⏳
-      ES-ES: ¿Cómo encontraremos tiempo para nuestra relación una vez que llegue el bebé?
+      ES-ES: ¿Tendremos suficiente tiempo para el niño o los niños? ⏳
 
 0110. DE: Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat.
       EN: Yes, we'll make sure family time comes first.
-      ES-ES: Programe fechas regulares o tiempo juntos
+      ES-ES: Sí, nos aseguraremos de que el tiempo en familia sea una prioridad.
 
 0111. DE: Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?
       EN: How will we make time for our relationship once the baby arrives?
-      ES-ES: ¿Cómo quieres que sea nuestro futuro?
+      ES-ES: ¿Cómo encontraremos tiempo para nuestra relación una vez que llegue el bebé?
 
 0112. DE: Regelmäßige Rendezvous oder gemeinsame Zeit einplanen
       EN: Plan regular dates or quality time together
-      ES-ES: Viajen juntos por el mundo, exploren nuevas culturas y cocinas.
+      ES-ES: Programe fechas regulares o tiempo juntos
 
 0113. DE: Wie möchtest du, dass unsere Zukunft aussieht?
       EN: What would you like our future to look like?
-      ES-ES: ¿Cómo lo llamarías?
+      ES-ES: ¿Cómo quieres que sea nuestro futuro?
 
 0114. DE: Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden
       EN: Travel the world together and explore new cultures and cuisines
-      ES-ES: ¿Quieres una niña o un niño? 👶
+      ES-ES: Viajen juntos por el mundo, exploren nuevas culturas y cocinas.
 
 0115. DE: Wie würdest du sie/ihn nennen?
       EN: What would you name them?
-      ES-ES: ¿Qué será de nuestro hijo cuando crezca?
+      ES-ES: ¿Cómo lo llamarías?
 
 0116. DE: Willst du ein Mädchen oder einen Jungen? 👶
       EN: Would you prefer a girl or a boy? 👶
-      ES-ES: Discutir antes de comprar una mascota.
+      ES-ES: ¿Quieres una niña o un niño? 👶
 
 0117. DE: Was soll aus unserem Kind werden, wenn es erwachsen ist?
       EN: What do we hope our child will become as an adult?
-      ES-ES: ¿Quién se ocupa del cuidado diario?
+      ES-ES: ¿Qué será de nuestro hijo cuando crezca?
 
 0118. DE: Vor der Anschaffung eines Haustiers besprechen
       EN: Discuss Before Getting a Pet
-      ES-ES: ¿Qué le pasa al animal cuando viajamos?
+      ES-ES: Discutir antes de comprar una mascota.
 
 0119. DE: Wer übernimmt die tägliche Versorgung?
       EN: Who will handle the daily care?
-      ES-ES: ¿Qué presupuesto tenemos previsto para alimentación y veterinaria?
+      ES-ES: ¿Quién se ocupa del cuidado diario?
 
 0120. DE: Was passiert mit dem Tier, wenn wir verreisen?
       EN: What happens to the pet when we travel?
-      ES-ES: ¿Un animal encaja siquiera en nuestra vida cotidiana?
+      ES-ES: ¿Qué le pasa al animal cuando viajamos?
 
 0121. DE: Welches Budget planen wir für Futter und Tierarzt ein?
       EN: What budget should we plan for food and veterinary care?
-      ES-ES: Discuta antes de viajar juntos
+      ES-ES: ¿Qué presupuesto tenemos previsto para alimentación y veterinaria?
 
 0122. DE: Passt ein Tier überhaupt zu unserem Alltag?
       EN: Does a pet truly fit our lifestyle?
-      ES-ES: ¿Cuánto queremos gastar en total?
+      ES-ES: ¿Un animal encaja siquiera en nuestra vida cotidiana?
 
 0123. DE: Vor der gemeinsamen Reise besprechen
       EN: Discuss Before Traveling Together
-      ES-ES: ¿Prefieres que sea planificado o espontáneo?
+      ES-ES: Discuta antes de viajar juntos
 
 0124. DE: Wie viel wollen wir insgesamt ausgeben?
       EN: How much do we want to spend in total?
-      ES-ES: ¿Cuánto tiempo queremos pasar separados?
+      ES-ES: ¿Cuánto queremos gastar en total?
 
 0125. DE: Lieber durchgeplant oder spontan?
       EN: Carefully planned or spontaneous?
-      ES-ES: ¿Qué es lo más destacado para cada uno de nosotros?
+      ES-ES: ¿Prefieres que sea planificado o espontáneo?
 
 0126. DE: Wie viel Zeit wollen wir getrennt verbringen?
       EN: How much time do we want to spend apart?
-      ES-ES: Discuta antes de comprar una casa
+      ES-ES: ¿Cuánto tiempo queremos pasar separados?
 
 0127. DE: Was ist für jeden von uns das absolute Highlight?
       EN: What is the absolute highlight for each of us?
-      ES-ES: ¿Cuánto crédito podemos permitirnos de manera realista?
+      ES-ES: ¿Qué es lo más destacado para cada uno de nosotros?
 
 0128. DE: Vor dem Kauf eines Hauses besprechen
       EN: Discuss Before Buying a Home
-      ES-ES: Ciudad o país: ¿qué es más importante para nosotros?
+      ES-ES: Discuta antes de comprar una casa
 
 0129. DE: Wie viel Kredit ist für uns realistisch tragbar?
       EN: How much of a mortgage can we realistically afford?
-      ES-ES: ¿Cuánto tiempo queremos permanecer allí al menos?
+      ES-ES: ¿Cuánto crédito podemos permitirnos de manera realista?
 
 0130. DE: Stadt oder Land — was ist uns wichtiger?
       EN: City or countryside — which matters more to us?
-      ES-ES: ¿Quién se ocupa de la renovación y el mantenimiento?
+      ES-ES: Ciudad o país: ¿qué es más importante para nosotros?
 
 0131. DE: Wie lange wollen wir dort mindestens bleiben?
       EN: How long do we want to stay there at minimum?
-      ES-ES: Destinos de viaje
+      ES-ES: ¿Cuánto tiempo queremos permanecer allí al menos?
 
 0132. DE: Wer kümmert sich um Renovierung und Instandhaltung?
       EN: Who will handle renovations and maintenance?
-      ES-ES: París, Francia
+      ES-ES: ¿Quién se ocupa de la renovación y el mantenimiento?
 
 0133. DE: Reiseziele
       EN: Travel Destinations
-      ES-ES: Roma, Italia
+      ES-ES: Destinos de viaje
 
 0134. DE: Paris, Frankreich
       EN: Paris, France
-      ES-ES: Bali, Indonesia
+      ES-ES: París, Francia
 
 0135. DE: Rom, Italien
       EN: Rome, Italy
-      ES-ES: Santorini, Grecia
+      ES-ES: Roma, Italia
 
 0136. DE: Bali, Indonesien
       EN: Bali, Indonesia
-      ES-ES: Londres, Inglaterra
+      ES-ES: Bali, Indonesia
 
 0137. DE: Santorini, Griechenland
       EN: Santorini, Greece
-      ES-ES: Nueva York, Estados Unidos
+      ES-ES: Santorini, Grecia
 
 0138. DE: London, England
       EN: London, England
-      ES-ES: Maldivas
+      ES-ES: Londres, Inglaterra
 
 0139. DE: New York, USA
       EN: New York, USA
-      ES-ES: Seychelles
+      ES-ES: Nueva York, Estados Unidos
 
 0140. DE: Malediven
       EN: Maldives
-      ES-ES: Tokio, Japón
+      ES-ES: Maldivas
 
 0141. DE: Seychellen
       EN: Seychelles
-      ES-ES: Dubái, Emiratos Árabes Unidos
+      ES-ES: Seychelles
 
 0142. DE: Tokyo, Japan
       EN: Tokyo, Japan
-      ES-ES: Venecia, Italia
+      ES-ES: Tokio, Japón
 
 0143. DE: Dubai, VAE
       EN: Dubai, UAE
-      ES-ES: Ámsterdam, Países Bajos
+      ES-ES: Dubái, Emiratos Árabes Unidos
 
 0144. DE: Venedig, Italien
       EN: Venice, Italy
-      ES-ES: Laponia, Finlandia
+      ES-ES: Venecia, Italia
 
 0145. DE: Amsterdam, Niederlande
       EN: Amsterdam, Netherlands
-      ES-ES: Islandia
+      ES-ES: Ámsterdam, Países Bajos
 
 0146. DE: Lappland, Finnland
       EN: Lapland, Finland
-      ES-ES: La casa de nuestros sueños
+      ES-ES: Laponia, Finlandia
 
 0147. DE: Island
       EN: Iceland
-      ES-ES: Edificio antiguo con encanto.
+      ES-ES: Islandia
 
 0148. DE: Unser Traumhaus
       EN: Our Dream Home
-      ES-ES: Nuevo edificio con casa inteligente
+      ES-ES: La casa de nuestros sueños
 
 0149. DE: Altbau mit Charme
       EN: Charming Period Home
-      ES-ES: Cocina/sala de estar abierta
+      ES-ES: Edificio antiguo con encanto.
 
 0150. DE: Neubau mit Smart Home
       EN: New Smart Home
-      ES-ES: cocina independiente
+      ES-ES: Nuevo edificio con casa inteligente
 
 0151. DE: Offene Wohnküche
       EN: Open-plan Kitchen
-      ES-ES: Chimenea rugiente
+      ES-ES: Cocina/sala de estar abierta
 
 0152. DE: Separate Küche
       EN: Separate Kitchen
-      ES-ES: Calefacción por suelo radiante
+      ES-ES: cocina independiente
 
 0153. DE: Prasselnder Kamin
       EN: Crackling Fireplace
-      ES-ES: Jardín grande
+      ES-ES: Chimenea rugiente
 
 0154. DE: Fußbodenheizung
       EN: Underfloor Heating
-      ES-ES: Terraza soleada en la azotea
+      ES-ES: Calefacción por suelo radiante
 
 0155. DE: Großer Garten
       EN: Large Garden
-      ES-ES: villa de la ciudad
+      ES-ES: Jardín grande
 
 0156. DE: Sonnige Dachterrasse
       EN: Sunny Roof Terrace
-      ES-ES: casa de campo
+      ES-ES: Terraza soleada en la azotea
 
 0157. DE: Stadtvilla
       EN: City Villa
-      ES-ES: Fachada de cristal
+      ES-ES: villa de la ciudad
 
 0158. DE: Landhaus
       EN: Country House
-      ES-ES: fachada de piedra natural
+      ES-ES: casa de campo
 
 0159. DE: Glasfassade
       EN: Glass Façade
-      ES-ES: Ático con vistas
+      ES-ES: Fachada de cristal
 
 0160. DE: Natursteinfassade
       EN: Natural-stone Façade
-      ES-ES: casa junto al lago
+      ES-ES: fachada de piedra natural
 
 0161. DE: Penthouse mit Ausblick
       EN: Penthouse with a View
-      ES-ES: Interior minimalista
+      ES-ES: Ático con vistas
 
 0162. DE: Haus am See
       EN: Lakeside Home
-      ES-ES: estilo campestre
+      ES-ES: casa junto al lago
 
 0163. DE: Minimalistisches Interieur
       EN: Minimalist Interior
-      ES-ES: biblioteca
+      ES-ES: Interior minimalista
 
 0164. DE: Landhausstil
       EN: Country Style
-      ES-ES: cine en casa
+      ES-ES: estilo campestre
 
 0165. DE: Bibliothek
       EN: Library
-      ES-ES: piscina cubierta
+      ES-ES: biblioteca
 
 0166. DE: Heimkino
       EN: Home Cinema
-      ES-ES: Baño de bienestar
+      ES-ES: cine en casa
 
 0167. DE: Innenpool
       EN: Indoor Pool
-      ES-ES: Frente de ventana grande
+      ES-ES: piscina cubierta
 
 0168. DE: Wellnessbad
       EN: Spa Bathroom
-      ES-ES: Patio privado
+      ES-ES: Baño de bienestar
 
 0169. DE: Große Fensterfront
       EN: Floor-to-ceiling Windows
-      ES-ES: pequeña casa
+      ES-ES: Frente de ventana grande
 
 0170. DE: Privater Innenhof
       EN: Private Courtyard
-      ES-ES: Casa multigeneracional
+      ES-ES: Patio privado
 
 0171. DE: Tiny House
       EN: Tiny House
-      ES-ES: Zona exterior de la casa de tus sueños
+      ES-ES: pequeña casa
 
 0172. DE: Mehrgenerationenhaus
       EN: Multigenerational Home
-      ES-ES: Gran piscina al aire libre
+      ES-ES: Casa multigeneracional
 
 0173. DE: Traumhaus Außenbereich
       EN: Dream Home: Outdoor Space
-      ES-ES: jacuzzi al aire libre
+      ES-ES: Zona exterior de la casa de tus sueños
 
 0174. DE: Großer Außenpool
       EN: Large Outdoor Pool
-      ES-ES: Estación de parrilla moderna
+      ES-ES: Gran piscina al aire libre
 
 0175. DE: Outdoor-Whirlpool
       EN: Outdoor Hot Tub
-      ES-ES: Acogedora fogata
+      ES-ES: jacuzzi al aire libre
 
 0176. DE: Moderne Grillstation
       EN: Modern Barbecue Station
-      ES-ES: Huerto propio
+      ES-ES: Estación de parrilla moderna
 
 0177. DE: Gemütliche Feuerstelle
       EN: Cozy Fire Pit
-      ES-ES: Prado de flores coloridas
+      ES-ES: Acogedora fogata
 
 0178. DE: Eigenes Gemüsebeet
       EN: Private Vegetable Garden
-      ES-ES: Hamaca relajada
+      ES-ES: Huerto propio
 
 0179. DE: Bunte Blumenwiese
       EN: Colorful Wildflower Meadow
-      ES-ES: Sofá de exterior con estilo
+      ES-ES: Prado de flores coloridas
 
 0180. DE: Entspannte Hängematte
       EN: Relaxing Hammock
-      ES-ES: piscina infinita
+      ES-ES: Hamaca relajada
 
 0181. DE: Stilvolles Outdoor-Sofa
       EN: Stylish Outdoor Sofa
-      ES-ES: estanque natural
+      ES-ES: Sofá de exterior con estilo
 
 0182. DE: Infinity-Pool
       EN: Infinity Pool
-      ES-ES: cocina al aire libre
+      ES-ES: piscina infinita
 
 0183. DE: Naturteich
       EN: Natural Pond
-      ES-ES: horno para pizzas
+      ES-ES: estanque natural
 
 0184. DE: Outdoor-Küche
       EN: Outdoor Kitchen
-      ES-ES: Pérgola con salón
+      ES-ES: cocina al aire libre
 
 0185. DE: Pizzaofen
       EN: Pizza Oven
-      ES-ES: jardín de invierno
+      ES-ES: horno para pizzas
 
 0186. DE: Pergola mit Lounge
       EN: Pergola with Lounge
-      ES-ES: Cama de hierbas
+      ES-ES: Pérgola con salón
 
 0187. DE: Wintergarten
       EN: Conservatory
-      ES-ES: huerta
+      ES-ES: jardín de invierno
 
 0188. DE: Kräuterbeet
       EN: Herb Garden
-      ES-ES: Jardín en la azotea con salón
+      ES-ES: Cama de hierbas
 
 0189. DE: Obstgarten
       EN: Orchard
-      ES-ES: patio mediterráneo
+      ES-ES: huerta
 
 0190. DE: Dachgarten mit Lounge
       EN: Roof Garden with Lounge
-      ES-ES: Pozo de fuego
+      ES-ES: Jardín en la azotea con salón
 
 0191. DE: Mediterraner Innenhof
       EN: Mediterranean Courtyard
-      ES-ES: Chimenea al aire libre
+      ES-ES: patio mediterráneo
 
 0192. DE: Feuerstelle
       EN: Fire Pit
-      ES-ES: Zona de juegos para niños
+      ES-ES: Pozo de fuego
 
 0193. DE: Außenkamin
       EN: Outdoor Fireplace
-      ES-ES: Campo deportivo
+      ES-ES: Chimenea al aire libre
 
 0194. DE: Spielbereich für Kinder
       EN: Children's Play Area
-      ES-ES: invernadero
+      ES-ES: Zona de juegos para niños
 
 0195. DE: Sportplatz
       EN: Sports Court
-      ES-ES: casa de sauna
+      ES-ES: Campo deportivo
 
 0196. DE: Gewächshaus
       EN: Greenhouse
-      ES-ES: Actividades
+      ES-ES: invernadero
 
 0197. DE: Saunahaus
       EN: Sauna House
-      ES-ES: Caminata
+      ES-ES: casa de sauna
 
 0198. DE: Aktivitäten
       EN: Activities
-      ES-ES: dia de playa
+      ES-ES: Actividades
 
 0199. DE: Wandern
       EN: Hiking
-      ES-ES: concierto
+      ES-ES: Caminata
 
 0200. DE: Strandtag
       EN: Beach Day
-      ES-ES: cine
+      ES-ES: dia de playa
 
 0201. DE: Konzert
       EN: Concert
-      ES-ES: clase de cocina
+      ES-ES: concierto
 
 0202. DE: Kino
       EN: Cinema
-      ES-ES: restaurante
+      ES-ES: cine
 
 0203. DE: Kochkurs
       EN: Cooking Class
-      ES-ES: museo
+      ES-ES: clase de cocina
 
 0204. DE: Restaurant
       EN: Restaurant
-      ES-ES: Parque de atracciones
+      ES-ES: restaurante
 
 0205. DE: Museum
       EN: Museum
-      ES-ES: Preferencias alimentarias
+      ES-ES: museo
 
 0206. DE: Freizeitpark
       EN: Theme Park
-      ES-ES: pizza
+      ES-ES: Parque de atracciones
 
 0207. DE: Essensvorlieben
       EN: Food Preferences
-      ES-ES: pastas
+      ES-ES: Preferencias alimentarias
 
 0208. DE: Pizza
       EN: Pizza
-      ES-ES: sushi
+      ES-ES: pizza
 
 0209. DE: Pasta
       EN: Pasta
-      ES-ES: Ciudadanos
+      ES-ES: pastas
 
 0210. DE: Sushi
       EN: Sushi
-      ES-ES: Dulce
+      ES-ES: sushi
 
 0211. DE: Burger
       EN: Burger
-      ES-ES: Salado
+      ES-ES: Ciudadanos
 
 0212. DE: Süß
       EN: Sweet
-      ES-ES: Cocinar en casa
+      ES-ES: Dulce
 
 0213. DE: Herzhaft
       EN: Savory
-      ES-ES: Pedir comida
+      ES-ES: Salado
 
 0214. DE: Selbst kochen
       EN: Cook at Home
-      ES-ES: anillos de compromiso
+      ES-ES: Cocinar en casa
 
 0215. DE: Bestellen
       EN: Order In
-      ES-ES: Solitario clásico
+      ES-ES: Pedir comida
 
 0216. DE: Verlobungsringe
       EN: Engagement Rings
-      ES-ES: Vintage juguetón
+      ES-ES: anillos de compromiso
 
 0217. DE: Klassisch Solitär
       EN: Classic Solitaire
-      ES-ES: oro amarillo
+      ES-ES: Solitario clásico
 
 0218. DE: Vintage verspielt
       EN: Playful Vintage
-      ES-ES: Oro blanco
+      ES-ES: Vintage juguetón
 
 0219. DE: Gelbgold
       EN: Yellow Gold
-      ES-ES: piedra grande
+      ES-ES: oro amarillo
 
 0220. DE: Weißgold
       EN: White Gold
-      ES-ES: Filigrana y sencilla
+      ES-ES: Oro blanco
 
 0221. DE: Großer Stein
       EN: Large Stone
-      ES-ES: diamante
+      ES-ES: piedra grande
 
 0222. DE: Filigran & schlicht
       EN: Delicate & Simple
-      ES-ES: Piedra preciosa de color
+      ES-ES: Filigrana y sencilla
 
 0223. DE: Diamant
       EN: Diamond
-      ES-ES: platino
+      ES-ES: diamante
 
 0224. DE: Farbedelstein
       EN: Colored Gemstone
-      ES-ES: oro rosa
+      ES-ES: Piedra preciosa de color
 
 0225. DE: Platin
       EN: Platinum
-      ES-ES: Anillo de tres piedras
+      ES-ES: platino
 
 0226. DE: Roségold
       EN: Rose Gold
-      ES-ES: solitario moderno
+      ES-ES: oro rosa
 
 0227. DE: Drei-Stein-Ring
       EN: Three-stone Ring
-      ES-ES: diamante ovalado
+      ES-ES: Anillo de tres piedras
 
 0228. DE: Moderner Solitär
       EN: Modern Solitaire
-      ES-ES: diamante redondo
+      ES-ES: solitario moderno
 
 0229. DE: Ovaler Diamant
       EN: Oval Diamond
-      ES-ES: Delgado y delicado
+      ES-ES: diamante ovalado
 
 0230. DE: Runder Diamant
       EN: Round Diamond
-      ES-ES: Llamativo y amplio
+      ES-ES: diamante redondo
 
 0231. DE: Schmal & zart
       EN: Slim & Delicate
-      ES-ES: Moissanita
+      ES-ES: Delgado y delicado
 
 0232. DE: Markant & breit
       EN: Bold & Wide
-      ES-ES: zafiro
+      ES-ES: Llamativo y amplio
 
 0233. DE: Moissanit
       EN: Moissanite
-      ES-ES: Art Déco vintage
+      ES-ES: Moissanita
 
 0234. DE: Saphir
       EN: Sapphire
-      ES-ES: geométrico moderno
+      ES-ES: zafiro
 
 0235. DE: Vintage Art déco
       EN: Vintage Art Deco
-      ES-ES: Grabado en el interior
+      ES-ES: Art Déco vintage
 
 0236. DE: Modern geometrisch
       EN: Modern Geometric
-      ES-ES: Diamantes en la banda
+      ES-ES: geométrico moderno
 
 0237. DE: Gravur innen
       EN: Inside Engraving
-      ES-ES: sin piedra
+      ES-ES: Grabado en el interior
 
 0238. DE: Diamanten im Band
       EN: Diamonds in the Band
-      ES-ES: Anillo llamativo
+      ES-ES: Diamantes en la banda
 
 0239. DE: Ohne Stein
       EN: No Stone
-      ES-ES: Ramos de boda
+      ES-ES: sin piedra
 
 0240. DE: Statement-Ring
       EN: Statement Ring
-      ES-ES: rosas blancas
+      ES-ES: Anillo llamativo
 
 0241. DE: Hochzeitssträuße
       EN: Wedding Bouquets
-      ES-ES: Peonías
+      ES-ES: Ramos de boda
 
 0242. DE: Weiße Rosen
       EN: White Roses
-      ES-ES: flores silvestres
+      ES-ES: rosas blancas
 
 0243. DE: Pfingstrosen
       EN: Peonies
-      ES-ES: Encuadernado clásicamente
+      ES-ES: Peonías
 
 0244. DE: Wildblumen
       EN: Wildflowers
-      ES-ES: Grande y exuberante
+      ES-ES: flores silvestres
 
 0245. DE: Klassisch gebunden
       EN: Classic Hand-tied
-      ES-ES: Pequeño y delicado
+      ES-ES: Encuadernado clásicamente
 
 0246. DE: Groß & üppig
       EN: Large & Lush
-      ES-ES: Pastel
+      ES-ES: Grande y exuberante
 
 0247. DE: Klein & zart
       EN: Small & Delicate
-      ES-ES: Colores fuertes
+      ES-ES: Pequeño y delicado
 
 0248. DE: Pastell
       EN: Pastels
-      ES-ES: Boda de ensueño
+      ES-ES: Pastel
 
 0249. DE: Kräftige Farben
       EN: Bold Colors
-      ES-ES: Gran celebración
+      ES-ES: Colores fuertes
 
 0250. DE: Traumhochzeit
       EN: Dream Wedding
-      ES-ES: Ronda pequeña
+      ES-ES: Boda de ensueño
 
 0251. DE: Große Feier
       EN: Large Celebration
-      ES-ES: en la playa
+      ES-ES: Gran celebración
 
 0252. DE: Kleine Runde
       EN: Intimate Gathering
-      ES-ES: en las montañas
+      ES-ES: Ronda pequeña
 
 0253. DE: Am Strand
       EN: On the Beach
-      ES-ES: Eclesiástico
+      ES-ES: en la playa
 
 0254. DE: In den Bergen
       EN: In the Mountains
-      ES-ES: Oficina de registro y fiesta
+      ES-ES: en las montañas
 
 0255. DE: Kirchlich
       EN: Church Ceremony
-      ES-ES: boda de verano
+      ES-ES: Eclesiástico
 
 0256. DE: Standesamt & Party
       EN: Civil Ceremony & Party
-      ES-ES: boda de invierno
+      ES-ES: Oficina de registro y fiesta
 
 0257. DE: Sommerhochzeit
       EN: Summer Wedding
-      ES-ES: Preguntas para cada ocasión
+      ES-ES: boda de verano
 
 0258. DE: Winterhochzeit
       EN: Winter Wedding
-      ES-ES: ¿Qué prefieres: madrugar o trasnochar?
+      ES-ES: boda de invierno
 
 0259. DE: Fragen für jede Gelegenheit
       EN: Questions for Any Occasion
-      ES-ES: para levantarse temprano
+      ES-ES: Preguntas para cada ocasión
 
 0260. DE: Was magst du lieber: früh aufstehen oder lange wach bleiben?
       EN: Which do you prefer: getting up early or staying up late?
-      ES-ES: permanecer despierto hasta tarde
+      ES-ES: ¿Qué prefieres: madrugar o trasnochar?
 
 0261. DE: Früh aufstehen
       EN: Getting up early
-      ES-ES: Depende del dia
+      ES-ES: para levantarse temprano
 
 0262. DE: Lange wach bleiben
       EN: Staying up late
-      ES-ES: ¿Prefieres pasar una velada tranquila para dos o con gente?
+      ES-ES: permanecer despierto hasta tarde
 
 0263. DE: Kommt auf den Tag an
       EN: It depends on the day
-      ES-ES: Tranquilo para dos
+      ES-ES: Depende del dia
 
 0264. DE: Lieber ein ruhiger Abend zu zweit oder unter Leuten?
       EN: Would you rather have a quiet evening together or be around other people?
-      ES-ES: entre la gente
+      ES-ES: ¿Prefieres pasar una velada tranquila para dos o con gente?
 
 0265. DE: Ruhig zu zweit
       EN: A quiet evening together
-      ES-ES: Mezclado
+      ES-ES: Tranquilo para dos
 
 0266. DE: Unter Leuten
       EN: Around other people
-      ES-ES: ¿Qué te relaja más?
+      ES-ES: entre la gente
 
 0267. DE: Gemischt
       EN: A mix of both
-      ES-ES: Música
+      ES-ES: Mezclado
 
 0268. DE: Was entspannt dich mehr?
       EN: What helps you relax most?
-      ES-ES: Paseo
+      ES-ES: ¿Qué te relaja más?
 
 0269. DE: Musik
       EN: Music
-      ES-ES: Ver serie
+      ES-ES: Música
 
 0270. DE: Spazieren
       EN: Going for a walk
-      ES-ES: no hacer nada en absoluto
+      ES-ES: Paseo
 
 0271. DE: Serie schauen
       EN: Watching a series
-      ES-ES: ¿Qué te hace reír más?
+      ES-ES: Ver serie
 
 0272. DE: Gar nichts tun
       EN: Doing absolutely nothing
-      ES-ES: Con chistes internos
+      ES-ES: no hacer nada en absoluto
 
 0273. DE: Wobei lachst du am meisten?
       EN: What makes you laugh the most?
-      ES-ES: en memes
+      ES-ES: ¿Qué te hace reír más?
 
 0274. DE: Bei Insider-Witzen
       EN: Inside jokes
-      ES-ES: cuando estoy cansado
+      ES-ES: Con chistes internos
 
 0275. DE: Bei Memes
       EN: Memes
-      ES-ES: Sobre mi
+      ES-ES: en memes
 
 0276. DE: Wenn ich müde bin
       EN: When I'm tired
-      ES-ES: Instantáneas de nuestra historia de amor.
+      ES-ES: cuando estoy cansado
 
 0277. DE: Über mich selbst
       EN: Myself
-      ES-ES: ¿En qué momento fue para ti el comienzo del “nosotros”?
+      ES-ES: Sobre mi
 
 0278. DE: Schnappschüsse aus unserer Liebesgeschichte
       EN: Snapshots from Our Love Story
-      ES-ES: Nuestra primera conversación
+      ES-ES: Instantáneas de nuestra historia de amor.
 
 0279. DE: Welcher Moment war für dich der Anfang von „uns"?
       EN: Which moment felt like the beginning of us?
-      ES-ES: la primera reunión
+      ES-ES: ¿En qué momento fue para ti el comienzo del “nosotros”?
 
 0280. DE: Unser erstes Gespräch
       EN: Our first conversation
-      ES-ES: el primer beso
+      ES-ES: Nuestra primera conversación
 
 0281. DE: Das erste Treffen
       EN: Our first date
-      ES-ES: Cuando estaba claro
+      ES-ES: la primera reunión
 
 0282. DE: Der erste Kuss
       EN: Our first kiss
-      ES-ES: ¿Qué foto juntos es tu favorita?
+      ES-ES: el primer beso
 
 0283. DE: Als es einfach klar war
       EN: When it simply felt clear
-      ES-ES: La primera selfie
+      ES-ES: Cuando estaba claro
 
 0284. DE: Welches gemeinsame Foto ist dein Lieblingsfoto?
       EN: Which photo of us is your favorite?
-      ES-ES: una foto de vacaciones
+      ES-ES: ¿Qué foto juntos es tu favorita?
 
 0285. DE: Das erste Selfie
       EN: Our first selfie
-      ES-ES: Una instantánea aleatoria
+      ES-ES: La primera selfie
 
 0286. DE: Ein Urlaubsfoto
       EN: A vacation photo
-      ES-ES: Uno que solo nosotros conocemos
+      ES-ES: una foto de vacaciones
 
 0287. DE: Ein zufälliger Schnappschuss
       EN: A candid snapshot
-      ES-ES: ¿Qué recuerdas más vívidamente?
+      ES-ES: Una instantánea aleatoria
 
 0288. DE: Eins, das nur wir kennen
       EN: One only we know
-      ES-ES: de un olor
+      ES-ES: Uno que solo nosotros conocemos
 
 0289. DE: Woran erinnerst du dich am lebhaftesten?
       EN: What do you remember most vividly?
-      ES-ES: de una cancion
+      ES-ES: ¿Qué recuerdas más vívidamente?
 
 0290. DE: An einen Geruch
       EN: A scent
-      ES-ES: Sobre algo que dije
+      ES-ES: de un olor
 
 0291. DE: An einen Song
       EN: A song
-      ES-ES: del sentimiento
+      ES-ES: de una cancion
 
 0292. DE: An etwas, das ich gesagt habe
       EN: Something I said
-      ES-ES: Calentamiento: conocerse
+      ES-ES: Sobre algo que dije
 
 0293. DE: An das Gefühl
       EN: The feeling
-      ES-ES: ¿Cuál ha sido tu mejor momento conmigo hasta ahora?
+      ES-ES: del sentimiento
 
 0294. DE: Aufwärmen: Einander kennenlernen
       EN: Warm-up: Getting to Know Each Other
-      ES-ES: Nuestro primer encuentro
+      ES-ES: Calentamiento: conocerse
 
 0295. DE: Was war dein schönster Moment mit mir bisher?
       EN: What has been your favorite moment with me so far?
-      ES-ES: Un día cotidiano completamente normal.
+      ES-ES: ¿Cuál ha sido tu mejor momento conmigo hasta ahora?
 
 0296. DE: Unser erstes Treffen
       EN: Our first date
-      ES-ES: Un viaje juntos
+      ES-ES: Nuestro primer encuentro
 
 0297. DE: Ein ganz normaler Alltagstag
       EN: An ordinary day together
-      ES-ES: Un momento difícil que logramos
+      ES-ES: Un día cotidiano completamente normal.
 
 0298. DE: Eine gemeinsame Reise
       EN: A trip together
-      ES-ES: ¿Qué es lo que más te gustaría hacer en un día juntos?
+      ES-ES: Un viaje juntos
 
 0299. DE: Ein schwerer Moment, den wir geschafft haben
       EN: A difficult moment we overcame together
-      ES-ES: Duerme hasta tarde y descansa
+      ES-ES: Un momento difícil que logramos
 
 0300. DE: Was würdest du an einem gemeinsamen Tag am liebsten machen?
       EN: What would you most like to do on a day together?
-      ES-ES: Prueba algo nuevo
+      ES-ES: ¿Qué es lo que más te gustaría hacer en un día juntos?
 
 0301. DE: Ausschlafen und faulenzen
       EN: Sleep in and relax
-      ES-ES: Sal a la naturaleza
+      ES-ES: Duerme hasta tarde y descansa
 
 0302. DE: Etwas Neues ausprobieren
       EN: Try something new
-      ES-ES: conocer amigos
+      ES-ES: Prueba algo nuevo
 
 0303. DE: Rausgehen in die Natur
       EN: Get out into nature
-      ES-ES: ¿Cómo te sientes más amado?
+      ES-ES: Sal a la naturaleza
 
 0304. DE: Freunde treffen
       EN: Meet up with friends
-      ES-ES: A través de palabras
+      ES-ES: conocer amigos
 
 0305. DE: Wie fühlst du dich am meisten geliebt?
       EN: What makes you feel most loved?
-      ES-ES: A través del tiempo juntos
+      ES-ES: ¿Cómo te sientes más amado?
 
 0306. DE: Durch Worte
       EN: Words
-      ES-ES: Al tacto
+      ES-ES: A través de palabras
 
 0307. DE: Durch Zeit zu zweit
       EN: Quality time together
-      ES-ES: A través de pequeños gestos
+      ES-ES: A través del tiempo juntos
 
 0308. DE: Durch Berührung
       EN: Physical touch
-      ES-ES: ¿Qué es lo que más esperas con nosotros?
+      ES-ES: Al tacto
 
 0309. DE: Durch kleine Gesten
       EN: Small gestures
-      ES-ES: Nuestro próximo viaje
+      ES-ES: A través de pequeños gestos
 
 0310. DE: Worauf freust du dich bei uns am meisten?
       EN: What are you most excited about for us?
-      ES-ES: Irse a vivir juntos
+      ES-ES: ¿Qué es lo que más esperas con nosotros?
 
 0311. DE: Unsere nächste Reise
       EN: Our next trip
-      ES-ES: Simplemente más vida cotidiana
+      ES-ES: Nuestro próximo viaje
 
 0312. DE: Zusammenziehen
       EN: Moving in together
-      ES-ES: Todo lo que esta por venir
+      ES-ES: Irse a vivir juntos
 
 0313. DE: Einfach mehr Alltag
       EN: Simply sharing more everyday life
-      ES-ES: ¿Quién tiene más probabilidades de llegar tarde?
+      ES-ES: Simplemente más vida cotidiana
 
 0314. DE: Alles, was noch kommt
       EN: Everything still to come
-      ES-ES: I
+      ES-ES: Todo lo que esta por venir
 
 0315. DE: Wer würde eher zu spät kommen?
       EN: Who's more likely to arrive late?
-      ES-ES: mi pareja
+      ES-ES: ¿Quién tiene más probabilidades de llegar tarde?
 
 0316. DE: Ich
       EN: Me
-      ES-ES: ambos iguales
+      ES-ES: I
 
 0317. DE: Mein Partner
       EN: My partner
-      ES-ES: Ninguno de nosotros
+      ES-ES: mi pareja
 
 0318. DE: Beide gleich
       EN: Both equally
-      ES-ES: ¿Quién es más probable que ceda primero en una discusión?
+      ES-ES: ambos iguales
 
 0319. DE: Keiner von uns
       EN: Neither of us
-      ES-ES: Eso depende
+      ES-ES: Ninguno de nosotros
 
 0320. DE: Wer würde eher bei einem Streit als Erstes einlenken?
       EN: Who's more likely to make peace first after an argument?
-      ES-ES: Nos encontraremos en el medio
+      ES-ES: ¿Quién es más probable que ceda primero en una discusión?
 
 0321. DE: Kommt drauf an
       EN: It depends
-      ES-ES: ¿Quién sería más probable que reservara un viaje de forma espontánea?
+      ES-ES: Eso depende
 
 0322. DE: Wir treffen uns in der Mitte
       EN: We meet halfway
-      ES-ES: ambos juntos
+      ES-ES: Nos encontraremos en el medio
 
 0323. DE: Wer würde eher spontan eine Reise buchen?
       EN: Who's more likely to book a spontaneous trip?
-      ES-ES: Nadie sin un plan
+      ES-ES: ¿Quién sería más probable que reservara un viaje de forma espontánea?
 
 0324. DE: Beide zusammen
       EN: Both of us
-      ES-ES: ¿Quién tiene más probabilidades de olvidar un aniversario?
+      ES-ES: ambos juntos
 
 0325. DE: Niemand ohne Plan
       EN: Neither without a plan
-      ES-ES: Ninguno
+      ES-ES: Nadie sin un plan
 
 0326. DE: Wer vergisst eher einen Jahrestag?
       EN: Who's more likely to forget an anniversary?
-      ES-ES: Ambos, pero pretendemos que no.
+      ES-ES: ¿Quién tiene más probabilidades de olvidar un aniversario?
 
 0327. DE: Keiner
       EN: Neither
-      ES-ES: Nunca... cancelé una cita para quedarme en casa.
+      ES-ES: Ninguno
 
 0328. DE: Beide, aber wir tun so als ob nicht
       EN: Both, but we pretend we didn't
-      ES-ES: Así es, nunca
+      ES-ES: Ambos, pero pretendemos que no.
 
 0329. DE: Ich habe noch nie … ein Date abgesagt, um zuhause zu bleiben.
       EN: Never have I ever canceled a date to stay home.
-      ES-ES: si, ya
+      ES-ES: Nunca... cancelé una cita para quedarme en casa.
 
 0330. DE: Stimmt, noch nie
       EN: True, never
-      ES-ES: Más a menudo de lo que admito
+      ES-ES: Así es, nunca
 
 0331. DE: Doch, schon mal
       EN: Yes, I have
-      ES-ES: Nunca... miré en secreto el teléfono de mi pareja.
+      ES-ES: si, ya
 
 0332. DE: Öfter als ich zugebe
       EN: More often than I'd admit
-      ES-ES: Una vez
+      ES-ES: Más a menudo de lo que admito
 
 0333. DE: Ich habe noch nie … heimlich das Handy meines Partners angeschaut.
       EN: Never have I ever secretly looked through my partner's phone.
-      ES-ES: yo nunca lo haría
+      ES-ES: Nunca... miré en secreto el teléfono de mi pareja.
 
 0334. DE: Einmal
       EN: Once
-      ES-ES: Nunca he... reformulado un mensaje 10 veces.
+      ES-ES: Una vez
 
 0335. DE: Ich würde es nie tun
       EN: I would never do that
-      ES-ES: Constante
+      ES-ES: yo nunca lo haría
 
 0336. DE: Ich habe noch nie … eine Nachricht 10x umformuliert.
       EN: Never have I ever rewritten a message ten times.
-      ES-ES: Sólo en temas importantes
+      ES-ES: Nunca he... reformulado un mensaje 10 veces.
 
 0337. DE: Ständig
       EN: All the time
-      ES-ES: ¿Qué significa la confianza para ti específicamente?
+      ES-ES: Constante
 
 0338. DE: Nur bei wichtigen Themen
       EN: Only for important topics
-      ES-ES: que puedo contarlo todo
+      ES-ES: Sólo en temas importantes
 
 0339. DE: Was bedeutet Vertrauen für dich konkret?
       EN: What does trust mean to you in practical terms?
-      ES-ES: que no tengo que preocuparme
+      ES-ES: ¿Qué significa la confianza para ti específicamente?
 
 0340. DE: Dass ich alles erzählen kann
       EN: Being able to share everything
-      ES-ES: que las promesas se cumplan
+      ES-ES: que puedo contarlo todo
 
 0341. DE: Dass ich mich nicht sorgen muss
       EN: Not having to worry
-      ES-ES: todo eso
+      ES-ES: que no tengo que preocuparme
 
 0342. DE: Dass Zusagen gehalten werden
       EN: Keeping promises
-      ES-ES: ¿Qué sería totalmente inaceptable para ti?
+      ES-ES: que las promesas se cumplan
 
 0343. DE: Alles davon
       EN: All of the above
-      ES-ES: Mentir
+      ES-ES: todo eso
 
 0344. DE: Was ist für dich ein absoluter Dealbreaker?
       EN: What is an absolute dealbreaker for you?
-      ES-ES: falta de respeto
+      ES-ES: ¿Qué sería totalmente inaceptable para ti?
 
 0345. DE: Lügen
       EN: Lying
-      ES-ES: indiferencia
+      ES-ES: Mentir
 
 0346. DE: Respektlosigkeit
       EN: Disrespect
-      ES-ES: infidelidad
+      ES-ES: falta de respeto
 
 0347. DE: Gleichgültigkeit
       EN: Indifference
-      ES-ES: ¿Cuándo te sientes más cerca de mí?
+      ES-ES: indiferencia
 
 0348. DE: Untreue
       EN: Cheating
-      ES-ES: mientras habla
+      ES-ES: infidelidad
 
 0349. DE: Wann fühlst du dich mir am nächsten?
       EN: When do you feel closest to me?
-      ES-ES: En silencio uno al lado del otro
+      ES-ES: ¿Cuándo te sientes más cerca de mí?
 
 0350. DE: Beim Reden
       EN: While talking
-      ES-ES: Cuando reímos juntos
+      ES-ES: mientras habla
 
 0351. DE: In Stille nebeneinander
       EN: Sitting quietly beside each other
-      ES-ES: Cuando las cosas son dificiles
+      ES-ES: En silencio uno al lado del otro
 
 0352. DE: Wenn wir zusammen lachen
       EN: When we laugh together
-      ES-ES: ¿A qué le tienes más miedo en nuestra relación?
+      ES-ES: Cuando reímos juntos
 
 0353. DE: Wenn es schwierig ist
       EN: When things are difficult
-      ES-ES: Para separarse
+      ES-ES: Cuando las cosas son dificiles
 
 0354. DE: Wovor hast du in unserer Beziehung am meisten Angst?
       EN: What are you most afraid of in our relationship?
-      ES-ES: Malentendidos
+      ES-ES: ¿A qué le tienes más miedo en nuestra relación?
 
 0355. DE: Uns auseinanderzuleben
       EN: Growing apart
-      ES-ES: la distancia
+      ES-ES: Para separarse
 
 0356. DE: Missverständnisse
       EN: Misunderstandings
-      ES-ES: de nada
+      ES-ES: Malentendidos
 
 0357. DE: Die Distanz
       EN: The distance
-      ES-ES: ¿Tenemos cuentas separadas o conjuntas?
+      ES-ES: la distancia
 
 0358. DE: Vor nichts
       EN: Nothing
-      ES-ES: ¿Cómo lidiamos con los diferentes ingresos?
+      ES-ES: de nada
 
 0359. DE: Führen wir getrennte oder gemeinsame Konten?
       EN: Should we keep separate or joint accounts?
-      ES-ES: ¿Para qué estamos ahorrando juntos?
+      ES-ES: ¿Tenemos cuentas separadas o conjuntas?
 
 0360. DE: Wie gehen wir mit unterschiedlichen Einkommen um?
       EN: How should we handle different income levels?
-      ES-ES: ¿De cuánto estamos hablando antes de realizar una compra?
+      ES-ES: ¿Cómo lidiamos con los diferentes ingresos?
 
 0361. DE: Wofür sparen wir gemeinsam?
       EN: What are we saving for together?
-      ES-ES: Cercanía e intimidad
+      ES-ES: ¿Para qué estamos ahorrando juntos?
 
 0362. DE: Ab welchem Betrag sprechen wir vor einer Anschaffung?
       EN: Above what amount should we talk before making a purchase?
-      ES-ES: ¿Cuándo te sientes físicamente más cerca de mí?
+      ES-ES: ¿De cuánto estamos hablando antes de realizar una compra?
 
 0363. DE: Nähe & Intimität
       EN: Closeness & Intimacy
-      ES-ES: Dormirse uno al lado del otro
+      ES-ES: Cercanía e intimidad
 
 0364. DE: Wann fühlst du dich mir körperlich am nächsten?
       EN: When do you feel physically closest to me?
-      ES-ES: Cuando nos abrazamos por mucho tiempo
+      ES-ES: ¿Cuándo te sientes físicamente más cerca de mí?
 
 0365. DE: Beim Einschlafen nebeneinander
       EN: Falling asleep beside each other
-      ES-ES: Con un toque espontáneo
+      ES-ES: Dormirse uno al lado del otro
 
 0366. DE: Wenn wir uns lange umarmen
       EN: When we hug for a long time
-      ES-ES: ¿Qué es lo que más extrañas de la distancia?
+      ES-ES: Cuando nos abrazamos por mucho tiempo
 
 0367. DE: Bei einer spontanen Berührung
       EN: A spontaneous touch
-      ES-ES: Cercanía física
+      ES-ES: Con un toque espontáneo
 
 0368. DE: Was fehlt dir über die Distanz am meisten?
       EN: What do you miss most while we're apart?
-      ES-ES: Solo estar uno al lado del otro
+      ES-ES: ¿Qué es lo que más extrañas de la distancia?
 
 0369. DE: Körperliche Nähe
       EN: Physical closeness
-      ES-ES: Noches juntas
+      ES-ES: Cercanía física
 
 0370. DE: Einfach nebeneinander sein
       EN: Simply being beside each other
-      ES-ES: toques cotidianos
+      ES-ES: Solo estar uno al lado del otro
 
 0371. DE: Gemeinsame Nächte
       EN: Nights together
-      ES-ES: ¿Qué tan fácil te resulta hablar de deseos?
+      ES-ES: Noches juntas
 
 0372. DE: Alltägliche Berührungen
       EN: Everyday touches
-      ES-ES: Muy claro
+      ES-ES: toques cotidianos
 
 0373. DE: Wie leicht fällt es dir, über Wünsche zu sprechen?
       EN: How easy is it for you to talk about your desires?
-      ES-ES: va bien
+      ES-ES: ¿Qué tan fácil te resulta hablar de deseos?
 
 0374. DE: Sehr leicht
       EN: Very easy
-      ES-ES: bastante dificil
+      ES-ES: Muy claro
 
 0375. DE: Geht so
       EN: So-so
-      ES-ES: todavía estoy practicando
+      ES-ES: va bien
 
 0376. DE: Eher schwer
       EN: Quite difficult
-      ES-ES: ¿Qué hace que un momento sea romántico para ti?
+      ES-ES: bastante dificil
 
 0377. DE: Ich übe noch
       EN: I'm still practicing
-      ES-ES: Atención
+      ES-ES: todavía estoy practicando
 
 0378. DE: Was macht einen Moment für dich romantisch?
       EN: What makes a moment romantic for you?
-      ES-ES: Sorpresa
+      ES-ES: ¿Qué hace que un momento sea romántico para ti?
 
 0379. DE: Aufmerksamkeit
       EN: Thoughtfulness
-      ES-ES: familiaridad
+      ES-ES: Atención
 
 0380. DE: Überraschung
       EN: Surprise
-      ES-ES: que no nos molesten
+      ES-ES: Sorpresa
 
 0381. DE: Vertrautheit
       EN: Familiarity
-      ES-ES: dibuja para mi
+      ES-ES: familiaridad
 
 0382. DE: Dass wir ungestört sind
       EN: Having privacy
-      ES-ES: Dibuja nuestra primera cita: ¿qué es lo que definitivamente debe estar en la imagen?
+      ES-ES: que no nos molesten
 
 0383. DE: Zeichne für mich
       EN: Draw for Me
-      ES-ES: el lugar
+      ES-ES: dibuja para mi
 
 0384. DE: Zeichne unser erstes Date — was gehört unbedingt aufs Bild?
       EN: Draw our first date — what absolutely belongs in the picture?
-      ES-ES: lo que comimos
+      ES-ES: Dibuja nuestra primera cita: ¿qué es lo que definitivamente debe estar en la imagen?
 
 0385. DE: Der Ort
       EN: The place
-      ES-ES: nuestras caras
+      ES-ES: el lugar
 
 0386. DE: Was wir gegessen haben
       EN: What we ate
-      ES-ES: El clima ese dia
+      ES-ES: lo que comimos
 
 0387. DE: Unsere Gesichter
       EN: Our faces
-      ES-ES: Dibuja la casa de nuestros sueños en una línea. ¿Qué es lo más llamativo?
+      ES-ES: nuestras caras
 
 0388. DE: Das Wetter an dem Tag
       EN: The weather that day
-      ES-ES: Grandes ventanales
+      ES-ES: El clima ese dia
 
 0389. DE: Zeichne unser Traumhaus in einem Strich. Was ist das Auffälligste?
       EN: Draw our dream home in one line. What stands out most?
-      ES-ES: el jardin
+      ES-ES: Dibuja la casa de nuestros sueños en una línea. ¿Qué es lo más llamativo?
 
 0390. DE: Große Fenster
       EN: Large windows
-      ES-ES: Un corazón en la puerta
+      ES-ES: Grandes ventanales
 
 0391. DE: Der Garten
       EN: The garden
-      ES-ES: Dos sillas delante
+      ES-ES: el jardin
 
 0392. DE: Ein Herz an der Tür
       EN: A heart on the door
-      ES-ES: Dibújame como un animal: ¿qué sería?
+      ES-ES: Un corazón en la puerta
 
 0393. DE: Zwei Stühle davor
       EN: Two chairs outside
-      ES-ES: Gato
+      ES-ES: Dos sillas delante
 
 0394. DE: Zeichne mich als Tier — welches wäre ich?
       EN: Draw me as an animal — which one would I be?
-      ES-ES: Perro
+      ES-ES: Dibújame como un animal: ¿qué sería?
 
 0395. DE: Katze
       EN: Cat
-      ES-ES: pingüino
+      ES-ES: Gato
 
 0396. DE: Hund
       EN: Dog
-      ES-ES: Algo completamente diferente
+      ES-ES: Perro
 
 0397. DE: Pinguin
       EN: Penguin
-      ES-ES: Dibujar nuestros sentimientos mutuos como símbolo.
+      ES-ES: pingüino
 
 0398. DE: Etwas ganz anderes
       EN: Something completely different
-      ES-ES: un corazon
+      ES-ES: Algo completamente diferente
 
 0399. DE: Zeichne unser Gefühl zueinander als Symbol.
       EN: Draw our feelings for each other as a symbol.
-      ES-ES: Dos círculos que se superponen
+      ES-ES: Dibujar nuestros sentimientos mutuos como símbolo.
 
 0400. DE: Ein Herz
       EN: A heart
-      ES-ES: un puente
+      ES-ES: un corazon
 
 0401. DE: Zwei Kreise, die sich überschneiden
       EN: Two overlapping circles
-      ES-ES: un ancla
+      ES-ES: Dos círculos que se superponen
 
 0402. DE: Eine Brücke
       EN: A bridge
-      ES-ES: En una relación deben saber todo sobre el otro.
+      ES-ES: un puente
 
 0403. DE: Ein Anker
       EN: An anchor
-      ES-ES: Totalmente de acuerdo
+      ES-ES: un ancla
 
 0404. DE: In einer Beziehung sollte man alles voneinander wissen.
       EN: Partners in a relationship should know everything about each other.
-      ES-ES: Más bien también
+      ES-ES: En una relación deben saber todo sobre el otro.
 
 0405. DE: Stimme voll zu
       EN: Strongly agree
-      ES-ES: Más bien no
+      ES-ES: Totalmente de acuerdo
 
 0406. DE: Eher zu
       EN: Somewhat agree
-      ES-ES: Rechazar
+      ES-ES: Más bien también
 
 0407. DE: Eher nicht
       EN: Somewhat disagree
-      ES-ES: Nunca debes quedarte dormido discutiendo.
+      ES-ES: Más bien no
 
 0408. DE: Lehne ab
       EN: Disagree
-      ES-ES: Las vacaciones separadas son buenas para una relación.
+      ES-ES: Rechazar
 
 0409. DE: Man sollte nie streitend einschlafen.
       EN: You should never go to sleep while still arguing.
-      ES-ES: Los celos son un signo de amor.
+      ES-ES: Nunca debes quedarte dormido discutiendo.
 
 0410. DE: Getrennte Urlaube tun einer Beziehung gut.
       EN: Separate vacations can be good for a relationship.
-      ES-ES: Las amistades con ex están bien.
+      ES-ES: Las vacaciones separadas son buenas para una relación.
 
 0411. DE: Eifersucht ist ein Zeichen von Liebe.
       EN: Jealousy is a sign of love.
-      ES-ES: Actividad diaria
+      ES-ES: Los celos son un signo de amor.
 
 0412. DE: Freundschaften mit Ex-Partnern sind okay.
       EN: Friendships with ex-partners are okay.
-      ES-ES: ¿Cómo puede tu pareja ser un socio aún mejor para ti?
+      ES-ES: Las amistades con ex están bien.
 
 0413. DE: Tägliche Aktivität
       EN: Daily Activity
-      ES-ES: ¿Conoces las preferencias alimentarias de tu pareja?
+      ES-ES: Actividad diaria
 
 0414. DE: Wie kann dein Partner ein noch besserer Partner für dich sein?
       EN: How could your partner be an even better partner for you?
-      ES-ES: vida diaria
+      ES-ES: ¿Cómo puede tu pareja ser un socio aún mejor para ti?
 
 0415. DE: Kennst du die Essensvorlieben deines Partners?
       EN: Do you know your partner's food preferences?
-      ES-ES: Nunca me he quedado dormido en un cine.
+      ES-ES: ¿Conoces las preferencias alimentarias de tu pareja?
 
 0416. DE: Das tägliche Leben
       EN: Everyday Life
-      ES-ES: ¡Nunca lo he hecho!
+      ES-ES: vida diaria
 
 0417. DE: Ich bin noch nie in einem Kino eingeschlafen.
       EN: Never have I ever fallen asleep in a cinema.
-      ES-ES: ¡Tengo!
+      ES-ES: Nunca me he quedado dormido en un cine.
 
 0418. DE: Ich habe noch nie!
       EN: Never have I ever!
-      ES-ES: Nunca cancelé mis planes de quedarme en casa y ver un programa de televisión.
+      ES-ES: ¡Nunca lo he hecho!
 
 0419. DE: Ich habe!
       EN: I have!
-      ES-ES: Nunca he jugado en un equipo deportivo universitario.
+      ES-ES: ¡Tengo!
 
 0420. DE: Ich habe noch nie Pläne abgesagt, um zu Hause zu bleiben und eine Fernsehsendung zu sehen.
       EN: Never have I ever canceled plans to stay home and watch a TV show.
-      ES-ES: Nunca me he olvidado la ropa mojada en la lavadora durante unos días.
+      ES-ES: Nunca cancelé mis planes de quedarme en casa y ver un programa de televisión.
 
 0421. DE: Ich habe noch nie in einer Universitätssportmannschaft mitgespielt.
       EN: Never have I ever played on a university sports team.
-      ES-ES: Nunca he conducido un coche eléctrico.
+      ES-ES: Nunca he jugado en un equipo deportivo universitario.
 
 0422. DE: Ich habe noch nie die nassen Klamotten für ein paar Tage in der Waschmaschine vergessen.
       EN: Never have I ever left wet clothes in the washing machine for several days.
-      ES-ES: Nunca he cogido un tren nocturno.
+      ES-ES: Nunca me he olvidado la ropa mojada en la lavadora durante unos días.
 
 0423. DE: Ich habe noch nie ein Elektroauto gefahren.
       EN: Never have I ever driven an electric car.
-      ES-ES: Nunca he tenido que correr para coger un vuelo de conexión.
+      ES-ES: Nunca he conducido un coche eléctrico.
 
 0424. DE: Ich habe noch nie einen Nachtzug genommen.
       EN: Never have I ever taken an overnight train.
-      ES-ES: Nunca he conducido un coche en un país extranjero.
+      ES-ES: Nunca he cogido un tren nocturno.
 
 0425. DE: Ich musste noch nie rennen, um einen Anschlussflug zu erwischen.
       EN: Never have I ever had to run to catch a connecting flight.
-      ES-ES: Nunca he tenido un amigo que se haya mudado a otro país.
+      ES-ES: Nunca he tenido que correr para coger un vuelo de conexión.
 
 0426. DE: Ich habe noch nie ein Auto in einem fremden Land gefahren.
       EN: Never have I ever driven a car in a foreign country.
-      ES-ES: Nunca he encontrado un amigo que hable otro idioma nativo.
+      ES-ES: Nunca he conducido un coche en un país extranjero.
 
 0427. DE: Ich habe noch nie einen Freund gehabt, der in ein anderes Land gezogen ist.
       EN: Never have I ever had a friend move to another country.
-      ES-ES: Nunca eliminé una publicación en las redes sociales porque no obtuvo suficientes Me gusta.
+      ES-ES: Nunca he tenido un amigo que se haya mudado a otro país.
 
 0428. DE: Ich habe noch nie einen Freund gefunden, der eine andere Muttersprache spricht.
       EN: Never have I ever made a friend who speaks a different native language.
-      ES-ES: Nunca he llorado por el final de un programa de televisión.
+      ES-ES: Nunca he encontrado un amigo que hable otro idioma nativo.
 
 0429. DE: Ich habe noch nie einen Social-Media-Beitrag gelöscht, weil er nicht genug Likes bekommen hat.
       EN: Never have I ever deleted a social media post because it didn't get enough likes.
-      ES-ES: nuestra vida intima
+      ES-ES: Nunca eliminé una publicación en las redes sociales porque no obtuvo suficientes Me gusta.
 
 0430. DE: Ich habe noch nie wegen des Finales einer Fernsehsendung geweint.
       EN: Never have I ever cried over a TV series finale.
-      ES-ES: ¿Cuál es la mejor manera para que tu pareja inicie relaciones sexuales contigo?
+      ES-ES: Nunca he llorado por el final de un programa de televisión.
 
 0431. DE: Unser Intimleben
       EN: Our Intimate Life
-      ES-ES: ¿Cómo te sientes acerca de las conversaciones sucias durante el sexo?
+      ES-ES: nuestra vida intima
 
 0432. DE: Wie kann dein Partner am besten Sex mit dir initiieren?
       EN: What is the best way for your partner to initiate sex with you?
-      ES-ES: ¿Qué es lo más importante que buscas en un encuentro sexual?
+      ES-ES: ¿Cuál es la mejor manera para que tu pareja inicie relaciones sexuales contigo?
 
 0433. DE: Wie stehst du zu schmutzigem Gerede beim Sex?
       EN: How do you feel about dirty talk during sex?
-      ES-ES: ¿Qué opinas de ver contenido erótico juntos?
+      ES-ES: ¿Cómo te sientes acerca de las conversaciones sucias durante el sexo?
 
 0434. DE: Was ist das Wichtigste, das du bei einer sexuellen Begegnung suchst?
       EN: What matters most to you in a sexual encounter?
-      ES-ES: ¿Cuál es tu forma favorita de mostrar afecto fuera del sexo?
+      ES-ES: ¿Qué es lo más importante que buscas en un encuentro sexual?
 
 0435. DE: Was hältst du davon, gemeinsam erotische Inhalte anzuschauen?
       EN: How do you feel about watching erotic content together?
-      ES-ES: Describe nuestra vida sexual con un emoji.
+      ES-ES: ¿Qué opinas de ver contenido erótico juntos?
 
 0436. DE: Wie zeigst du deine Zuneigung am liebsten außerhalb von Sex?
       EN: How do you most like to show affection outside of sex?
-      ES-ES: Opiniones impopulares
+      ES-ES: ¿Cuál es tu forma favorita de mostrar afecto fuera del sexo?
 
 0437. DE: Beschreibe unser Sexleben mit einem Emoji.
       EN: Describe our sex life with one emoji.
-      ES-ES: La piña en pizza tiene un sabor delicioso.
+      ES-ES: Describe nuestra vida sexual con un emoji.
 
 0438. DE: Unbeliebte Meinungen
       EN: Unpopular Opinions
-      ES-ES: Los lugares turísticos famosos siempre son una decepción.
+      ES-ES: Opiniones impopulares
 
 0439. DE: Ananas auf der Pizza schmeckt köstlich.
       EN: Pineapple on pizza tastes delicious.
-      ES-ES: Los fantasmas realmente existen.
+      ES-ES: La piña en pizza tiene un sabor delicioso.
 
 0440. DE: Berühmte Touristenorte sind immer eine Enttäuschung.
       EN: Famous tourist attractions are always disappointing.
-      ES-ES: A veces resulta interesante ver los anuncios de televisión.
+      ES-ES: Los lugares turísticos famosos siempre son una decepción.
 
 0441. DE: Geister existieren wirklich.
       EN: Ghosts really exist.
-      ES-ES: Aprender un nuevo idioma es fácil.
+      ES-ES: Los fantasmas realmente existen.
 
 0442. DE: Fernsehwerbung ist manchmal interessant anzusehen.
       EN: TV commercials can sometimes be interesting to watch.
-      ES-ES: Ver la misma película dos veces es una pérdida de tiempo.
+      ES-ES: A veces resulta interesante ver los anuncios de televisión.
 
 0443. DE: Eine neue Sprache zu lernen ist einfach.
       EN: Learning a new language is easy.
-      ES-ES: vida de pareja casada
+      ES-ES: Aprender un nuevo idioma es fácil.
 
 0444. DE: Denselben Film zweimal zu schauen, ist Zeitverschwendung.
       EN: Watching the same movie twice is a waste of time.
-      ES-ES: ¿Quién es más romántico?
+      ES-ES: Ver la misma película dos veces es una pérdida de tiempo.
 
 0445. DE: Ehepaar Leben
       EN: Married Life
-      ES-ES: ¿Quién es el mejor bailarín?
+      ES-ES: vida de pareja casada
 
 0446. DE: Wer ist romantischer?
       EN: Who is more romantic?
-      ES-ES: ¿Quién da más calidez?
+      ES-ES: ¿Quién es más romántico?
 
 0447. DE: Wer ist der beste Tänzer?
       EN: Who is the better dancer?
-      ES-ES: ¿Quién tiene mejor gusto musical?
+      ES-ES: ¿Quién es el mejor bailarín?
 
 0448. DE: Wer gibt mehr Herzlichkeit?
       EN: Who is more affectionate?
-      ES-ES: ¿Quién encuentra los mejores restaurantes?
+      ES-ES: ¿Quién da más calidez?
 
 0449. DE: Wer hat den besseren Musikgeschmack?
       EN: Who has better taste in music?
-      ES-ES: ¿Quién está más apegado a sus padres?
+      ES-ES: ¿Quién tiene mejor gusto musical?
 
 0450. DE: Wer findet die besten Restaurants?
       EN: Who finds the best restaurants?
-      ES-ES: ¿Quién está mejor organizado?
+      ES-ES: ¿Quién encuentra los mejores restaurantes?
 
 0451. DE: Wer hängt mehr an seinen Eltern?
       EN: Who is more attached to their parents?
-      ES-ES: ¿Quién es mejor para elegir películas?
+      ES-ES: ¿Quién está más apegado a sus padres?
 
 0452. DE: Wer ist besser organisiert?
       EN: Who is better organized?
-      ES-ES: ¿Quién cocina mejor?
+      ES-ES: ¿Quién está mejor organizado?
 
 0453. DE: Wer ist der Beste bei der Filmauswahl?
       EN: Who is better at choosing movies?
-      ES-ES: ¿Quién es mejor planificando citas románticas?
+      ES-ES: ¿Quién es mejor para elegir películas?
 
 0454. DE: Wer kocht besser?
       EN: Who is the better cook?
-      ES-ES: Iniciadores de conversación
+      ES-ES: ¿Quién cocina mejor?
 
 0455. DE: Wer ist der Beste bei der Planung romantischer Dates?
       EN: Who is better at planning romantic dates?
-      ES-ES: ¿Qué te gustaría que tu pareja hiciera más a menudo?
+      ES-ES: ¿Quién es mejor planificando citas románticas?
 
 0456. DE: Gesprächsanreger
       EN: Conversation Starters
-      ES-ES: ¿Cuál es tu foto favorita de nosotros? 📸
+      ES-ES: Iniciadores de conversación
 
 0457. DE: Was möchtest du, dass dein Partner öfter tut?
       EN: What would you like your partner to do more often?
-      ES-ES: ¿Qué canción te excita? 🥵
+      ES-ES: ¿Qué te gustaría que tu pareja hiciera más a menudo?
 
 0458. DE: Was ist dein Lieblingsfoto von uns? 📸
       EN: What is your favorite photo of us? 📸
-      ES-ES: ¿Qué es lo que más te gusta de tu pareja?
+      ES-ES: ¿Cuál es tu foto favorita de nosotros? 📸
 
 0459. DE: Welches Lied macht dich an? 🥵
       EN: Which song turns you on? 🥵
-      ES-ES: ¿Cuál es tu mayor miedo acerca de vivir juntos?
+      ES-ES: ¿Qué canción te excita? 🥵
 
 0460. DE: Was magst du an deinem Partner am liebsten?
       EN: What do you love most about your partner?
-      ES-ES: ¿Qué has aprendido de tu pareja?
+      ES-ES: ¿Qué es lo que más te gusta de tu pareja?
 
 0461. DE: Was ist deine größte Angst vor dem Zusammenleben?
       EN: What is your biggest fear about living together?
-      ES-ES: amor en equilibrio
+      ES-ES: ¿Cuál es tu mayor miedo acerca de vivir juntos?
 
 0462. DE: Was hast du von deinem Partner gelernt?
       EN: What have you learned from your partner?
-      ES-ES: Deja que tu pareja te inspire a ser tu mejor yo
+      ES-ES: ¿Qué has aprendido de tu pareja?
 
 0463. DE: Liebe im Gleichgewicht
       EN: Love in Balance
-      ES-ES: Ser aceptado tal como eres
+      ES-ES: amor en equilibrio
 
 0464. DE: Lass dich von deinem Partner inspirieren, dein bestes Selbst zu sein
       EN: Be inspired by your partner to become your best self
-      ES-ES: Tener una relación a larga distancia durante un año.
+      ES-ES: Deja que tu pareja te inspire a ser tu mejor yo
 
 0465. DE: Werde so akzeptiert, wie du bist
       EN: Be accepted exactly as you are
-      ES-ES: Sin hablarnos durante un mes
+      ES-ES: Ser aceptado tal como eres
 
 0466. DE: Ein Jahr lang eine Fernbeziehung führen
       EN: Have a long-distance relationship for one year
-      ES-ES: Tener momentos íntimos solo cuando tu pareja los inicia.
+      ES-ES: Tener una relación a larga distancia durante un año.
 
 0467. DE: Einen Monat lang überhaupt nicht miteinander reden
       EN: Not speak to each other at all for one month
-      ES-ES: Inicia tú mismo todos los momentos íntimos
+      ES-ES: Sin hablarnos durante un mes
 
 0468. DE: Intime Momente nur dann zu haben, wenn dein Partner sie initiiert
       EN: Only have intimate moments when your partner initiates them
-      ES-ES: Prefiere compartir tus secretos más profundos con tu pareja.
+      ES-ES: Tener momentos íntimos solo cuando tu pareja los inicia.
 
 0469. DE: Alle intimen Momente selbst initiieren
       EN: Initiate every intimate moment yourself
-      ES-ES: Guárdate algunas cosas para ti
+      ES-ES: Inicia tú mismo todos los momentos íntimos
 
 0470. DE: Deine tiefsten Geheimnisse lieber mit deinem Partner teilen
       EN: Share your deepest secrets with your partner
-      ES-ES: Gana un millón de dólares
+      ES-ES: Prefiere compartir tus secretos más profundos con tu pareja.
 
 0471. DE: Einige Dinge für dich behalten
       EN: Keep some things to yourself
-      ES-ES: Gana un millón de dólares
+      ES-ES: Guárdate algunas cosas para ti
 
 0472. DE: Eine Million Dollar gewinnen
       EN: Win one million dollars
-      ES-ES: Tener una pareja muy emocional
+      ES-ES: Gana un millón de dólares
 
 0473. DE: Eine Million Dollar verdienen
       EN: Earn one million dollars
-      ES-ES: Tener una pareja muy lógica
+      ES-ES: Gana un millón de dólares
 
 0474. DE: Einen sehr emotionalen Partner haben
       EN: Have a very emotional partner
-      ES-ES: Haz que tu relación sea estable y segura
+      ES-ES: Tener una pareja muy emocional
 
 0475. DE: Einen sehr logischen Partner haben
       EN: Have a very logical partner
-      ES-ES: Haz que tu relación sea aventurera y espontánea
+      ES-ES: Tener una pareja muy lógica
 
 0476. DE: Deine Beziehung stabil und sicher machen
       EN: Make your relationship stable and secure
-      ES-ES: Perdiendo a tu mejor amigo
+      ES-ES: Haz que tu relación sea estable y segura
 
 0477. DE: Deine Beziehung abenteuerlich und spontan machen
       EN: Make your relationship adventurous and spontaneous
-      ES-ES: Pierde a todos tus amigos excepto a tu mejor amigo.
+      ES-ES: Haz que tu relación sea aventurera y espontánea
 
 0478. DE: Deinen besten Freund verlieren
       EN: Lose your best friend
-      ES-ES: Comparte todas tus aficiones con tu pareja
+      ES-ES: Perdiendo a tu mejor amigo
 
 0479. DE: Alle deine Freunde verlieren, außer deinem besten Freund
       EN: Lose all your friends except your best friend
-      ES-ES: Que tu pareja te presente nuevos pasatiempos
+      ES-ES: Pierde a todos tus amigos excepto a tu mejor amigo.
 
 0480. DE: Teile alle deine Hobbys mit deinem Partner
       EN: Share all your hobbies with your partner
-      ES-ES: Se el que sea abrazado
+      ES-ES: Comparte todas tus aficiones con tu pareja
 
 0481. DE: Von deinem Partner in neue Hobbys eingeführt werden
       EN: Be introduced to new hobbies by your partner
-      ES-ES: Se el que abraza
+      ES-ES: Que tu pareja te presente nuevos pasatiempos
 
 0482. DE: Derjenige sein, der umarmt wird
       EN: Be the one who gets hugged
-      ES-ES: Pasa las vacaciones con tu familia
+      ES-ES: Se el que sea abrazado
 
 0483. DE: Diejenige sein, die umarmt
       EN: Be the one giving the hug
-      ES-ES: Pasa las vacaciones con la familia de tu pareja
+      ES-ES: Se el que abraza
 
 0484. DE: Verbringe die Feiertage mit deiner Familie
       EN: Spend the holidays with your family
-      ES-ES: Nuevo amor, nuevas experiencias.
+      ES-ES: Pasa las vacaciones con tu familia
 
 0485. DE: Die Feiertage mit der Familie deines Partners verbringen
       EN: Spend the holidays with your partner's family
-      ES-ES: Me río mucho con mi pareja.
+      ES-ES: Pasa las vacaciones con la familia de tu pareja
 
 0486. DE: Neue Liebe, neue Erfahrungen
       EN: New Love, New Experiences
-      ES-ES: Disfruto descubriendo nuevos pasatiempos o actividades con mi pareja.
+      ES-ES: Nuevo amor, nuevas experiencias.
 
 0487. DE: Ich lache viel mit meinem Partner.
       EN: I laugh a lot with my partner.
-      ES-ES: Me gusta compartir memes y chistes con mi pareja.
+      ES-ES: Me río mucho con mi pareja.
 
 0488. DE: Ich entdecke gerne neue Hobbys oder Aktivitäten mit meinem Partner.
       EN: I enjoy discovering new hobbies or activities with my partner.
-      ES-ES: Priorizo ​​pasar tiempo con mi pareja incluso cuando estoy ocupado.
+      ES-ES: Disfruto descubriendo nuevos pasatiempos o actividades con mi pareja.
 
 0489. DE: Ich teile gerne Memes und Witze mit meinem Partner.
       EN: I enjoy sharing memes and jokes with my partner.
-      ES-ES: Le envío mensajes de texto a mi pareja todos los días.
+      ES-ES: Me gusta compartir memes y chistes con mi pareja.
 
 0490. DE: Ich priorisiere es, Zeit mit meinem Partner zu verbringen, auch wenn ich beschäftigt bin.
       EN: I make spending time with my partner a priority, even when I'm busy.
-      ES-ES: Me gusta compartir todos los detalles de mi día con mi pareja.
+      ES-ES: Priorizo ​​pasar tiempo con mi pareja incluso cuando estoy ocupado.
 
 0491. DE: Ich schreibe meinem Partner jeden Tag.
       EN: I message my partner every day.
-      ES-ES: Me gusta conocer las aficiones e intereses de mi pareja.
+      ES-ES: Le envío mensajes de texto a mi pareja todos los días.
 
 0492. DE: Ich teile gerne alle Details meines Tages mit meinem Partner.
       EN: I enjoy sharing all the details of my day with my partner.
-      ES-ES: Me molesta cuando mi pareja tarda mucho en responder los mensajes.
+      ES-ES: Me gusta compartir todos los detalles de mi día con mi pareja.
 
 0493. DE: Ich lerne gerne die Hobbys und Interessen meines Partners kennen.
       EN: I enjoy learning about my partner's hobbies and interests.
-      ES-ES: Me gusta planificar citas con mi pareja.
+      ES-ES: Me gusta conocer las aficiones e intereses de mi pareja.
 
 0494. DE: Es nervt mich, wenn mein Partner zu lange braucht, um auf Nachrichten zu antworten.
       EN: It bothers me when my partner takes too long to reply to messages.
-      ES-ES: Me encanta ver películas con mi pareja que ninguno de los dos hemos visto antes.
+      ES-ES: Me molesta cuando mi pareja tarda mucho en responder los mensajes.
 
 0495. DE: Ich plane gerne Dates mit meinem Partner.
       EN: I enjoy planning dates with my partner.
-      ES-ES: Me encanta compartir mi música favorita con mi pareja.
+      ES-ES: Me gusta planificar citas con mi pareja.
 
 0496. DE: Ich liebe es, Filme mit meinem Partner zu schauen, die keiner von uns zuvor gesehen hat.
       EN: I love watching movies with my partner that neither of us has seen before.
-      ES-ES: Los gestos románticos como mensajes, notas o regalos me hacen feliz.
+      ES-ES: Me encanta ver películas con mi pareja que ninguno de los dos hemos visto antes.
 
 0497. DE: Ich liebe es, meine Lieblingsmusik mit meinem Partner zu teilen.
       EN: I love sharing my favorite music with my partner.
-      ES-ES: Prefiero los paseos románticos por el parque que ir al cine.
+      ES-ES: Me encanta compartir mi música favorita con mi pareja.
 
 0498. DE: Romantische Gesten wie Nachrichten, Zettelchen oder Geschenke machen mich glücklich.
       EN: Romantic gestures such as messages, notes, or gifts make me happy.
-      ES-ES: Disfruto probar nuevos restaurantes con mi pareja en lugar de ir siempre a los mismos lugares.
+      ES-ES: Los gestos románticos como mensajes, notas o regalos me hacen feliz.
 
 0499. DE: Ich bevorzuge romantische Spaziergänge im Park gegenüber einem Kinobesuch.
       EN: I prefer romantic walks in the park to going to the movies.
-      ES-ES: una noche de cine
+      ES-ES: Prefiero los paseos románticos por el parque que ir al cine.
 
 0500. DE: Ich genieße es, mit meinem Partner neue Restaurants auszuprobieren, anstatt immer an die gleichen Orte zu gehen.
       EN: I enjoy trying new restaurants with my partner instead of always going to the same places.
-      ES-ES: una noche de juegos
+      ES-ES: Disfruto probar nuevos restaurantes con mi pareja en lugar de ir siempre a los mismos lugares.
 
 0501. DE: Ein Filmabend
       EN: Movie Night
-      ES-ES: Una aventura activa
+      ES-ES: una noche de cine
 
 0502. DE: Ein Spieleabend
       EN: Game Night
-      ES-ES: Un relajante día de spa
+      ES-ES: una noche de juegos
 
 0503. DE: Ein aktives Abenteuer
       EN: An Active Adventure
-      ES-ES: Una cita acogedora en el interior
+      ES-ES: Una aventura activa
 
 0504. DE: Ein entspannender Spa-Tag
       EN: A Relaxing Spa Day
-      ES-ES: un viaje por carretera
+      ES-ES: Un relajante día de spa
 
 0505. DE: Ein gemütliches Date drinnen
       EN: A Cozy Indoor Date
-      ES-ES: ver una película
+      ES-ES: Una cita acogedora en el interior
 
 0506. DE: Eine Autoreise
       EN: A Road Trip
-      ES-ES: Construyan juntos un Lego
+      ES-ES: un viaje por carretera
 
 0507. DE: Einen Film anschauen
       EN: Watch a Movie
-      ES-ES: una cata de vinos
+      ES-ES: ver una película
 
 0508. DE: Gemeinsam ein Lego bauen
       EN: Build a Lego Set Together
-      ES-ES: Una cata de chocolate
+      ES-ES: Construyan juntos un Lego
 
 0509. DE: Eine Weinverkostung
       EN: Wine Tasting
-      ES-ES: Una noche acogedora en casa
+      ES-ES: una cata de vinos
 
 0510. DE: Eine Schokoladenverkostung
       EN: Chocolate Tasting
-      ES-ES: Una aventura en una nueva ciudad.
+      ES-ES: Una cata de chocolate
 
 0511. DE: Eine gemütliche Nacht zu Hause
       EN: A Cozy Night at Home
-      ES-ES: ir de picnic
+      ES-ES: Una noche acogedora en casa
 
 0512. DE: Ein Abenteuer in einer neuen Stadt
       EN: An Adventure in a New City
-      ES-ES: Ir a una cena elegante
+      ES-ES: Una aventura en una nueva ciudad.
 
 0513. DE: Zu einem Picknick gehen
       EN: Go on a Picnic
-      ES-ES: Una velada romantica
+      ES-ES: ir de picnic
 
 0514. DE: Zu einem ausgefallenen Abendessen gehen
       EN: Go Out for a Fancy Dinner
-      ES-ES: Una noche en un club
+      ES-ES: Ir a una cena elegante
 
 0515. DE: Ein romantischer Abend
       EN: A Romantic Evening
-      ES-ES: Una cita nocturna bajo las estrellas.
+      ES-ES: Una velada romantica
 
 0516. DE: Eine Nacht in einem Club
       EN: A Night at a Club
-      ES-ES: Una cena romántica a la luz de las velas.
+      ES-ES: Una noche en un club
 
 0517. DE: Eine Date-Nacht unter den Sternen
       EN: A Date Night Under the Stars
-      ES-ES: ir a una cafeteria
+      ES-ES: Una cita nocturna bajo las estrellas.
 
 0518. DE: Ein romantisches Abendessen bei Kerzenlicht
       EN: A Romantic Candlelit Dinner
-      ES-ES: ir a un bar
+      ES-ES: Una cena romántica a la luz de las velas.
 
 0519. DE: In einen Coffeeshop gehen
       EN: Go to a Coffee Shop
-      ES-ES: Una velada acogedora en casa durante una tormenta
+      ES-ES: ir a una cafeteria
 
 0520. DE: In eine Bar gehen
       EN: Go to a Bar
-      ES-ES: Una gran cita al aire libre bajo la luz de la luna.
+      ES-ES: ir a un bar
 
 0521. DE: Ein gemütlicher Abend im Haus während eines Gewitters
       EN: A Cozy Evening at Home During a Thunderstorm
-      ES-ES: Explora un parque de diversiones
+      ES-ES: Una velada acogedora en casa durante una tormenta
 
 0522. DE: Ein tolles Date im Freien unter dem Mondlicht
       EN: An Amazing Outdoor Date in the Moonlight
-      ES-ES: visitar un museo
+      ES-ES: Una gran cita al aire libre bajo la luz de la luna.
 
 0523. DE: Einen Vergnügungspark erkunden
       EN: Explore an Amusement Park
-      ES-ES: Una noche de juegos con amigos.
+      ES-ES: Explora un parque de diversiones
 
 0524. DE: Ein Museum besuchen
       EN: Visit a Museum
-      ES-ES: Un picnic romántico en un hermoso lugar.
+      ES-ES: visitar un museo
 
 0525. DE: Ein Spieleabend mit Freunden
       EN: A Game Night with Friends
-      ES-ES: Prueben juntos una nueva receta en la cocina.
+      ES-ES: Una noche de juegos con amigos.
 
 0526. DE: Ein romantisches Picknick an einem schönen Ort
       EN: A Romantic Picnic Somewhere Beautiful
-      ES-ES: Comer en un buen restaurante
+      ES-ES: Un picnic romántico en un hermoso lugar.
 
 0527. DE: Gemeinsam in der Küche ein neues Rezept ausprobieren
       EN: Try a New Recipe Together
-      ES-ES: ir a acampar
+      ES-ES: Prueben juntos una nueva receta en la cocina.
 
 0528. DE: In einem feinen Restaurant essen gehen
       EN: Dine at a Fine Restaurant
-      ES-ES: un dia de bienestar
+      ES-ES: Comer en un buen restaurante
 
 0529. DE: Zelten gehen
       EN: Go Camping
-      ES-ES: tomar una clase de baile
+      ES-ES: ir a acampar
 
 0530. DE: Einen Wellness-Tag
       EN: Have a Spa Day
-      ES-ES: Haz una caminata con vistas panorámicas.
+      ES-ES: un dia de bienestar
 
 0531. DE: Einen Tanzkurs besuchen
       EN: Take a Dance Class
-      ES-ES: Juega y diviértete
+      ES-ES: tomar una clase de baile
 
 0532. DE: Eine Wanderung mit Panoramablick machen
       EN: Go on a Scenic Hike
-      ES-ES: Tener conversaciones profundas
+      ES-ES: Haz una caminata con vistas panorámicas.
 
 0533. DE: Spiele spielen und Spaß haben
       EN: Play Games and Have Fun
-      ES-ES: Asiste a un concierto de música en vivo.
+      ES-ES: Juega y diviértete
 
 0534. DE: Tiefgründige Gespräche führen
       EN: Have Deep Conversations
-      ES-ES: Ir a una fiesta en barco
+      ES-ES: Tener conversaciones profundas
 
 0535. DE: Ein Live-Musik-Konzert besuchen
       EN: Go to a Live Music Concert
-      ES-ES: Ve temprano en la mañana para ver el amanecer.
+      ES-ES: Asiste a un concierto de música en vivo.
 
 0536. DE: Auf eine Bootsparty gehen
       EN: Go to a Boat Party
-      ES-ES: Ir a un chiringuito a ver el atardecer
+      ES-ES: Ir a una fiesta en barco
 
 0537. DE: Geh früh am Morgen, um den Sonnenaufgang zu sehen
       EN: Get Up Early to Watch the Sunrise
-      ES-ES: Variedades de helados gourmet
+      ES-ES: Ve temprano en la mañana para ver el amanecer.
 
 0538. DE: In eine Strandbar gehen, um den Sonnenuntergang zu sehen
       EN: Go to a Beach Bar to Watch the Sunset
-      ES-ES: Vainilla
+      ES-ES: Ir a un chiringuito a ver el atardecer
 
 0539. DE: Gourmet Eis-Sorten
       EN: Gourmet Ice Cream Flavors
-      ES-ES: Chocolate
+      ES-ES: Variedades de helados gourmet
 
 0540. DE: Vanille
       EN: Vanilla
-      ES-ES: fresa
+      ES-ES: Vainilla
 
 0541. DE: Schokolade
       EN: Chocolate
-      ES-ES: limón
+      ES-ES: Chocolate
 
 0542. DE: Erdbeere
       EN: Strawberry
-      ES-ES: Stracciatella
+      ES-ES: fresa
 
 0543. DE: Zitrone
       EN: Lemon
-      ES-ES: pistacho
+      ES-ES: limón
 
 0544. DE: Stracciatella
       EN: Stracciatella
-      ES-ES: Sorbete de mango
+      ES-ES: Stracciatella
 
 0545. DE: Pistazie
       EN: Pistachio
-      ES-ES: frambuesa
+      ES-ES: pistacho
 
 0546. DE: Mango Sorbet
       EN: Mango Sorbet
-      ES-ES: caramelo salado
+      ES-ES: Sorbete de mango
 
 0547. DE: Himbeere
       EN: Raspberry
-      ES-ES: masa para galletas
+      ES-ES: frambuesa
 
 0548. DE: Salted Caramel
       EN: Salted Caramel
-      ES-ES: Avellana
+      ES-ES: caramelo salado
 
 0549. DE: Cookie Dough
       EN: Cookie Dough
-      ES-ES: Chocolate blanco
+      ES-ES: masa para galletas
 
 0550. DE: Hazelnut
       EN: Hazelnut
-      ES-ES: nuez
+      ES-ES: Avellana
 
 0551. DE: White Chocolate
       EN: White Chocolate
-      ES-ES: banana
+      ES-ES: Chocolate blanco
 
 0552. DE: Walnuss
       EN: Walnut
-      ES-ES: 6 meses en un edificio antiguo con encanto.
+      ES-ES: nuez
 
 0553. DE: Banane
       EN: Banana
-      ES-ES: 📂 Carpeta
+      ES-ES: banana
 
 0554. DE: 6 Monate im Altbau mit Charme
       EN: 6 Months in a Charming Period Home
-      ES-ES: 📝 Juegos
+      ES-ES: 6 meses en un edificio antiguo con encanto.
 
 0555. DE: 📂 Ordner
       EN: 📂 Folder
-      ES-ES: 🔗 Cadenas
+      ES-ES: 📂 Carpeta
 
 0556. DE: 📝 Spiele
       EN: 📝 Games
-      ES-ES: 🖼️ Fotos
+      ES-ES: 📝 Juegos
 
 0557. DE: 🔗 Ketten
       EN: 🔗 Chains
-      ES-ES: ⚡ Prueba
+      ES-ES: 🔗 Cadenas
 
 0558. DE: 🖼️ Bilder
       EN: 🖼️ Images
-      ES-ES: 📤 Exportaciones
+      ES-ES: 🖼️ Fotos
 
 0559. DE: ⚡ Test
       EN: ⚡ Test
-      ES-ES: Estudio de desarrollador
+      ES-ES: ⚡ Prueba
 
 0560. DE: 📤 Export
       EN: 📤 Export
-      ES-ES: Entrada de carpeta · Salida de pares · Exportación para AI Studio
+      ES-ES: 📤 Exportaciones
 
 0561. DE: Entwickler Studio
       EN: Developer Studio
-      ES-ES: La carpeta se está leyendo...
+      ES-ES: Estudio de desarrollador
 
 0562. DE: Ordner rein · Paare raus · Export für AI Studio
       EN: Import a folder · Create pairs · Export for AI Studio
-      ES-ES: No se encontraron imágenes en esta carpeta.
+      ES-ES: Entrada de carpeta · Salida de pares · Exportación para AI Studio
 
 0563. DE: Ordner wird gelesen…
       EN: Reading folder…
-      ES-ES: Se leen las imágenes...
+      ES-ES: La carpeta se está leyendo...
 
 0564. DE: Keine Bilder in diesem Ordner gefunden.
       EN: No images found in this folder.
-      ES-ES: Leer carpetas de imágenes
+      ES-ES: No se encontraron imágenes en esta carpeta.
 
 0565. DE: Bilder werden gelesen…
       EN: Reading images…
-      ES-ES: Cada dos imágenes se convierten en un par. El siguiente orden es el orden en el juego:
+      ES-ES: Se leen las imágenes...
 
 0566. DE: Bilder-Ordner einlesen
       EN: Import Image Folder
-      ES-ES: Mueva las filas con las flechas si un par no coincide.
+      ES-ES: Leer carpetas de imágenes
 
 0567. DE: Je zwei Bilder werden ein Paar. Die Reihenfolge unten ist die Reihenfolge im Spiel —
       EN: Every two images form a pair. The order below is the order used in the game —
-      ES-ES: Carpeta
+      ES-ES: Cada dos imágenes se convierten en un par. El siguiente orden es el orden en el juego:
 
 0568. DE: verschiebe Zeilen mit den Pfeilen, wenn ein Paar nicht passt.
       EN: move rows with the arrows if a pair does not match.
-      ES-ES: Fotos
+      ES-ES: Mueva las filas con las flechas si un par no coincide.
 
 0569. DE: Ordner
       EN: Folder
-      ES-ES: Categoría (por ejemplo, helado)
+      ES-ES: Carpeta
 
 0570. DE: Bilder
       EN: Images
-      ES-ES: nombre
+      ES-ES: Fotos
 
 0571. DE: Kategorie (z.B. Eis)
       EN: Category (e.g. ice cream)
-      ES-ES: emojis
+      ES-ES: Categoría (por ejemplo, helado)
 
 0572. DE: Name
       EN: Name
-      ES-ES: Título del juego
+      ES-ES: nombre
 
 0573. DE: Emoji
       EN: Emoji
-      ES-ES: emojis del juego
+      ES-ES: emojis
 
 0574. DE: Titel des Spiels
       EN: Game Title
-      ES-ES: Una imagen permanece y se ignora.
+      ES-ES: Título del juego
 
 0575. DE: Spiel-Emoji
       EN: Game Emoji
-      ES-ES: Vacío
+      ES-ES: emojis del juego
 
 0576. DE: Ein Bild bleibt übrig und wird ignoriert.
       EN: One image is left over and will be ignored.
-      ES-ES: Crear y activar paquete
+      ES-ES: Una imagen permanece y se ignora.
 
 0577. DE: Leeren
       EN: Clear
-      ES-ES: Los nombres de archivos como 01a_vanille.jpg / 01b_schoko.jpg se reconocen automáticamente como un par.
+      ES-ES: Vacío
 
 0578. DE: Paket erstellen & freischalten
       EN: Create & Unlock Pack
-      ES-ES: De lo contrario, cuenta el orden alfabético.
+      ES-ES: Crear y activar paquete
 
 0579. DE: Dateinamen wie 01a_vanille.jpg / 01b_schoko.jpg werden automatisch als Paar erkannt.
       EN: File names such as 01a_vanilla.jpg / 01b_chocolate.jpg are automatically recognized as a pair.
-      ES-ES: Nombre (opcional; déjelo en blanco si no hay texto)
+      ES-ES: Los nombres de archivos como 01a_vanille.jpg / 01b_schoko.jpg se reconocen automáticamente como un par.
 
 0580. DE: Sonst zählt die alphabetische Reihenfolge.
       EN: Otherwise, alphabetical order is used.
-      ES-ES: Arriba
+      ES-ES: De lo contrario, cuenta el orden alfabético.
 
 0581. DE: Name (optional - leer lassen für kein Text)
       EN: Name (optional — leave blank for no text)
-      ES-ES: Hacia abajo
+      ES-ES: Nombre (opcional; déjelo en blanco si no hay texto)
 
 0582. DE: Nach oben
       EN: Move Up
-      ES-ES: Eliminar
+      ES-ES: Arriba
 
 0583. DE: Nach unten
       EN: Move Down
-      ES-ES: Enviar
+      ES-ES: Hacia abajo
 
 0584. DE: Entfernen
       EN: Remove
-      ES-ES: puente de PRFV
+      ES-ES: Eliminar
 
 0585. DE: Senden
       EN: Send
-      ES-ES: Juego de búsqueda...
+      ES-ES: Enviar
 
 0586. DE: GFK Brücke
       EN: NVC Bridge
-      ES-ES: Categorías y colores
+      ES-ES: puente de PRFV
 
 0587. DE: Spiel suchen…
       EN: Search Games…
-      ES-ES: Nuevo juego
+      ES-ES: Juego de búsqueda...
 
 0588. DE: Kategorien & Farben
       EN: Categories & Colors
-      ES-ES: Todo
+      ES-ES: Categorías y colores
 
 0589. DE: Neues Spiel
       EN: New Game
-      ES-ES: ⚖️ Esto o aquello
+      ES-ES: Nuevo juego
 
 0590. DE: Alle
       EN: All
-      ES-ES: 🧠 Prueba
+      ES-ES: Todo
 
 0591. DE: ⚖️ Das oder Das
       EN: ⚖️ This or That
-      ES-ES: 🗣️ Discusión
+      ES-ES: ⚖️ Esto o aquello
 
 0592. DE: 🧠 Quiz
       EN: 🧠 Quiz
-      ES-ES: esto o aquello
+      ES-ES: 🧠 Prueba
 
 0593. DE: 🗣️ Diskussion
       EN: 🗣️ Discussion
-      ES-ES: prueba
+      ES-ES: 🗣️ Discusión
 
 0594. DE: Das oder Das
       EN: This or That
-      ES-ES: discusión
+      ES-ES: esto o aquello
 
 0595. DE: Quiz
       EN: Quiz
-      ES-ES: Editar
+      ES-ES: prueba
 
 0596. DE: Diskussion
       EN: Discussion
-      ES-ES: Borrar
+      ES-ES: discusión
 
 0597. DE: Bearbeiten
       EN: Edit
-      ES-ES: Cerca
+      ES-ES: Editar
 
 0598. DE: Löschen
       EN: Delete
-      ES-ES: Editar juego
+      ES-ES: Borrar
 
 0599. DE: Schließen
       EN: Close
-      ES-ES: Ahorrar
+      ES-ES: Cerca
 
 0600. DE: Spiel bearbeiten
       EN: Edit Game
-      ES-ES: título
+      ES-ES: Editar juego
 
 0601. DE: Speichern
       EN: Save
-      ES-ES: categoría
+      ES-ES: Ahorrar
 
 0602. DE: Titel
       EN: Title
-      ES-ES: 🎨 Administrar colores y categorías
+      ES-ES: título
 
 0603. DE: Kategorie
       EN: Category
-      ES-ES: Tipo de juego
+      ES-ES: categoría
 
 0604. DE: 🎨 Farben & Kategorien verwalten
       EN: 🎨 Manage Colors & Categories
-      ES-ES: Pares: toca una imagen para intercambiar
+      ES-ES: 🎨 Administrar colores y categorías
 
 0605. DE: Spieltyp
       EN: Game Type
-      ES-ES: Pareja
+      ES-ES: Tipo de juego
 
 0606. DE: Paare — tippe auf ein Bild, um es zu tauschen
       EN: Pairs — tap an image to replace it
-      ES-ES: galería
+      ES-ES: Pares: toca una imagen para intercambiar
 
 0607. DE: Paar
       EN: Pair
-      ES-ES: Mezclar pares
+      ES-ES: Pareja
 
 0608. DE: Galerie
       EN: Gallery
-      ES-ES: Preguntas
+      ES-ES: galería
 
 0609. DE: Paare mischen
       EN: Shuffle Pairs
-      ES-ES: Agregar pregunta
+      ES-ES: Mezclar pares
 
 0610. DE: Fragen
       EN: Questions
-      ES-ES: Eliminar par
+      ES-ES: Preguntas
 
 0611. DE: Frage hinzufügen
       EN: Add Question
-      ES-ES: Cambiar imagen
+      ES-ES: Agregar pregunta
 
 0612. DE: Paar löschen
       EN: Delete Pair
-      ES-ES: Nombre (opcional)
+      ES-ES: Eliminar par
 
 0613. DE: Bild ändern
       EN: Change Image
-      ES-ES: Texto de la pregunta
+      ES-ES: Cambiar imagen
 
 0614. DE: Name (optional)
       EN: Name (optional)
-      ES-ES: Eliminar pregunta
+      ES-ES: Nombre (opcional)
 
 0615. DE: Fragetext
       EN: Question Text
-      ES-ES: Respuestas separadas por |
+      ES-ES: Texto de la pregunta
 
 0616. DE: Frage löschen
       EN: Delete Question
-      ES-ES: Imágenes y Ciudades
+      ES-ES: Eliminar pregunta
 
 0617. DE: Antworten, getrennt mit |
       EN: Answers, separated by |
-      ES-ES: Todas las opciones de todos los juegos. Toca y elige tu propia imagen de la galería.
+      ES-ES: Respuestas separadas por |
 
 0618. DE: Bilder & Städte
       EN: Images & Cities
-      ES-ES: Opción de búsqueda...
+      ES-ES: Imágenes y Ciudades
 
 0619. DE: Jede Option aus allen Spielen. Tippen und ein eigenes Bild aus der Galerie wählen.
       EN: Every option from every game. Tap one to choose a custom image from the gallery.
-      ES-ES: Sólo opciones sin imagen propia.
+      ES-ES: Todas las opciones de todos los juegos. Toca y elige tu propia imagen de la galería.
 
 0620. DE: Option suchen…
       EN: Search Options…
-      ES-ES: Foto propia
+      ES-ES: Opción de búsqueda...
 
 0621. DE: Nur Optionen ohne eigenes Bild
       EN: Only options without a custom image
-      ES-ES: Reiniciar
+      ES-ES: Sólo opciones sin imagen propia.
 
 0622. DE: Eigenes Bild
       EN: Custom Image
-      ES-ES: prueba rápida
+      ES-ES: Foto propia
 
 0623. DE: Zurücksetzen
       EN: Reset
-      ES-ES: Selecciona al menos dos imágenes.
+      ES-ES: Reiniciar
 
 0624. DE: Schnelltest
       EN: Quick Test
-      ES-ES: Al juego todavía le falta un título.
+      ES-ES: prueba rápida
 
 0625. DE: Mindestens zwei Bilder auswählen.
       EN: Select at least two images.
-      ES-ES: Las imágenes se guardan...
+      ES-ES: Selecciona al menos dos imágenes.
 
 0626. DE: Dem Spiel fehlt noch ein Titel.
       EN: The game still needs a title.
-      ES-ES: La imagen está tomada...
+      ES-ES: Al juego todavía le falta un título.
 
 0627. DE: Bilder werden gespeichert…
       EN: Saving images…
-      ES-ES: Las imágenes se están leyendo en...
+      ES-ES: Las imágenes se guardan...
 
 0628. DE: Bild wird übernommen…
       EN: Importing image…
-      ES-ES: No se pudo leer la imagen.
+      ES-ES: La imagen está tomada...
 
 0629. DE: Bilder werden eingelesen…
       EN: Reading images…
-      ES-ES: No hay paquetes para exportar.
+      ES-ES: Las imágenes se están leyendo en...
 
 0630. DE: Bild konnte nicht gelesen werden.
       EN: The image could not be read.
-      ES-ES: Se está construyendo la exportación...
+      ES-ES: No se pudo leer la imagen.
 
 0631. DE: Keine Pakete zum Exportieren.
       EN: No packs available to export.
-      ES-ES: Más de 3 MB: utilice un tamaño de imagen más pequeño o exporte los paquetes individualmente.
+      ES-ES: No hay paquetes para exportar.
 
 0632. DE: Export wird gebaut…
       EN: Building export…
-      ES-ES: No hay fotografías propias disponibles.
+      ES-ES: Se está construyendo la exportación...
 
 0633. DE: Über 3 MB — nimm eine kleinere Bildgröße oder exportiere die Pakete einzeln.
       EN: Over 3 MB — choose a smaller image size or export the packs individually.
-      ES-ES: Comienza un juego en el Runner real, exactamente como lo jugarás más adelante.
+      ES-ES: Más de 3 MB: utilice un tamaño de imagen más pequeño o exporte los paquetes individualmente.
 
 0634. DE: Keine eigenen Bilder vorhanden.
       EN: No custom images available.
-      ES-ES: Prueba
+      ES-ES: No hay fotografías propias disponibles.
 
 0635. DE: Startet ein Spiel im echten Runner — genau so, wie ihr es später spielt.
       EN: Starts a game in the real runner — exactly as it will be played later.
-      ES-ES: Exportar para Google AI Studio
+      ES-ES: Comienza un juego en el Runner real, exactamente como lo jugarás más adelante.
 
 0636. DE: Testen
       EN: Test
-      ES-ES: Un único archivo de texto que contiene paquetes e imágenes. AI Studio no acepta archivos ZIP —
+      ES-ES: Prueba
 
 0637. DE: Export für Google AI Studio
       EN: Export for Google AI Studio
-      ES-ES: Por eso las imágenes están en Base64 directamente en el código Kotlin.
+      ES-ES: Exportar para Google AI Studio
 
 0638. DE: Eine einzige Textdatei mit Paketen und Bildern. AI Studio nimmt keine ZIPs —
       EN: One text file containing packs and images. AI Studio does not accept ZIP files —
-      ES-ES: Todavía no hay nada que exportar. Crea el primer paquete en la pestaña "Carpeta".
+      ES-ES: Un único archivo de texto que contiene paquetes e imágenes. AI Studio no acepta archivos ZIP —
 
 0639. DE: deshalb stecken die Bilder als Base64 direkt im Kotlin-Code.
       EN: so the images are embedded directly in the Kotlin code as Base64.
-      ES-ES: Paquetes (nada seleccionado = todos)
+      ES-ES: Por eso las imágenes están en Base64 directamente en el código Kotlin.
 
 0640. DE: Noch nichts zum Exportieren. Leg im Tab "Ordner" ein erstes Paket an.
       EN: Nothing to export yet. Create your first pack in the Folder tab.
-      ES-ES: Enviar fotos
+      ES-ES: Todavía no hay nada que exportar. Crea el primer paquete en la pestaña "Carpeta".
 
 0641. DE: Pakete (nichts ausgewählt = alle)
       EN: Packs (nothing selected = all)
-      ES-ES: Desactivado: solo textos, el archivo permanece pequeño
+      ES-ES: Paquetes (nada seleccionado = todos)
 
 0642. DE: Bilder mitschicken
       EN: Include Images
-      ES-ES: Tamaño de imagen en exportación
+      ES-ES: Enviar fotos
 
 0643. DE: Aus: nur Texte, Datei bleibt winzig
       EN: Off: text only, keeping the file tiny
-      ES-ES: Pequeño · 480px
+      ES-ES: Desactivado: solo textos, el archivo permanece pequeño
 
 0644. DE: Bildgröße im Export
       EN: Export Image Size
-      ES-ES: Mediano · 720px
+      ES-ES: Tamaño de imagen en exportación
 
 0645. DE: Klein · 480px
       EN: Small · 480px
-      ES-ES: Grande · 960px
+      ES-ES: Pequeño · 480px
 
 0646. DE: Mittel · 720px
       EN: Medium · 720px
-      ES-ES: Exportar para AI Studio
+      ES-ES: Mediano · 720px
 
 0647. DE: Groß · 960px
       EN: Large · 960px
-      ES-ES: Compartir imágenes individualmente
+      ES-ES: Grande · 960px
 
 0648. DE: Für AI Studio exportieren
       EN: Export for AI Studio
-      ES-ES: Copia de seguridad completa del proyecto (JSON)
+      ES-ES: Exportar para AI Studio
 
 0649. DE: Bilder einzeln teilen
       EN: Share Images Separately
-      ES-ES: Incluye todos los juegos, cadenas, categorías Y todas las imágenes incrustadas como Base64. Ideal para realizar copias de seguridad, transferir y restaurar.
+      ES-ES: Compartir imágenes individualmente
 
 0650. DE: Vollständiges Projekt-Backup (JSON)
       EN: Complete Project Backup (JSON)
-      ES-ES: Copiar
+      ES-ES: Copia de seguridad completa del proyecto (JSON)
 
 0651. DE: Enthält alle Spiele, Ketten, Kategorien UND alle eingebetteten Bilder als Base64. Ideal zur Sicherung, Übertragung & Wiederherstellung.
       EN: Contains every game, chain, category, and all embedded images as Base64. Ideal for backup, transfer, and recovery.
-      ES-ES: Compartir JSON
+      ES-ES: Incluye todos los juegos, cadenas, categorías Y todas las imágenes incrustadas como Base64. Ideal para realizar copias de seguridad, transferir y restaurar.
 
 0652. DE: Kopieren
       EN: Copy
-      ES-ES: jugar en
+      ES-ES: Copiar
 
 0653. DE: JSON teilen
       EN: Share JSON
-      ES-ES: Pegue JSON o exporte contenido (con Base64) aquí
+      ES-ES: Compartir JSON
 
 0654. DE: Einspielen
       EN: Import
-      ES-ES: Importa contenido e imágenes ahora
+      ES-ES: jugar en
 
 0655. DE: JSON oder Export-Inhalt (mit Base64) hier einfügen
       EN: Paste JSON or export content, including Base64, here
-      ES-ES: 🔗 Juegos de cadena
+      ES-ES: Pegue JSON o exporte contenido (con Base64) aquí
 
 0656. DE: Inhalt & Bilder jetzt einspielen
       EN: Import Content & Images Now
-      ES-ES: Packs con instrucciones de construcción dinámicas que se componen de respuestas previas.
+      ES-ES: Importa contenido e imágenes ahora
 
 0657. DE: 🔗 Ketten-Spiele
       EN: 🔗 Chain Games
-      ES-ES: Nueva cadena
+      ES-ES: 🔗 Juegos de cadena
 
 0658. DE: Pakete mit dynamischen Bauanleitungen, die sich aus bisherigen Antworten zusammensetzen.
       EN: Packs with dynamic templates assembled from previous answers.
-      ES-ES: construir una cadena
+      ES-ES: Packs con instrucciones de construcción dinámicas que se componen de respuestas previas.
 
 0659. DE: Neue Kette
       EN: New Chain
-      ES-ES: durante 1 año en {}
+      ES-ES: Nueva cadena
 
 0660. DE: Kette bauen
       EN: Build Chain
-      ES-ES: 6 meses en {}
+      ES-ES: construir una cadena
 
 0661. DE: 1 Jahr lang in {}
       EN: 1 Year in {}
-      ES-ES: Porque elegiste {A}...
+      ES-ES: durante 1 año en {}
 
 0662. DE: 6 Monate im {}
       EN: 6 Months in {}
-      ES-ES: Aún no se han puesto cadenas
+      ES-ES: 6 meses en {}
 
 0663. DE: Weil du {A} gewählt hast …
       EN: Because You Chose {A}…
-      ES-ES: Crea un paquete en cadena para vincular preguntas dinámicamente con respuestas anteriores.
+      ES-ES: Porque elegiste {A}...
 
 0664. DE: Noch keine Ketten angelegt
       EN: No Chains Yet
-      ES-ES: Jugar
+      ES-ES: Aún no se han puesto cadenas
 
 0665. DE: Erstelle ein Ketten-Paket, um Fragen dynamisch mit bisherigen Antworten zu verknüpfen.
       EN: Create a chain pack to connect questions dynamically with previous answers.
-      ES-ES: Editar cadena
+      ES-ES: Crea un paquete en cadena para vincular preguntas dinámicamente con respuestas anteriores.
 
 0666. DE: Spielen
       EN: Play
-      ES-ES: Crear nueva cadena
+      ES-ES: Jugar
 
 0667. DE: Kette bearbeiten
       EN: Edit Chain
-      ES-ES: Encabezado (por ejemplo, porque eligió {A}…)
+      ES-ES: Editar cadena
 
 0668. DE: Neue Kette erstellen
       EN: Create New Chain
-      ES-ES: Patrón de oración (por ejemplo, 6 meses en {})
+      ES-ES: Crear nueva cadena
 
 0669. DE: Kopfzeile (z.B. Weil du {A} gewählt hast …)
       EN: Caption (e.g. Because you chose {A}…)
-      ES-ES: Agregar nuevo paso
+      ES-ES: Encabezado (por ejemplo, porque eligió {A}…)
 
 0670. DE: Satzmuster (z.B. 6 Monate im {})
       EN: Sentence Pattern (e.g. 6 months in {})
-      ES-ES: Cancelar
+      ES-ES: Patrón de oración (por ejemplo, 6 meses en {})
 
 0671. DE: Neuen Schritt hinzufügen
       EN: Add New Step
-      ES-ES: Guardar y probar
+      ES-ES: Agregar nuevo paso
 
 0672. DE: Abbrechen
       EN: Cancel
-      ES-ES: Seleccionar fuente:
+      ES-ES: Cancelar
 
 0673. DE: Speichern & testen
       EN: Save & Test
-      ES-ES: Preferido
+      ES-ES: Guardar y probar
 
 0674. DE: Quelle wählen:
       EN: Choose Source:
-      ES-ES: No elegido
+      ES-ES: Seleccionar fuente:
 
 0675. DE: Gewählt
       EN: Selected
-      ES-ES: Opción fija
+      ES-ES: Preferido
 
 0676. DE: Nicht gewählt
       EN: Not Selected
-      ES-ES: Texto fijo
+      ES-ES: No elegido
 
 0677. DE: Feste Option
       EN: Fixed Option
-      ES-ES: Paquete fuente:
+      ES-ES: Opción fija
 
 0678. DE: Fester Text
       EN: Fixed Text
-      ES-ES: Turquesa
+      ES-ES: Texto fijo
 
 0679. DE: Quell-Paket:
       EN: Source Pack:
-      ES-ES: verde lima
+      ES-ES: Paquete fuente:
 
 0680. DE: Türkis
       EN: Turquoise
-      ES-ES: Seleccionar color de categoría
+      ES-ES: Turquesa
 
 0681. DE: Limetten grün
       EN: Lime Green
-      ES-ES: Crear nueva categoría
+      ES-ES: verde lima
 
 0682. DE: Kategorie-Farbe wählen
       EN: Choose Category Color
-      ES-ES: Editar categoría
+      ES-ES: Seleccionar color de categoría
 
 0683. DE: Neue Kategorie erstellen
       EN: Create New Category
-      ES-ES: Nueva categoría
+      ES-ES: Crear nueva categoría
 
 0684. DE: Kategorie bearbeiten
       EN: Edit Category
-      ES-ES: vacío
+      ES-ES: Editar categoría
 
 0685. DE: Neue Kategorie
       EN: New Category
-      ES-ES: Ningún paquete seleccionado
+      ES-ES: Nueva categoría
 
 0686. DE: leer
       EN: empty
-      ES-ES: Respuesta seleccionada
+      ES-ES: vacío
 
 0687. DE: Kein Paket gewählt
       EN: No Pack Selected
-      ES-ES: Respuesta rechazada
+      ES-ES: Ningún paquete seleccionado
 
 0688. DE: Gewählte Antwort
       EN: Selected Answer
-      ES-ES: cualquier par
+      ES-ES: Respuesta seleccionada
 
 0689. DE: Verworfene Antwort
       EN: Rejected Answer
-      ES-ES: París o Roma
+      ES-ES: Respuesta rechazada
 
 0690. DE: beliebiges Paar
       EN: Any Pair
-      ES-ES: Se está preparando la copia de seguridad JSON...
+      ES-ES: cualquier par
 
 0691. DE: Paris oder Rom
       EN: Paris or Rome
-      ES-ES: 🎉 ¡JSON que incluye imágenes y cadenas copiadas!
+      ES-ES: París o Roma
 
 0692. DE: JSON Backup wird vorbereitet…
       EN: Preparing JSON Backup…
-      ES-ES: Se crea el archivo de copia de seguridad JSON...
+      ES-ES: Se está preparando la copia de seguridad JSON...
 
 0693. DE: 🎉 JSON inkl. Bildern & Ketten kopiert!
       EN: 🎉 JSON including images and chains copied!
-      ES-ES: Los datos se importan...
+      ES-ES: 🎉 ¡JSON que incluye imágenes y cadenas copiadas!
 
 0694. DE: JSON Backup Datei wird erstellt…
       EN: Creating JSON Backup File…
-      ES-ES: Cadena iniciada
+      ES-ES: Se crea el archivo de copia de seguridad JSON...
 
 0695. DE: Daten werden eingespielt…
       EN: Importing Data…
-      ES-ES: 🔗 Peón de cadena
+      ES-ES: Los datos se importan...
 
 0696. DE: Kette gestartet
       EN: Chain Started
-      ES-ES: Tarjeta izquierda (lado A)
+      ES-ES: Cadena iniciada
 
 0697. DE: 🔗 Ketten-Bauer
       EN: 🔗 Chain Builder
-      ES-ES: Tarjeta derecha (lado B)
+      ES-ES: 🔗 Peón de cadena
 
 0698. DE: Linke Karte (Seite A)
       EN: Left Card (Side A)
-      ES-ES: Avance:
+      ES-ES: Tarjeta izquierda (lado A)
 
 0699. DE: Rechte Karte (Seite B)
       EN: Right Card (Side B)
-      ES-ES: Par/Opción:
+      ES-ES: Tarjeta derecha (lado B)
 
 0700. DE: Vorschau:
       EN: Preview:
-      ES-ES: Cualquier/último par
+      ES-ES: Avance:
 
 0701. DE: Paar / Option:
       EN: Pair / Option:
-      ES-ES: Página:
+      ES-ES: Par/Opción:
 
 0702. DE: Beliebiges / letztes Paar
       EN: Any / Last Pair
-      ES-ES: Opción izquierda (0)
+      ES-ES: Cualquier/último par
 
 0703. DE: Seite:
       EN: Side:
-      ES-ES: Opción correcta (1)
+      ES-ES: Página:
 
 0704. DE: Linke Option (0)
       EN: Left Option (0)
-      ES-ES: 🏷️ Categorías y colores
+      ES-ES: Opción izquierda (0)
 
 0705. DE: Rechte Option (1)
       EN: Right Option (1)
-      ES-ES: Título del juego de la cadena.
+      ES-ES: Opción correcta (1)
 
 0706. DE: 🏷️ Kategorien & Farben
       EN: 🏷️ Categories & Colors
-      ES-ES: Cadena sin nombre
+      ES-ES: 🏷️ Categorías y colores
 
 0707. DE: Titel des Ketten-Spiels
       EN: Chain Game Title
-      ES-ES: Descartado
+      ES-ES: Título del juego de la cadena.
 
 0708. DE: Unbenannte Kette
       EN: Untitled Chain
-      ES-ES: texto libre
+      ES-ES: Cadena sin nombre
 
 0709. DE: Verworfen
       EN: Rejected
-      ES-ES: Patrones de oraciones (por ejemplo, durante 1 año en {})
+      ES-ES: Descartado
 
 0710. DE: Freier Text
       EN: Free Text
-      ES-ES: Imagen predeterminada
+      ES-ES: texto libre
 
 0711. DE: Satzmuster (z.B. 1 Jahr lang in {})
       EN: Sentence Pattern (e.g. 1 year in {})
-      ES-ES: propio
+      ES-ES: Patrones de oraciones (por ejemplo, durante 1 año en {})
 
 0712. DE: Standardbild
       EN: Default Image
-      ES-ES: Hielo
+      ES-ES: Imagen predeterminada
 
 0713. DE: eigen
       EN: custom
-      ES-ES: sabores de helado
+      ES-ES: propio
 
 0714. DE: Eis
       EN: Ice Cream
-      ES-ES: Oro
+      ES-ES: Hielo
 
 0715. DE: Eissorten
       EN: Ice Cream Flavors
-      ES-ES: Rosa
+      ES-ES: sabores de helado
 
 0716. DE: Gold
       EN: Gold
-      ES-ES: Púrpura
+      ES-ES: Oro
 
 0717. DE: Rosa
       EN: Pink
-      ES-ES: Azul
+      ES-ES: Rosa
 
 0718. DE: Lila
       EN: Purple
-      ES-ES: coral
+      ES-ES: Púrpura
 
 0719. DE: Blau
       EN: Blue
-      ES-ES: esmeralda
+      ES-ES: Azul
 
 0720. DE: Koralle
       EN: Coral
-      ES-ES: Rojo rubí
+      ES-ES: coral
 
 0721. DE: Smaragd
       EN: Emerald
-      ES-ES: lavanda
+      ES-ES: esmeralda
 
 0722. DE: Rubinrot
       EN: Ruby Red
-      ES-ES: magenta
+      ES-ES: Rojo rubí
 
 0723. DE: Lavendel
       EN: Lavender
-      ES-ES: Naranja
+      ES-ES: lavanda
 
 0724. DE: Magenta
       EN: Magenta
-      ES-ES: Nuevo edificio con tecnología
+      ES-ES: magenta
 
 0725. DE: Orange
       EN: Orange
-      ES-ES: cocina abierta
+      ES-ES: Naranja
 
 0726. DE: Neubau mit Technik
       EN: Tech-Enabled New Build
-      ES-ES: huerto
+      ES-ES: Nuevo edificio con tecnología
 
 0727. DE: Offene Küche
       EN: Open-Plan Kitchen
-      ES-ES: hamaca
+      ES-ES: cocina abierta
 
 0728. DE: Gemüsebeet
       EN: Vegetable Garden
-      ES-ES: Prado de flores
+      ES-ES: huerto
 
 0729. DE: Hängematte
       EN: Hammock
-      ES-ES: Azotea
+      ES-ES: hamaca
 
 0730. DE: Blumenwiese
       EN: Flower Meadow
-      ES-ES: Zona de barbacoa
+      ES-ES: Prado de flores
 
 0731. DE: Dachterrasse
       EN: Rooftop Terrace
-      ES-ES: Tubo de lámpara
+      ES-ES: Azotea
 
 0732. DE: Grillplatz
       EN: Barbecue Area
-      ES-ES: chocolate belga
+      ES-ES: Zona de barbacoa
 
 0733. DE: Kamin
       EN: Fireplace
-      ES-ES: Sube a AI Studio y escribe: "Reemplaza GeneratedHarmonyContent.kt por completo con el contenido de este archivo".
+      ES-ES: Tubo de lámpara
 
 0734. DE: Belgische Schokolade
       EN: Belgian Chocolate
-      ES-ES: Preguntas y juegos
+      ES-ES: chocolate belga
 
 0735. DE: In AI Studio hochladen und schreiben: "Ersetze GeneratedHarmonyContent.kt komplett durch den Inhalt dieser Datei."
       EN: Upload to AI Studio and write: "Replace GeneratedHarmonyContent.kt completely with the contents of this file."
-      ES-ES: Categorías
+      ES-ES: Sube a AI Studio y escribe: "Reemplaza GeneratedHarmonyContent.kt por completo con el contenido de este archivo".
 
 0736. DE: Fragen & Spiele
       EN: Questions & Games
-      ES-ES: Temas
+      ES-ES: Preguntas y juegos
 
 0737. DE: Kategorien
       EN: Categories
-      ES-ES: Recomendado para ti
+      ES-ES: Categorías
 
 0738. DE: Themen
       EN: Topics
-      ES-ES: Estadísticas de pareja
+      ES-ES: Temas
 
 0739. DE: Für dich empfohlen
       EN: Recommended for You
-      ES-ES: Días juntos
+      ES-ES: Recomendado para ti
 
 0740. DE: Paar-Statistiken
       EN: Couple Statistics
-      ES-ES: Preguntas respondidas
+      ES-ES: Estadísticas de pareja
 
 0741. DE: Gemeinsame Tage
       EN: Days Together
-      ES-ES: Ciudades visitadas
+      ES-ES: Días juntos
 
 0742. DE: Beantwortete Fragen
       EN: Questions Answered
-      ES-ES: Países visitados
+      ES-ES: Preguntas respondidas
 
 0743. DE: Besuchte Städte
       EN: Cities Visited
-      ES-ES: widgets
+      ES-ES: Ciudades visitadas
 
 0744. DE: Besuchte Länder
       EN: Countries Visited
-      ES-ES: Te echo de menos
+      ES-ES: Países visitados
 
 0745. DE: Widgets
       EN: Widgets
-      ES-ES: Pienso en ti
+      ES-ES: widgets
 
 0746. DE: Du fehlst mir
       EN: I Miss You
-      ES-ES: Estoy pensando en ti
+      ES-ES: Te echo de menos
 
 0747. DE: Denke an dich
       EN: Thinking of You
-      ES-ES: Enviar un beso
+      ES-ES: Pienso en ti
 
 0748. DE: Ich denke an dich
       EN: I'm Thinking of You
-      ES-ES: beso
+      ES-ES: Estoy pensando en ti
 
 0749. DE: Kuss senden
       EN: Send a Kiss
-      ES-ES: RESULTADOS
+      ES-ES: Enviar un beso
 
 0750. DE: Kuss
       EN: Kiss
-      ES-ES: RESPONDER
+      ES-ES: beso
 
 0751. DE: ERGEBNISSE
       EN: RESULTS
-      ES-ES: Todos los paquetes
+      ES-ES: RESULTADOS
 
 0752. DE: BEANTWORTE
       EN: ANSWER
-      ES-ES: Perfil
+      ES-ES: RESPONDER
 
 0753. DE: Alle Pakete
       EN: All Packs
-      ES-ES: Tu nombre
+      ES-ES: Todos los paquetes
 
 0754. DE: Profil
       EN: Profile
-      ES-ES: Pareja
+      ES-ES: Perfil
 
 0755. DE: Dein Name
       EN: Your Name
-      ES-ES: Juntos desde
+      ES-ES: Tu nombre
 
 0756. DE: Partnerin
       EN: Partner
-      ES-ES: Simulador de pareja
+      ES-ES: Pareja
 
 0757. DE: Zusammen seit
       EN: Together Since
-      ES-ES: Idioma
+      ES-ES: Juntos desde
 
 0758. DE: Partner-Simulator
       EN: Partner Simulator
-      ES-ES: Alemán
+      ES-ES: Simulador de pareja
 
 0759. DE: Sprache
       EN: Language
-      ES-ES: Inglés
+      ES-ES: Idioma
 
 0760. DE: Deutsch
       EN: German
-      ES-ES: Modo de desarrollo
+      ES-ES: Alemán
 
 0761. DE: Englisch
       EN: English
-      ES-ES: Abrir el estudio de desarrollo
+      ES-ES: Inglés
 
 0762. DE: Entwickler-Modus
       EN: Developer Mode
-      ES-ES: Editar perfil
+      ES-ES: Modo de desarrollo
 
 0763. DE: Entwickler Studio Öffnen
       EN: Open Developer Studio
-      ES-ES: Nombre de tu pareja
+      ES-ES: Abrir el estudio de desarrollo
 
 0764. DE: Profil bearbeiten
       EN: Edit Profile
-      ES-ES: Añadir
+      ES-ES: Editar perfil
 
 0765. DE: Name Partnerin
       EN: Partner's Name
-      ES-ES: Momentos
+      ES-ES: Nombre de tu pareja
 
 0766. DE: Hinzufügen
       EN: Add
-      ES-ES: ¿Qué pasó?
+      ES-ES: Añadir
 
 0767. DE: Momente
       EN: Moments
-      ES-ES: o
+      ES-ES: Momentos
 
 0768. DE: Was ist passiert?
       EN: What Happened?
-      ES-ES: Atrás
+      ES-ES: ¿Qué pasó?
 
 0769. DE: oder
       EN: or
-      ES-ES: Tu propia respuesta
+      ES-ES: o
 
 0770. DE: Zurück
       EN: Back
-      ES-ES: Tu respuesta...
+      ES-ES: Atrás
 
 0771. DE: Deine eigene Antwort
       EN: Your Own Answer
-      ES-ES: Guardar
+      ES-ES: Tu propia respuesta
 
 0772. DE: Deine Antwort...
       EN: Your Answer...
-      ES-ES: Similitud de respuestas
+      ES-ES: Tu respuesta...
 
 0773. DE: Übernehmen
       EN: Save
-      ES-ES: Hablen sobre sus respuestas
+      ES-ES: Guardar
 
 0774. DE: Antwortähnlichkeit
       EN: Answer Similarity
-      ES-ES: ¡Listo!
+      ES-ES: Similitud de respuestas
 
 0775. DE: Diskutiert eure Antworten
       EN: Discuss Your Answers
-      ES-ES: ✎ Toca para responder
+      ES-ES: Hablen sobre sus respuestas
 
 0776. DE: Fertig!
       EN: Done!
-      ES-ES: Escribe tu propia respuesta
+      ES-ES: ¡Listo!
 
 0777. DE: ✎ Tippe, um zu antworten
       EN: ✎ Tap to Answer
-      ES-ES: ¿Salir del cuestionario?
+      ES-ES: ✎ Toca para responder
 
 0778. DE: Schreibe deine eigene Antwort
       EN: Write Your Own Answer
-      ES-ES: ¿Realmente quieres abandonar el cuestionario? Tu progreso anterior permanece guardado.
+      ES-ES: Escribe tu propia respuesta
 
 0779. DE: Quiz verlassen?
       EN: Leave Quiz?
-      ES-ES: Escribe libremente lo que realmente te venga a la cabeza.
+      ES-ES: ¿Salir del cuestionario?
 
 0780. DE: Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.
       EN: Are you sure you want to leave the quiz? Your progress will remain saved.
-      ES-ES: ¿Has descubierto alguna diferencia sorprendente? ¡Habla sobre por qué te gustan más ciertas opciones!
+      ES-ES: ¿Realmente quieres abandonar el cuestionario? Tu progreso anterior permanece guardado.
 
 0781. DE: Schreib frei, was dir wirklich dazu einfällt.
       EN: Write freely about what truly comes to mind.
-      ES-ES: ✕ Cerrar
+      ES-ES: Escribe libremente lo que realmente te venga a la cabeza.
 
 0782. DE: Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!
       EN: Did you discover any surprising differences? Talk about why you each prefer certain options!
-      ES-ES: No hay nada aquí ahora mismo. ↵ Cambia el filtro o elige un tema diferente.
+      ES-ES: ¿Has descubierto alguna diferencia sorprendente? ¡Habla sobre por qué te gustan más ciertas opciones!
 
 0783. DE: ✕ Schließen
       EN: ✕ Close
-      ES-ES: ✨ Puente de CNV
+      ES-ES: ✕ Cerrar
 
 0784. DE: Hier ist gerade nichts. ↵ Wechsle den Filter oder wähle ein anderes Thema.
       EN: There is nothing here right now. ↵ Change the filter or choose another topic.
-      ES-ES: Reformula tu borrador usando comunicación no violenta: observación, sentimiento, necesidad y petición.
+      ES-ES: No hay nada aquí ahora mismo. ↵ Cambia el filtro o elige un tema diferente.
 
 0785. DE: ✨ GFK-Brücke
       EN: ✨ NVC Bridge
-      ES-ES: ¿Qué es lo que realmente quieres decir?
+      ES-ES: ✨ Puente de CNV
 
 0786. DE: Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.
       EN: Rewrite your draft using nonviolent communication: observation, feeling, need, request.
-      ES-ES: Insertar en el chat
+      ES-ES: Reformula tu borrador usando comunicación no violenta: observación, sentimiento, necesidad y petición.
 
 0787. DE: Was möchtest du eigentlich sagen?
       EN: What would you really like to say?
-      ES-ES: Analiza las respuestas y los chats de ambos según Gottman y la CNV.
+      ES-ES: ¿Qué es lo que realmente quieres decir?
 
 0788. DE: In Chat einfügen
       EN: Insert into Chat
-      ES-ES: ¿Deseos? p.ej. barato, afuera
+      ES-ES: Insertar en el chat
 
 0789. DE: Analysiert eure Antworten & Chats nach Gottman und GFK.
       EN: Analyzes your answers and chats using the Gottman method and NVC.
-      ES-ES: Edita juegos y ciudades, carga carpetas, ajusta imágenes
+      ES-ES: Analiza las respuestas y los chats de ambos según Gottman y la CNV.
 
 0790. DE: Wünsche? z.B. günstig, draußen
       EN: Preferences? e.g. affordable, outdoors
-      ES-ES: 🔥 Actividad diaria
+      ES-ES: ¿Deseos? p.ej. barato, afuera
 
 0791. DE: Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen
       EN: Edit games and cities, import folders, and customize images
-      ES-ES: + Añadir
+      ES-ES: Edita juegos y ciudades, carga carpetas, ajusta imágenes
 
 0792. DE: 🔥 Tägliche Aktivität
       EN: 🔥 Daily Activity
-      ES-ES: Aún no hay momentos. ↵ Captura tu primera experiencia 💞
+      ES-ES: 🔥 Actividad diaria
 
 0793. DE: + Hinzufügen
       EN: + Add
-      ES-ES: Un hito de armonía de tu amor.
+      ES-ES: + Añadir
 
 0794. DE: Noch keine Momente. ↵ Haltet euer erstes Erlebnis fest 💞
       EN: No moments yet. ↵ Capture your first memory together 💞
-      ES-ES: ¿Qué no quieres olvidar nunca?
+      ES-ES: Aún no hay momentos. ↵ Captura tu primera experiencia 💞
 
 0795. DE: Ein Harmony-Meilenstein eurer Liebe.
       EN: A Harmony Milestone in Your Love Story.
-      ES-ES: 🟠 Tu turno
+      ES-ES: Un hito de armonía de tu amor.
 
 0796. DE: Was wollt ihr nie vergessen?
       EN: What Do You Never Want to Forget?
-      ES-ES: Responda las preguntas al mismo tiempo: las respuestas no serán visibles hasta que ambos hayan terminado.
+      ES-ES: ¿Qué no quieres olvidar nunca?
 
 0797. DE: 🟠 Du bist dran
       EN: 🟠 Your Turn
-      ES-ES: Nosotros
+      ES-ES: 🟠 Tu turno
 
 0798. DE: Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.
       EN: Answer questions at the same time — answers become visible only after you have both finished.
-      ES-ES: Hola tú 💕 ¿cómo estuvo tu día?
+      ES-ES: Responda las preguntas al mismo tiempo: las respuestas no serán visibles hasta que ambos hayan terminado.
 
 0799. DE: Wir
       EN: Profile
-      ES-ES: Es estresante, pero las cosas están mejorando ahora ☺️
+      ES-ES: Nosotros
 
 0800. DE: Hey du 💕 wie war dein Tag?
       EN: Hey you 💕 how was your day?
-      ES-ES: Ya estaba pensando en nuestro reencuentro 🥹
+      ES-ES: Hola tú 💕 ¿cómo estuvo tu día?
 
 0801. DE: Stressig — aber jetzt wird’s besser ☺️
       EN: Stressful — but it's getting better now ☺️
-      ES-ES: Nuestra primera cita en video
+      ES-ES: Es estresante, pero las cosas están mejorando ahora ☺️
 
 0802. DE: Ich hab schon an unser Wiedersehen gedacht 🥹
       EN: I've already been thinking about seeing you again 🥹
-      ES-ES: Hablé durante cuatro horas y perdí la noción del tiempo.
+      ES-ES: Ya estaba pensando en nuestro reencuentro 🥹
 
 0803. DE: Unser erstes Videodate
       EN: Our First Video Date
-      ES-ES: paquete sorpresa
+      ES-ES: Nuestra primera cita en video
 
 0804. DE: Vier Stunden geredet und die Zeit vergessen.
       EN: We talked for four hours and completely lost track of time.
-      ES-ES: Galletas y una carta: lloré de alegría.
+      ES-ES: Hablé durante cuatro horas y perdí la noción del tiempo.
 
 0805. DE: Überraschungspaket
       EN: Surprise Package
-      ES-ES: Eso suena bien 🥰
+      ES-ES: paquete sorpresa
 
 0806. DE: Kekse und ein Brief — ich musste weinen vor Freude.
       EN: Cookies and a letter — I cried happy tears.
-      ES-ES: Realmente te extraño ahora mismo
+      ES-ES: Galletas y una carta: lloré de alegría.
 
 0807. DE: Das klingt schön 🥰
       EN: That sounds lovely 🥰
-      ES-ES: Cuéntame más al respecto 💕
+      ES-ES: Eso suena bien 🥰
 
 0808. DE: Ich vermiss dich gerade richtig
       EN: I really miss you right now
-      ES-ES: Jaja siempre me haces reír 😄
+      ES-ES: Realmente te extraño ahora mismo
 
 0809. DE: Erzähl mir mehr davon 💕
       EN: Tell me more about it 💕
-      ES-ES: ¿Podemos hablar por teléfono esta noche?
+      ES-ES: Cuéntame más al respecto 💕
 
 0810. DE: Haha du bringst mich immer zum Lachen 😄
       EN: Haha, you always make me laugh 😄
-      ES-ES: Pienso en ti tan seguido ❤️
+      ES-ES: Jaja siempre me haces reír 😄
 
 0811. DE: Können wir heute Abend telefonieren?
       EN: Can we call tonight?
-      ES-ES: La clave API de Gemini no está configurada. Agregue su GEMINI_API_KEY en el Panel de secretos AI Studio.
+      ES-ES: ¿Podemos hablar por teléfono esta noche?
 
 0812. DE: Ich denk so oft an dich ❤️
       EN: I think about you so often ❤️
-      ES-ES: No se recibió ninguna respuesta.
+      ES-ES: Pienso en ti tan seguido ❤️
 
 0813. DE: Gemini API Key ist nicht konfiguriert. Bitte füge deinen GEMINI_API_KEY im AI Studio Secrets Panel ein.
       EN: The Gemini API key is not configured. Add your GEMINI_API_KEY in the AI Studio Secrets panel.
-      ES-ES: Tu turno
+      ES-ES: La clave API de Gemini no está configurada. Agregue su GEMINI_API_KEY en el Panel de secretos AI Studio.
 
 0814. DE: Keine Antwort erhalten.
       EN: No response received.
-      ES-ES: Respondido
+      ES-ES: No se recibió ninguna respuesta.
 
 0815. DE: Du bist dran
       EN: Your Turn
-      ES-ES: Omitir
+      ES-ES: Tu turno
 
 0816. DE: Beantwortet
       EN: Answered
-      ES-ES: Siguiente
+      ES-ES: Respondido
 
 0817. DE: Überspringen
       EN: Skip
-      ES-ES: Coach de relaciones con IA
+      ES-ES: Omitir
 
 0818. DE: Weiter
       EN: Next
-      ES-ES: Ideas para citas con IA
+      ES-ES: Siguiente
 
 0819. DE: KI-Beziehungscoach
       EN: AI Relationship Coach
-      ES-ES: Iniciar análisis
+      ES-ES: Coach de relaciones con IA
 
 0820. DE: KI-Date-Ideen
       EN: AI Date Ideas
-      ES-ES: Generar ideas
+      ES-ES: Ideas para citas con IA
 
 0821. DE: Analyse starten
       EN: Start Analysis
-      ES-ES: Nombre y fecha de inicio de su relación.
+      ES-ES: Iniciar análisis
 
 0822. DE: Ideen generieren
       EN: Generate Ideas
-      ES-ES: Listo
+      ES-ES: Generar ideas
 
 0823. DE: Namen und Startdatum eurer Beziehung.
       EN: Your names and relationship start date.
-      ES-ES: Seguir jugando
+      ES-ES: Nombre y fecha de inicio de su relación.
 
 0824. DE: Fertig
       EN: Done
-      ES-ES: Reformulando...
+      ES-ES: Listo
 
 0825. DE: Weiter spielen
       EN: Keep Playing
-      ES-ES: Reformular
+      ES-ES: Seguir jugando
 
 0826. DE: Formuliere um...
       EN: Reframing...
-      ES-ES: Mensaje a $partnerName...
+      ES-ES: Reformulando...
 
 0827. DE: Umformulieren
       EN: Reframe
-      ES-ES: ✅ Respondido
+      ES-ES: Reformular
 
 0828. DE: Nachricht an $partnerName...
       EN: Message to $partnerName...
-      ES-ES: Conéctate con $partnerName
+      ES-ES: Mensaje a $partnerName...
 
 0829. DE: ✅ Beantwortet
       EN: ✅ Answered
-      ES-ES: 1 año juntos 🎉
+      ES-ES: ✅ Respondido
 
 0830. DE: Verbinde dich mit $partnerName
       EN: Connect with $partnerName
-      ES-ES: 2 años juntos 🎉
+      ES-ES: Conéctate con $partnerName
 
 0831. DE: 1 Jahr zusammen 🎉
       EN: Together for 1 year 🎉
-      ES-ES: 3 años juntos 🎉
+      ES-ES: 1 año juntos 🎉
 
 0832. DE: 2 Jahre zusammen 🎉
       EN: Together for 2 years 🎉
-      ES-ES: $d días juntos 💞
+      ES-ES: 2 años juntos 🎉
 
 0833. DE: 3 Jahre zusammen 🎉
       EN: Together for 3 years 🎉
-      ES-ES: Guardar un momento
+      ES-ES: 3 años juntos 🎉
 
 0834. DE: $d Tage zusammen 💞
       EN: $d days together 💞
-      ES-ES: Código de invitación: HRM-8731 · todo desbloqueado
+      ES-ES: $d días juntos 💞
 
 0835. DE: Moment festhalten
       EN: Capture a moment
-      ES-ES: ✨ Entrenador de relaciones con IA
+      ES-ES: Guardar un momento
 
 0836. DE: Invite-Code: HRM-8731 · alles freigeschaltet
       EN: Invite code: HRM-8731 · everything unlocked
-      ES-ES: Analiza tus patrones...
+      ES-ES: Código de invitación: HRM-8731 · todo desbloqueado
 
 0837. DE: ✨ KI-Beziehungscoach
       EN: ✨ AI relationship coach
-      ES-ES: 💡 Ideas para citas con IA
+      ES-ES: ✨ Entrenador de relaciones con IA
 
 0838. DE: Analysiere eure Muster...
       EN: Analyzing your patterns...
-      ES-ES: Recoge ideas...
+      ES-ES: Analiza tus patrones...
 
 0839. DE: 💡 KI-Date-Ideen
       EN: 💡 AI date ideas
-      ES-ES: 🛠️ Modo desarrollador
+      ES-ES: 💡 Ideas para citas con IA
 
 0840. DE: Sammle Ideen...
       EN: Collecting ideas...
-      ES-ES: Juntos desde (DD.MM.AAAA)
+      ES-ES: Recoge ideas...
 
 0841. DE: 🛠️ Entwickler-Modus
       EN: 🛠️ Developer mode
-      ES-ES: Tus respuestas están guardadas. Tan pronto como ${profile.partnerName} finalice el paquete, ambas respuestas serán visibles juntas.
+      ES-ES: 🛠️ Modo desarrollador
 
 0842. DE: Zusammen seit (TT.MM.JJJJ)
       EN: Together since (DD.MM.YYYY)
-      ES-ES: Conéctate con ${profile.partnerName} para ver la respuesta
+      ES-ES: Juntos desde (DD.MM.AAAA)
 
 0843. DE: Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
       EN: Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together.
-      ES-ES: Salir del cuestionario
+      ES-ES: Tus respuestas están guardadas. Tan pronto como ${profile.partnerName} finalice el paquete, ambas respuestas serán visibles juntas.
 
 0844. DE: Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen
       EN: Connect with ${profile.partnerName} to see the answer
-      ES-ES: Resultados
+      ES-ES: Conéctate con ${profile.partnerName} para ver la respuesta
 
 0845. DE: Quiz verlassen
       EN: Leave quiz
-      ES-ES: Entretenimiento
+      ES-ES: Salir del cuestionario
 
 0846. DE: Ergebnisse
       EN: Results
-      ES-ES: Boda
+      ES-ES: Resultados
 
 0847. DE: Unterhaltung
       EN: Entertainment
-      ES-ES: Hijos
+      ES-ES: Entretenimiento
 
 0848. DE: Hochzeit
       EN: Wedding
-      ES-ES: Hablar antes de...
+      ES-ES: Boda
 
 0849. DE: Kinder
       EN: Children
-      ES-ES: {ANZAHL} imágenes cargadas: revisa los nombres y luego crea el paquete.
+      ES-ES: Hijos
 
 0850. DE: Reden vor...
       EN: Talk Before...
-      ES-ES: {ANZAHL} Imágenes cargadas.
+      ES-ES: Hablar antes de...
 
 0851. DE: {ANZAHL} Bilder geladen — Namen prüfen, dann erstellen.
       EN: {COUNT} images loaded — review the names, then create the pack.
-      ES-ES: {ANZAHL} parejas de {ANZAHL} fotos
+      ES-ES: {ANZAHL} imágenes cargadas: revisa los nombres y luego crea el paquete.
 
 0852. DE: {ANZAHL} Bilder geladen.
       EN: {COUNT} images loaded.
-      ES-ES: Imagen {NUMMER} por {ANZAHL}…
+      ES-ES: {ANZAHL} Imágenes cargadas.
 
 0853. DE: {ANZAHL} Paare aus {ANZAHL} Bildern
       EN: {COUNT} pairs from {COUNT} images
-      ES-ES: Guardando imagen {NUMMER} de {ANZAHL}…
+      ES-ES: {ANZAHL} parejas de {ANZAHL} fotos
 
 0854. DE: Bild {NUMMER} von {ANZAHL}…
       EN: Image {NUMBER} of {COUNT}…
-      ES-ES: Pareja {NUMMER}
+      ES-ES: Imagen {NUMMER} por {ANZAHL}…
 
 0855. DE: Speichere Bild {NUMMER} von {ANZAHL}…
       EN: Saving image {NUMBER} of {COUNT}…
-      ES-ES: Pregunta {NUMMER}
+      ES-ES: Guardando imagen {NUMMER} de {ANZAHL}…
 
 0856. DE: Paar {NUMMER}
       EN: Pair {NUMBER}
-      ES-ES: Paso {NUMMER}
+      ES-ES: Pareja {NUMMER}
 
 0857. DE: Frage {NUMMER}
       EN: Question {NUMBER}
-      ES-ES: {ANZAHL} parejas
+      ES-ES: Pregunta {NUMMER}
 
 0858. DE: Schritt {NUMMER}
       EN: Step {NUMBER}
-      ES-ES: {ANZAHL} Preguntas
+      ES-ES: Paso {NUMMER}
 
 0859. DE: {ANZAHL} Paare
       EN: {COUNT} pairs
-      ES-ES: {ANZAHL} Paso(s)
+      ES-ES: {ANZAHL} parejas
 
 0860. DE: {ANZAHL} Fragen
       EN: {COUNT} questions
-      ES-ES: {ANZAHL} Parejas · {ANZAHL} Preguntas
+      ES-ES: {ANZAHL} Preguntas
 
 0861. DE: {ANZAHL} Schritt(e)
       EN: {COUNT} steps
-      ES-ES: {ANZAHL} entradas
+      ES-ES: {ANZAHL} Paso(s)
 
 0862. DE: {ANZAHL} Paare · {ANZAHL} Fragen
       EN: {COUNT} pairs · {COUNT} questions
-      ES-ES: Listo: {PAKETE} paquetes · {BILDER} imágenes · {DETAILS}
+      ES-ES: {ANZAHL} Parejas · {ANZAHL} Preguntas
 
 0863. DE: {ANZAHL} Einträge
       EN: {COUNT} entries
-      ES-ES: 🎉 {ANZAHL} ¡Paquetes/cadenas e imágenes importadas correctamente!
+      ES-ES: {ANZAHL} entradas
 
 0864. DE: Fertig: {PAKETE} Pakete · {BILDER} Bilder · {DETAILS}
       EN: Done: {PACKS} packs · {IMAGES} images · {DETAILS}
-      ES-ES: 🎉 '{TITEL}' creado · {ANZAHL} pares listos para jugar
+      ES-ES: Listo: {PAKETE} paquetes · {BILDER} imágenes · {DETAILS}
 
 0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
       EN: 🎉 {COUNT} packs/chains and images imported successfully!
-      ES-ES: • A: {OPTION} (Imagen: {BILD})
+      ES-ES: 🎉 {ANZAHL} ¡Paquetes/cadenas e imágenes importadas correctamente!
 
 0866. DE: 🎉 '{TITEL}' angelegt · {ANZAHL} Paare spielbereit
       EN: 🎉 '{TITLE}' created · {COUNT} pairs ready to play
-      ES-ES: • B: {OPTION} (Imagen: {BILD})
+      ES-ES: 🎉 '{TITEL}' creado · {ANZAHL} pares listos para jugar
 
 0867. DE: • A: {OPTION} (Bild: {BILD})
       EN: • A: {OPTION} (Image: {IMAGE})
-      ES-ES: '{TITEL}' eliminado.
+      ES-ES: • A: {OPTION} (Imagen: {BILD})
 
 0868. DE: • B: {OPTION} (Bild: {BILD})
       EN: • B: {OPTION} (Image: {IMAGE})
-      ES-ES: '{TITEL}' guardado.
+      ES-ES: • B: {OPTION} (Imagen: {BILD})
 
 0869. DE: '{TITEL}' gelöscht.
       EN: '{TITLE}' deleted.
-      ES-ES: Categoría '{TITEL}' guardada.
+      ES-ES: '{TITEL}' eliminado.
 
 0870. DE: '{TITEL}' gespeichert.
       EN: '{TITLE}' saved.
-      ES-ES: Cadena '{TITEL}' guardada.
+      ES-ES: '{TITEL}' guardado.
 
 0871. DE: Kategorie '{TITEL}' gespeichert.
       EN: Category '{TITLE}' saved.
-      ES-ES: Cadena '{TITEL}' eliminada.
+      ES-ES: Categoría '{TITEL}' guardada.
 
 0872. DE: Kette '{TITEL}' gespeichert.
       EN: Chain '{TITLE}' saved.
-      ES-ES: Imagen configurada para '{OPTION}'.
+      ES-ES: Cadena '{TITEL}' guardada.
 
 0873. DE: Kette '{TITEL}' gelöscht.
       EN: Chain '{TITLE}' deleted.
-      ES-ES: Se eliminó la imagen personalizada para '{OPTION}'.
+      ES-ES: Cadena '{TITEL}' eliminada.
 
 0874. DE: Bild für '{OPTION}' gesetzt.
       EN: Image set for '{OPTION}'.
-      ES-ES: {EMOJI} “{WIDGET}” enviado a {PARTNER}
+      ES-ES: Imagen configurada para '{OPTION}'.
 
 0875. DE: Eigenes Bild für '{OPTION}' entfernt.
       EN: Custom image removed for '{OPTION}'.
-      ES-ES: 6 meses en {ORT}
+      ES-ES: Se eliminó la imagen personalizada para '{OPTION}'.
 
 0876. DE: {EMOJI} „{WIDGET}“ an {PARTNER} gesendet
       EN: {EMOJI} “{WIDGET}” sent to {PARTNER}
-      ES-ES: 1 año en {ORT}
+      ES-ES: {EMOJI} “{WIDGET}” enviado a {PARTNER}
 
 0877. DE: 6 Monate im {ORT}
       EN: 6 months in {PLACE}
-      ES-ES: Porque elegiste {OPTION}...
+      ES-ES: 6 meses en {ORT}
 
 0878. DE: 1 Jahr lang in {ORT}
       EN: 1 year in {PLACE}
-      ES-ES: Conéctate con {PARTNER} para ver la respuesta
+      ES-ES: 1 año en {ORT}
 
 0879. DE: Weil du {OPTION} gewählt hast …
       EN: Because you chose {OPTION}…
-      ES-ES: Conéctate con {PARTNER}
+      ES-ES: Porque elegiste {OPTION}...
 
 0880. DE: Verbinde dich mit {PARTNER}, um die Antwort zu sehen
       EN: Connect with {PARTNER} to see the answer
-      ES-ES: Tus respuestas están guardadas. Tan pronto como {PARTNER} finalice el paquete, ambas respuestas serán visibles juntas.
+      ES-ES: Conéctate con {PARTNER} para ver la respuesta
 
 0881. DE: Verbinde dich mit {PARTNER}
       EN: Connect with {PARTNER}
-      ES-ES: Error al redactar nuevamente: {FEHLER}
+      ES-ES: Conéctate con {PARTNER}
 
 0882. DE: Deine Antworten sind gespeichert. Sobald {PARTNER} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
       EN: Your answers have been saved. Once {PARTNER} finishes the pack, both sets of answers will appear together.
-      ES-ES: Error durante el análisis: {FEHLER}
+      ES-ES: Tus respuestas están guardadas. Tan pronto como {PARTNER} finalice el paquete, ambas respuestas serán visibles juntas.
 
 0883. DE: Fehler bei der Umformulierung: {FEHLER}
       EN: Rewriting failed: {ERROR}
-      ES-ES: Error de generación de ideas: {FEHLER}
+      ES-ES: Error al redactar nuevamente: {FEHLER}
 
 0884. DE: Fehler bei der Analyse: {FEHLER}
       EN: Analysis failed: {ERROR}
-      ES-ES: {EMOJI} {INHALT}
+      ES-ES: Error durante el análisis: {FEHLER}
 
 0885. DE: Fehler bei der Ideengenerierung: {FEHLER}
       EN: Idea generation failed: {ERROR}
-      ES-ES: {NUMMER}. {INHALT}
+      ES-ES: Error de generación de ideas: {FEHLER}
 
 0886. DE: {EMOJI} {INHALT}
       EN: {EMOJI} {LOCALIZED CONTENT}
-      ES-ES: HARMONY
+      ES-ES: {EMOJI} {INHALT}
 
 0887. DE: {NUMMER}. {INHALT}
       EN: {NUMBER}. {LOCALIZED CONTENT}
-      ES-ES: Inicio
+      ES-ES: {NUMMER}. {INHALT}
 
 0888. DE: HARMONY
       EN: HARMONY
-      ES-ES: Chat
+      ES-ES: HARMONY
 
 0889. DE: Home
       EN: Home
-      ES-ES: Dev
+      ES-ES: Inicio
 
 0890. DE: Chat
       EN: Chat
-      ES-ES: Jerome
+      ES-ES: Chat
 
 0891. DE: Dev
       EN: Dev
-      ES-ES: Alex
+      ES-ES: Dev
 
 0892. DE: Jerome
       EN: Jerome
-      ES-ES: O
+      ES-ES: Jerome
 
 0893. DE: Alex
       EN: Alex
-      ES-ES: VS
+      ES-ES: Alex
 
 0894. DE: OR
       EN: OR
-      ES-ES: Compartir exportación
+      ES-ES: O
 
 0895. DE: VS
       EN: VS
-      ES-ES: Compartir imágenes
+      ES-ES: VS
