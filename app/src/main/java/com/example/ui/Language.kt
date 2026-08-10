@@ -8,14 +8,20 @@ import androidx.compose.runtime.compositionLocalOf
  * Supported app locales. Add future languages here using their stable BCP-47 language code.
  * The language selector is generated from this enum, so it does not need language-specific UI edits.
  */
-enum class AppLanguage(val code: String, val nativeName: String, val englishName: String) {
-    GERMAN("de", "Deutsch", "German"),
-    ENGLISH("en", "English", "English"),
-    ITALIAN("it", "Italiano", "Italian"),
-    FRENCH("fr", "Français", "French"),
-    JAPANESE("ja", "日本語", "Japanese"),
-    SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish"),
-    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)");
+enum class AppLanguage(
+    val code: String,
+    val nativeName: String,
+    val englishName: String,
+    val flagEmoji: String
+) {
+    GERMAN("de", "Deutsch", "German", "🇩🇪"),
+    ENGLISH("en", "English", "English", "🇬🇧"),
+    ITALIAN("it", "Italiano", "Italian", "🇮🇹"),
+    FRENCH("fr", "Français", "French", "🇫🇷"),
+    JAPANESE("ja", "日本語", "Japanese", "🇯🇵"),
+    // Latin America is a region rather than one country, so it uses the regional globe.
+    SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish", "🌎"),
+    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸");
 
     companion object {
         fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
