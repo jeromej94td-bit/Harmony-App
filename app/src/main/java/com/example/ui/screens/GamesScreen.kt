@@ -59,6 +59,21 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
 import com.example.ui.theme.HarmonyText
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+
 @Composable
 fun GamesScreen(
     answers: List<AnswerEntity>,
@@ -70,6 +85,17 @@ fun GamesScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    var isSearchOpen by remember { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
+    val searchFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(isSearchOpen) {
+        if (isSearchOpen) {
+            searchFocusRequester.requestFocus()
+            keyboardController?.show()
+        }
+    }
 
     // Find daily pack
     val answeredPackIds = answers.groupBy { it.packId }.keys
@@ -79,30 +105,116 @@ fun GamesScreen(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(bottom = 112.dp)
+            .padding(bottom = 90.dp)
     ) {
-        // Section Title
-        Text(
-            text = tr("Fragen & Spiele", "Questions & Games"),
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)
-        )
+        if (isSearchOpen) {
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp, vertical = 8.dp)
+                    .focusRequester(searchFocusRequester)
+                    .testTag("pack_search_field"),
+                placeholder = { Text("Suchen…", color = HarmonyMuted) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Suchen", tint = HarmonyPink) },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { searchQuery = "" }) {
+                            Icon(Icons.Default.Close, contentDescription = "Suche löschen", tint = HarmonyMuted)
+                        }
+                    }
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(18.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = HarmonySurface2,
+                    unfocusedContainerColor = HarmonySurface2,
+                    focusedIndicatorColor = HarmonyPink,
+                    unfocusedIndicatorColor = HarmonyLine,
+                    focusedTextColor = HarmonyText,
+                    unfocusedTextColor = HarmonyText,
+                    cursorColor = HarmonyPink
+                )
+            )
 
-        // Filter Chips
-        FilterChipsRow(
-            selectedFilter = packFilter,
-            onFilterSelected = onSetFilter,
-            modifier = Modifier.padding(horizontal = 18.dp)
-        )
+            val normalizedQuery = searchQuery.trim()
+            val searchResults = if (normalizedQuery.isBlank()) {
+                emptyList()
+            } else {
+                val categoryNames = HarmonyPacksData.CATEGORIES.associate { it.id to it.name }
+                val topicNames = HarmonyPacksData.TOPICS.associate { it.id to it.name }
+                HarmonyPacksData.PACKS.filter { pack ->
+                    val searchableText = buildString {
+                        append(pack.title).append(' ')
+                        append(pack.cat).append(' ').append(categoryNames[pack.cat].orEmpty()).append(' ')
+                        append(pack.topic).append(' ').append(topicNames[pack.topic].orEmpty()).append(' ')
+                        append(pack.tags.joinToString(" ")).append(' ')
+                        pack.questions.forEach { append(it.q).append(' ').append(it.options.joinToString(" ")).append(' ') }
+                        pack.pairs.forEach { append(it.first).append(' ').append(it.second).append(' ') }
+                    }
+                    searchableText.contains(normalizedQuery, ignoreCase = true)
+                }
+            }
 
-        Spacer(modifier = Modifier.height(18.dp))
+            if (normalizedQuery.isNotBlank() && searchResults.isEmpty()) {
+                Text(
+                    text = "Keine passenden Fragen oder Spiele gefunden.",
+                    color = HarmonyMuted,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 28.dp)
+                )
+            } else {
+                searchResults.forEach { pack ->
+                    PaddingPackCard(
+                        pack = pack,
+                        answers = answers,
+                        onStartPack = onStartPack,
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 6.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                IconButton(
+                    onClick = { isSearchOpen = true },
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .background(HarmonySurface2)
+                        .border(1.dp, HarmonyLine, CircleShape)
+                        .testTag("open_pack_search_button")
+                ) {
+                    Icon(Icons.Default.Search, contentDescription = "Fragen suchen", tint = HarmonyPink)
+                }
+                Text(
+                    text = "Fragen & Spiele",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText
+                )
+            }
+
+            FilterChipsRow(
+                selectedFilter = packFilter,
+                onFilterSelected = onSetFilter,
+                modifier = Modifier.padding(horizontal = 18.dp)
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
 
         // Categories Header
         Text(
-            text = tr("Kategorien", "Categories"),
-            fontSize = 19.sp,
+            text = "Kategorien",
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
@@ -132,7 +244,7 @@ fun GamesScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = tr("🔥 Tägliche Aktivität", "🔥 Daily activity"),
+                text = "🔥 Tägliche Aktivität",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
@@ -151,8 +263,8 @@ fun GamesScreen(
 
         // Topics Progress Header
         Text(
-            text = tr("Themen", "Topics"),
-            fontSize = 19.sp,
+            text = "Themen",
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
@@ -177,6 +289,7 @@ fun GamesScreen(
                 onClick = { onTopicClick(topic.id) },
                 modifier = Modifier.padding(horizontal = 18.dp, vertical = 5.dp)
             )
+        }
         }
     }
 }
