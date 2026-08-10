@@ -214,7 +214,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0049. DE: Welche Umgebung würdest du dir für einen Antrag wünschen?
       EN: What setting would you want for a proposal?
-      FR: Quel environnement souhaiteriez-vous pour une proposition ?
+      FR: Quel cadre souhaiteriez-vous pour une demande en mariage ?
 
 0050. DE: Zu Hause, gemütlich und privat
       EN: At home, cozy and private
@@ -230,7 +230,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0053. DE: Magst du einen öffentlichen oder privaten Antrag lieber?
       EN: Would you prefer a public or private proposal?
-      FR: Préférez-vous une proposition publique ou privée?
+      FR: Préférez-vous une demande en mariage publique ou privée ?
 
 0054. DE: Nur wir beide
       EN: Just the two of us
@@ -246,7 +246,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0057. DE: Soll der Antrag eine Überraschung sein?
       EN: Should the proposal be a surprise?
-      FR: La proposition devrait-elle être une surprise ?
+      FR: La demande en mariage devrait-elle être une surprise ?
 
 0058. DE: Ja, komplett überraschend
       EN: Yes, a complete surprise
@@ -282,7 +282,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0066. DE: Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?
       EN: Would you prefer an extravagant proposal or something understated?
-      FR: Préférez-vous une proposition extravagante ou quelque chose de subtil ?
+      FR: Préférez-vous une demande en mariage extravagante ou quelque chose de subtil ?
 
 0067. DE: Übertrieben und großartig
       EN: Over-the-top and spectacular
@@ -330,7 +330,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0078. DE: Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?
       EN: How important is it that the proposal reflects your hobbies or interests?
-      FR: Dans quelle mesure est-il important pour vous que la candidature reflète vos passe-temps ou vos intérêts ?
+      FR: Dans quelle mesure est-il important pour vous que la demande en mariage reflète vos loisirs ou vos centres d'intérêt ?
 
 0079. DE: Sehr wichtig, es sollte persönlich sein
       EN: Very important — it should feel personal
@@ -378,7 +378,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0090. DE: Hättest du gerne einen geschriebenen Brief als Teil des Antrags?
       EN: Would you like a handwritten letter as part of the proposal?
-      FR: Souhaitez-vous une lettre écrite dans le cadre de la candidature?
+      FR: Souhaitez-vous une lettre écrite dans le cadre de la demande en mariage ?
 
 0091. DE: Ja, etwas zum Lesen und Aufbewahren
       EN: Yes, something to read and keep
@@ -394,7 +394,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0094. DE: Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?
       EN: Should the proposal include cultural or traditional elements?
-      FR: La candidature doit-elle contenir des éléments culturels ou traditionnels ?
+      FR: La demande en mariage devrait-elle contenir des éléments culturels ou traditionnels ?
 
 0095. DE: Ja, Traditionen einbinden
       EN: Yes, include traditions
@@ -410,7 +410,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0098. DE: Was ist das Wichtigste beim Antrag?
       EN: What matters most in a proposal?
-      FR: Quelle est la chose la plus importante lors de la candidature ?
+      FR: Qu'est-ce qui est le plus important dans une demande en mariage ?
 
 0099. DE: Die Umgebung und Atmosphäre
       EN: The setting and atmosphere
@@ -426,7 +426,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0102. DE: Möchtest du, dass Haustiere beim Antrag dabei sind?
       EN: Would you want pets to be part of the proposal?
-      FR: Souhaitez-vous que les animaux de compagnie soient inclus dans la candidature ?
+      FR: Souhaitez-vous que des animaux de compagnie participent à la demande en mariage ?
 
 0103. DE: Ja, sie gehören zur Familie!
       EN: Yes, they're part of the family!
@@ -614,11 +614,11 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0149. DE: Altbau mit Charme
       EN: Charming Period Home
-      FR: Bâtisse ancienne de charme
+      FR: Maison ancienne de charme
 
 0150. DE: Neubau mit Smart Home
       EN: New Smart Home
-      FR: Nouveau bâtiment avec maison intelligente
+      FR: Maison neuve avec domotique
 
 0151. DE: Offene Wohnküche
       EN: Open-plan Kitchen
@@ -630,7 +630,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0153. DE: Prasselnder Kamin
       EN: Crackling Fireplace
-      FR: Cheminée rugissante
+      FR: Cheminée crépitante
 
 0154. DE: Fußbodenheizung
       EN: Underfloor Heating
@@ -738,7 +738,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0180. DE: Entspannte Hängematte
       EN: Relaxing Hammock
-      FR: Hamac décontracté
+      FR: Hamac relaxant
 
 0181. DE: Stilvolles Outdoor-Sofa
       EN: Stylish Outdoor Sofa
@@ -2554,7 +2554,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0634. DE: Keine eigenen Bilder vorhanden.
       EN: No custom images available.
-      FR: Aucune photo personnelle disponible.
+      FR: Aucune image personnalisée disponible.
 
 0635. DE: Startet ein Spiel im echten Runner — genau so, wie ihr es später spielt.
       EN: Starts a game in the real runner — exactly as it will be played later.
@@ -2674,7 +2674,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0664. DE: Noch keine Ketten angelegt
       EN: No Chains Yet
-      FR: Pas encore de chaînes mises
+      FR: Aucune chaîne créée pour le moment
 
 0665. DE: Erstelle ein Ketten-Paket, um Fragen dynamisch mit bisherigen Antworten zu verknüpfen.
       EN: Create a chain pack to connect questions dynamically with previous answers.
@@ -3478,7 +3478,7 @@ CONTENU INTÉGRÉ SUPPLÉMENTAIRE
 
 0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
       EN: 🎉 {COUNT} packs/chains and images imported successfully!
-      FR: 🎉 {ANZAHL} Packages/chaînes et images importés avec succès !
+      FR: 🎉 {ANZAHL} packs/chaînes et images importés avec succès !
 
 0866. DE: 🎉 '{TITEL}' angelegt · {ANZAHL} Paare spielbereit
       EN: 🎉 '{TITLE}' created · {COUNT} pairs ready to play
