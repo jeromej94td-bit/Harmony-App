@@ -88,6 +88,15 @@ class SpanishLocalizationCoverageTest {
             "1. ¿Quién lo haría?",
             localizedContent("1. Wer würde eher?", AppLanguage.SPANISH_LATIN_AMERICA)
         )
+        val emptyState = "Hier ist gerade nichts.\nWechsle den Filter oder wähle ein anderes Thema."
+        assertEquals(
+            "No hay nada aquí ahora mismo.\nCambia el filtro o elige otro tema.",
+            localizedContent(emptyState, AppLanguage.SPANISH_LATIN_AMERICA)
+        )
+        assertEquals(
+            "No hay nada aquí ahora mismo.\nCambia el filtro o elige otro tema.",
+            localizedContent(emptyState, AppLanguage.SPANISH_SPAIN)
+        )
     }
 
     @Test
