@@ -1,0 +1,3601 @@
+HARMONY – CATALOGUE COMPLET DES TEXTES (FRANÇAIS)
+Français
+
+Source : catalogue de l'interface et du contenu Harmony. Les noms des utilisateurs et partenaires ainsi que le contenu créé par les utilisateurs restent des données variables et ne sont pas traduits automatiquement.
+Les espaces réservés tels que {PARTNER}, {COUNT} et {OPTION} sont remplacés lors de l'exécution.
+
+==============================================================================
+CONTENU INTÉGRÉ SUPPLÉMENTAIRE
+==============================================================================
+
+0896. DE: Tiere
+      EN: Animals
+      FR: Animaux
+
+0897. DE: Export teilen
+      EN: Share export
+      FR: Partager l'export
+
+0898. DE: Bilder teilen
+      EN: Share images
+      FR: Partager les images
+
+0001. DE: Wer würde eher?
+      EN: Who's more likely?
+      FR: Qui le ferait le plus probablement ?
+
+0002. DE: Zeichnen
+      EN: Drawing
+      FR: Dessiner
+
+0003. DE: Das oder das?
+      EN: This or That?
+      FR: Ceci ou cela ?
+
+0004. DE: Das oder das
+      EN: This or That
+      FR: Ceci ou cela
+
+0005. DE: Zustimmen oder Ablehnen
+      EN: Agree or Disagree
+      FR: D'accord / Pas d'accord
+
+0006. DE: Ich habe noch nie
+      EN: Never Have I Ever
+      FR: Je n'ai jamais
+
+0007. DE: Was magst du lieber?
+      EN: Which Do You Prefer?
+      FR: Que préfères-tu ?
+
+0008. DE: Antwort mit einem Foto
+      EN: Answer with a Photo
+      FR: Réponds avec une photo
+
+0009. DE: Tiefe Gespräche
+      EN: Deep Conversations
+      FR: Conversations profondes
+
+0010. DE: Reden vor ...
+      EN: Talk Before...
+      FR: Parler avant…
+
+0011. DE: Aufwärmen
+      EN: Warm-up
+      FR: Pour se mettre en confiance
+
+0012. DE: Beziehung
+      EN: Relationship
+      FR: Relation
+
+0013. DE: Sex & Liebe
+      EN: Sex & Love
+      FR: Sexe et amour
+
+0014. DE: Moralische Werte
+      EN: Moral Values
+      FR: Valeurs morales
+
+0015. DE: Geld & Finanzen
+      EN: Money & Finances
+      FR: Argent et finances
+
+0016. DE: Einander kennenlernen
+      EN: Getting to Know Each Other
+      FR: Apprendre à se connaître
+
+0017. DE: Reisen
+      EN: Travel
+      FR: Voyage
+
+0018. DE: Familie
+      EN: Family
+      FR: Famille
+
+0019. DE: Hobbys
+      EN: Hobbies
+      FR: Loisirs
+
+0020. DE: unterhaltung
+      EN: Entertainment
+      FR: Divertissement
+
+0021. DE: dasoderdas
+      EN: This or That
+      FR: Ceci ou cela
+
+0022. DE: hochzeit
+      EN: Wedding
+      FR: Mariage
+
+0023. DE: kinder
+      EN: Children
+      FR: Enfants
+
+0024. DE: reden
+      EN: Discussion
+      FR: Discuter
+
+0025. DE: reisen
+      EN: Travel
+      FR: Voyages
+
+0026. DE: familie
+      EN: Family
+      FR: Famille
+
+0027. DE: Zuhause & Alltag
+      EN: Home & Everyday Life
+      FR: Maison et vie quotidienne
+
+0028. DE: Was gefällt dir an deinem Zuhause am besten?
+      EN: What do you like most about your home?
+      FR: Qu’est-ce que vous aimez le plus dans votre maison ?
+
+0029. DE: Die Gemütlichkeit und Ruhe
+      EN: The comfort and peace
+      FR: Le confort et la paix
+
+0030. DE: Dass alles meinen Stil hat
+      EN: That everything reflects my style
+      FR: Que tout a mon style
+
+0031. DE: Die Menschen, die darin wohnen
+      EN: The people who live there
+      FR: Les gens qui y vivent
+
+0032. DE: Der Blick nach draußen
+      EN: The view outside
+      FR: La vue à l'extérieur
+
+0033. DE: Welcher Raum sagt am meisten über dich aus?
+      EN: Which room says the most about you?
+      FR: Quelle pièce en dit le plus sur vous ?
+
+0034. DE: Küche
+      EN: Kitchen
+      FR: Cuisine
+
+0035. DE: Schlafzimmer
+      EN: Bedroom
+      FR: chambre à coucher
+
+0036. DE: Wohnzimmer
+      EN: Living room
+      FR: Salon
+
+0037. DE: Mein Arbeitsplatz
+      EN: My workspace
+      FR: Mon lieu de travail
+
+0038. DE: Was würdest du sofort ändern, wenn Geld keine Rolle spielt?
+      EN: What would you change immediately if money were no object?
+      FR: Que changeriez-vous immédiatement si l’argent n’était pas un problème ?
+
+0039. DE: Größere Küche
+      EN: A larger kitchen
+      FR: Cuisine plus grande
+
+0040. DE: Ein Balkon oder Garten
+      EN: A balcony or garden
+      FR: Un balcon ou un jardin
+
+0041. DE: Bessere Lage
+      EN: A better location
+      FR: Meilleur emplacement
+
+0042. DE: Nichts — es passt so
+      EN: Nothing — it's perfect as it is
+      FR: Rien - ça va comme ça
+
+0043. DE: Wie sieht dein perfekter Sonntag zuhause aus?
+      EN: What does your perfect Sunday at home look like?
+      FR: À quoi ressemble votre dimanche parfait à la maison ?
+
+0044. DE: Ausschlafen und nichts tun
+      EN: Sleeping in and doing nothing
+      FR: Dormir et ne rien faire
+
+0045. DE: Kochen und Freunde einladen
+      EN: Cooking and inviting friends over
+      FR: Cuisinez et invitez des amis
+
+0046. DE: Serienmarathon auf dem Sofa
+      EN: A TV marathon on the sofa
+      FR: Série marathon sur le canapé
+
+0047. DE: Aufräumen und Projekte angehen
+      EN: Tidying up and tackling projects
+      FR: Nettoyer et aborder les projets
+
+0048. DE: Der perfekte Heiratsantrag
+      EN: The Perfect Proposal
+      FR: La demande en mariage parfaite
+
+0049. DE: Welche Umgebung würdest du dir für einen Antrag wünschen?
+      EN: What setting would you want for a proposal?
+      FR: Quel cadre souhaiteriez-vous pour une demande en mariage ?
+
+0050. DE: Zu Hause, gemütlich und privat
+      EN: At home, cozy and private
+      FR: À la maison, confortable et privé
+
+0051. DE: Draußen mit der Natur als Kulisse
+      EN: Outdoors with nature as the backdrop
+      FR: Dehors avec la nature en toile de fond
+
+0052. DE: Schickes Restaurant oder Hotel
+      EN: An elegant restaurant or hotel
+      FR: Restaurant ou hôtel chic
+
+0053. DE: Magst du einen öffentlichen oder privaten Antrag lieber?
+      EN: Would you prefer a public or private proposal?
+      FR: Préférez-vous une demande en mariage publique ou privée ?
+
+0054. DE: Nur wir beide
+      EN: Just the two of us
+      FR: Juste nous deux
+
+0055. DE: Mit Familie und engen Freunden
+      EN: With family and close friends
+      FR: En famille et amis proches
+
+0056. DE: An einem öffentlichen Ort mit vielen Zuschauern
+      EN: In a public place with lots of people watching
+      FR: Dans un lieu public avec de nombreux spectateurs
+
+0057. DE: Soll der Antrag eine Überraschung sein?
+      EN: Should the proposal be a surprise?
+      FR: La demande en mariage devrait-elle être une surprise ?
+
+0058. DE: Ja, komplett überraschend
+      EN: Yes, a complete surprise
+      FR: Oui, complètement surprenant
+
+0059. DE: Lieber vorher grob absprechen
+      EN: I'd rather discuss the basics beforehand
+      FR: Il vaut mieux discuter grossièrement avant
+
+0060. DE: Wir entscheiden es gemeinsam
+      EN: We'll decide together
+      FR: Nous décidons ensemble
+
+0061. DE: Wie wichtig ist dir, dass der Moment festgehalten wird?
+      EN: How important is it to you that the moment is captured?
+      FR: Dans quelle mesure est-il important pour vous que le moment soit capturé ?
+
+0062. DE: Sehr wichtig — Fotos und Video
+      EN: Very important — photos and video
+      FR: Très important — photos et vidéo
+
+0063. DE: Ein paar Handyfotos reichen
+      EN: A few phone photos are enough
+      FR: Quelques photos de téléphone portable suffisent
+
+0064. DE: Gar nicht, der Moment gehört uns
+      EN: Not at all — the moment is ours
+      FR: Pas du tout, le moment est à nous
+
+0065. DE: Vorlieben für den Antrag
+      EN: Proposal Preferences
+      FR: Préférences pour la demande
+
+0066. DE: Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?
+      EN: Would you prefer an extravagant proposal or something understated?
+      FR: Préférez-vous une demande en mariage extravagante ou quelque chose de subtil ?
+
+0067. DE: Übertrieben und großartig
+      EN: Over-the-top and spectacular
+      FR: Exagéré et génial
+
+0068. DE: Mittelweg mit besonderen Details
+      EN: A balanced approach with special details
+      FR: Terrain d’entente avec des détails spéciaux
+
+0069. DE: Einfach und intim
+      EN: Simple and intimate
+      FR: Simple et intime
+
+0070. DE: Was hältst du von Requisiten (z.B. Schilder, Luftballons, etc.)?
+      EN: What do you think about props, such as signs or balloons?
+      FR: Que pensez-vous des accessoires (panneaux, ballons, etc.) ?
+
+0071. DE: Liebe sie, macht mehr Spaß
+      EN: I love them — they make it more fun
+      FR: Aimez-les, plus amusant
+
+0072. DE: Vielleicht ein oder zwei
+      EN: Maybe one or two
+      FR: Peut-être un ou deux
+
+0073. DE: Nein, zu ablenkend
+      EN: No, they're too distracting
+      FR: Non, trop distrayant
+
+0074. DE: Möchtest du, dass der Moment sofort in den sozialen Medien geteilt wird?
+      EN: Would you want the moment shared on social media right away?
+      FR: Vous souhaitez partager ce moment instantanément sur les réseaux sociaux ?
+
+0075. DE: Ja, sofort teilen
+      EN: Yes, share it right away
+      FR: Oui, partagez immédiatement
+
+0076. DE: Nein, erstmal privat halten
+      EN: No, keep it private at first
+      FR: Non, garde-le privé pour l'instant
+
+0077. DE: Erst nur enge Freunde/Familie
+      EN: Close friends and family first
+      FR: Seulement les amis proches/la famille au début
+
+0078. DE: Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?
+      EN: How important is it that the proposal reflects your hobbies or interests?
+      FR: Dans quelle mesure est-il important pour vous que la demande en mariage reflète vos loisirs ou vos centres d'intérêt ?
+
+0079. DE: Sehr wichtig, es sollte persönlich sein
+      EN: Very important — it should feel personal
+      FR: Très important, cela doit être personnel
+
+0080. DE: Etwas, eine kleine Note wäre schön
+      EN: Somewhat — a small personal touch would be lovely
+      FR: Quelque chose, une petite touche serait bien
+
+0081. DE: Nicht nötig, lieber klassisch bleiben
+      EN: Not necessary — I'd prefer to keep it classic
+      FR: Pas nécessaire, il vaut mieux rester classique
+
+0082. DE: Würdest du einen Antrag im Urlaub bevorzugen (mit Reisen verbunden)?
+      EN: Would you prefer a proposal while on vacation?
+      FR: Préféreriez-vous proposer des vacances (impliquant un voyage) ?
+
+0083. DE: Ja, in einer aufregenden Stadt oder Sehenswürdigkeit
+      EN: Yes, in an exciting city or at a landmark
+      FR: Oui, dans une ville ou une attraction passionnante
+
+0084. DE: Vielleicht, wenn es machbar ist
+      EN: Maybe, if it's practical
+      FR: Peut-être, si c'est faisable
+
+0085. DE: Nein, lieber vor Ort
+      EN: No, I'd rather stay local
+      FR: Non, mieux sur place
+
+0086. DE: Wie lange nach dem Antrag möchtest du mit anderen feiern?
+      EN: How soon after the proposal would you want to celebrate with others?
+      FR: Combien de temps après la demande en mariage souhaitez-vous célébrer avec d'autres ?
+
+0087. DE: Am selben Tag mit Freunden/Familie
+      EN: The same day with friends and family
+      FR: Le même jour avec des amis/famille
+
+0088. DE: Etwa eine Woche später, erst mal nur wir
+      EN: About a week later — just us at first
+      FR: Environ une semaine plus tard, juste nous au début
+
+0089. DE: Keine Party nötig, privat halten
+      EN: No party needed — keep it private
+      FR: Aucune fête nécessaire, gardez-la privée
+
+0090. DE: Hättest du gerne einen geschriebenen Brief als Teil des Antrags?
+      EN: Would you like a handwritten letter as part of the proposal?
+      FR: Souhaitez-vous une lettre écrite dans le cadre de la demande en mariage ?
+
+0091. DE: Ja, etwas zum Lesen und Aufbewahren
+      EN: Yes, something to read and keep
+      FR: Oui, quelque chose à lire et à conserver
+
+0092. DE: Vielleicht, aber mündlich reicht
+      EN: Maybe, but spoken words are enough
+      FR: Peut-être, mais verbalement suffit
+
+0093. DE: Nein, einfach halten
+      EN: No, keep it simple
+      FR: Non, attends-le
+
+0094. DE: Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?
+      EN: Should the proposal include cultural or traditional elements?
+      FR: La demande en mariage devrait-elle contenir des éléments culturels ou traditionnels ?
+
+0095. DE: Ja, Traditionen einbinden
+      EN: Yes, include traditions
+      FR: Oui, incorporez les traditions
+
+0096. DE: Ein paar kulturelle Anklänge sind okay
+      EN: A few cultural touches would be nice
+      FR: Quelques références culturelles sont acceptables
+
+0097. DE: Nein, modern halten
+      EN: No, keep it modern
+      FR: Non, garde-le moderne
+
+0098. DE: Was ist das Wichtigste beim Antrag?
+      EN: What matters most in a proposal?
+      FR: Qu'est-ce qui est le plus important dans une demande en mariage ?
+
+0099. DE: Die Umgebung und Atmosphäre
+      EN: The setting and atmosphere
+      FR: L'environnement et l'ambiance
+
+0100. DE: Die Worte und Emotionen
+      EN: The words and emotions
+      FR: Les mots et les émotions
+
+0101. DE: Der Ring und die Geste
+      EN: The ring and the gesture
+      FR: La bague et le geste
+
+0102. DE: Möchtest du, dass Haustiere beim Antrag dabei sind?
+      EN: Would you want pets to be part of the proposal?
+      FR: Souhaitez-vous que des animaux de compagnie participent à la demande en mariage ?
+
+0103. DE: Ja, sie gehören zur Familie!
+      EN: Yes, they're part of the family!
+      FR: Oui, ils sont de la famille !
+
+0104. DE: Vielleicht, wenn es passt
+      EN: Maybe, if it feels right
+      FR: Peut-être, si ça convient
+
+0105. DE: Nein, nur wir
+      EN: No, just us
+      FR: Non, juste nous
+
+0106. DE: Diskutiere vor dem Kinderkriegen
+      EN: Discuss Before Having Children
+      FR: Discutez avant d’avoir des enfants
+
+0107. DE: Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken? 💰
+      EN: Can we afford all the costs of one or more children? 💰
+      FR: Sommes-nous en mesure de couvrir tous les frais pour un/plusieurs enfants ? 💰
+
+0108. DE: Möglicherweise müssen wir Einsparungen vornehmen
+      EN: We may need to make some savings
+      FR: Nous devrons peut-être faire des économies
+
+0109. DE: Werden wir genug Zeit für das Kind / die Kinder haben? ⏳
+      EN: Will we have enough time for our child or children? ⏳
+      FR: Aurons-nous suffisamment de temps pour le ou les enfants ? ⏳
+
+0110. DE: Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat.
+      EN: Yes, we'll make sure family time comes first.
+      FR: Oui, nous veillerons à ce que le temps passé en famille soit une priorité.
+
+0111. DE: Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?
+      EN: How will we make time for our relationship once the baby arrives?
+      FR: Comment trouverons-nous du temps pour notre relation une fois le bébé arrivé ?
+
+0112. DE: Regelmäßige Rendezvous oder gemeinsame Zeit einplanen
+      EN: Plan regular dates or quality time together
+      FR: Planifiez des dates ou des heures régulières ensemble
+
+0113. DE: Wie möchtest du, dass unsere Zukunft aussieht?
+      EN: What would you like our future to look like?
+      FR: À quoi voulez-vous que notre avenir ressemble ?
+
+0114. DE: Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden
+      EN: Travel the world together and explore new cultures and cuisines
+      FR: Parcourez le monde ensemble, explorez de nouvelles cultures et cuisines
+
+0115. DE: Wie würdest du sie/ihn nennen?
+      EN: What would you name them?
+      FR: Comment l'appelleriez-vous ?
+
+0116. DE: Willst du ein Mädchen oder einen Jungen? 👶
+      EN: Would you prefer a girl or a boy? 👶
+      FR: Tu veux une fille ou un garçon ? 👶
+
+0117. DE: Was soll aus unserem Kind werden, wenn es erwachsen ist?
+      EN: What do we hope our child will become as an adult?
+      FR: Que deviendra notre enfant quand il sera grand ?
+
+0118. DE: Vor der Anschaffung eines Haustiers besprechen
+      EN: Discuss Before Getting a Pet
+      FR: Discutez avant d'acheter un animal de compagnie
+
+0119. DE: Wer übernimmt die tägliche Versorgung?
+      EN: Who will handle the daily care?
+      FR: Qui s'occupe des soins quotidiens ?
+
+0120. DE: Was passiert mit dem Tier, wenn wir verreisen?
+      EN: What happens to the pet when we travel?
+      FR: Qu'arrive-t-il à l'animal lorsque nous voyageons ?
+
+0121. DE: Welches Budget planen wir für Futter und Tierarzt ein?
+      EN: What budget should we plan for food and veterinary care?
+      FR: Quel budget prévoyons-nous pour la nourriture et le vétérinaire ?
+
+0122. DE: Passt ein Tier überhaupt zu unserem Alltag?
+      EN: Does a pet truly fit our lifestyle?
+      FR: Un animal a-t-il vraiment sa place dans notre vie quotidienne ?
+
+0123. DE: Vor der gemeinsamen Reise besprechen
+      EN: Discuss Before Traveling Together
+      FR: Discutez avant de voyager ensemble
+
+0124. DE: Wie viel wollen wir insgesamt ausgeben?
+      EN: How much do we want to spend in total?
+      FR: Combien voulons-nous dépenser au total ?
+
+0125. DE: Lieber durchgeplant oder spontan?
+      EN: Carefully planned or spontaneous?
+      FR: Préférez-vous que ce soit planifié ou spontané ?
+
+0126. DE: Wie viel Zeit wollen wir getrennt verbringen?
+      EN: How much time do we want to spend apart?
+      FR: Combien de temps voulons-nous passer séparément ?
+
+0127. DE: Was ist für jeden von uns das absolute Highlight?
+      EN: What is the absolute highlight for each of us?
+      FR: Quel est le point fort absolu pour chacun de nous ?
+
+0128. DE: Vor dem Kauf eines Hauses besprechen
+      EN: Discuss Before Buying a Home
+      FR: Discutez avant d'acheter une maison
+
+0129. DE: Wie viel Kredit ist für uns realistisch tragbar?
+      EN: How much of a mortgage can we realistically afford?
+      FR: Quel montant de crédit pouvons-nous raisonnablement nous permettre ?
+
+0130. DE: Stadt oder Land — was ist uns wichtiger?
+      EN: City or countryside — which matters more to us?
+      FR: Ville ou campagne – qu’est-ce qui est le plus important pour nous ?
+
+0131. DE: Wie lange wollen wir dort mindestens bleiben?
+      EN: How long do we want to stay there at minimum?
+      FR: Combien de temps voulons-nous y rester au moins ?
+
+0132. DE: Wer kümmert sich um Renovierung und Instandhaltung?
+      EN: Who will handle renovations and maintenance?
+      FR: Qui s'occupe de la rénovation et de l'entretien ?
+
+0133. DE: Reiseziele
+      EN: Travel Destinations
+      FR: Destinations de voyage
+
+0134. DE: Paris, Frankreich
+      EN: Paris, France
+      FR: Paris, France
+
+0135. DE: Rom, Italien
+      EN: Rome, Italy
+      FR: Rome, Italie
+
+0136. DE: Bali, Indonesien
+      EN: Bali, Indonesia
+      FR: Bali, Indonésie
+
+0137. DE: Santorini, Griechenland
+      EN: Santorini, Greece
+      FR: Santorin, Grèce
+
+0138. DE: London, England
+      EN: London, England
+      FR: Londres, Angleterre
+
+0139. DE: New York, USA
+      EN: New York, USA
+      FR: New York, États-Unis
+
+0140. DE: Malediven
+      EN: Maldives
+      FR: Maldives
+
+0141. DE: Seychellen
+      EN: Seychelles
+      FR: Seychelles
+
+0142. DE: Tokyo, Japan
+      EN: Tokyo, Japan
+      FR: Tokyo, Japon
+
+0143. DE: Dubai, VAE
+      EN: Dubai, UAE
+      FR: Dubaï, Émirats Arabes Unis
+
+0144. DE: Venedig, Italien
+      EN: Venice, Italy
+      FR: Venise, Italie
+
+0145. DE: Amsterdam, Niederlande
+      EN: Amsterdam, Netherlands
+      FR: Amsterdam, Pays-Bas
+
+0146. DE: Lappland, Finnland
+      EN: Lapland, Finland
+      FR: Laponie, Finlande
+
+0147. DE: Island
+      EN: Iceland
+      FR: Islande
+
+0148. DE: Unser Traumhaus
+      EN: Our Dream Home
+      FR: La maison de nos rêves
+
+0149. DE: Altbau mit Charme
+      EN: Charming Period Home
+      FR: Maison ancienne de charme
+
+0150. DE: Neubau mit Smart Home
+      EN: New Smart Home
+      FR: Maison neuve avec domotique
+
+0151. DE: Offene Wohnküche
+      EN: Open-plan Kitchen
+      FR: Cuisine/salon ouvert
+
+0152. DE: Separate Küche
+      EN: Separate Kitchen
+      FR: Cuisine séparée
+
+0153. DE: Prasselnder Kamin
+      EN: Crackling Fireplace
+      FR: Cheminée crépitante
+
+0154. DE: Fußbodenheizung
+      EN: Underfloor Heating
+      FR: Chauffage au sol
+
+0155. DE: Großer Garten
+      EN: Large Garden
+      FR: Grand jardin
+
+0156. DE: Sonnige Dachterrasse
+      EN: Sunny Roof Terrace
+      FR: Terrasse ensoleillée sur le toit
+
+0157. DE: Stadtvilla
+      EN: City Villa
+      FR: Villa de ville
+
+0158. DE: Landhaus
+      EN: Country House
+      FR: maison de campagne
+
+0159. DE: Glasfassade
+      EN: Glass Façade
+      FR: Façade en verre
+
+0160. DE: Natursteinfassade
+      EN: Natural-stone Façade
+      FR: Façade en pierre naturelle
+
+0161. DE: Penthouse mit Ausblick
+      EN: Penthouse with a View
+      FR: Attique avec vue
+
+0162. DE: Haus am See
+      EN: Lakeside Home
+      FR: Maison au bord du lac
+
+0163. DE: Minimalistisches Interieur
+      EN: Minimalist Interior
+      FR: Intérieur minimaliste
+
+0164. DE: Landhausstil
+      EN: Country Style
+      FR: Style campagnard
+
+0165. DE: Bibliothek
+      EN: Library
+      FR: bibliothèque
+
+0166. DE: Heimkino
+      EN: Home Cinema
+      FR: Cinéma maison
+
+0167. DE: Innenpool
+      EN: Indoor Pool
+      FR: Piscine intérieure
+
+0168. DE: Wellnessbad
+      EN: Spa Bathroom
+      FR: Bain bien-être
+
+0169. DE: Große Fensterfront
+      EN: Floor-to-ceiling Windows
+      FR: Grande façade vitrée
+
+0170. DE: Privater Innenhof
+      EN: Private Courtyard
+      FR: Cour privée
+
+0171. DE: Tiny House
+      EN: Tiny House
+      FR: Petite maison
+
+0172. DE: Mehrgenerationenhaus
+      EN: Multigenerational Home
+      FR: Maison multigénérationnelle
+
+0173. DE: Traumhaus Außenbereich
+      EN: Dream Home: Outdoor Space
+      FR: Espace extérieur de la maison de rêve
+
+0174. DE: Großer Außenpool
+      EN: Large Outdoor Pool
+      FR: Grande piscine extérieure
+
+0175. DE: Outdoor-Whirlpool
+      EN: Outdoor Hot Tub
+      FR: Spa extérieur
+
+0176. DE: Moderne Grillstation
+      EN: Modern Barbecue Station
+      FR: Station de grill moderne
+
+0177. DE: Gemütliche Feuerstelle
+      EN: Cozy Fire Pit
+      FR: Foyer confortable
+
+0178. DE: Eigenes Gemüsebeet
+      EN: Private Vegetable Garden
+      FR: Propre potager
+
+0179. DE: Bunte Blumenwiese
+      EN: Colorful Wildflower Meadow
+      FR: Prairie fleurie colorée
+
+0180. DE: Entspannte Hängematte
+      EN: Relaxing Hammock
+      FR: Hamac relaxant
+
+0181. DE: Stilvolles Outdoor-Sofa
+      EN: Stylish Outdoor Sofa
+      FR: Canapé d'extérieur élégant
+
+0182. DE: Infinity-Pool
+      EN: Infinity Pool
+      FR: Piscine à débordement
+
+0183. DE: Naturteich
+      EN: Natural Pond
+      FR: Étang naturel
+
+0184. DE: Outdoor-Küche
+      EN: Outdoor Kitchen
+      FR: Cuisine extérieure
+
+0185. DE: Pizzaofen
+      EN: Pizza Oven
+      FR: Four à pizza
+
+0186. DE: Pergola mit Lounge
+      EN: Pergola with Lounge
+      FR: Pergola avec salon
+
+0187. DE: Wintergarten
+      EN: Conservatory
+      FR: Jardin d'hiver
+
+0188. DE: Kräuterbeet
+      EN: Herb Garden
+      FR: Lit d'herbes aromatiques
+
+0189. DE: Obstgarten
+      EN: Orchard
+      FR: verger
+
+0190. DE: Dachgarten mit Lounge
+      EN: Roof Garden with Lounge
+      FR: Jardin sur le toit avec salon
+
+0191. DE: Mediterraner Innenhof
+      EN: Mediterranean Courtyard
+      FR: Cour méditerranéenne
+
+0192. DE: Feuerstelle
+      EN: Fire Pit
+      FR: Foyer
+
+0193. DE: Außenkamin
+      EN: Outdoor Fireplace
+      FR: Foyer extérieur
+
+0194. DE: Spielbereich für Kinder
+      EN: Children's Play Area
+      FR: Aire de jeux pour les enfants
+
+0195. DE: Sportplatz
+      EN: Sports Court
+      FR: Terrain de sport
+
+0196. DE: Gewächshaus
+      EN: Greenhouse
+      FR: serre
+
+0197. DE: Saunahaus
+      EN: Sauna House
+      FR: Maison de sauna
+
+0198. DE: Aktivitäten
+      EN: Activities
+      FR: Activités
+
+0199. DE: Wandern
+      EN: Hiking
+      FR: Randonnée
+
+0200. DE: Strandtag
+      EN: Beach Day
+      FR: Journée à la plage
+
+0201. DE: Konzert
+      EN: Concert
+      FR: concert
+
+0202. DE: Kino
+      EN: Cinema
+      FR: cinéma
+
+0203. DE: Kochkurs
+      EN: Cooking Class
+      FR: Cours de cuisine
+
+0204. DE: Restaurant
+      EN: Restaurant
+      FR: restaurant
+
+0205. DE: Museum
+      EN: Museum
+      FR: musée
+
+0206. DE: Freizeitpark
+      EN: Theme Park
+      FR: Parc d'attractions
+
+0207. DE: Essensvorlieben
+      EN: Food Preferences
+      FR: Préférences alimentaires
+
+0208. DE: Pizza
+      EN: Pizza
+      FR: pizza
+
+0209. DE: Pasta
+      EN: Pasta
+      FR: pâtes
+
+0210. DE: Sushi
+      EN: Sushi
+      FR: Sushis
+
+0211. DE: Burger
+      EN: Burger
+      FR: Citoyens
+
+0212. DE: Süß
+      EN: Sweet
+      FR: Doux
+
+0213. DE: Herzhaft
+      EN: Savory
+      FR: Salé
+
+0214. DE: Selbst kochen
+      EN: Cook at Home
+      FR: Cuisiner à la maison
+
+0215. DE: Bestellen
+      EN: Order In
+      FR: Commander
+
+0216. DE: Verlobungsringe
+      EN: Engagement Rings
+      FR: Bagues de fiançailles
+
+0217. DE: Klassisch Solitär
+      EN: Classic Solitaire
+      FR: Solitaire classique
+
+0218. DE: Vintage verspielt
+      EN: Playful Vintage
+      FR: Ludique vintage
+
+0219. DE: Gelbgold
+      EN: Yellow Gold
+      FR: Or jaune
+
+0220. DE: Weißgold
+      EN: White Gold
+      FR: Or blanc
+
+0221. DE: Großer Stein
+      EN: Large Stone
+      FR: Grosse pierre
+
+0222. DE: Filigran & schlicht
+      EN: Delicate & Simple
+      FR: Filigrane et simple
+
+0223. DE: Diamant
+      EN: Diamond
+      FR: diamant
+
+0224. DE: Farbedelstein
+      EN: Colored Gemstone
+      FR: Pierre précieuse colorée
+
+0225. DE: Platin
+      EN: Platinum
+      FR: platine
+
+0226. DE: Roségold
+      EN: Rose Gold
+      FR: Or rose
+
+0227. DE: Drei-Stein-Ring
+      EN: Three-stone Ring
+      FR: Bague trois pierres
+
+0228. DE: Moderner Solitär
+      EN: Modern Solitaire
+      FR: Solitaire moderne
+
+0229. DE: Ovaler Diamant
+      EN: Oval Diamond
+      FR: Diamant ovale
+
+0230. DE: Runder Diamant
+      EN: Round Diamond
+      FR: Diamant rond
+
+0231. DE: Schmal & zart
+      EN: Slim & Delicate
+      FR: Mince et délicat
+
+0232. DE: Markant & breit
+      EN: Bold & Wide
+      FR: Frappant et large
+
+0233. DE: Moissanit
+      EN: Moissanite
+      FR: Moissanite
+
+0234. DE: Saphir
+      EN: Sapphire
+      FR: saphir
+
+0235. DE: Vintage Art déco
+      EN: Vintage Art Deco
+      FR: Art Déco Vintage
+
+0236. DE: Modern geometrisch
+      EN: Modern Geometric
+      FR: Géométrique moderne
+
+0237. DE: Gravur innen
+      EN: Inside Engraving
+      FR: Gravure à l'intérieur
+
+0238. DE: Diamanten im Band
+      EN: Diamonds in the Band
+      FR: Diamants dans le groupe
+
+0239. DE: Ohne Stein
+      EN: No Stone
+      FR: Sans pierre
+
+0240. DE: Statement-Ring
+      EN: Statement Ring
+      FR: Bague tendance
+
+0241. DE: Hochzeitssträuße
+      EN: Wedding Bouquets
+      FR: Bouquets de mariage
+
+0242. DE: Weiße Rosen
+      EN: White Roses
+      FR: Roses blanches
+
+0243. DE: Pfingstrosen
+      EN: Peonies
+      FR: Pivoines
+
+0244. DE: Wildblumen
+      EN: Wildflowers
+      FR: Fleurs sauvages
+
+0245. DE: Klassisch gebunden
+      EN: Classic Hand-tied
+      FR: Reliure classique
+
+0246. DE: Groß & üppig
+      EN: Large & Lush
+      FR: Grand et luxuriant
+
+0247. DE: Klein & zart
+      EN: Small & Delicate
+      FR: Petit et délicat
+
+0248. DE: Pastell
+      EN: Pastels
+      FR: Pastel
+
+0249. DE: Kräftige Farben
+      EN: Bold Colors
+      FR: Des couleurs fortes
+
+0250. DE: Traumhochzeit
+      EN: Dream Wedding
+      FR: Mariage de rêve
+
+0251. DE: Große Feier
+      EN: Large Celebration
+      FR: Grande fête
+
+0252. DE: Kleine Runde
+      EN: Intimate Gathering
+      FR: Petit rond
+
+0253. DE: Am Strand
+      EN: On the Beach
+      FR: A la plage
+
+0254. DE: In den Bergen
+      EN: In the Mountains
+      FR: Dans les montagnes
+
+0255. DE: Kirchlich
+      EN: Church Ceremony
+      FR: Ecclésiastique
+
+0256. DE: Standesamt & Party
+      EN: Civil Ceremony & Party
+      FR: Bureau d'état civil et fête
+
+0257. DE: Sommerhochzeit
+      EN: Summer Wedding
+      FR: Mariage d'été
+
+0258. DE: Winterhochzeit
+      EN: Winter Wedding
+      FR: Mariage d'hiver
+
+0259. DE: Fragen für jede Gelegenheit
+      EN: Questions for Any Occasion
+      FR: Des questions pour chaque occasion
+
+0260. DE: Was magst du lieber: früh aufstehen oder lange wach bleiben?
+      EN: Which do you prefer: getting up early or staying up late?
+      FR: Que préférez-vous : vous lever tôt ou vous coucher tard ?
+
+0261. DE: Früh aufstehen
+      EN: Getting up early
+      FR: Se lever tôt
+
+0262. DE: Lange wach bleiben
+      EN: Staying up late
+      FR: Rester éveillé tard
+
+0263. DE: Kommt auf den Tag an
+      EN: It depends on the day
+      FR: Cela dépend du jour
+
+0264. DE: Lieber ein ruhiger Abend zu zweit oder unter Leuten?
+      EN: Would you rather have a quiet evening together or be around other people?
+      FR: Vous préférez passer une soirée tranquille à deux ou entre personnes ?
+
+0265. DE: Ruhig zu zweit
+      EN: A quiet evening together
+      FR: Calme à deux
+
+0266. DE: Unter Leuten
+      EN: Around other people
+      FR: Parmi les gens
+
+0267. DE: Gemischt
+      EN: A mix of both
+      FR: Mixte
+
+0268. DE: Was entspannt dich mehr?
+      EN: What helps you relax most?
+      FR: Qu'est-ce qui vous détend le plus ?
+
+0269. DE: Musik
+      EN: Music
+      FR: Musique
+
+0270. DE: Spazieren
+      EN: Going for a walk
+      FR: Flâner
+
+0271. DE: Serie schauen
+      EN: Watching a series
+      FR: Regarder des séries
+
+0272. DE: Gar nichts tun
+      EN: Doing absolutely nothing
+      FR: Ne rien faire du tout
+
+0273. DE: Wobei lachst du am meisten?
+      EN: What makes you laugh the most?
+      FR: Qu'est-ce qui vous fait le plus rire ?
+
+0274. DE: Bei Insider-Witzen
+      EN: Inside jokes
+      FR: Avec des blagues intérieures
+
+0275. DE: Bei Memes
+      EN: Memes
+      FR: Dans les mèmes
+
+0276. DE: Wenn ich müde bin
+      EN: When I'm tired
+      FR: Quand je suis fatigué
+
+0277. DE: Über mich selbst
+      EN: Myself
+      FR: À propos de moi
+
+0278. DE: Schnappschüsse aus unserer Liebesgeschichte
+      EN: Snapshots from Our Love Story
+      FR: Instantanés de notre histoire d'amour
+
+0279. DE: Welcher Moment war für dich der Anfang von „uns"?
+      EN: Which moment felt like the beginning of us?
+      FR: À quel moment a été pour vous le début du « nous » ?
+
+0280. DE: Unser erstes Gespräch
+      EN: Our first conversation
+      FR: Notre première conversation
+
+0281. DE: Das erste Treffen
+      EN: Our first date
+      FR: La première rencontre
+
+0282. DE: Der erste Kuss
+      EN: Our first kiss
+      FR: Le premier baiser
+
+0283. DE: Als es einfach klar war
+      EN: When it simply felt clear
+      FR: Quand c'était clair
+
+0284. DE: Welches gemeinsame Foto ist dein Lieblingsfoto?
+      EN: Which photo of us is your favorite?
+      FR: Quelle photo ensemble préférez-vous ?
+
+0285. DE: Das erste Selfie
+      EN: Our first selfie
+      FR: Le premier selfie
+
+0286. DE: Ein Urlaubsfoto
+      EN: A vacation photo
+      FR: Une photo de vacances
+
+0287. DE: Ein zufälliger Schnappschuss
+      EN: A candid snapshot
+      FR: Un instantané aléatoire
+
+0288. DE: Eins, das nur wir kennen
+      EN: One only we know
+      FR: Celui que nous seuls connaissons
+
+0289. DE: Woran erinnerst du dich am lebhaftesten?
+      EN: What do you remember most vividly?
+      FR: De quoi vous souvenez-vous le plus clairement ?
+
+0290. DE: An einen Geruch
+      EN: A scent
+      FR: D'une odeur
+
+0291. DE: An einen Song
+      EN: A song
+      FR: D'une chanson
+
+0292. DE: An etwas, das ich gesagt habe
+      EN: Something I said
+      FR: A propos de quelque chose que j'ai dit
+
+0293. DE: An das Gefühl
+      EN: The feeling
+      FR: Du sentiment
+
+0294. DE: Aufwärmen: Einander kennenlernen
+      EN: Warm-up: Getting to Know Each Other
+      FR: Échauffement : apprendre à se connaître
+
+0295. DE: Was war dein schönster Moment mit mir bisher?
+      EN: What has been your favorite moment with me so far?
+      FR: Quel a été ton meilleur moment avec moi jusqu’à présent ?
+
+0296. DE: Unser erstes Treffen
+      EN: Our first date
+      FR: Notre première rencontre
+
+0297. DE: Ein ganz normaler Alltagstag
+      EN: An ordinary day together
+      FR: Une journée tout à fait normale
+
+0298. DE: Eine gemeinsame Reise
+      EN: A trip together
+      FR: Un voyage ensemble
+
+0299. DE: Ein schwerer Moment, den wir geschafft haben
+      EN: A difficult moment we overcame together
+      FR: Un moment difficile que nous avons géré
+
+0300. DE: Was würdest du an einem gemeinsamen Tag am liebsten machen?
+      EN: What would you most like to do on a day together?
+      FR: Qu’aimeriez-vous le plus faire lors d’une journée ensemble ?
+
+0301. DE: Ausschlafen und faulenzen
+      EN: Sleep in and relax
+      FR: Dormir et paresser
+
+0302. DE: Etwas Neues ausprobieren
+      EN: Try something new
+      FR: Essayez quelque chose de nouveau
+
+0303. DE: Rausgehen in die Natur
+      EN: Get out into nature
+      FR: Sortez dans la nature
+
+0304. DE: Freunde treffen
+      EN: Meet up with friends
+      FR: rencontrer des amis
+
+0305. DE: Wie fühlst du dich am meisten geliebt?
+      EN: What makes you feel most loved?
+      FR: Comment vous sentez-vous le plus aimé ?
+
+0306. DE: Durch Worte
+      EN: Words
+      FR: À travers les mots
+
+0307. DE: Durch Zeit zu zweit
+      EN: Quality time together
+      FR: À travers le temps ensemble
+
+0308. DE: Durch Berührung
+      EN: Physical touch
+      FR: Au toucher
+
+0309. DE: Durch kleine Gesten
+      EN: Small gestures
+      FR: Par de petits gestes
+
+0310. DE: Worauf freust du dich bei uns am meisten?
+      EN: What are you most excited about for us?
+      FR: Qu’attendez-vous le plus avec nous ?
+
+0311. DE: Unsere nächste Reise
+      EN: Our next trip
+      FR: Notre prochain voyage
+
+0312. DE: Zusammenziehen
+      EN: Moving in together
+      FR: Emménager ensemble
+
+0313. DE: Einfach mehr Alltag
+      EN: Simply sharing more everyday life
+      FR: Tout simplement plus de vie quotidienne
+
+0314. DE: Alles, was noch kommt
+      EN: Everything still to come
+      FR: Tout ce qui est à venir
+
+0315. DE: Wer würde eher zu spät kommen?
+      EN: Who's more likely to arrive late?
+      FR: Qui est le plus susceptible d’être en retard ?
+
+0316. DE: Ich
+      EN: Me
+      FR: je
+
+0317. DE: Mein Partner
+      EN: My partner
+      FR: Mon partenaire
+
+0318. DE: Beide gleich
+      EN: Both equally
+      FR: Les deux pareils
+
+0319. DE: Keiner von uns
+      EN: Neither of us
+      FR: Aucun de nous
+
+0320. DE: Wer würde eher bei einem Streit als Erstes einlenken?
+      EN: Who's more likely to make peace first after an argument?
+      FR: Qui est le plus susceptible de céder en premier lors d’une dispute ?
+
+0321. DE: Kommt drauf an
+      EN: It depends
+      FR: Ça dépend
+
+0322. DE: Wir treffen uns in der Mitte
+      EN: We meet halfway
+      FR: Nous nous retrouverons au milieu
+
+0323. DE: Wer würde eher spontan eine Reise buchen?
+      EN: Who's more likely to book a spontaneous trip?
+      FR: Qui serait le plus susceptible de réserver un voyage spontanément ?
+
+0324. DE: Beide zusammen
+      EN: Both of us
+      FR: Les deux ensemble
+
+0325. DE: Niemand ohne Plan
+      EN: Neither without a plan
+      FR: Personne sans plan
+
+0326. DE: Wer vergisst eher einen Jahrestag?
+      EN: Who's more likely to forget an anniversary?
+      FR: Qui est le plus susceptible d’oublier un anniversaire ?
+
+0327. DE: Keiner
+      EN: Neither
+      FR: Aucun
+
+0328. DE: Beide, aber wir tun so als ob nicht
+      EN: Both, but we pretend we didn't
+      FR: Les deux, mais nous faisons semblant de ne pas le faire
+
+0329. DE: Ich habe noch nie … ein Date abgesagt, um zuhause zu bleiben.
+      EN: Never have I ever canceled a date to stay home.
+      FR: Je n'ai jamais annulé un rendez-vous pour rester à la maison.
+
+0330. DE: Stimmt, noch nie
+      EN: True, never
+      FR: C'est vrai, jamais
+
+0331. DE: Doch, schon mal
+      EN: Yes, I have
+      FR: Oui, déjà
+
+0332. DE: Öfter als ich zugebe
+      EN: More often than I'd admit
+      FR: Plus souvent que je ne l'admets
+
+0333. DE: Ich habe noch nie … heimlich das Handy meines Partners angeschaut.
+      EN: Never have I ever secretly looked through my partner's phone.
+      FR: Je n'ai jamais... secrètement regardé le téléphone de mon partenaire.
+
+0334. DE: Einmal
+      EN: Once
+      FR: Une fois
+
+0335. DE: Ich würde es nie tun
+      EN: I would never do that
+      FR: je ne le ferais jamais
+
+0336. DE: Ich habe noch nie … eine Nachricht 10x umformuliert.
+      EN: Never have I ever rewritten a message ten times.
+      FR: Je n'ai jamais... reformulé un message 10 fois.
+
+0337. DE: Ständig
+      EN: All the time
+      FR: Constante
+
+0338. DE: Nur bei wichtigen Themen
+      EN: Only for important topics
+      FR: Uniquement sur des sujets importants
+
+0339. DE: Was bedeutet Vertrauen für dich konkret?
+      EN: What does trust mean to you in practical terms?
+      FR: Que signifie spécifiquement pour vous la confiance ?
+
+0340. DE: Dass ich alles erzählen kann
+      EN: Being able to share everything
+      FR: Que je peux tout dire
+
+0341. DE: Dass ich mich nicht sorgen muss
+      EN: Not having to worry
+      FR: Que je n'ai pas à m'inquiéter
+
+0342. DE: Dass Zusagen gehalten werden
+      EN: Keeping promises
+      FR: Que les promesses sont tenues
+
+0343. DE: Alles davon
+      EN: All of the above
+      FR: Tout cela
+
+0344. DE: Was ist für dich ein absoluter Dealbreaker?
+      EN: What is an absolute dealbreaker for you?
+      FR: Qu’est-ce qui constitue pour vous un dealbreaker absolu ?
+
+0345. DE: Lügen
+      EN: Lying
+      FR: Mensonge
+
+0346. DE: Respektlosigkeit
+      EN: Disrespect
+      FR: manque de respect
+
+0347. DE: Gleichgültigkeit
+      EN: Indifference
+      FR: indifférence
+
+0348. DE: Untreue
+      EN: Cheating
+      FR: infidélité
+
+0349. DE: Wann fühlst du dich mir am nächsten?
+      EN: When do you feel closest to me?
+      FR: Quand te sens-tu le plus proche de moi ?
+
+0350. DE: Beim Reden
+      EN: While talking
+      FR: En parlant
+
+0351. DE: In Stille nebeneinander
+      EN: Sitting quietly beside each other
+      FR: En silence l'un à côté de l'autre
+
+0352. DE: Wenn wir zusammen lachen
+      EN: When we laugh together
+      FR: Quand nous rions ensemble
+
+0353. DE: Wenn es schwierig ist
+      EN: When things are difficult
+      FR: Quand les choses sont difficiles
+
+0354. DE: Wovor hast du in unserer Beziehung am meisten Angst?
+      EN: What are you most afraid of in our relationship?
+      FR: De quoi as-tu le plus peur dans notre relation ?
+
+0355. DE: Uns auseinanderzuleben
+      EN: Growing apart
+      FR: Se séparer
+
+0356. DE: Missverständnisse
+      EN: Misunderstandings
+      FR: Malentendus
+
+0357. DE: Die Distanz
+      EN: The distance
+      FR: La distance
+
+0358. DE: Vor nichts
+      EN: Nothing
+      FR: De rien
+
+0359. DE: Führen wir getrennte oder gemeinsame Konten?
+      EN: Should we keep separate or joint accounts?
+      FR: Avons-nous des comptes séparés ou conjoints ?
+
+0360. DE: Wie gehen wir mit unterschiedlichen Einkommen um?
+      EN: How should we handle different income levels?
+      FR: Comment gérer les différents revenus ?
+
+0361. DE: Wofür sparen wir gemeinsam?
+      EN: What are we saving for together?
+      FR: Pour quoi économisons-nous ensemble ?
+
+0362. DE: Ab welchem Betrag sprechen wir vor einer Anschaffung?
+      EN: Above what amount should we talk before making a purchase?
+      FR: De combien parle-t-on avant de faire un achat ?
+
+0363. DE: Nähe & Intimität
+      EN: Closeness & Intimacy
+      FR: Proximité et intimité
+
+0364. DE: Wann fühlst du dich mir körperlich am nächsten?
+      EN: When do you feel physically closest to me?
+      FR: Quand te sens-tu physiquement le plus proche de moi ?
+
+0365. DE: Beim Einschlafen nebeneinander
+      EN: Falling asleep beside each other
+      FR: S'endormir l'un à côté de l'autre
+
+0366. DE: Wenn wir uns lange umarmen
+      EN: When we hug for a long time
+      FR: Quand on s'embrasse longtemps
+
+0367. DE: Bei einer spontanen Berührung
+      EN: A spontaneous touch
+      FR: Avec une touche spontanée
+
+0368. DE: Was fehlt dir über die Distanz am meisten?
+      EN: What do you miss most while we're apart?
+      FR: Qu’est-ce qui vous manque le plus dans la distance ?
+
+0369. DE: Körperliche Nähe
+      EN: Physical closeness
+      FR: Proximité physique
+
+0370. DE: Einfach nebeneinander sein
+      EN: Simply being beside each other
+      FR: Soyez juste l'un à côté de l'autre
+
+0371. DE: Gemeinsame Nächte
+      EN: Nights together
+      FR: Nuits ensemble
+
+0372. DE: Alltägliche Berührungen
+      EN: Everyday touches
+      FR: Touches quotidiennes
+
+0373. DE: Wie leicht fällt es dir, über Wünsche zu sprechen?
+      EN: How easy is it for you to talk about your desires?
+      FR: Est-il facile pour vous de parler de vos souhaits ?
+
+0374. DE: Sehr leicht
+      EN: Very easy
+      FR: Très léger
+
+0375. DE: Geht so
+      EN: So-so
+      FR: Ça va
+
+0376. DE: Eher schwer
+      EN: Quite difficult
+      FR: Plutôt difficile
+
+0377. DE: Ich übe noch
+      EN: I'm still practicing
+      FR: je m'entraîne toujours
+
+0378. DE: Was macht einen Moment für dich romantisch?
+      EN: What makes a moment romantic for you?
+      FR: Qu’est-ce qui rend un moment romantique pour vous ?
+
+0379. DE: Aufmerksamkeit
+      EN: Thoughtfulness
+      FR: Attention
+
+0380. DE: Überraschung
+      EN: Surprise
+      FR: Surprendre
+
+0381. DE: Vertrautheit
+      EN: Familiarity
+      FR: familiarité
+
+0382. DE: Dass wir ungestört sind
+      EN: Having privacy
+      FR: Que nous ne sommes pas dérangés
+
+0383. DE: Zeichne für mich
+      EN: Draw for Me
+      FR: Dessine pour moi
+
+0384. DE: Zeichne unser erstes Date — was gehört unbedingt aufs Bild?
+      EN: Draw our first date — what absolutely belongs in the picture?
+      FR: Dessinez notre premier rendez-vous - qu'est-ce qui doit absolument figurer sur l'image ?
+
+0385. DE: Der Ort
+      EN: The place
+      FR: L'endroit
+
+0386. DE: Was wir gegessen haben
+      EN: What we ate
+      FR: Ce que nous avons mangé
+
+0387. DE: Unsere Gesichter
+      EN: Our faces
+      FR: Nos visages
+
+0388. DE: Das Wetter an dem Tag
+      EN: The weather that day
+      FR: La météo ce jour-là
+
+0389. DE: Zeichne unser Traumhaus in einem Strich. Was ist das Auffälligste?
+      EN: Draw our dream home in one line. What stands out most?
+      FR: Dessinez la maison de nos rêves en une seule ligne. Quelle est la chose la plus frappante ?
+
+0390. DE: Große Fenster
+      EN: Large windows
+      FR: Grandes fenêtres
+
+0391. DE: Der Garten
+      EN: The garden
+      FR: Le jardin
+
+0392. DE: Ein Herz an der Tür
+      EN: A heart on the door
+      FR: Un coeur à la porte
+
+0393. DE: Zwei Stühle davor
+      EN: Two chairs outside
+      FR: Deux chaises devant
+
+0394. DE: Zeichne mich als Tier — welches wäre ich?
+      EN: Draw me as an animal — which one would I be?
+      FR: Dessine-moi comme un animal - que serais-je ?
+
+0395. DE: Katze
+      EN: Cat
+      FR: Chat
+
+0396. DE: Hund
+      EN: Dog
+      FR: Chien
+
+0397. DE: Pinguin
+      EN: Penguin
+      FR: manchot
+
+0398. DE: Etwas ganz anderes
+      EN: Something completely different
+      FR: Quelque chose de complètement différent
+
+0399. DE: Zeichne unser Gefühl zueinander als Symbol.
+      EN: Draw our feelings for each other as a symbol.
+      FR: Dessinez nos sentiments les uns envers les autres comme un symbole.
+
+0400. DE: Ein Herz
+      EN: A heart
+      FR: Un coeur
+
+0401. DE: Zwei Kreise, die sich überschneiden
+      EN: Two overlapping circles
+      FR: Deux cercles qui se chevauchent
+
+0402. DE: Eine Brücke
+      EN: A bridge
+      FR: Un pont
+
+0403. DE: Ein Anker
+      EN: An anchor
+      FR: Une ancre
+
+0404. DE: In einer Beziehung sollte man alles voneinander wissen.
+      EN: Partners in a relationship should know everything about each other.
+      FR: Dans une relation, vous devez tout savoir l’un sur l’autre.
+
+0405. DE: Stimme voll zu
+      EN: Strongly agree
+      FR: Tout à fait d'accord
+
+0406. DE: Eher zu
+      EN: Somewhat agree
+      FR: Plutôt aussi
+
+0407. DE: Eher nicht
+      EN: Somewhat disagree
+      FR: Plutôt pas
+
+0408. DE: Lehne ab
+      EN: Disagree
+      FR: Déclin
+
+0409. DE: Man sollte nie streitend einschlafen.
+      EN: You should never go to sleep while still arguing.
+      FR: Vous ne devriez jamais vous endormir en vous disputant.
+
+0410. DE: Getrennte Urlaube tun einer Beziehung gut.
+      EN: Separate vacations can be good for a relationship.
+      FR: Des vacances séparées sont bonnes pour une relation.
+
+0411. DE: Eifersucht ist ein Zeichen von Liebe.
+      EN: Jealousy is a sign of love.
+      FR: La jalousie est un signe d'amour.
+
+0412. DE: Freundschaften mit Ex-Partnern sind okay.
+      EN: Friendships with ex-partners are okay.
+      FR: Les amitiés avec les ex, c'est bien.
+
+0413. DE: Tägliche Aktivität
+      EN: Daily Activity
+      FR: Activité quotidienne
+
+0414. DE: Wie kann dein Partner ein noch besserer Partner für dich sein?
+      EN: How could your partner be an even better partner for you?
+      FR: Comment votre partenaire peut-il être un partenaire encore meilleur pour vous ?
+
+0415. DE: Kennst du die Essensvorlieben deines Partners?
+      EN: Do you know your partner's food preferences?
+      FR: Connaissez-vous les préférences alimentaires de votre partenaire ?
+
+0416. DE: Das tägliche Leben
+      EN: Everyday Life
+      FR: Vie quotidienne
+
+0417. DE: Ich bin noch nie in einem Kino eingeschlafen.
+      EN: Never have I ever fallen asleep in a cinema.
+      FR: Je ne me suis jamais endormi dans un cinéma.
+
+0418. DE: Ich habe noch nie!
+      EN: Never have I ever!
+      FR: Je ne l'ai jamais fait !
+
+0419. DE: Ich habe!
+      EN: I have!
+      FR: J'ai!
+
+0420. DE: Ich habe noch nie Pläne abgesagt, um zu Hause zu bleiben und eine Fernsehsendung zu sehen.
+      EN: Never have I ever canceled plans to stay home and watch a TV show.
+      FR: Je n'ai jamais annulé mon projet de rester à la maison et de regarder une émission de télévision.
+
+0421. DE: Ich habe noch nie in einer Universitätssportmannschaft mitgespielt.
+      EN: Never have I ever played on a university sports team.
+      FR: Je n'ai jamais joué dans une équipe sportive universitaire.
+
+0422. DE: Ich habe noch nie die nassen Klamotten für ein paar Tage in der Waschmaschine vergessen.
+      EN: Never have I ever left wet clothes in the washing machine for several days.
+      FR: Je n'ai jamais oublié de vêtements mouillés dans la machine à laver depuis quelques jours.
+
+0423. DE: Ich habe noch nie ein Elektroauto gefahren.
+      EN: Never have I ever driven an electric car.
+      FR: Je n'ai jamais conduit de voiture électrique.
+
+0424. DE: Ich habe noch nie einen Nachtzug genommen.
+      EN: Never have I ever taken an overnight train.
+      FR: Je n'ai jamais pris de train de nuit.
+
+0425. DE: Ich musste noch nie rennen, um einen Anschlussflug zu erwischen.
+      EN: Never have I ever had to run to catch a connecting flight.
+      FR: Je n'ai jamais eu à courir pour prendre un vol de correspondance.
+
+0426. DE: Ich habe noch nie ein Auto in einem fremden Land gefahren.
+      EN: Never have I ever driven a car in a foreign country.
+      FR: Je n'ai jamais conduit de voiture dans un pays étranger.
+
+0427. DE: Ich habe noch nie einen Freund gehabt, der in ein anderes Land gezogen ist.
+      EN: Never have I ever had a friend move to another country.
+      FR: Je n’ai jamais eu d’ami qui ait déménagé dans un autre pays.
+
+0428. DE: Ich habe noch nie einen Freund gefunden, der eine andere Muttersprache spricht.
+      EN: Never have I ever made a friend who speaks a different native language.
+      FR: Je n'ai jamais trouvé d'ami qui parle une autre langue maternelle.
+
+0429. DE: Ich habe noch nie einen Social-Media-Beitrag gelöscht, weil er nicht genug Likes bekommen hat.
+      EN: Never have I ever deleted a social media post because it didn't get enough likes.
+      FR: Je n'ai jamais supprimé une publication sur les réseaux sociaux parce qu'elle n'avait pas reçu suffisamment de likes.
+
+0430. DE: Ich habe noch nie wegen des Finales einer Fernsehsendung geweint.
+      EN: Never have I ever cried over a TV series finale.
+      FR: Je n'ai jamais pleuré à la fin d'une émission de télévision.
+
+0431. DE: Unser Intimleben
+      EN: Our Intimate Life
+      FR: Notre vie intime
+
+0432. DE: Wie kann dein Partner am besten Sex mit dir initiieren?
+      EN: What is the best way for your partner to initiate sex with you?
+      FR: Quelle est la meilleure façon pour votre partenaire d’initier une relation sexuelle avec vous ?
+
+0433. DE: Wie stehst du zu schmutzigem Gerede beim Sex?
+      EN: How do you feel about dirty talk during sex?
+      FR: Que pensez-vous des propos grossiers pendant les rapports sexuels ?
+
+0434. DE: Was ist das Wichtigste, das du bei einer sexuellen Begegnung suchst?
+      EN: What matters most to you in a sexual encounter?
+      FR: Quelle est la chose la plus importante que vous recherchez lors d’une relation sexuelle ?
+
+0435. DE: Was hältst du davon, gemeinsam erotische Inhalte anzuschauen?
+      EN: How do you feel about watching erotic content together?
+      FR: Que pensez-vous du fait de regarder du contenu érotique ensemble ?
+
+0436. DE: Wie zeigst du deine Zuneigung am liebsten außerhalb von Sex?
+      EN: How do you most like to show affection outside of sex?
+      FR: Quelle est votre façon préférée de montrer de l’affection en dehors du sexe ?
+
+0437. DE: Beschreibe unser Sexleben mit einem Emoji.
+      EN: Describe our sex life with one emoji.
+      FR: Décrivez notre vie sexuelle avec un emoji.
+
+0438. DE: Unbeliebte Meinungen
+      EN: Unpopular Opinions
+      FR: Avis impopulaires
+
+0439. DE: Ananas auf der Pizza schmeckt köstlich.
+      EN: Pineapple on pizza tastes delicious.
+      FR: L'ananas sur la pizza est délicieux.
+
+0440. DE: Berühmte Touristenorte sind immer eine Enttäuschung.
+      EN: Famous tourist attractions are always disappointing.
+      FR: Les lieux touristiques célèbres sont toujours une déception.
+
+0441. DE: Geister existieren wirklich.
+      EN: Ghosts really exist.
+      FR: Les fantômes existent vraiment.
+
+0442. DE: Fernsehwerbung ist manchmal interessant anzusehen.
+      EN: TV commercials can sometimes be interesting to watch.
+      FR: Les publicités télévisées sont parfois intéressantes à regarder.
+
+0443. DE: Eine neue Sprache zu lernen ist einfach.
+      EN: Learning a new language is easy.
+      FR: Apprendre une nouvelle langue est facile.
+
+0444. DE: Denselben Film zweimal zu schauen, ist Zeitverschwendung.
+      EN: Watching the same movie twice is a waste of time.
+      FR: Regarder deux fois le même film est une perte de temps.
+
+0445. DE: Ehepaar Leben
+      EN: Married Life
+      FR: La vie de couple
+
+0446. DE: Wer ist romantischer?
+      EN: Who is more romantic?
+      FR: Qui est le plus romantique ?
+
+0447. DE: Wer ist der beste Tänzer?
+      EN: Who is the better dancer?
+      FR: Qui est le meilleur danseur ?
+
+0448. DE: Wer gibt mehr Herzlichkeit?
+      EN: Who is more affectionate?
+      FR: Qui donne plus de chaleur ?
+
+0449. DE: Wer hat den besseren Musikgeschmack?
+      EN: Who has better taste in music?
+      FR: Qui a le meilleur goût en musique ?
+
+0450. DE: Wer findet die besten Restaurants?
+      EN: Who finds the best restaurants?
+      FR: Qui trouve les meilleurs restaurants ?
+
+0451. DE: Wer hängt mehr an seinen Eltern?
+      EN: Who is more attached to their parents?
+      FR: Qui est le plus attaché à ses parents ?
+
+0452. DE: Wer ist besser organisiert?
+      EN: Who is better organized?
+      FR: Qui est le mieux organisé ?
+
+0453. DE: Wer ist der Beste bei der Filmauswahl?
+      EN: Who is better at choosing movies?
+      FR: Qui est le meilleur pour choisir des films ?
+
+0454. DE: Wer kocht besser?
+      EN: Who is the better cook?
+      FR: Qui cuisine mieux ?
+
+0455. DE: Wer ist der Beste bei der Planung romantischer Dates?
+      EN: Who is better at planning romantic dates?
+      FR: Qui est le meilleur pour planifier des rendez-vous romantiques ?
+
+0456. DE: Gesprächsanreger
+      EN: Conversation Starters
+      FR: Démarreurs de conversation
+
+0457. DE: Was möchtest du, dass dein Partner öfter tut?
+      EN: What would you like your partner to do more often?
+      FR: Qu’aimeriez-vous que votre partenaire fasse plus souvent ?
+
+0458. DE: Was ist dein Lieblingsfoto von uns? 📸
+      EN: What is your favorite photo of us? 📸
+      FR: Quelle est votre photo préférée de nous ? 📸
+
+0459. DE: Welches Lied macht dich an? 🥵
+      EN: Which song turns you on? 🥵
+      FR: Quelle chanson vous excite ? 🥵
+
+0460. DE: Was magst du an deinem Partner am liebsten?
+      EN: What do you love most about your partner?
+      FR: Qu’est-ce que vous aimez le plus chez votre partenaire ?
+
+0461. DE: Was ist deine größte Angst vor dem Zusammenleben?
+      EN: What is your biggest fear about living together?
+      FR: Quelle est votre plus grande peur dans la vie à deux ?
+
+0462. DE: Was hast du von deinem Partner gelernt?
+      EN: What have you learned from your partner?
+      FR: Qu'avez-vous appris de votre partenaire ?
+
+0463. DE: Liebe im Gleichgewicht
+      EN: Love in Balance
+      FR: L'amour en équilibre
+
+0464. DE: Lass dich von deinem Partner inspirieren, dein bestes Selbst zu sein
+      EN: Be inspired by your partner to become your best self
+      FR: Laissez votre partenaire vous inspirer pour être le meilleur de vous-même
+
+0465. DE: Werde so akzeptiert, wie du bist
+      EN: Be accepted exactly as you are
+      FR: Soyez accepté tel que vous êtes
+
+0466. DE: Ein Jahr lang eine Fernbeziehung führen
+      EN: Have a long-distance relationship for one year
+      FR: Avoir une relation à distance depuis un an
+
+0467. DE: Einen Monat lang überhaupt nicht miteinander reden
+      EN: Not speak to each other at all for one month
+      FR: Je ne me parle pas du tout depuis un mois
+
+0468. DE: Intime Momente nur dann zu haben, wenn dein Partner sie initiiert
+      EN: Only have intimate moments when your partner initiates them
+      FR: N'avoir des moments intimes que lorsque votre partenaire les initie
+
+0469. DE: Alle intimen Momente selbst initiieren
+      EN: Initiate every intimate moment yourself
+      FR: Initiez vous-même tous les moments intimes
+
+0470. DE: Deine tiefsten Geheimnisse lieber mit deinem Partner teilen
+      EN: Share your deepest secrets with your partner
+      FR: Partagez plutôt vos secrets les plus profonds avec votre partenaire
+
+0471. DE: Einige Dinge für dich behalten
+      EN: Keep some things to yourself
+      FR: Gardez certaines choses pour vous
+
+0472. DE: Eine Million Dollar gewinnen
+      EN: Win one million dollars
+      FR: Gagnez un million de dollars
+
+0473. DE: Eine Million Dollar verdienen
+      EN: Earn one million dollars
+      FR: Gagnez un million de dollars
+
+0474. DE: Einen sehr emotionalen Partner haben
+      EN: Have a very emotional partner
+      FR: Avoir un partenaire très émotif
+
+0475. DE: Einen sehr logischen Partner haben
+      EN: Have a very logical partner
+      FR: Avoir un partenaire très logique
+
+0476. DE: Deine Beziehung stabil und sicher machen
+      EN: Make your relationship stable and secure
+      FR: Rendez votre relation stable et sécurisée
+
+0477. DE: Deine Beziehung abenteuerlich und spontan machen
+      EN: Make your relationship adventurous and spontaneous
+      FR: Rendez votre relation aventureuse et spontanée
+
+0478. DE: Deinen besten Freund verlieren
+      EN: Lose your best friend
+      FR: Perdre son meilleur ami
+
+0479. DE: Alle deine Freunde verlieren, außer deinem besten Freund
+      EN: Lose all your friends except your best friend
+      FR: Perds tous tes amis sauf ton meilleur ami
+
+0480. DE: Teile alle deine Hobbys mit deinem Partner
+      EN: Share all your hobbies with your partner
+      FR: Partagez tous vos loisirs avec votre partenaire
+
+0481. DE: Von deinem Partner in neue Hobbys eingeführt werden
+      EN: Be introduced to new hobbies by your partner
+      FR: Être initié à de nouveaux passe-temps par votre partenaire
+
+0482. DE: Derjenige sein, der umarmt wird
+      EN: Be the one who gets hugged
+      FR: Soyez celui qui est embrassé
+
+0483. DE: Diejenige sein, die umarmt
+      EN: Be the one giving the hug
+      FR: Soyez celui qui fait des câlins
+
+0484. DE: Verbringe die Feiertage mit deiner Familie
+      EN: Spend the holidays with your family
+      FR: Passez les vacances en famille
+
+0485. DE: Die Feiertage mit der Familie deines Partners verbringen
+      EN: Spend the holidays with your partner's family
+      FR: Passez les vacances avec la famille de votre partenaire
+
+0486. DE: Neue Liebe, neue Erfahrungen
+      EN: New Love, New Experiences
+      FR: Nouvel amour, nouvelles expériences
+
+0487. DE: Ich lache viel mit meinem Partner.
+      EN: I laugh a lot with my partner.
+      FR: Je ris beaucoup avec mon partenaire.
+
+0488. DE: Ich entdecke gerne neue Hobbys oder Aktivitäten mit meinem Partner.
+      EN: I enjoy discovering new hobbies or activities with my partner.
+      FR: J'aime découvrir de nouveaux passe-temps ou activités avec mon partenaire.
+
+0489. DE: Ich teile gerne Memes und Witze mit meinem Partner.
+      EN: I enjoy sharing memes and jokes with my partner.
+      FR: J'aime partager des mèmes et des blagues avec mon partenaire.
+
+0490. DE: Ich priorisiere es, Zeit mit meinem Partner zu verbringen, auch wenn ich beschäftigt bin.
+      EN: I make spending time with my partner a priority, even when I'm busy.
+      FR: Je donne la priorité au temps passé avec mon partenaire même lorsque je suis occupé.
+
+0491. DE: Ich schreibe meinem Partner jeden Tag.
+      EN: I message my partner every day.
+      FR: J'envoie des SMS à mon partenaire tous les jours.
+
+0492. DE: Ich teile gerne alle Details meines Tages mit meinem Partner.
+      EN: I enjoy sharing all the details of my day with my partner.
+      FR: J'aime partager tous les détails de ma journée avec mon partenaire.
+
+0493. DE: Ich lerne gerne die Hobbys und Interessen meines Partners kennen.
+      EN: I enjoy learning about my partner's hobbies and interests.
+      FR: J'aime connaître les passe-temps et les intérêts de mon partenaire.
+
+0494. DE: Es nervt mich, wenn mein Partner zu lange braucht, um auf Nachrichten zu antworten.
+      EN: It bothers me when my partner takes too long to reply to messages.
+      FR: Cela m'énerve lorsque mon partenaire met trop de temps à répondre aux messages.
+
+0495. DE: Ich plane gerne Dates mit meinem Partner.
+      EN: I enjoy planning dates with my partner.
+      FR: J'aime planifier des rendez-vous avec mon partenaire.
+
+0496. DE: Ich liebe es, Filme mit meinem Partner zu schauen, die keiner von uns zuvor gesehen hat.
+      EN: I love watching movies with my partner that neither of us has seen before.
+      FR: J'adore regarder des films avec mon partenaire qu'aucun de nous n'a vu auparavant.
+
+0497. DE: Ich liebe es, meine Lieblingsmusik mit meinem Partner zu teilen.
+      EN: I love sharing my favorite music with my partner.
+      FR: J'adore partager ma musique préférée avec mon partenaire.
+
+0498. DE: Romantische Gesten wie Nachrichten, Zettelchen oder Geschenke machen mich glücklich.
+      EN: Romantic gestures such as messages, notes, or gifts make me happy.
+      FR: Les gestes romantiques comme les messages, les notes ou les cadeaux me rendent heureux.
+
+0499. DE: Ich bevorzuge romantische Spaziergänge im Park gegenüber einem Kinobesuch.
+      EN: I prefer romantic walks in the park to going to the movies.
+      FR: Je préfère les promenades romantiques dans le parc plutôt que d'aller au cinéma.
+
+0500. DE: Ich genieße es, mit meinem Partner neue Restaurants auszuprobieren, anstatt immer an die gleichen Orte zu gehen.
+      EN: I enjoy trying new restaurants with my partner instead of always going to the same places.
+      FR: J'aime essayer de nouveaux restaurants avec mon partenaire au lieu d'aller toujours aux mêmes endroits.
+
+0501. DE: Ein Filmabend
+      EN: Movie Night
+      FR: Une soirée cinéma
+
+0502. DE: Ein Spieleabend
+      EN: Game Night
+      FR: Une soirée de jeux
+
+0503. DE: Ein aktives Abenteuer
+      EN: An Active Adventure
+      FR: Une aventure active
+
+0504. DE: Ein entspannender Spa-Tag
+      EN: A Relaxing Spa Day
+      FR: Une journée spa relaxante
+
+0505. DE: Ein gemütliches Date drinnen
+      EN: A Cozy Indoor Date
+      FR: Un rendez-vous convivial à l'intérieur
+
+0506. DE: Eine Autoreise
+      EN: A Road Trip
+      FR: Un road trip
+
+0507. DE: Einen Film anschauen
+      EN: Watch a Movie
+      FR: Regarder un film
+
+0508. DE: Gemeinsam ein Lego bauen
+      EN: Build a Lego Set Together
+      FR: Construisez un Lego ensemble
+
+0509. DE: Eine Weinverkostung
+      EN: Wine Tasting
+      FR: Une dégustation de vins
+
+0510. DE: Eine Schokoladenverkostung
+      EN: Chocolate Tasting
+      FR: Une dégustation de chocolat
+
+0511. DE: Eine gemütliche Nacht zu Hause
+      EN: A Cozy Night at Home
+      FR: Une nuit douillette à la maison
+
+0512. DE: Ein Abenteuer in einer neuen Stadt
+      EN: An Adventure in a New City
+      FR: Une aventure dans une nouvelle ville
+
+0513. DE: Zu einem Picknick gehen
+      EN: Go on a Picnic
+      FR: Aller à un pique-nique
+
+0514. DE: Zu einem ausgefallenen Abendessen gehen
+      EN: Go Out for a Fancy Dinner
+      FR: Aller à un dîner chic
+
+0515. DE: Ein romantischer Abend
+      EN: A Romantic Evening
+      FR: Une soirée romantique
+
+0516. DE: Eine Nacht in einem Club
+      EN: A Night at a Club
+      FR: Une nuit dans un club
+
+0517. DE: Eine Date-Nacht unter den Sternen
+      EN: A Date Night Under the Stars
+      FR: Une soirée en amoureux sous les étoiles
+
+0518. DE: Ein romantisches Abendessen bei Kerzenlicht
+      EN: A Romantic Candlelit Dinner
+      FR: Un dîner romantique aux chandelles
+
+0519. DE: In einen Coffeeshop gehen
+      EN: Go to a Coffee Shop
+      FR: Aller dans un café
+
+0520. DE: In eine Bar gehen
+      EN: Go to a Bar
+      FR: Aller dans un bar
+
+0521. DE: Ein gemütlicher Abend im Haus während eines Gewitters
+      EN: A Cozy Evening at Home During a Thunderstorm
+      FR: Une soirée agréable à la maison pendant un orage
+
+0522. DE: Ein tolles Date im Freien unter dem Mondlicht
+      EN: An Amazing Outdoor Date in the Moonlight
+      FR: Un bon rendez-vous en plein air au clair de lune
+
+0523. DE: Einen Vergnügungspark erkunden
+      EN: Explore an Amusement Park
+      FR: Explorez un parc d'attractions
+
+0524. DE: Ein Museum besuchen
+      EN: Visit a Museum
+      FR: Visiter un musée
+
+0525. DE: Ein Spieleabend mit Freunden
+      EN: A Game Night with Friends
+      FR: Une soirée de jeux entre amis
+
+0526. DE: Ein romantisches Picknick an einem schönen Ort
+      EN: A Romantic Picnic Somewhere Beautiful
+      FR: Un pique-nique romantique dans un endroit magnifique
+
+0527. DE: Gemeinsam in der Küche ein neues Rezept ausprobieren
+      EN: Try a New Recipe Together
+      FR: Essayez une nouvelle recette ensemble en cuisine
+
+0528. DE: In einem feinen Restaurant essen gehen
+      EN: Dine at a Fine Restaurant
+      FR: Manger dans un bon restaurant
+
+0529. DE: Zelten gehen
+      EN: Go Camping
+      FR: Aller camper
+
+0530. DE: Einen Wellness-Tag
+      EN: Have a Spa Day
+      FR: Une journée bien-être
+
+0531. DE: Einen Tanzkurs besuchen
+      EN: Take a Dance Class
+      FR: Prendre un cours de danse
+
+0532. DE: Eine Wanderung mit Panoramablick machen
+      EN: Go on a Scenic Hike
+      FR: Faites une randonnée avec vue panoramique
+
+0533. DE: Spiele spielen und Spaß haben
+      EN: Play Games and Have Fun
+      FR: Jouez à des jeux et amusez-vous
+
+0534. DE: Tiefgründige Gespräche führen
+      EN: Have Deep Conversations
+      FR: Ayez des conversations approfondies
+
+0535. DE: Ein Live-Musik-Konzert besuchen
+      EN: Go to a Live Music Concert
+      FR: Assister à un concert de musique live
+
+0536. DE: Auf eine Bootsparty gehen
+      EN: Go to a Boat Party
+      FR: Aller à une fête en bateau
+
+0537. DE: Geh früh am Morgen, um den Sonnenaufgang zu sehen
+      EN: Get Up Early to Watch the Sunrise
+      FR: Allez-y tôt le matin pour voir le lever du soleil
+
+0538. DE: In eine Strandbar gehen, um den Sonnenuntergang zu sehen
+      EN: Go to a Beach Bar to Watch the Sunset
+      FR: Aller dans un bar de plage pour regarder le coucher du soleil
+
+0539. DE: Gourmet Eis-Sorten
+      EN: Gourmet Ice Cream Flavors
+      FR: Variétés de glaces gastronomiques
+
+0540. DE: Vanille
+      EN: Vanilla
+      FR: Vanille
+
+0541. DE: Schokolade
+      EN: Chocolate
+      FR: Chocolat
+
+0542. DE: Erdbeere
+      EN: Strawberry
+      FR: fraise
+
+0543. DE: Zitrone
+      EN: Lemon
+      FR: citron
+
+0544. DE: Stracciatella
+      EN: Stracciatella
+      FR: Stracciatelle
+
+0545. DE: Pistazie
+      EN: Pistachio
+      FR: pistache
+
+0546. DE: Mango Sorbet
+      EN: Mango Sorbet
+      FR: Sorbet mangue
+
+0547. DE: Himbeere
+      EN: Raspberry
+      FR: framboise
+
+0548. DE: Salted Caramel
+      EN: Salted Caramel
+      FR: Caramel salé
+
+0549. DE: Cookie Dough
+      EN: Cookie Dough
+      FR: Pâte à biscuits
+
+0550. DE: Hazelnut
+      EN: Hazelnut
+      FR: Noisette
+
+0551. DE: White Chocolate
+      EN: White Chocolate
+      FR: Chocolat blanc
+
+0552. DE: Walnuss
+      EN: Walnut
+      FR: noyer
+
+0553. DE: Banane
+      EN: Banana
+      FR: banane
+
+0554. DE: 6 Monate im Altbau mit Charme
+      EN: 6 Months in a Charming Period Home
+      FR: 6 mois dans une charmante bâtisse ancienne
+
+0555. DE: 📂 Ordner
+      EN: 📂 Folder
+      FR: 📂 Dossier
+
+0556. DE: 📝 Spiele
+      EN: 📝 Games
+      FR: 📝 Jeux
+
+0557. DE: 🔗 Ketten
+      EN: 🔗 Chains
+      FR: 🔗 Chaînes
+
+0558. DE: 🖼️ Bilder
+      EN: 🖼️ Images
+      FR: 🖼️ Photos
+
+0559. DE: ⚡ Test
+      EN: ⚡ Test
+      FR: ⚡Testez
+
+0560. DE: 📤 Export
+      EN: 📤 Export
+      FR: 📤 Exportations
+
+0561. DE: Entwickler Studio
+      EN: Developer Studio
+      FR: Studio de développement
+
+0562. DE: Ordner rein · Paare raus · Export für AI Studio
+      EN: Import a folder · Create pairs · Export for AI Studio
+      FR: Dossier entrant · Appariements · Exportation pour AI Studio
+
+0563. DE: Ordner wird gelesen…
+      EN: Reading folder…
+      FR: Le dossier est en cours de lecture...
+
+0564. DE: Keine Bilder in diesem Ordner gefunden.
+      EN: No images found in this folder.
+      FR: Aucune image trouvée dans ce dossier.
+
+0565. DE: Bilder werden gelesen…
+      EN: Reading images…
+      FR: Les images sont lues...
+
+0566. DE: Bilder-Ordner einlesen
+      EN: Import Image Folder
+      FR: Lire les dossiers d'images
+
+0567. DE: Je zwei Bilder werden ein Paar. Die Reihenfolge unten ist die Reihenfolge im Spiel —
+      EN: Every two images form a pair. The order below is the order used in the game —
+      FR: Toutes les deux images deviennent une paire. L'ordre ci-dessous est l'ordre dans le jeu —
+
+0568. DE: verschiebe Zeilen mit den Pfeilen, wenn ein Paar nicht passt.
+      EN: move rows with the arrows if a pair does not match.
+      FR: déplacez les lignes avec les flèches si une paire ne correspond pas.
+
+0569. DE: Ordner
+      EN: Folder
+      FR: Dossier
+
+0570. DE: Bilder
+      EN: Images
+      FR: Photos
+
+0571. DE: Kategorie (z.B. Eis)
+      EN: Category (e.g. ice cream)
+      FR: Catégorie (par exemple, glace)
+
+0572. DE: Name
+      EN: Name
+      FR: nom
+
+0573. DE: Emoji
+      EN: Emoji
+      FR: Émoji
+
+0574. DE: Titel des Spiels
+      EN: Game Title
+      FR: Titre du jeu
+
+0575. DE: Spiel-Emoji
+      EN: Game Emoji
+      FR: Jeu emoji
+
+0576. DE: Ein Bild bleibt übrig und wird ignoriert.
+      EN: One image is left over and will be ignored.
+      FR: Une image reste et est ignorée.
+
+0577. DE: Leeren
+      EN: Clear
+      FR: Vide
+
+0578. DE: Paket erstellen & freischalten
+      EN: Create & Unlock Pack
+      FR: Créer et activer le package
+
+0579. DE: Dateinamen wie 01a_vanille.jpg / 01b_schoko.jpg werden automatisch als Paar erkannt.
+      EN: File names such as 01a_vanilla.jpg / 01b_chocolate.jpg are automatically recognized as a pair.
+      FR: Les noms de fichiers comme 01a_vanille.jpg / 01b_schoko.jpg sont automatiquement reconnus comme une paire.
+
+0580. DE: Sonst zählt die alphabetische Reihenfolge.
+      EN: Otherwise, alphabetical order is used.
+      FR: Sinon, l'ordre alphabétique compte.
+
+0581. DE: Name (optional - leer lassen für kein Text)
+      EN: Name (optional — leave blank for no text)
+      FR: Nom (facultatif - laisser vide s'il n'y a pas de texte)
+
+0582. DE: Nach oben
+      EN: Move Up
+      FR: En haut
+
+0583. DE: Nach unten
+      EN: Move Down
+      FR: Vers le bas
+
+0584. DE: Entfernen
+      EN: Remove
+      FR: Retirer
+
+0585. DE: Senden
+      EN: Send
+      FR: Envoyer
+
+0586. DE: GFK Brücke
+      EN: NVC Bridge
+      FR: Pont PRV
+
+0587. DE: Spiel suchen…
+      EN: Search Games…
+      FR: Jeu de recherche...
+
+0588. DE: Kategorien & Farben
+      EN: Categories & Colors
+      FR: Catégories et couleurs
+
+0589. DE: Neues Spiel
+      EN: New Game
+      FR: Nouveau jeu
+
+0590. DE: Alle
+      EN: All
+      FR: Tous
+
+0591. DE: ⚖️ Das oder Das
+      EN: ⚖️ This or That
+      FR: ⚖️ Ceci ou cela
+
+0592. DE: 🧠 Quiz
+      EN: 🧠 Quiz
+      FR: 🧠 Quiz
+
+0593. DE: 🗣️ Diskussion
+      EN: 🗣️ Discussion
+      FR: 🗣️Débat
+
+0594. DE: Das oder Das
+      EN: This or That
+      FR: Ceci ou cela
+
+0595. DE: Quiz
+      EN: Quiz
+      FR: questionnaire
+
+0596. DE: Diskussion
+      EN: Discussion
+      FR: discussion
+
+0597. DE: Bearbeiten
+      EN: Edit
+      FR: Modifier
+
+0598. DE: Löschen
+      EN: Delete
+      FR: Supprimer
+
+0599. DE: Schließen
+      EN: Close
+      FR: Fermer
+
+0600. DE: Spiel bearbeiten
+      EN: Edit Game
+      FR: Modifier le jeu
+
+0601. DE: Speichern
+      EN: Save
+      FR: Sauvegarder
+
+0602. DE: Titel
+      EN: Title
+      FR: titre
+
+0603. DE: Kategorie
+      EN: Category
+      FR: catégorie
+
+0604. DE: 🎨 Farben & Kategorien verwalten
+      EN: 🎨 Manage Colors & Categories
+      FR: 🎨 Gérer les couleurs et les catégories
+
+0605. DE: Spieltyp
+      EN: Game Type
+      FR: Type de jeu
+
+0606. DE: Paare — tippe auf ein Bild, um es zu tauschen
+      EN: Pairs — tap an image to replace it
+      FR: Paires : appuyez sur une image pour l'échanger
+
+0607. DE: Paar
+      EN: Pair
+      FR: Couple
+
+0608. DE: Galerie
+      EN: Gallery
+      FR: galerie
+
+0609. DE: Paare mischen
+      EN: Shuffle Pairs
+      FR: Mélanger des paires
+
+0610. DE: Fragen
+      EN: Questions
+      FR: Questions
+
+0611. DE: Frage hinzufügen
+      EN: Add Question
+      FR: Ajouter une question
+
+0612. DE: Paar löschen
+      EN: Delete Pair
+      FR: Supprimer la paire
+
+0613. DE: Bild ändern
+      EN: Change Image
+      FR: Changer l'image
+
+0614. DE: Name (optional)
+      EN: Name (optional)
+      FR: Nom (facultatif)
+
+0615. DE: Fragetext
+      EN: Question Text
+      FR: Texte de la question
+
+0616. DE: Frage löschen
+      EN: Delete Question
+      FR: Supprimer la question
+
+0617. DE: Antworten, getrennt mit |
+      EN: Answers, separated by |
+      FR: Réponses séparées par |
+
+0618. DE: Bilder & Städte
+      EN: Images & Cities
+      FR: Images et villes
+
+0619. DE: Jede Option aus allen Spielen. Tippen und ein eigenes Bild aus der Galerie wählen.
+      EN: Every option from every game. Tap one to choose a custom image from the gallery.
+      FR: Toutes les options de tous les jeux. Appuyez et choisissez votre propre image dans la galerie.
+
+0620. DE: Option suchen…
+      EN: Search Options…
+      FR: Option de recherche...
+
+0621. DE: Nur Optionen ohne eigenes Bild
+      EN: Only options without a custom image
+      FR: Seules les options sans votre propre image
+
+0622. DE: Eigenes Bild
+      EN: Custom Image
+      FR: Image personnalisée
+
+0623. DE: Zurücksetzen
+      EN: Reset
+      FR: Réinitialiser
+
+0624. DE: Schnelltest
+      EN: Quick Test
+      FR: Test rapide
+
+0625. DE: Mindestens zwei Bilder auswählen.
+      EN: Select at least two images.
+      FR: Sélectionne au moins deux images.
+
+0626. DE: Dem Spiel fehlt noch ein Titel.
+      EN: The game still needs a title.
+      FR: Il manque encore un titre au jeu.
+
+0627. DE: Bilder werden gespeichert…
+      EN: Saving images…
+      FR: Les images sont enregistrées...
+
+0628. DE: Bild wird übernommen…
+      EN: Importing image…
+      FR: L'image est prise...
+
+0629. DE: Bilder werden eingelesen…
+      EN: Reading images…
+      FR: Les images sont lues dans...
+
+0630. DE: Bild konnte nicht gelesen werden.
+      EN: The image could not be read.
+      FR: L'image n'a pas pu être lue.
+
+0631. DE: Keine Pakete zum Exportieren.
+      EN: No packs available to export.
+      FR: Aucun package à exporter.
+
+0632. DE: Export wird gebaut…
+      EN: Building export…
+      FR: L’export se construit…
+
+0633. DE: Über 3 MB — nimm eine kleinere Bildgröße oder exportiere die Pakete einzeln.
+      EN: Over 3 MB — choose a smaller image size or export the packs individually.
+      FR: Plus de 3 Mo : utilisez une taille d'image plus petite ou exportez les packages individuellement.
+
+0634. DE: Keine eigenen Bilder vorhanden.
+      EN: No custom images available.
+      FR: Aucune image personnalisée disponible.
+
+0635. DE: Startet ein Spiel im echten Runner — genau so, wie ihr es später spielt.
+      EN: Starts a game in the real runner — exactly as it will be played later.
+      FR: Démarrez une partie dans le vrai Runner, exactement comme vous y jouerez plus tard.
+
+0636. DE: Testen
+      EN: Test
+      FR: Test
+
+0637. DE: Export für Google AI Studio
+      EN: Export for Google AI Studio
+      FR: Exporter pour Google AI Studio
+
+0638. DE: Eine einzige Textdatei mit Paketen und Bildern. AI Studio nimmt keine ZIPs —
+      EN: One text file containing packs and images. AI Studio does not accept ZIP files —
+      FR: Un seul fichier texte contenant des packages et des images. AI Studio n'accepte pas les ZIP —
+
+0639. DE: deshalb stecken die Bilder als Base64 direkt im Kotlin-Code.
+      EN: so the images are embedded directly in the Kotlin code as Base64.
+      FR: C'est pourquoi les images sont en Base64 directement dans le code Kotlin.
+
+0640. DE: Noch nichts zum Exportieren. Leg im Tab "Ordner" ein erstes Paket an.
+      EN: Nothing to export yet. Create your first pack in the Folder tab.
+      FR: Rien à exporter pour le moment. Crée un premier pack dans l'onglet "Dossier".
+
+0641. DE: Pakete (nichts ausgewählt = alle)
+      EN: Packs (nothing selected = all)
+      FR: Forfaits (rien de sélectionné = tous)
+
+0642. DE: Bilder mitschicken
+      EN: Include Images
+      FR: Envoyez des photos
+
+0643. DE: Aus: nur Texte, Datei bleibt winzig
+      EN: Off: text only, keeping the file tiny
+      FR: Désactivé : uniquement les textes, le fichier reste petit
+
+0644. DE: Bildgröße im Export
+      EN: Export Image Size
+      FR: Taille de l'image à l'exportation
+
+0645. DE: Klein · 480px
+      EN: Small · 480px
+      FR: Petit · 480px
+
+0646. DE: Mittel · 720px
+      EN: Medium · 720px
+      FR: Moyenne · 720px
+
+0647. DE: Groß · 960px
+      EN: Large · 960px
+      FR: Grand · 960px
+
+0648. DE: Für AI Studio exportieren
+      EN: Export for AI Studio
+      FR: Exporter pour AI Studio
+
+0649. DE: Bilder einzeln teilen
+      EN: Share Images Separately
+      FR: Partager des images individuellement
+
+0650. DE: Vollständiges Projekt-Backup (JSON)
+      EN: Complete Project Backup (JSON)
+      FR: Sauvegarde complète du projet (JSON)
+
+0651. DE: Enthält alle Spiele, Ketten, Kategorien UND alle eingebetteten Bilder als Base64. Ideal zur Sicherung, Übertragung & Wiederherstellung.
+      EN: Contains every game, chain, category, and all embedded images as Base64. Ideal for backup, transfer, and recovery.
+      FR: Comprend tous les jeux, chaînes, catégories ET toutes les images intégrées en Base64. Idéal pour la sauvegarde, le transfert et la restauration.
+
+0652. DE: Kopieren
+      EN: Copy
+      FR: Copie
+
+0653. DE: JSON teilen
+      EN: Share JSON
+      FR: Partager JSON
+
+0654. DE: Einspielen
+      EN: Import
+      FR: Jouer dans
+
+0655. DE: JSON oder Export-Inhalt (mit Base64) hier einfügen
+      EN: Paste JSON or export content, including Base64, here
+      FR: Collez JSON ou exportez le contenu (avec Base64) ici
+
+0656. DE: Inhalt & Bilder jetzt einspielen
+      EN: Import Content & Images Now
+      FR: Importez du contenu et des images maintenant
+
+0657. DE: 🔗 Ketten-Spiele
+      EN: 🔗 Chain Games
+      FR: 🔗 Jeux en chaîne
+
+0658. DE: Pakete mit dynamischen Bauanleitungen, die sich aus bisherigen Antworten zusammensetzen.
+      EN: Packs with dynamic templates assembled from previous answers.
+      FR: Packs d'instructions de construction dynamiques composées de réponses précédentes.
+
+0659. DE: Neue Kette
+      EN: New Chain
+      FR: Nouvelle chaîne
+
+0660. DE: Kette bauen
+      EN: Build Chain
+      FR: Construire une chaîne
+
+0661. DE: 1 Jahr lang in {}
+      EN: 1 Year in {}
+      FR: pendant 1 an en {}
+
+0662. DE: 6 Monate im {}
+      EN: 6 Months in {}
+      FR: 6 mois en {}
+
+0663. DE: Weil du {A} gewählt hast …
+      EN: Because You Chose {A}…
+      FR: Parce que vous avez choisi {A}...
+
+0664. DE: Noch keine Ketten angelegt
+      EN: No Chains Yet
+      FR: Aucune chaîne créée pour le moment
+
+0665. DE: Erstelle ein Ketten-Paket, um Fragen dynamisch mit bisherigen Antworten zu verknüpfen.
+      EN: Create a chain pack to connect questions dynamically with previous answers.
+      FR: Crée un pack en chaîne pour relier dynamiquement les questions aux réponses précédentes.
+
+0666. DE: Spielen
+      EN: Play
+      FR: Jouer
+
+0667. DE: Kette bearbeiten
+      EN: Edit Chain
+      FR: Modifier la chaîne
+
+0668. DE: Neue Kette erstellen
+      EN: Create New Chain
+      FR: Créer une nouvelle chaîne
+
+0669. DE: Kopfzeile (z.B. Weil du {A} gewählt hast …)
+      EN: Caption (e.g. Because you chose {A}…)
+      FR: En-tête (par exemple, parce que vous avez choisi {A}…)
+
+0670. DE: Satzmuster (z.B. 6 Monate im {})
+      EN: Sentence Pattern (e.g. 6 months in {})
+      FR: Modèle de phrase (par exemple, 6 mois en {})
+
+0671. DE: Neuen Schritt hinzufügen
+      EN: Add New Step
+      FR: Ajouter une nouvelle étape
+
+0672. DE: Abbrechen
+      EN: Cancel
+      FR: Annuler
+
+0673. DE: Speichern & testen
+      EN: Save & Test
+      FR: Enregistrer et tester
+
+0674. DE: Quelle wählen:
+      EN: Choose Source:
+      FR: Sélectionnez la source :
+
+0675. DE: Gewählt
+      EN: Selected
+      FR: Choisi
+
+0676. DE: Nicht gewählt
+      EN: Not Selected
+      FR: Non élu
+
+0677. DE: Feste Option
+      EN: Fixed Option
+      FR: Option fixe
+
+0678. DE: Fester Text
+      EN: Fixed Text
+      FR: Texte fixe
+
+0679. DE: Quell-Paket:
+      EN: Source Pack:
+      FR: Paquet source :
+
+0680. DE: Türkis
+      EN: Turquoise
+      FR: Turquoise
+
+0681. DE: Limetten grün
+      EN: Lime Green
+      FR: Vert citron
+
+0682. DE: Kategorie-Farbe wählen
+      EN: Choose Category Color
+      FR: Sélectionnez la couleur de la catégorie
+
+0683. DE: Neue Kategorie erstellen
+      EN: Create New Category
+      FR: Créer une nouvelle catégorie
+
+0684. DE: Kategorie bearbeiten
+      EN: Edit Category
+      FR: Modifier la catégorie
+
+0685. DE: Neue Kategorie
+      EN: New Category
+      FR: Nouvelle catégorie
+
+0686. DE: leer
+      EN: empty
+      FR: vide
+
+0687. DE: Kein Paket gewählt
+      EN: No Pack Selected
+      FR: Aucun forfait sélectionné
+
+0688. DE: Gewählte Antwort
+      EN: Selected Answer
+      FR: Réponse sélectionnée
+
+0689. DE: Verworfene Antwort
+      EN: Rejected Answer
+      FR: Réponse rejetée
+
+0690. DE: beliebiges Paar
+      EN: Any Pair
+      FR: n'importe quelle paire
+
+0691. DE: Paris oder Rom
+      EN: Paris or Rome
+      FR: Paris ou Rome
+
+0692. DE: JSON Backup wird vorbereitet…
+      EN: Preparing JSON Backup…
+      FR: La sauvegarde JSON est en cours de préparation…
+
+0693. DE: 🎉 JSON inkl. Bildern & Ketten kopiert!
+      EN: 🎉 JSON including images and chains copied!
+      FR: 🎉 JSON incluant les images et les chaînes copiées !
+
+0694. DE: JSON Backup Datei wird erstellt…
+      EN: Creating JSON Backup File…
+      FR: Le fichier de sauvegarde JSON est créé...
+
+0695. DE: Daten werden eingespielt…
+      EN: Importing Data…
+      FR: Les données sont importées...
+
+0696. DE: Kette gestartet
+      EN: Chain Started
+      FR: Chaîne démarrée
+
+0697. DE: 🔗 Ketten-Bauer
+      EN: 🔗 Chain Builder
+      FR: 🔗 Créateur de chaînes
+
+0698. DE: Linke Karte (Seite A)
+      EN: Left Card (Side A)
+      FR: Carte gauche (face A)
+
+0699. DE: Rechte Karte (Seite B)
+      EN: Right Card (Side B)
+      FR: Carte de droite (face B)
+
+0700. DE: Vorschau:
+      EN: Preview:
+      FR: Aperçu :
+
+0701. DE: Paar / Option:
+      EN: Pair / Option:
+      FR: Paire/Option :
+
+0702. DE: Beliebiges / letztes Paar
+      EN: Any / Last Pair
+      FR: N'importe quelle/dernière paire
+
+0703. DE: Seite:
+      EN: Side:
+      FR: Page:
+
+0704. DE: Linke Option (0)
+      EN: Left Option (0)
+      FR: Option gauche (0)
+
+0705. DE: Rechte Option (1)
+      EN: Right Option (1)
+      FR: Bonne option (1)
+
+0706. DE: 🏷️ Kategorien & Farben
+      EN: 🏷️ Categories & Colors
+      FR: 🏷️ Catégories et couleurs
+
+0707. DE: Titel des Ketten-Spiels
+      EN: Chain Game Title
+      FR: Titre du jeu en chaîne
+
+0708. DE: Unbenannte Kette
+      EN: Untitled Chain
+      FR: Chaîne sans nom
+
+0709. DE: Verworfen
+      EN: Rejected
+      FR: Écarté
+
+0710. DE: Freier Text
+      EN: Free Text
+      FR: Texte libre
+
+0711. DE: Satzmuster (z.B. 1 Jahr lang in {})
+      EN: Sentence Pattern (e.g. 1 year in {})
+      FR: Modèles de peines (par exemple, pendant 1 an en {})
+
+0712. DE: Standardbild
+      EN: Default Image
+      FR: Image par défaut
+
+0713. DE: eigen
+      EN: custom
+      FR: propre
+
+0714. DE: Eis
+      EN: Ice Cream
+      FR: Glace
+
+0715. DE: Eissorten
+      EN: Ice Cream Flavors
+      FR: Saveurs de glace
+
+0716. DE: Gold
+      EN: Gold
+      FR: Or
+
+0717. DE: Rosa
+      EN: Pink
+      FR: Rose
+
+0718. DE: Lila
+      EN: Purple
+      FR: Violet
+
+0719. DE: Blau
+      EN: Blue
+      FR: Bleu
+
+0720. DE: Koralle
+      EN: Coral
+      FR: corail
+
+0721. DE: Smaragd
+      EN: Emerald
+      FR: émeraude
+
+0722. DE: Rubinrot
+      EN: Ruby Red
+      FR: Rouge rubis
+
+0723. DE: Lavendel
+      EN: Lavender
+      FR: lavande
+
+0724. DE: Magenta
+      EN: Magenta
+      FR: magenta
+
+0725. DE: Orange
+      EN: Orange
+      FR: Orange
+
+0726. DE: Neubau mit Technik
+      EN: Tech-Enabled New Build
+      FR: Nouveau bâtiment doté de technologie
+
+0727. DE: Offene Küche
+      EN: Open-Plan Kitchen
+      FR: Cuisine ouverte
+
+0728. DE: Gemüsebeet
+      EN: Vegetable Garden
+      FR: potager
+
+0729. DE: Hängematte
+      EN: Hammock
+      FR: hamac
+
+0730. DE: Blumenwiese
+      EN: Flower Meadow
+      FR: Prairie fleurie
+
+0731. DE: Dachterrasse
+      EN: Rooftop Terrace
+      FR: Toit-terrasse
+
+0732. DE: Grillplatz
+      EN: Barbecue Area
+      FR: Espace barbecue
+
+0733. DE: Kamin
+      EN: Fireplace
+      FR: Cheminée
+
+0734. DE: Belgische Schokolade
+      EN: Belgian Chocolate
+      FR: Chocolat belge
+
+0735. DE: In AI Studio hochladen und schreiben: "Ersetze GeneratedHarmonyContent.kt komplett durch den Inhalt dieser Datei."
+      EN: Upload to AI Studio and write: "Replace GeneratedHarmonyContent.kt completely with the contents of this file."
+      FR: Téléchargez vers AI Studio et écrivez : "Remplacez entièrement GeneratedHarmonyContent.kt par le contenu de ce fichier."
+
+0736. DE: Fragen & Spiele
+      EN: Questions & Games
+      FR: Questions et jeux
+
+0737. DE: Kategorien
+      EN: Categories
+      FR: Catégories
+
+0738. DE: Themen
+      EN: Topics
+      FR: Thèmes
+
+0739. DE: Für dich empfohlen
+      EN: Recommended for You
+      FR: Recommandé pour toi
+
+0740. DE: Paar-Statistiken
+      EN: Couple Statistics
+      FR: Statistiques du couple
+
+0741. DE: Gemeinsame Tage
+      EN: Days Together
+      FR: Jours ensemble
+
+0742. DE: Beantwortete Fragen
+      EN: Questions Answered
+      FR: Questions répondues
+
+0743. DE: Besuchte Städte
+      EN: Cities Visited
+      FR: Villes visitées
+
+0744. DE: Besuchte Länder
+      EN: Countries Visited
+      FR: Pays visités
+
+0745. DE: Widgets
+      EN: Widgets
+      FR: Widgets
+
+0746. DE: Du fehlst mir
+      EN: I Miss You
+      FR: Tu me manques
+
+0747. DE: Denke an dich
+      EN: Thinking of You
+      FR: Je pense à toi
+
+0748. DE: Ich denke an dich
+      EN: I'm Thinking of You
+      FR: Je pense à toi
+
+0749. DE: Kuss senden
+      EN: Send a Kiss
+      FR: Envoyer un baiser
+
+0750. DE: Kuss
+      EN: Kiss
+      FR: baiser
+
+0751. DE: ERGEBNISSE
+      EN: RESULTS
+      FR: RÉSULTATS
+
+0752. DE: BEANTWORTE
+      EN: ANSWER
+      FR: RÉPONDRE
+
+0753. DE: Alle Pakete
+      EN: All Packs
+      FR: Tous les packs
+
+0754. DE: Profil
+      EN: Profile
+      FR: Profil
+
+0755. DE: Dein Name
+      EN: Your Name
+      FR: Ton prénom
+
+0756. DE: Partnerin
+      EN: Partner
+      FR: Partenaire
+
+0757. DE: Zusammen seit
+      EN: Together Since
+      FR: Ensemble depuis
+
+0758. DE: Partner-Simulator
+      EN: Partner Simulator
+      FR: Simulateur de partenaire
+
+0759. DE: Sprache
+      EN: Language
+      FR: Langue
+
+0760. DE: Deutsch
+      EN: German
+      FR: Allemand
+
+0761. DE: Englisch
+      EN: English
+      FR: Anglais
+
+0762. DE: Entwickler-Modus
+      EN: Developer Mode
+      FR: Mode développeur
+
+0763. DE: Entwickler Studio Öffnen
+      EN: Open Developer Studio
+      FR: Ouvrir le studio développeur
+
+0764. DE: Profil bearbeiten
+      EN: Edit Profile
+      FR: Modifier le profil
+
+0765. DE: Name Partnerin
+      EN: Partner's Name
+      FR: Prénom de ton/ta partenaire
+
+0766. DE: Hinzufügen
+      EN: Add
+      FR: Ajouter
+
+0767. DE: Momente
+      EN: Moments
+      FR: Moments
+
+0768. DE: Was ist passiert?
+      EN: What Happened?
+      FR: Que s'est-il passé ?
+
+0769. DE: oder
+      EN: or
+      FR: ou
+
+0770. DE: Zurück
+      EN: Back
+      FR: Retour
+
+0771. DE: Deine eigene Antwort
+      EN: Your Own Answer
+      FR: Ta propre réponse
+
+0772. DE: Deine Antwort...
+      EN: Your Answer...
+      FR: Ta réponse…
+
+0773. DE: Übernehmen
+      EN: Save
+      FR: Enregistrer
+
+0774. DE: Antwortähnlichkeit
+      EN: Answer Similarity
+      FR: Similarité des réponses
+
+0775. DE: Diskutiert eure Antworten
+      EN: Discuss Your Answers
+      FR: Discutez de vos réponses
+
+0776. DE: Fertig!
+      EN: Done!
+      FR: Terminé !
+
+0777. DE: ✎ Tippe, um zu antworten
+      EN: ✎ Tap to Answer
+      FR: ✎ Appuie pour répondre
+
+0778. DE: Schreibe deine eigene Antwort
+      EN: Write Your Own Answer
+      FR: Écris ta propre réponse
+
+0779. DE: Quiz verlassen?
+      EN: Leave Quiz?
+      FR: Quitter le quiz ?
+
+0780. DE: Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.
+      EN: Are you sure you want to leave the quiz? Your progress will remain saved.
+      FR: Voulez-vous vraiment quitter le quiz ? Votre progression précédente reste enregistrée.
+
+0781. DE: Schreib frei, was dir wirklich dazu einfällt.
+      EN: Write freely about what truly comes to mind.
+      FR: Écrivez librement ce qui vous vient réellement à l’esprit.
+
+0782. DE: Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!
+      EN: Did you discover any surprising differences? Talk about why you each prefer certain options!
+      FR: Avez-vous découvert des différences surprenantes ? Expliquez pourquoi vous préférez certaines options !
+
+0783. DE: ✕ Schließen
+      EN: ✕ Close
+      FR: ✕ Fermer
+
+0784. DE: Hier ist gerade nichts. ↵ Wechsle den Filter oder wähle ein anderes Thema.
+      EN: There is nothing here right now. ↵ Change the filter or choose another topic.
+      FR: Il n'y a rien ici pour le moment. ↵ Change le filtre ou choisis un autre thème.
+
+0785. DE: ✨ GFK-Brücke
+      EN: ✨ NVC Bridge
+      FR: ✨ Pont de communication non violente
+
+0786. DE: Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.
+      EN: Rewrite your draft using nonviolent communication: observation, feeling, need, request.
+      FR: Reformule ton brouillon avec une communication non violente : observation, sentiment, besoin, demande.
+
+0787. DE: Was möchtest du eigentlich sagen?
+      EN: What would you really like to say?
+      FR: Que veux-tu dire concrètement ?
+
+0788. DE: In Chat einfügen
+      EN: Insert into Chat
+      FR: Insérer dans le chat
+
+0789. DE: Analysiert eure Antworten & Chats nach Gottman und GFK.
+      EN: Analyzes your answers and chats using the Gottman method and NVC.
+      FR: Analyse vos réponses et vos chats selon Gottman et la communication non violente.
+
+0790. DE: Wünsche? z.B. günstig, draußen
+      EN: Preferences? e.g. affordable, outdoors
+      FR: Vœux? par ex. pas cher, dehors
+
+0791. DE: Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen
+      EN: Edit games and cities, import folders, and customize images
+      FR: Modifiez les jeux et les villes, chargez des dossiers, ajustez les images
+
+0792. DE: 🔥 Tägliche Aktivität
+      EN: 🔥 Daily Activity
+      FR: 🔥 Activité du jour
+
+0793. DE: + Hinzufügen
+      EN: + Add
+      FR: + Ajouter
+
+0794. DE: Noch keine Momente. ↵ Haltet euer erstes Erlebnis fest 💞
+      EN: No moments yet. ↵ Capture your first memory together 💞
+      FR: Pas encore de moments. ↵ Immortalisez votre première expérience 💞
+
+0795. DE: Ein Harmony-Meilenstein eurer Liebe.
+      EN: A Harmony Milestone in Your Love Story.
+      FR: Une étape d’harmonie de votre amour.
+
+0796. DE: Was wollt ihr nie vergessen?
+      EN: What Do You Never Want to Forget?
+      FR: Qu’est-ce que tu ne veux jamais oublier ?
+
+0797. DE: 🟠 Du bist dran
+      EN: 🟠 Your Turn
+      FR: 🟠 À toi
+
+0798. DE: Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.
+      EN: Answer questions at the same time — answers become visible only after you have both finished.
+      FR: Répondez aux questions en même temps : les réponses ne seront visibles que lorsque vous aurez tous les deux terminé.
+
+0799. DE: Wir
+      EN: Profile
+      FR: Nous
+
+0800. DE: Hey du 💕 wie war dein Tag?
+      EN: Hey you 💕 how was your day?
+      FR: Salut toi 💕 comment s'est passée ta journée ?
+
+0801. DE: Stressig — aber jetzt wird’s besser ☺️
+      EN: Stressful — but it's getting better now ☺️
+      FR: Stressant – mais les choses s'améliorent maintenant ☺️
+
+0802. DE: Ich hab schon an unser Wiedersehen gedacht 🥹
+      EN: I've already been thinking about seeing you again 🥹
+      FR: Je pensais déjà à nos retrouvailles 🥹
+
+0803. DE: Unser erstes Videodate
+      EN: Our First Video Date
+      FR: Notre premier rendez-vous vidéo
+
+0804. DE: Vier Stunden geredet und die Zeit vergessen.
+      EN: We talked for four hours and completely lost track of time.
+      FR: J'ai parlé pendant quatre heures et j'ai perdu la notion du temps.
+
+0805. DE: Überraschungspaket
+      EN: Surprise Package
+      FR: Forfait surprise
+
+0806. DE: Kekse und ein Brief — ich musste weinen vor Freude.
+      EN: Cookies and a letter — I cried happy tears.
+      FR: Des biscuits et une lettre - j'ai pleuré de joie.
+
+0807. DE: Das klingt schön 🥰
+      EN: That sounds lovely 🥰
+      FR: Ça a l'air sympa 🥰
+
+0808. DE: Ich vermiss dich gerade richtig
+      EN: I really miss you right now
+      FR: Tu me manques vraiment en ce moment
+
+0809. DE: Erzähl mir mehr davon 💕
+      EN: Tell me more about it 💕
+      FR: Parlez-m'en en plus 💕
+
+0810. DE: Haha du bringst mich immer zum Lachen 😄
+      EN: Haha, you always make me laugh 😄
+      FR: Haha tu me fais toujours rire 😄
+
+0811. DE: Können wir heute Abend telefonieren?
+      EN: Can we call tonight?
+      FR: Pouvons-nous parler au téléphone ce soir ?
+
+0812. DE: Ich denk so oft an dich ❤️
+      EN: I think about you so often ❤️
+      FR: Je pense très souvent à toi ❤️
+
+0813. DE: Gemini API Key ist nicht konfiguriert. Bitte füge deinen GEMINI_API_KEY im AI Studio Secrets Panel ein.
+      EN: The Gemini API key is not configured. Add your GEMINI_API_KEY in the AI Studio Secrets panel.
+      FR: La clé API Gemini n'est pas configurée. Veuillez coller votre GEMINI_API_KEY dans le panneau Secrets AI Studio.
+
+0814. DE: Keine Antwort erhalten.
+      EN: No response received.
+      FR: Aucune réponse reçue.
+
+0815. DE: Du bist dran
+      EN: Your Turn
+      FR: À toi
+
+0816. DE: Beantwortet
+      EN: Answered
+      FR: Répondu
+
+0817. DE: Überspringen
+      EN: Skip
+      FR: Passer
+
+0818. DE: Weiter
+      EN: Next
+      FR: Suivant
+
+0819. DE: KI-Beziehungscoach
+      EN: AI Relationship Coach
+      FR: Coach de couple IA
+
+0820. DE: KI-Date-Ideen
+      EN: AI Date Ideas
+      FR: Idées de rendez-vous IA
+
+0821. DE: Analyse starten
+      EN: Start Analysis
+      FR: Lancer l'analyse
+
+0822. DE: Ideen generieren
+      EN: Generate Ideas
+      FR: Générer des idées
+
+0823. DE: Namen und Startdatum eurer Beziehung.
+      EN: Your names and relationship start date.
+      FR: Nom et date de début de votre relation.
+
+0824. DE: Fertig
+      EN: Done
+      FR: Terminé
+
+0825. DE: Weiter spielen
+      EN: Keep Playing
+      FR: Continuer à jouer
+
+0826. DE: Formuliere um...
+      EN: Reframing...
+      FR: Reformulation…
+
+0827. DE: Umformulieren
+      EN: Reframe
+      FR: Reformuler
+
+0828. DE: Nachricht an $partnerName...
+      EN: Message to $partnerName...
+      FR: Message à $partnerName...
+
+0829. DE: ✅ Beantwortet
+      EN: ✅ Answered
+      FR: ✅ Répondu
+
+0830. DE: Verbinde dich mit $partnerName
+      EN: Connect with $partnerName
+      FR: Connecte-toi avec $partnerName
+
+0831. DE: 1 Jahr zusammen 🎉
+      EN: Together for 1 year 🎉
+      FR: 1 an ensemble 🎉
+
+0832. DE: 2 Jahre zusammen 🎉
+      EN: Together for 2 years 🎉
+      FR: 2 ans ensemble 🎉
+
+0833. DE: 3 Jahre zusammen 🎉
+      EN: Together for 3 years 🎉
+      FR: 3 ans ensemble 🎉
+
+0834. DE: $d Tage zusammen 💞
+      EN: $d days together 💞
+      FR: $d jours ensemble 💞
+
+0835. DE: Moment festhalten
+      EN: Capture a moment
+      FR: Immortaliser un moment
+
+0836. DE: Invite-Code: HRM-8731 · alles freigeschaltet
+      EN: Invite code: HRM-8731 · everything unlocked
+      FR: Code d'invitation : HRM-8731 · tout est débloqué
+
+0837. DE: ✨ KI-Beziehungscoach
+      EN: ✨ AI relationship coach
+      FR: ✨ Coach relationnel IA
+
+0838. DE: Analysiere eure Muster...
+      EN: Analyzing your patterns...
+      FR: Analysez vos modèles...
+
+0839. DE: 💡 KI-Date-Ideen
+      EN: 💡 AI date ideas
+      FR: 💡 Idées de rendez-vous IA
+
+0840. DE: Sammle Ideen...
+      EN: Collecting ideas...
+      FR: Recueillir des idées...
+
+0841. DE: 🛠️ Entwickler-Modus
+      EN: 🛠️ Developer mode
+      FR: 🛠️ Mode développeur
+
+0842. DE: Zusammen seit (TT.MM.JJJJ)
+      EN: Together since (DD.MM.YYYY)
+      FR: Ensemble depuis (JJ.MM.AAAA)
+
+0843. DE: Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
+      EN: Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together.
+      FR: Vos réponses sont enregistrées. Une fois que ${profile.partnerName} aura terminé le package, les deux réponses seront visibles ensemble.
+
+0844. DE: Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen
+      EN: Connect with ${profile.partnerName} to see the answer
+      FR: Connecte-toi avec ${profile.partnerName} pour voir la réponse
+
+0845. DE: Quiz verlassen
+      EN: Leave quiz
+      FR: Quitter le quiz
+
+0846. DE: Ergebnisse
+      EN: Results
+      FR: Résultats
+
+0847. DE: Unterhaltung
+      EN: Entertainment
+      FR: Divertissement
+
+0848. DE: Hochzeit
+      EN: Wedding
+      FR: Mariage
+
+0849. DE: Kinder
+      EN: Children
+      FR: Enfants
+
+0850. DE: Reden vor...
+      EN: Talk Before...
+      FR: Parler avant…
+
+0851. DE: {ANZAHL} Bilder geladen — Namen prüfen, dann erstellen.
+      EN: {COUNT} images loaded — review the names, then create the pack.
+      FR: {ANZAHL} images chargées — vérifie les noms, puis crée le pack.
+
+0852. DE: {ANZAHL} Bilder geladen.
+      EN: {COUNT} images loaded.
+      FR: {ANZAHL} Images chargées.
+
+0853. DE: {ANZAHL} Paare aus {ANZAHL} Bildern
+      EN: {COUNT} pairs from {COUNT} images
+      FR: {ANZAHL} paires d'images {ANZAHL}
+
+0854. DE: Bild {NUMMER} von {ANZAHL}…
+      EN: Image {NUMBER} of {COUNT}…
+      FR: Image {NUMMER} de {ANZAHL}…
+
+0855. DE: Speichere Bild {NUMMER} von {ANZAHL}…
+      EN: Saving image {NUMBER} of {COUNT}…
+      FR: Enregistrement de l'image {NUMMER} sur {ANZAHL}…
+
+0856. DE: Paar {NUMMER}
+      EN: Pair {NUMBER}
+      FR: Paire {NUMMER}
+
+0857. DE: Frage {NUMMER}
+      EN: Question {NUMBER}
+      FR: Question {NUMMER}
+
+0858. DE: Schritt {NUMMER}
+      EN: Step {NUMBER}
+      FR: Étape {NUMMER}
+
+0859. DE: {ANZAHL} Paare
+      EN: {COUNT} pairs
+      FR: {ANZAHL} paires
+
+0860. DE: {ANZAHL} Fragen
+      EN: {COUNT} questions
+      FR: {ANZAHL} Questions
+
+0861. DE: {ANZAHL} Schritt(e)
+      EN: {COUNT} steps
+      FR: {ANZAHL} Étape(s)
+
+0862. DE: {ANZAHL} Paare · {ANZAHL} Fragen
+      EN: {COUNT} pairs · {COUNT} questions
+      FR: {ANZAHL} Couples · {ANZAHL} Questions
+
+0863. DE: {ANZAHL} Einträge
+      EN: {COUNT} entries
+      FR: {ANZAHL} entrées
+
+0864. DE: Fertig: {PAKETE} Pakete · {BILDER} Bilder · {DETAILS}
+      EN: Done: {PACKS} packs · {IMAGES} images · {DETAILS}
+      FR: Terminé : {PAKETE} paquets · {BILDER} images · {DETAILS}
+
+0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
+      EN: 🎉 {COUNT} packs/chains and images imported successfully!
+      FR: 🎉 {ANZAHL} packs/chaînes et images importés avec succès !
+
+0866. DE: 🎉 '{TITEL}' angelegt · {ANZAHL} Paare spielbereit
+      EN: 🎉 '{TITLE}' created · {COUNT} pairs ready to play
+      FR: 🎉 '{TITEL}' créé · {ANZAHL} paires prêtes à jouer
+
+0867. DE: • A: {OPTION} (Bild: {BILD})
+      EN: • A: {OPTION} (Image: {IMAGE})
+      FR: • A : {OPTION} (Image : {BILD})
+
+0868. DE: • B: {OPTION} (Bild: {BILD})
+      EN: • B: {OPTION} (Image: {IMAGE})
+      FR: • B : {OPTION} (Image : {BILD})
+
+0869. DE: '{TITEL}' gelöscht.
+      EN: '{TITLE}' deleted.
+      FR: « {TITEL} » supprimé.
+
+0870. DE: '{TITEL}' gespeichert.
+      EN: '{TITLE}' saved.
+      FR: « {TITEL} » enregistré.
+
+0871. DE: Kategorie '{TITEL}' gespeichert.
+      EN: Category '{TITLE}' saved.
+      FR: Catégorie '{TITEL}' enregistrée.
+
+0872. DE: Kette '{TITEL}' gespeichert.
+      EN: Chain '{TITLE}' saved.
+      FR: Chaîne '{TITEL}' enregistrée.
+
+0873. DE: Kette '{TITEL}' gelöscht.
+      EN: Chain '{TITLE}' deleted.
+      FR: Chaîne '{TITEL}' supprimée.
+
+0874. DE: Bild für '{OPTION}' gesetzt.
+      EN: Image set for '{OPTION}'.
+      FR: Ensemble d'images pour '{OPTION}'.
+
+0875. DE: Eigenes Bild für '{OPTION}' entfernt.
+      EN: Custom image removed for '{OPTION}'.
+      FR: Image personnalisée supprimée pour '{OPTION}'.
+
+0876. DE: {EMOJI} „{WIDGET}“ an {PARTNER} gesendet
+      EN: {EMOJI} “{WIDGET}” sent to {PARTNER}
+      FR: {EMOJI} « {WIDGET} » envoyé à {PARTNER}
+
+0877. DE: 6 Monate im {ORT}
+      EN: 6 months in {PLACE}
+      FR: 6 mois en {ORT}
+
+0878. DE: 1 Jahr lang in {ORT}
+      EN: 1 year in {PLACE}
+      FR: 1 an en {ORT}
+
+0879. DE: Weil du {OPTION} gewählt hast …
+      EN: Because you chose {OPTION}…
+      FR: Parce que vous avez choisi {OPTION}...
+
+0880. DE: Verbinde dich mit {PARTNER}, um die Antwort zu sehen
+      EN: Connect with {PARTNER} to see the answer
+      FR: Connecte-toi avec {PARTNER} pour voir la réponse
+
+0881. DE: Verbinde dich mit {PARTNER}
+      EN: Connect with {PARTNER}
+      FR: Connecte-toi avec {PARTNER}
+
+0882. DE: Deine Antworten sind gespeichert. Sobald {PARTNER} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
+      EN: Your answers have been saved. Once {PARTNER} finishes the pack, both sets of answers will appear together.
+      FR: Vos réponses sont enregistrées. Une fois que {PARTNER} aura terminé le package, les deux réponses seront visibles ensemble.
+
+0883. DE: Fehler bei der Umformulierung: {FEHLER}
+      EN: Rewriting failed: {ERROR}
+      FR: Erreur de reformulation : {FEHLER}
+
+0884. DE: Fehler bei der Analyse: {FEHLER}
+      EN: Analysis failed: {ERROR}
+      FR: Erreur d'analyse : {FEHLER}
+
+0885. DE: Fehler bei der Ideengenerierung: {FEHLER}
+      EN: Idea generation failed: {ERROR}
+      FR: Erreur de génération d'idée : {FEHLER}
+
+0886. DE: {EMOJI} {INHALT}
+      EN: {EMOJI} {LOCALIZED CONTENT}
+      FR: {EMOJI} {INHALT}
+
+0887. DE: {NUMMER}. {INHALT}
+      EN: {NUMBER}. {LOCALIZED CONTENT}
+      FR: {NUMMER}. {INHALT}
+
+0888. DE: HARMONY
+      EN: HARMONY
+      FR: HARMONY
+
+0889. DE: Home
+      EN: Home
+      FR: Accueil
+
+0890. DE: Chat
+      EN: Chat
+      FR: Chat
+
+0891. DE: Dev
+      EN: Dev
+      FR: Dev
+
+0892. DE: Jerome
+      EN: Jerome
+      FR: Jerome
+
+0893. DE: Alex
+      EN: Alex
+      FR: Alex
+
+0894. DE: OR
+      EN: OR
+      FR: OU
+
+0895. DE: VS
+      EN: VS
+      FR: VS
