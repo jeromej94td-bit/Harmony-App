@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import com.example.R
 import com.example.ui.EXACT_ENGLISH_CONTENT
 import com.example.ui.EXACT_ITALIAN_CONTENT
+import com.example.ui.EXACT_SPANISH_LATIN_AMERICA_CONTENT
+import com.example.ui.EXACT_SPANISH_SPAIN_CONTENT
 import java.io.File
 
 /**
@@ -199,7 +201,7 @@ object TotImageProvider {
         "Derjenige sein, der umarmt wird" to "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
         "Diejenige sein, die umarmt" to "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
         "Verbringe die Feiertage mit deiner Familie" to "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800&auto=format&fit=crop&q=80",
-        "Die Feiertage mit der Familie deines Partners verbringen" to "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80"
+        "Die Feiertage mit der Familie deines Partners verbringen" to "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80",
         // Harmony premium local artwork: explicit one-image-per-option mappings.
         "Altbau mit Charme" to R.drawable.traumhaus_altbau,
         "Neubau mit Smart Home" to R.drawable.traumhaus_smart_home,
@@ -281,10 +283,15 @@ object TotImageProvider {
 
     init {
         // Option labels are localized for display, but image resources are keyed by
-        // their canonical German source. Register both shipped locales up front so
+        // their canonical German source. Register every shipped locale up front so
         // every renderer — including legacy screens that only pass display text —
         // resolves the same image after a language switch.
-        (EXACT_ENGLISH_CONTENT.entries + EXACT_ITALIAN_CONTENT.entries).forEach { (source, localized) ->
+        (
+            EXACT_ENGLISH_CONTENT.entries +
+                EXACT_ITALIAN_CONTENT.entries +
+                EXACT_SPANISH_LATIN_AMERICA_CONTENT.entries +
+                EXACT_SPANISH_SPAIN_CONTENT.entries
+        ).forEach { (source, localized) ->
             if (!source.equals(localized, ignoreCase = true)) {
                 setAlias(localized, source)
             }

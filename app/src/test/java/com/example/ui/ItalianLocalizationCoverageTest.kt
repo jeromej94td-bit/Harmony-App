@@ -71,5 +71,12 @@ class ItalianLocalizationCoverageTest {
             assertEquals(translations.first, localizedContent(source, AppLanguage.ENGLISH))
             assertEquals(translations.second, localizedContent(source, AppLanguage.ITALIAN))
         }
+        assertEquals(
+            "Non c'è niente qui adesso.\nCambia il filtro o scegli un argomento diverso.",
+            localizedContent(
+                "Hier ist gerade nichts.\nWechsle den Filter oder wähle ein anderes Thema.",
+                AppLanguage.ITALIAN
+            )
+        )
     }
 }
