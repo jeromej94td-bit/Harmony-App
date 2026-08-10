@@ -17,6 +17,7 @@ internal object TranslationCatalog {
         "en" to localePack(EXACT_ENGLISH_CONTENT, ::localizeEnglishDynamicContent),
         "it" to localePack(EXACT_ITALIAN_CONTENT, ::localizeItalianDynamicContent),
         "fr" to localePack(EXACT_FRENCH_CONTENT, ::localizeFrenchDynamicContent),
+        "ja" to localePack(EXACT_JAPANESE_CONTENT, ::localizeJapaneseDynamicContent),
         "es-419" to localePack(
             EXACT_SPANISH_LATIN_AMERICA_CONTENT,
             ::localizeLatinAmericanSpanishDynamicContent

@@ -1,0 +1,3601 @@
+HARMONY – 完全テキストカタログ（日本語）
+日本語
+
+出典：Harmony のUIおよびコンテンツカタログ。ユーザー名、パートナー名、ユーザーが作成したコンテンツは可変データであり、自動翻訳されません。
+{PARTNER}、{COUNT}、{OPTION} などのプレースホルダーは実行時に置き換えられます。
+
+==============================================================================
+追加の統合コンテンツ
+==============================================================================
+
+0896. DE: Tiere
+      EN: Animals
+      JA: 動物
+
+0897. DE: Export teilen
+      EN: Share export
+      JA: エクスポートを共有
+
+0898. DE: Bilder teilen
+      EN: Share images
+      JA: 画像を共有
+
+0001. DE: Wer würde eher?
+      EN: Who's more likely?
+      JA: どちらがやりそう？
+
+0002. DE: Zeichnen
+      EN: Drawing
+      JA: お絵描き
+
+0003. DE: Das oder das?
+      EN: This or That?
+      JA: これかあれか？
+
+0004. DE: Das oder das
+      EN: This or That
+      JA: これかあれか
+
+0005. DE: Zustimmen oder Ablehnen
+      EN: Agree or Disagree
+      JA: 賛成 / 反対
+
+0006. DE: Ich habe noch nie
+      EN: Never Have I Ever
+      JA: 一度もしたことがない
+
+0007. DE: Was magst du lieber?
+      EN: Which Do You Prefer?
+      JA: どちらが好き？
+
+0008. DE: Antwort mit einem Foto
+      EN: Answer with a Photo
+      JA: 写真で答える
+
+0009. DE: Tiefe Gespräche
+      EN: Deep Conversations
+      JA: 深い会話
+
+0010. DE: Reden vor ...
+      EN: Talk Before...
+      JA: …の前に話す
+
+0011. DE: Aufwärmen
+      EN: Warm-up
+      JA: ウォームアップ
+
+0012. DE: Beziehung
+      EN: Relationship
+      JA: 関係
+
+0013. DE: Sex & Liebe
+      EN: Sex & Love
+      JA: セックスと愛
+
+0014. DE: Moralische Werte
+      EN: Moral Values
+      JA: 道徳的な価値観
+
+0015. DE: Geld & Finanzen
+      EN: Money & Finances
+      JA: お金と家計
+
+0016. DE: Einander kennenlernen
+      EN: Getting to Know Each Other
+      JA: お互いを知る
+
+0017. DE: Reisen
+      EN: Travel
+      JA: 旅行
+
+0018. DE: Familie
+      EN: Family
+      JA: 家族
+
+0019. DE: Hobbys
+      EN: Hobbies
+      JA: 趣味
+
+0020. DE: unterhaltung
+      EN: Entertainment
+      JA: エンターテインメント
+
+0021. DE: dasoderdas
+      EN: This or That
+      JA: これかあれか
+
+0022. DE: hochzeit
+      EN: Wedding
+      JA: 結婚式
+
+0023. DE: kinder
+      EN: Children
+      JA: 子ども
+
+0024. DE: reden
+      EN: Discussion
+      JA: 話す
+
+0025. DE: reisen
+      EN: Travel
+      JA: 旅行
+
+0026. DE: familie
+      EN: Family
+      JA: 家族
+
+0027. DE: Zuhause & Alltag
+      EN: Home & Everyday Life
+      JA: 家庭と日常生活
+
+0028. DE: Was gefällt dir an deinem Zuhause am besten?
+      EN: What do you like most about your home?
+      JA: あなたの家で一番気に入っていることは何ですか?
+
+0029. DE: Die Gemütlichkeit und Ruhe
+      EN: The comfort and peace
+      JA: 居心地の良さと平和
+
+0030. DE: Dass alles meinen Stil hat
+      EN: That everything reflects my style
+      JA: すべてに私のスタイルがあるということ
+
+0031. DE: Die Menschen, die darin wohnen
+      EN: The people who live there
+      JA: そこに住む人々は、
+
+0032. DE: Der Blick nach draußen
+      EN: The view outside
+      JA: 外の景色
+
+0033. DE: Welcher Raum sagt am meisten über dich aus?
+      EN: Which room says the most about you?
+      JA: あなたについて最も印象に残る部屋はどれですか?
+
+0034. DE: Küche
+      EN: Kitchen
+      JA: 台所
+
+0035. DE: Schlafzimmer
+      EN: Bedroom
+      JA: 寝室
+
+0036. DE: Wohnzimmer
+      EN: Living room
+      JA: リビングルーム
+
+0037. DE: Mein Arbeitsplatz
+      EN: My workspace
+      JA: 私の職場
+
+0038. DE: Was würdest du sofort ändern, wenn Geld keine Rolle spielt?
+      EN: What would you change immediately if money were no object?
+      JA: お金に問題がなかったら、すぐに何を変えますか?
+
+0039. DE: Größere Küche
+      EN: A larger kitchen
+      JA: より大きなキッチン
+
+0040. DE: Ein Balkon oder Garten
+      EN: A balcony or garden
+      JA: バルコニーまたは庭園
+
+0041. DE: Bessere Lage
+      EN: A better location
+      JA: より良いロケーション
+
+0042. DE: Nichts — es passt so
+      EN: Nothing — it's perfect as it is
+      JA: 何もない - それはそのようにフィットします
+
+0043. DE: Wie sieht dein perfekter Sonntag zuhause aus?
+      EN: What does your perfect Sunday at home look like?
+      JA: 家で過ごす完璧な日曜日はどんな感じですか?
+
+0044. DE: Ausschlafen und nichts tun
+      EN: Sleeping in and doing nothing
+      JA: 何もせずに寝てください
+
+0045. DE: Kochen und Freunde einladen
+      EN: Cooking and inviting friends over
+      JA: 料理をして友達を招待する
+
+0046. DE: Serienmarathon auf dem Sofa
+      EN: A TV marathon on the sofa
+      JA: ソファーでのシリーズマラソン
+
+0047. DE: Aufräumen und Projekte angehen
+      EN: Tidying up and tackling projects
+      JA: クリーンアップしてプロジェクトに取り組む
+
+0048. DE: Der perfekte Heiratsantrag
+      EN: The Perfect Proposal
+      JA: 理想のプロポーズ
+
+0049. DE: Welche Umgebung würdest du dir für einen Antrag wünschen?
+      EN: What setting would you want for a proposal?
+      JA: どんな場所でプロポーズしたいですか？
+
+0050. DE: Zu Hause, gemütlich und privat
+      EN: At home, cozy and private
+      JA: 自宅で、居心地よく、プライベートに
+
+0051. DE: Draußen mit der Natur als Kulisse
+      EN: Outdoors with nature as the backdrop
+      JA: 自然を背景にした屋外
+
+0052. DE: Schickes Restaurant oder Hotel
+      EN: An elegant restaurant or hotel
+      JA: おしゃれなレストランやホテル
+
+0053. DE: Magst du einen öffentlichen oder privaten Antrag lieber?
+      EN: Would you prefer a public or private proposal?
+      JA: 人前でのプロポーズと、二人きりのプロポーズのどちらが好きですか？
+
+0054. DE: Nur wir beide
+      EN: Just the two of us
+      JA: 私たち二人だけで
+
+0055. DE: Mit Familie und engen Freunden
+      EN: With family and close friends
+      JA: 家族や親しい友人たちと
+
+0056. DE: An einem öffentlichen Ort mit vielen Zuschauern
+      EN: In a public place with lots of people watching
+      JA: 大勢の観客がいる公共の場で
+
+0057. DE: Soll der Antrag eine Überraschung sein?
+      EN: Should the proposal be a surprise?
+      JA: プロポーズはサプライズであるべきでしょうか？
+
+0058. DE: Ja, komplett überraschend
+      EN: Yes, a complete surprise
+      JA: はい、まったく驚きです
+
+0059. DE: Lieber vorher grob absprechen
+      EN: I'd rather discuss the basics beforehand
+      JA: 事前に大まかに話し合った方が良い
+
+0060. DE: Wir entscheiden es gemeinsam
+      EN: We'll decide together
+      JA: 私たちは一緒に決めます
+
+0061. DE: Wie wichtig ist dir, dass der Moment festgehalten wird?
+      EN: How important is it to you that the moment is captured?
+      JA: あなたにとって、瞬間を捉えることはどのくらい重要ですか?
+
+0062. DE: Sehr wichtig — Fotos und Video
+      EN: Very important — photos and video
+      JA: 非常に重要 - 写真とビデオ
+
+0063. DE: Ein paar Handyfotos reichen
+      EN: A few phone photos are enough
+      JA: 携帯電話の写真数枚で十分です
+
+0064. DE: Gar nicht, der Moment gehört uns
+      EN: Not at all — the moment is ours
+      JA: そんなことはない、この瞬間は私たちのもの
+
+0065. DE: Vorlieben für den Antrag
+      EN: Proposal Preferences
+      JA: プロポーズの好み
+
+0066. DE: Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?
+      EN: Would you prefer an extravagant proposal or something understated?
+      JA: 華やかなプロポーズと控えめなプロポーズ、どちらが好みですか？
+
+0067. DE: Übertrieben und großartig
+      EN: Over-the-top and spectacular
+      JA: 最高で素晴らしい
+
+0068. DE: Mittelweg mit besonderen Details
+      EN: A balanced approach with special details
+      JA: 特別なディテールを備えた中間点
+
+0069. DE: Einfach und intim
+      EN: Simple and intimate
+      JA: シンプルで親密な雰囲気
+
+0070. DE: Was hältst du von Requisiten (z.B. Schilder, Luftballons, etc.)?
+      EN: What do you think about props, such as signs or balloons?
+      JA: 小道具 (看板、風船など) についてどう思いますか?
+
+0071. DE: Liebe sie, macht mehr Spaß
+      EN: I love them — they make it more fun
+      JA: 愛して、もっと楽しく
+
+0072. DE: Vielleicht ein oder zwei
+      EN: Maybe one or two
+      JA: たぶん1つか2つ
+
+0073. DE: Nein, zu ablenkend
+      EN: No, they're too distracting
+      JA: いや、気が散りすぎる
+
+0074. DE: Möchtest du, dass der Moment sofort in den sozialen Medien geteilt wird?
+      EN: Would you want the moment shared on social media right away?
+      JA: その瞬間をソーシャルメディアで即座に共有したいですか?
+
+0075. DE: Ja, sofort teilen
+      EN: Yes, share it right away
+      JA: はい、すぐに共有します
+
+0076. DE: Nein, erstmal privat halten
+      EN: No, keep it private at first
+      JA: いいえ、今は非公開にしておいてください
+
+0077. DE: Erst nur enge Freunde/Familie
+      EN: Close friends and family first
+      JA: 最初は親しい友人/家族だけ
+
+0078. DE: Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?
+      EN: How important is it that the proposal reflects your hobbies or interests?
+      JA: プロポーズにあなたの趣味や関心が反映されることは、どれくらい大切ですか？
+
+0079. DE: Sehr wichtig, es sollte persönlich sein
+      EN: Very important — it should feel personal
+      JA: 非常に重要です。個人的なものでなければなりません
+
+0080. DE: Etwas, eine kleine Note wäre schön
+      EN: Somewhat — a small personal touch would be lovely
+      JA: 何か、ちょっとした触れ合いがいいですね
+
+0081. DE: Nicht nötig, lieber klassisch bleiben
+      EN: Not necessary — I'd prefer to keep it classic
+      JA: 必要ありません。クラシックのままの方が良いです
+
+0082. DE: Würdest du einen Antrag im Urlaub bevorzugen (mit Reisen verbunden)?
+      EN: Would you prefer a proposal while on vacation?
+      JA: 旅行中のプロポーズは好きですか？
+
+0083. DE: Ja, in einer aufregenden Stadt oder Sehenswürdigkeit
+      EN: Yes, in an exciting city or at a landmark
+      JA: はい、エキサイティングな街や観光地で
+
+0084. DE: Vielleicht, wenn es machbar ist
+      EN: Maybe, if it's practical
+      JA: たぶん、それが実現可能であれば
+
+0085. DE: Nein, lieber vor Ort
+      EN: No, I'd rather stay local
+      JA: いいえ、現場での方が良いです
+
+0086. DE: Wie lange nach dem Antrag möchtest du mit anderen feiern?
+      EN: How soon after the proposal would you want to celebrate with others?
+      JA: プロポーズからどれくらい経ってから他の人と一緒にお祝いしたいですか？
+
+0087. DE: Am selben Tag mit Freunden/Familie
+      EN: The same day with friends and family
+      JA: 友人/家族と同じ日に
+
+0088. DE: Etwa eine Woche später, erst mal nur wir
+      EN: About a week later — just us at first
+      JA: 1週間くらい経って、最初は僕らだけで
+
+0089. DE: Keine Party nötig, privat halten
+      EN: No party needed — keep it private
+      JA: パーティーは必要ありません。プライベートに保ちます
+
+0090. DE: Hättest du gerne einen geschriebenen Brief als Teil des Antrags?
+      EN: Would you like a handwritten letter as part of the proposal?
+      JA: プロポーズの一部として、手書きの手紙がほしいですか？
+
+0091. DE: Ja, etwas zum Lesen und Aufbewahren
+      EN: Yes, something to read and keep
+      JA: はい、読んで保管しておきたいものがあります
+
+0092. DE: Vielleicht, aber mündlich reicht
+      EN: Maybe, but spoken words are enough
+      JA: たぶんだけど口頭で十分だよ
+
+0093. DE: Nein, einfach halten
+      EN: No, keep it simple
+      JA: いや、ちょっと待ってください
+
+0094. DE: Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?
+      EN: Should the proposal include cultural or traditional elements?
+      JA: プロポーズに文化的または伝統的な要素を入れたいですか？
+
+0095. DE: Ja, Traditionen einbinden
+      EN: Yes, include traditions
+      JA: はい、伝統を取り入れます
+
+0096. DE: Ein paar kulturelle Anklänge sind okay
+      EN: A few cultural touches would be nice
+      JA: いくつかの文化的参照は問題ありません
+
+0097. DE: Nein, modern halten
+      EN: No, keep it modern
+      JA: いいえ、現代的にしてください
+
+0098. DE: Was ist das Wichtigste beim Antrag?
+      EN: What matters most in a proposal?
+      JA: プロポーズで最も大切なことは何ですか？
+
+0099. DE: Die Umgebung und Atmosphäre
+      EN: The setting and atmosphere
+      JA: 環境と雰囲気
+
+0100. DE: Die Worte und Emotionen
+      EN: The words and emotions
+      JA: 言葉も感情も
+
+0101. DE: Der Ring und die Geste
+      EN: The ring and the gesture
+      JA: 指輪とジェスチャー
+
+0102. DE: Möchtest du, dass Haustiere beim Antrag dabei sind?
+      EN: Would you want pets to be part of the proposal?
+      JA: プロポーズにペットも参加してほしいですか？
+
+0103. DE: Ja, sie gehören zur Familie!
+      EN: Yes, they're part of the family!
+      JA: そう、彼らは家族なのです！
+
+0104. DE: Vielleicht, wenn es passt
+      EN: Maybe, if it feels right
+      JA: もしかしたら、それが合えば
+
+0105. DE: Nein, nur wir
+      EN: No, just us
+      JA: いいえ、私たちだけです
+
+0106. DE: Diskutiere vor dem Kinderkriegen
+      EN: Discuss Before Having Children
+      JA: 子どもを産む前に話し合おう
+
+0107. DE: Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken? 💰
+      EN: Can we afford all the costs of one or more children? 💰
+      JA: 一人の子供または複数の子供の費用を全額負担することはできますか? 💰
+
+0108. DE: Möglicherweise müssen wir Einsparungen vornehmen
+      EN: We may need to make some savings
+      JA: 節約する必要があるかもしれない
+
+0109. DE: Werden wir genug Zeit für das Kind / die Kinder haben? ⏳
+      EN: Will we have enough time for our child or children? ⏳
+      JA: 子どもたちに十分な時間をとれるでしょうか？ ⏳
+
+0110. DE: Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat.
+      EN: Yes, we'll make sure family time comes first.
+      JA: はい、家族の時間を最優先にいたします。
+
+0111. DE: Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?
+      EN: How will we make time for our relationship once the baby arrives?
+      JA: 赤ちゃんが生まれたら、どうやって二人の関係のための時間を見つけますか？
+
+0112. DE: Regelmäßige Rendezvous oder gemeinsame Zeit einplanen
+      EN: Plan regular dates or quality time together
+      JA: 定期的な日付や時間を一緒にスケジュールする
+
+0113. DE: Wie möchtest du, dass unsere Zukunft aussieht?
+      EN: What would you like our future to look like?
+      JA: 私たちの未来をどのようにしていきたいですか？
+
+0114. DE: Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden
+      EN: Travel the world together and explore new cultures and cuisines
+      JA: 一緒に世界を旅し、新しい文化や料理を探求しましょう
+
+0115. DE: Wie würdest du sie/ihn nennen?
+      EN: What would you name them?
+      JA: あなたなら彼/彼女を何と呼びますか?
+
+0116. DE: Willst du ein Mädchen oder einen Jungen? 👶
+      EN: Would you prefer a girl or a boy? 👶
+      JA: 女の子が欲しいですか、それとも男の子が欲しいですか？ 👶
+
+0117. DE: Was soll aus unserem Kind werden, wenn es erwachsen ist?
+      EN: What do we hope our child will become as an adult?
+      JA: うちの子は大きくなったらどうなるのでしょうか？
+
+0118. DE: Vor der Anschaffung eines Haustiers besprechen
+      EN: Discuss Before Getting a Pet
+      JA: ペットを購入する前にご相談ください
+
+0119. DE: Wer übernimmt die tägliche Versorgung?
+      EN: Who will handle the daily care?
+      JA: 毎日の手入れは誰がするのですか？
+
+0120. DE: Was passiert mit dem Tier, wenn wir verreisen?
+      EN: What happens to the pet when we travel?
+      JA: 私たちが旅行すると動物はどうなりますか?
+
+0121. DE: Welches Budget planen wir für Futter und Tierarzt ein?
+      EN: What budget should we plan for food and veterinary care?
+      JA: 食事と獣医のためにどれくらいの予算を計画していますか?
+
+0122. DE: Passt ein Tier überhaupt zu unserem Alltag?
+      EN: Does a pet truly fit our lifestyle?
+      JA: 動物は私たちの日常生活に溶け込んでいますか？
+
+0123. DE: Vor der gemeinsamen Reise besprechen
+      EN: Discuss Before Traveling Together
+      JA: 一緒に旅行する前に話し合う
+
+0124. DE: Wie viel wollen wir insgesamt ausgeben?
+      EN: How much do we want to spend in total?
+      JA: 合計でいくらかかりますか?
+
+0125. DE: Lieber durchgeplant oder spontan?
+      EN: Carefully planned or spontaneous?
+      JA: 計画的に行うか、自発的に行うか、どちらを好みますか?
+
+0126. DE: Wie viel Zeit wollen wir getrennt verbringen?
+      EN: How much time do we want to spend apart?
+      JA: どれくらいの時間を別々に過ごしたいですか?
+
+0127. DE: Was ist für jeden von uns das absolute Highlight?
+      EN: What is the absolute highlight for each of us?
+      JA: 私たち一人ひとりにとっての絶対的なハイライトは何でしょうか?
+
+0128. DE: Vor dem Kauf eines Hauses besprechen
+      EN: Discuss Before Buying a Home
+      JA: 家を買う前に相談しましょう
+
+0129. DE: Wie viel Kredit ist für uns realistisch tragbar?
+      EN: How much of a mortgage can we realistically afford?
+      JA: 現実的にどれくらいの信用を得ることができるでしょうか?
+
+0130. DE: Stadt oder Land — was ist uns wichtiger?
+      EN: City or countryside — which matters more to us?
+      JA: 都市と国 – 私たちにとってどちらがより重要ですか?
+
+0131. DE: Wie lange wollen wir dort mindestens bleiben?
+      EN: How long do we want to stay there at minimum?
+      JA: 少なくともどれくらいそこに滞在したいですか？
+
+0132. DE: Wer kümmert sich um Renovierung und Instandhaltung?
+      EN: Who will handle renovations and maintenance?
+      JA: 改修やメンテナンスは誰が行うのですか？
+
+0133. DE: Reiseziele
+      EN: Travel Destinations
+      JA: 旅行先
+
+0134. DE: Paris, Frankreich
+      EN: Paris, France
+      JA: パリ、フランス
+
+0135. DE: Rom, Italien
+      EN: Rome, Italy
+      JA: ローマ、イタリア
+
+0136. DE: Bali, Indonesien
+      EN: Bali, Indonesia
+      JA: バリ島、インドネシア
+
+0137. DE: Santorini, Griechenland
+      EN: Santorini, Greece
+      JA: サントリーニ島、ギリシャ
+
+0138. DE: London, England
+      EN: London, England
+      JA: ロンドン、イギリス
+
+0139. DE: New York, USA
+      EN: New York, USA
+      JA: 米国ニューヨーク州
+
+0140. DE: Malediven
+      EN: Maldives
+      JA: モルディブ
+
+0141. DE: Seychellen
+      EN: Seychelles
+      JA: セーシェル
+
+0142. DE: Tokyo, Japan
+      EN: Tokyo, Japan
+      JA: 東京、日本
+
+0143. DE: Dubai, VAE
+      EN: Dubai, UAE
+      JA: ドバイ、アラブ首長国連邦
+
+0144. DE: Venedig, Italien
+      EN: Venice, Italy
+      JA: ヴェネツィア、イタリア
+
+0145. DE: Amsterdam, Niederlande
+      EN: Amsterdam, Netherlands
+      JA: アムステルダム、オランダ
+
+0146. DE: Lappland, Finnland
+      EN: Lapland, Finland
+      JA: ラップランド、フィンランド
+
+0147. DE: Island
+      EN: Iceland
+      JA: アイスランド
+
+0148. DE: Unser Traumhaus
+      EN: Our Dream Home
+      JA: 夢のマイホーム
+
+0149. DE: Altbau mit Charme
+      EN: Charming Period Home
+      JA: 趣のある古い建物
+
+0150. DE: Neubau mit Smart Home
+      EN: New Smart Home
+      JA: スマートホームを備えた新しい建物
+
+0151. DE: Offene Wohnküche
+      EN: Open-plan Kitchen
+      JA: オープンキッチン/リビングルーム
+
+0152. DE: Separate Küche
+      EN: Separate Kitchen
+      JA: 独立したキッチン
+
+0153. DE: Prasselnder Kamin
+      EN: Crackling Fireplace
+      JA: 轟音を立てる暖炉
+
+0154. DE: Fußbodenheizung
+      EN: Underfloor Heating
+      JA: 床暖房
+
+0155. DE: Großer Garten
+      EN: Large Garden
+      JA: 広い庭
+
+0156. DE: Sonnige Dachterrasse
+      EN: Sunny Roof Terrace
+      JA: 日当たりのよい屋上テラス
+
+0157. DE: Stadtvilla
+      EN: City Villa
+      JA: シティヴィラ
+
+0158. DE: Landhaus
+      EN: Country House
+      JA: カントリーハウス
+
+0159. DE: Glasfassade
+      EN: Glass Façade
+      JA: ガラスのファサード
+
+0160. DE: Natursteinfassade
+      EN: Natural-stone Façade
+      JA: 天然石のファサード
+
+0161. DE: Penthouse mit Ausblick
+      EN: Penthouse with a View
+      JA: 眺めの良いペントハウス
+
+0162. DE: Haus am See
+      EN: Lakeside Home
+      JA: 湖のほとりの家
+
+0163. DE: Minimalistisches Interieur
+      EN: Minimalist Interior
+      JA: シンプルなインテリア
+
+0164. DE: Landhausstil
+      EN: Country Style
+      JA: カントリースタイル
+
+0165. DE: Bibliothek
+      EN: Library
+      JA: 図書館
+
+0166. DE: Heimkino
+      EN: Home Cinema
+      JA: ホームシアター
+
+0167. DE: Innenpool
+      EN: Indoor Pool
+      JA: 屋内プール
+
+0168. DE: Wellnessbad
+      EN: Spa Bathroom
+      JA: ウェルネスバス
+
+0169. DE: Große Fensterfront
+      EN: Floor-to-ceiling Windows
+      JA: 正面に大きな窓
+
+0170. DE: Privater Innenhof
+      EN: Private Courtyard
+      JA: 専用の中庭
+
+0171. DE: Tiny House
+      EN: Tiny House
+      JA: 小さな家
+
+0172. DE: Mehrgenerationenhaus
+      EN: Multigenerational Home
+      JA: 多世代住宅
+
+0173. DE: Traumhaus Außenbereich
+      EN: Dream Home: Outdoor Space
+      JA: ドリームハウスの屋外エリア
+
+0174. DE: Großer Außenpool
+      EN: Large Outdoor Pool
+      JA: 大きな屋外プール
+
+0175. DE: Outdoor-Whirlpool
+      EN: Outdoor Hot Tub
+      JA: 屋外ホットタブ
+
+0176. DE: Moderne Grillstation
+      EN: Modern Barbecue Station
+      JA: モダンなグリルステーション
+
+0177. DE: Gemütliche Feuerstelle
+      EN: Cozy Fire Pit
+      JA: 居心地の良いファイヤーピット
+
+0178. DE: Eigenes Gemüsebeet
+      EN: Private Vegetable Garden
+      JA: 独自の野菜畑
+
+0179. DE: Bunte Blumenwiese
+      EN: Colorful Wildflower Meadow
+      JA: 色とりどりの花の草原
+
+0180. DE: Entspannte Hängematte
+      EN: Relaxing Hammock
+      JA: くつろぎのハンモック
+
+0181. DE: Stilvolles Outdoor-Sofa
+      EN: Stylish Outdoor Sofa
+      JA: おしゃれなアウトドアソファ
+
+0182. DE: Infinity-Pool
+      EN: Infinity Pool
+      JA: インフィニティプール
+
+0183. DE: Naturteich
+      EN: Natural Pond
+      JA: 自然の池
+
+0184. DE: Outdoor-Küche
+      EN: Outdoor Kitchen
+      JA: アウトドアキッチン
+
+0185. DE: Pizzaofen
+      EN: Pizza Oven
+      JA: ピザ窯
+
+0186. DE: Pergola mit Lounge
+      EN: Pergola with Lounge
+      JA: ラウンジ付きパーゴラ
+
+0187. DE: Wintergarten
+      EN: Conservatory
+      JA: ウィンターガーデン
+
+0188. DE: Kräuterbeet
+      EN: Herb Garden
+      JA: ハーブベッド
+
+0189. DE: Obstgarten
+      EN: Orchard
+      JA: オーチャード
+
+0190. DE: Dachgarten mit Lounge
+      EN: Roof Garden with Lounge
+      JA: ラウンジ付きの屋上庭園
+
+0191. DE: Mediterraner Innenhof
+      EN: Mediterranean Courtyard
+      JA: 地中海風の中庭
+
+0192. DE: Feuerstelle
+      EN: Fire Pit
+      JA: ファイヤーピット
+
+0193. DE: Außenkamin
+      EN: Outdoor Fireplace
+      JA: 屋外暖炉
+
+0194. DE: Spielbereich für Kinder
+      EN: Children's Play Area
+      JA: 子供用の遊び場
+
+0195. DE: Sportplatz
+      EN: Sports Court
+      JA: スポーツフィールド
+
+0196. DE: Gewächshaus
+      EN: Greenhouse
+      JA: 温室
+
+0197. DE: Saunahaus
+      EN: Sauna House
+      JA: サウナハウス
+
+0198. DE: Aktivitäten
+      EN: Activities
+      JA: 活動内容
+
+0199. DE: Wandern
+      EN: Hiking
+      JA: ハイキング
+
+0200. DE: Strandtag
+      EN: Beach Day
+      JA: ビーチの日
+
+0201. DE: Konzert
+      EN: Concert
+      JA: コンサート
+
+0202. DE: Kino
+      EN: Cinema
+      JA: シネマ
+
+0203. DE: Kochkurs
+      EN: Cooking Class
+      JA: 料理教室
+
+0204. DE: Restaurant
+      EN: Restaurant
+      JA: レストラン
+
+0205. DE: Museum
+      EN: Museum
+      JA: 博物館
+
+0206. DE: Freizeitpark
+      EN: Theme Park
+      JA: 遊園地
+
+0207. DE: Essensvorlieben
+      EN: Food Preferences
+      JA: 食べ物の好み
+
+0208. DE: Pizza
+      EN: Pizza
+      JA: ピザ
+
+0209. DE: Pasta
+      EN: Pasta
+      JA: パスタ
+
+0210. DE: Sushi
+      EN: Sushi
+      JA: 寿司
+
+0211. DE: Burger
+      EN: Burger
+      JA: 国民
+
+0212. DE: Süß
+      EN: Sweet
+      JA: 甘い
+
+0213. DE: Herzhaft
+      EN: Savory
+      JA: 塩味
+
+0214. DE: Selbst kochen
+      EN: Cook at Home
+      JA: 家で料理する
+
+0215. DE: Bestellen
+      EN: Order In
+      JA: 注文する
+
+0216. DE: Verlobungsringe
+      EN: Engagement Rings
+      JA: 婚約指輪
+
+0217. DE: Klassisch Solitär
+      EN: Classic Solitaire
+      JA: クラシックなソリティア
+
+0218. DE: Vintage verspielt
+      EN: Playful Vintage
+      JA: ヴィンテージの遊び心
+
+0219. DE: Gelbgold
+      EN: Yellow Gold
+      JA: イエローゴールド
+
+0220. DE: Weißgold
+      EN: White Gold
+      JA: ホワイトゴールド
+
+0221. DE: Großer Stein
+      EN: Large Stone
+      JA: 大きな石
+
+0222. DE: Filigran & schlicht
+      EN: Delicate & Simple
+      JA: フィリグリー＆シンプル
+
+0223. DE: Diamant
+      EN: Diamond
+      JA: ダイヤモンド
+
+0224. DE: Farbedelstein
+      EN: Colored Gemstone
+      JA: 色の宝石
+
+0225. DE: Platin
+      EN: Platinum
+      JA: 白金
+
+0226. DE: Roségold
+      EN: Rose Gold
+      JA: ローズゴールド
+
+0227. DE: Drei-Stein-Ring
+      EN: Three-stone Ring
+      JA: スリーストーンリング
+
+0228. DE: Moderner Solitär
+      EN: Modern Solitaire
+      JA: モダンなソリティア
+
+0229. DE: Ovaler Diamant
+      EN: Oval Diamond
+      JA: オーバルダイヤモンド
+
+0230. DE: Runder Diamant
+      EN: Round Diamond
+      JA: ラウンドダイヤモンド
+
+0231. DE: Schmal & zart
+      EN: Slim & Delicate
+      JA: スリム＆繊細
+
+0232. DE: Markant & breit
+      EN: Bold & Wide
+      JA: 印象的でワイド
+
+0233. DE: Moissanit
+      EN: Moissanite
+      JA: モアサナイト
+
+0234. DE: Saphir
+      EN: Sapphire
+      JA: サファイア
+
+0235. DE: Vintage Art déco
+      EN: Vintage Art Deco
+      JA: ヴィンテージアールデコ
+
+0236. DE: Modern geometrisch
+      EN: Modern Geometric
+      JA: モダンな幾何学模様
+
+0237. DE: Gravur innen
+      EN: Inside Engraving
+      JA: 内側の彫刻
+
+0238. DE: Diamanten im Band
+      EN: Diamonds in the Band
+      JA: バンド内のダイヤモンド
+
+0239. DE: Ohne Stein
+      EN: No Stone
+      JA: 石なし
+
+0240. DE: Statement-Ring
+      EN: Statement Ring
+      JA: ステートメントリング
+
+0241. DE: Hochzeitssträuße
+      EN: Wedding Bouquets
+      JA: ウェディングブーケ
+
+0242. DE: Weiße Rosen
+      EN: White Roses
+      JA: 白いバラ
+
+0243. DE: Pfingstrosen
+      EN: Peonies
+      JA: 牡丹
+
+0244. DE: Wildblumen
+      EN: Wildflowers
+      JA: 野の花
+
+0245. DE: Klassisch gebunden
+      EN: Classic Hand-tied
+      JA: 古典的な束縛
+
+0246. DE: Groß & üppig
+      EN: Large & Lush
+      JA: 大きくて豊かな
+
+0247. DE: Klein & zart
+      EN: Small & Delicate
+      JA: 小さくて繊細
+
+0248. DE: Pastell
+      EN: Pastels
+      JA: パステル
+
+0249. DE: Kräftige Farben
+      EN: Bold Colors
+      JA: 強い色
+
+0250. DE: Traumhochzeit
+      EN: Dream Wedding
+      JA: 夢のウェディング
+
+0251. DE: Große Feier
+      EN: Large Celebration
+      JA: 盛大なお祝い
+
+0252. DE: Kleine Runde
+      EN: Intimate Gathering
+      JA: 小さな丸い
+
+0253. DE: Am Strand
+      EN: On the Beach
+      JA: ビーチで
+
+0254. DE: In den Bergen
+      EN: In the Mountains
+      JA: 山の中で
+
+0255. DE: Kirchlich
+      EN: Church Ceremony
+      JA: 教会
+
+0256. DE: Standesamt & Party
+      EN: Civil Ceremony & Party
+      JA: 登記所と当事者
+
+0257. DE: Sommerhochzeit
+      EN: Summer Wedding
+      JA: 夏の結婚式
+
+0258. DE: Winterhochzeit
+      EN: Winter Wedding
+      JA: 冬の結婚式
+
+0259. DE: Fragen für jede Gelegenheit
+      EN: Questions for Any Occasion
+      JA: あらゆる場面での質問
+
+0260. DE: Was magst du lieber: früh aufstehen oder lange wach bleiben?
+      EN: Which do you prefer: getting up early or staying up late?
+      JA: 早起きするのと夜更かしするのとどちらが好きですか?
+
+0261. DE: Früh aufstehen
+      EN: Getting up early
+      JA: 早く起きるには
+
+0262. DE: Lange wach bleiben
+      EN: Staying up late
+      JA: 遅くまで起きていてください
+
+0263. DE: Kommt auf den Tag an
+      EN: It depends on the day
+      JA: 日によって異なります
+
+0264. DE: Lieber ein ruhiger Abend zu zweit oder unter Leuten?
+      EN: Would you rather have a quiet evening together or be around other people?
+      JA: 二人で、または複数人で静かな夜を過ごしませんか?
+
+0265. DE: Ruhig zu zweit
+      EN: A quiet evening together
+      JA: 二人で静かに
+
+0266. DE: Unter Leuten
+      EN: Around other people
+      JA: 人々の間で
+
+0267. DE: Gemischt
+      EN: A mix of both
+      JA: 混合
+
+0268. DE: Was entspannt dich mehr?
+      EN: What helps you relax most?
+      JA: もっとリラックスできるものは何ですか？
+
+0269. DE: Musik
+      EN: Music
+      JA: 音楽
+
+0270. DE: Spazieren
+      EN: Going for a walk
+      JA: 散歩
+
+0271. DE: Serie schauen
+      EN: Watching a series
+      JA: 時計シリーズ
+
+0272. DE: Gar nichts tun
+      EN: Doing absolutely nothing
+      JA: まったく何もしない
+
+0273. DE: Wobei lachst du am meisten?
+      EN: What makes you laugh the most?
+      JA: あなたを一番笑わせるのは何ですか?
+
+0274. DE: Bei Insider-Witzen
+      EN: Inside jokes
+      JA: 内輪ジョークあり
+
+0275. DE: Bei Memes
+      EN: Memes
+      JA: ミームで
+
+0276. DE: Wenn ich müde bin
+      EN: When I'm tired
+      JA: 疲れたとき
+
+0277. DE: Über mich selbst
+      EN: Myself
+      JA: 私自身について
+
+0278. DE: Schnappschüsse aus unserer Liebesgeschichte
+      EN: Snapshots from Our Love Story
+      JA: 私たちのラブストーリーのスナップショット
+
+0279. DE: Welcher Moment war für dich der Anfang von „uns"?
+      EN: Which moment felt like the beginning of us?
+      JA: あなたにとって「私たち」の始まりはどんな瞬間でしたか？
+
+0280. DE: Unser erstes Gespräch
+      EN: Our first conversation
+      JA: 私たちの最初の会話
+
+0281. DE: Das erste Treffen
+      EN: Our first date
+      JA: 最初の会議
+
+0282. DE: Der erste Kuss
+      EN: Our first kiss
+      JA: 最初のキス
+
+0283. DE: Als es einfach klar war
+      EN: When it simply felt clear
+      JA: ちょうどクリアだった頃
+
+0284. DE: Welches gemeinsame Foto ist dein Lieblingsfoto?
+      EN: Which photo of us is your favorite?
+      JA: 一緒に撮ったどの写真がお気に入りですか?
+
+0285. DE: Das erste Selfie
+      EN: Our first selfie
+      JA: 初めての自撮り
+
+0286. DE: Ein Urlaubsfoto
+      EN: A vacation photo
+      JA: 休暇中の写真
+
+0287. DE: Ein zufälliger Schnappschuss
+      EN: A candid snapshot
+      JA: ランダムなスナップショット
+
+0288. DE: Eins, das nur wir kennen
+      EN: One only we know
+      JA: 私たちだけが知っているもの
+
+0289. DE: Woran erinnerst du dich am lebhaftesten?
+      EN: What do you remember most vividly?
+      JA: 最も鮮明に覚えていることは何ですか?
+
+0290. DE: An einen Geruch
+      EN: A scent
+      JA: 匂いの
+
+0291. DE: An einen Song
+      EN: A song
+      JA: 歌の
+
+0292. DE: An etwas, das ich gesagt habe
+      EN: Something I said
+      JA: 私が言ったことについて
+
+0293. DE: An das Gefühl
+      EN: The feeling
+      JA: 気持ちの
+
+0294. DE: Aufwärmen: Einander kennenlernen
+      EN: Warm-up: Getting to Know Each Other
+      JA: ウォームアップ: お互いを知る
+
+0295. DE: Was war dein schönster Moment mit mir bisher?
+      EN: What has been your favorite moment with me so far?
+      JA: これまで私と過ごした最高の瞬間は何ですか?
+
+0296. DE: Unser erstes Treffen
+      EN: Our first date
+      JA: 私たちの最初のミーティング
+
+0297. DE: Ein ganz normaler Alltagstag
+      EN: An ordinary day together
+      JA: 全く普通の日常
+
+0298. DE: Eine gemeinsame Reise
+      EN: A trip together
+      JA: 一緒に旅をする
+
+0299. DE: Ein schwerer Moment, den wir geschafft haben
+      EN: A difficult moment we overcame together
+      JA: 私たちが乗り越えた困難な瞬間
+
+0300. DE: Was würdest du an einem gemeinsamen Tag am liebsten machen?
+      EN: What would you most like to do on a day together?
+      JA: 一緒に過ごす日に一番やりたいことは何ですか?
+
+0301. DE: Ausschlafen und faulenzen
+      EN: Sleep in and relax
+      JA: 寝てダラダラする
+
+0302. DE: Etwas Neues ausprobieren
+      EN: Try something new
+      JA: 何か新しいことを試してみる
+
+0303. DE: Rausgehen in die Natur
+      EN: Get out into nature
+      JA: 自然の中に出かけましょう
+
+0304. DE: Freunde treffen
+      EN: Meet up with friends
+      JA: 友達に会う
+
+0305. DE: Wie fühlst du dich am meisten geliebt?
+      EN: What makes you feel most loved?
+      JA: あなたはどのようにして最も愛されていると感じますか？
+
+0306. DE: Durch Worte
+      EN: Words
+      JA: 言葉を通して
+
+0307. DE: Durch Zeit zu zweit
+      EN: Quality time together
+      JA: 一緒に時を経て
+
+0308. DE: Durch Berührung
+      EN: Physical touch
+      JA: タッチで
+
+0309. DE: Durch kleine Gesten
+      EN: Small gestures
+      JA: 小さなジェスチャーを通して
+
+0310. DE: Worauf freust du dich bei uns am meisten?
+      EN: What are you most excited about for us?
+      JA: 私たちと一番楽しみにしていることは何ですか?
+
+0311. DE: Unsere nächste Reise
+      EN: Our next trip
+      JA: 私たちの次の旅行
+
+0312. DE: Zusammenziehen
+      EN: Moving in together
+      JA: 一緒に住む
+
+0313. DE: Einfach mehr Alltag
+      EN: Simply sharing more everyday life
+      JA: もっとシンプルに日常生活を
+
+0314. DE: Alles, was noch kommt
+      EN: Everything still to come
+      JA: これから起こるすべてのこと
+
+0315. DE: Wer würde eher zu spät kommen?
+      EN: Who's more likely to arrive late?
+      JA: 遅刻する可能性が高いのは誰ですか?
+
+0316. DE: Ich
+      EN: Me
+      JA: 私
+
+0317. DE: Mein Partner
+      EN: My partner
+      JA: 私のパートナー
+
+0318. DE: Beide gleich
+      EN: Both equally
+      JA: どちらも同じ
+
+0319. DE: Keiner von uns
+      EN: Neither of us
+      JA: 私たちの誰も
+
+0320. DE: Wer würde eher bei einem Streit als Erstes einlenken?
+      EN: Who's more likely to make peace first after an argument?
+      JA: 議論でどちらが先に譲歩する可能性が高いでしょうか?
+
+0321. DE: Kommt drauf an
+      EN: It depends
+      JA: 場合によります
+
+0322. DE: Wir treffen uns in der Mitte
+      EN: We meet halfway
+      JA: 真ん中でお会いしましょう
+
+0323. DE: Wer würde eher spontan eine Reise buchen?
+      EN: Who's more likely to book a spontaneous trip?
+      JA: 自発的に旅行を予約する可能性が高いのは誰でしょうか?
+
+0324. DE: Beide zusammen
+      EN: Both of us
+      JA: 両方一緒に
+
+0325. DE: Niemand ohne Plan
+      EN: Neither without a plan
+      JA: 計画のない人はいない
+
+0326. DE: Wer vergisst eher einen Jahrestag?
+      EN: Who's more likely to forget an anniversary?
+      JA: 記念日を忘れる可能性が高いのは誰ですか?
+
+0327. DE: Keiner
+      EN: Neither
+      JA: なし
+
+0328. DE: Beide, aber wir tun so als ob nicht
+      EN: Both, but we pretend we didn't
+      JA: 両方だけど、私たちはそうでないふりをする
+
+0329. DE: Ich habe noch nie … ein Date abgesagt, um zuhause zu bleiben.
+      EN: Never have I ever canceled a date to stay home.
+      JA: 私は家にいるためにデートをキャンセルしたことはありません。
+
+0330. DE: Stimmt, noch nie
+      EN: True, never
+      JA: そうです、決して
+
+0331. DE: Doch, schon mal
+      EN: Yes, I have
+      JA: はい、もう
+
+0332. DE: Öfter als ich zugebe
+      EN: More often than I'd admit
+      JA: 私が認めているよりも頻繁に
+
+0333. DE: Ich habe noch nie … heimlich das Handy meines Partners angeschaut.
+      EN: Never have I ever secretly looked through my partner's phone.
+      JA: 私はパートナーの携帯電話をこっそり見たことはありません。
+
+0334. DE: Einmal
+      EN: Once
+      JA: 一度
+
+0335. DE: Ich würde es nie tun
+      EN: I would never do that
+      JA: 私だったら絶対にそんなことはしないだろう
+
+0336. DE: Ich habe noch nie … eine Nachricht 10x umformuliert.
+      EN: Never have I ever rewritten a message ten times.
+      JA: 私はメッセージを 10 回言い直したことがありません。
+
+0337. DE: Ständig
+      EN: All the time
+      JA: 絶え間ない
+
+0338. DE: Nur bei wichtigen Themen
+      EN: Only for important topics
+      JA: 重要なトピックのみ
+
+0339. DE: Was bedeutet Vertrauen für dich konkret?
+      EN: What does trust mean to you in practical terms?
+      JA: あなたにとって信頼とは具体的には何ですか?
+
+0340. DE: Dass ich alles erzählen kann
+      EN: Being able to share everything
+      JA: すべてを言えるということ
+
+0341. DE: Dass ich mich nicht sorgen muss
+      EN: Not having to worry
+      JA: 心配する必要はないということ
+
+0342. DE: Dass Zusagen gehalten werden
+      EN: Keeping promises
+      JA: 約束は守られるということ
+
+0343. DE: Alles davon
+      EN: All of the above
+      JA: 全部
+
+0344. DE: Was ist für dich ein absoluter Dealbreaker?
+      EN: What is an absolute dealbreaker for you?
+      JA: あなたにとって絶対的な取引の妨げとなるものは何ですか?
+
+0345. DE: Lügen
+      EN: Lying
+      JA: 嘘
+
+0346. DE: Respektlosigkeit
+      EN: Disrespect
+      JA: 軽蔑する
+
+0347. DE: Gleichgültigkeit
+      EN: Indifference
+      JA: 無関心
+
+0348. DE: Untreue
+      EN: Cheating
+      JA: 不倫
+
+0349. DE: Wann fühlst du dich mir am nächsten?
+      EN: When do you feel closest to me?
+      JA: あなたが私を一番近くに感じるのはいつですか？
+
+0350. DE: Beim Reden
+      EN: While talking
+      JA: 話しながら
+
+0351. DE: In Stille nebeneinander
+      EN: Sitting quietly beside each other
+      JA: 隣り合って沈黙の中で
+
+0352. DE: Wenn wir zusammen lachen
+      EN: When we laugh together
+      JA: 一緒に笑うとき
+
+0353. DE: Wenn es schwierig ist
+      EN: When things are difficult
+      JA: 物事が難しいとき
+
+0354. DE: Wovor hast du in unserer Beziehung am meisten Angst?
+      EN: What are you most afraid of in our relationship?
+      JA: 私たちの関係で最も恐れていることは何ですか?
+
+0355. DE: Uns auseinanderzuleben
+      EN: Growing apart
+      JA: 離れていくために
+
+0356. DE: Missverständnisse
+      EN: Misunderstandings
+      JA: 誤解
+
+0357. DE: Die Distanz
+      EN: The distance
+      JA: 距離
+
+0358. DE: Vor nichts
+      EN: Nothing
+      JA: 何もない
+
+0359. DE: Führen wir getrennte oder gemeinsame Konten?
+      EN: Should we keep separate or joint accounts?
+      JA: 別々のアカウントまたは共同アカウントを持っていますか?
+
+0360. DE: Wie gehen wir mit unterschiedlichen Einkommen um?
+      EN: How should we handle different income levels?
+      JA: さまざまな収入にどう対処すればよいでしょうか?
+
+0361. DE: Wofür sparen wir gemeinsam?
+      EN: What are we saving for together?
+      JA: 私たちは何を一緒に節約していますか？
+
+0362. DE: Ab welchem Betrag sprechen wir vor einer Anschaffung?
+      EN: Above what amount should we talk before making a purchase?
+      JA: 購入前にどれくらいの金額について話しますか?
+
+0363. DE: Nähe & Intimität
+      EN: Closeness & Intimacy
+      JA: 親密さと親密さ
+
+0364. DE: Wann fühlst du dich mir körperlich am nächsten?
+      EN: When do you feel physically closest to me?
+      JA: 物理的に私に最も近いと感じるのはいつですか?
+
+0365. DE: Beim Einschlafen nebeneinander
+      EN: Falling asleep beside each other
+      JA: 隣り合って眠りにつく
+
+0366. DE: Wenn wir uns lange umarmen
+      EN: When we hug for a long time
+      JA: 長い間抱き合っているとき
+
+0367. DE: Bei einer spontanen Berührung
+      EN: A spontaneous touch
+      JA: 自発的なタッチで
+
+0368. DE: Was fehlt dir über die Distanz am meisten?
+      EN: What do you miss most while we're apart?
+      JA: 距離について最も恋しいことは何ですか?
+
+0369. DE: Körperliche Nähe
+      EN: Physical closeness
+      JA: 物理的な親密さ
+
+0370. DE: Einfach nebeneinander sein
+      EN: Simply being beside each other
+      JA: ただ隣にいて
+
+0371. DE: Gemeinsame Nächte
+      EN: Nights together
+      JA: 一緒に夜を過ごす
+
+0372. DE: Alltägliche Berührungen
+      EN: Everyday touches
+      JA: 日常の触れ合い
+
+0373. DE: Wie leicht fällt es dir, über Wünsche zu sprechen?
+      EN: How easy is it for you to talk about your desires?
+      JA: 願いについて話すのはどれくらい簡単ですか？
+
+0374. DE: Sehr leicht
+      EN: Very easy
+      JA: とても軽い
+
+0375. DE: Geht so
+      EN: So-so
+      JA: 順調です
+
+0376. DE: Eher schwer
+      EN: Quite difficult
+      JA: かなり難しい
+
+0377. DE: Ich übe noch
+      EN: I'm still practicing
+      JA: まだ練習中です
+
+0378. DE: Was macht einen Moment für dich romantisch?
+      EN: What makes a moment romantic for you?
+      JA: あなたにとってロマンチックな瞬間は何ですか?
+
+0379. DE: Aufmerksamkeit
+      EN: Thoughtfulness
+      JA: 注意
+
+0380. DE: Überraschung
+      EN: Surprise
+      JA: 驚き
+
+0381. DE: Vertrautheit
+      EN: Familiarity
+      JA: 親しみやすさ
+
+0382. DE: Dass wir ungestört sind
+      EN: Having privacy
+      JA: 私たちが平穏であること
+
+0383. DE: Zeichne für mich
+      EN: Draw for Me
+      JA: 私のために描いてください
+
+0384. DE: Zeichne unser erstes Date — was gehört unbedingt aufs Bild?
+      EN: Draw our first date — what absolutely belongs in the picture?
+      JA: 最初のデートの絵を描きます - 写真に必ず含める必要があるものは何ですか?
+
+0385. DE: Der Ort
+      EN: The place
+      JA: 場所
+
+0386. DE: Was wir gegessen haben
+      EN: What we ate
+      JA: 私たちが食べたもの
+
+0387. DE: Unsere Gesichter
+      EN: Our faces
+      JA: 私たちの顔
+
+0388. DE: Das Wetter an dem Tag
+      EN: The weather that day
+      JA: その日の天気は
+
+0389. DE: Zeichne unser Traumhaus in einem Strich. Was ist das Auffälligste?
+      EN: Draw our dream home in one line. What stands out most?
+      JA: 私たちの夢の家を一直線に描きます。最も印象的なことは何ですか?
+
+0390. DE: Große Fenster
+      EN: Large windows
+      JA: 大きな窓
+
+0391. DE: Der Garten
+      EN: The garden
+      JA: 庭園
+
+0392. DE: Ein Herz an der Tür
+      EN: A heart on the door
+      JA: ドアにあるハート
+
+0393. DE: Zwei Stühle davor
+      EN: Two chairs outside
+      JA: その前に椅子が２脚
+
+0394. DE: Zeichne mich als Tier — welches wäre ich?
+      EN: Draw me as an animal — which one would I be?
+      JA: 私を動物として描いたら、私は何になるでしょうか？
+
+0395. DE: Katze
+      EN: Cat
+      JA: 猫
+
+0396. DE: Hund
+      EN: Dog
+      JA: 犬
+
+0397. DE: Pinguin
+      EN: Penguin
+      JA: ペンギン
+
+0398. DE: Etwas ganz anderes
+      EN: Something completely different
+      JA: まったく違うもの
+
+0399. DE: Zeichne unser Gefühl zueinander als Symbol.
+      EN: Draw our feelings for each other as a symbol.
+      JA: お互いへの気持ちをシンボルとして描きます。
+
+0400. DE: Ein Herz
+      EN: A heart
+      JA: 心
+
+0401. DE: Zwei Kreise, die sich überschneiden
+      EN: Two overlapping circles
+      JA: 重なる二つの円
+
+0402. DE: Eine Brücke
+      EN: A bridge
+      JA: 橋
+
+0403. DE: Ein Anker
+      EN: An anchor
+      JA: アンカー
+
+0404. DE: In einer Beziehung sollte man alles voneinander wissen.
+      EN: Partners in a relationship should know everything about each other.
+      JA: 恋愛関係では、お互いのことをすべて知っておく必要があります。
+
+0405. DE: Stimme voll zu
+      EN: Strongly agree
+      JA: 全く同感
+
+0406. DE: Eher zu
+      EN: Somewhat agree
+      JA: むしろあまりにも
+
+0407. DE: Eher nicht
+      EN: Somewhat disagree
+      JA: むしろそうではない
+
+0408. DE: Lehne ab
+      EN: Disagree
+      JA: 衰退
+
+0409. DE: Man sollte nie streitend einschlafen.
+      EN: You should never go to sleep while still arguing.
+      JA: 議論しながら居眠りしてはいけません。
+
+0410. DE: Getrennte Urlaube tun einer Beziehung gut.
+      EN: Separate vacations can be good for a relationship.
+      JA: 別々に休暇をとるのは恋愛に良いことです。
+
+0411. DE: Eifersucht ist ein Zeichen von Liebe.
+      EN: Jealousy is a sign of love.
+      JA: 嫉妬は愛情の表れです。
+
+0412. DE: Freundschaften mit Ex-Partnern sind okay.
+      EN: Friendships with ex-partners are okay.
+      JA: 元彼との友情は大丈夫です。
+
+0413. DE: Tägliche Aktivität
+      EN: Daily Activity
+      JA: 日々の活動
+
+0414. DE: Wie kann dein Partner ein noch besserer Partner für dich sein?
+      EN: How could your partner be an even better partner for you?
+      JA: どうすればあなたのパートナーがあなたにとってさらに良いパートナーになれるでしょうか?
+
+0415. DE: Kennst du die Essensvorlieben deines Partners?
+      EN: Do you know your partner's food preferences?
+      JA: あなたのパートナーの食べ物の好みを知っていますか？
+
+0416. DE: Das tägliche Leben
+      EN: Everyday Life
+      JA: 日常生活
+
+0417. DE: Ich bin noch nie in einem Kino eingeschlafen.
+      EN: Never have I ever fallen asleep in a cinema.
+      JA: 映画館で眠くなったことは一度もありません。
+
+0418. DE: Ich habe noch nie!
+      EN: Never have I ever!
+      JA: やったことがない！
+
+0419. DE: Ich habe!
+      EN: I have!
+      JA: 私は持っている！
+
+0420. DE: Ich habe noch nie Pläne abgesagt, um zu Hause zu bleiben und eine Fernsehsendung zu sehen.
+      EN: Never have I ever canceled plans to stay home and watch a TV show.
+      JA: 私は家にいてテレビ番組を見る計画をキャンセルしたことはありません。
+
+0421. DE: Ich habe noch nie in einer Universitätssportmannschaft mitgespielt.
+      EN: Never have I ever played on a university sports team.
+      JA: 私は大学のスポーツチームでプレーしたことがありません。
+
+0422. DE: Ich habe noch nie die nassen Klamotten für ein paar Tage in der Waschmaschine vergessen.
+      EN: Never have I ever left wet clothes in the washing machine for several days.
+      JA: 濡れた服を数日間洗濯機に入れたことを忘れたことはありません。
+
+0423. DE: Ich habe noch nie ein Elektroauto gefahren.
+      EN: Never have I ever driven an electric car.
+      JA: 私は電気自動車を運転したことがありません。
+
+0424. DE: Ich habe noch nie einen Nachtzug genommen.
+      EN: Never have I ever taken an overnight train.
+      JA: 私は夜行列車に乗ったことはありません。
+
+0425. DE: Ich musste noch nie rennen, um einen Anschlussflug zu erwischen.
+      EN: Never have I ever had to run to catch a connecting flight.
+      JA: 乗り継ぎ便に乗るために走らなければならなかったことがありません。
+
+0426. DE: Ich habe noch nie ein Auto in einem fremden Land gefahren.
+      EN: Never have I ever driven a car in a foreign country.
+      JA: 私は外国で車を運転したことがありません。
+
+0427. DE: Ich habe noch nie einen Freund gehabt, der in ein anderes Land gezogen ist.
+      EN: Never have I ever had a friend move to another country.
+      JA: 私には他の国に引っ越した友人が一人もいませんでした。
+
+0428. DE: Ich habe noch nie einen Freund gefunden, der eine andere Muttersprache spricht.
+      EN: Never have I ever made a friend who speaks a different native language.
+      JA: 私は他の母国語を話す友人を見つけたことがありません。
+
+0429. DE: Ich habe noch nie einen Social-Media-Beitrag gelöscht, weil er nicht genug Likes bekommen hat.
+      EN: Never have I ever deleted a social media post because it didn't get enough likes.
+      JA: 十分な「いいね！」がもらえなかったためにソーシャルメディアの投稿を削除したことはありません。
+
+0430. DE: Ich habe noch nie wegen des Finales einer Fernsehsendung geweint.
+      EN: Never have I ever cried over a TV series finale.
+      JA: 私はテレビ番組の最終回で泣いたことはありません。
+
+0431. DE: Unser Intimleben
+      EN: Our Intimate Life
+      JA: 私たちの親密な生活
+
+0432. DE: Wie kann dein Partner am besten Sex mit dir initiieren?
+      EN: What is the best way for your partner to initiate sex with you?
+      JA: あなたのパートナーがあなたとセックスを始める最善の方法は何ですか?
+
+0433. DE: Wie stehst du zu schmutzigem Gerede beim Sex?
+      EN: How do you feel about dirty talk during sex?
+      JA: セックス中の汚い話についてどう思いますか?
+
+0434. DE: Was ist das Wichtigste, das du bei einer sexuellen Begegnung suchst?
+      EN: What matters most to you in a sexual encounter?
+      JA: 性的な出会いにおいてあなたが求める最も重要なことは何ですか?
+
+0435. DE: Was hältst du davon, gemeinsam erotische Inhalte anzuschauen?
+      EN: How do you feel about watching erotic content together?
+      JA: エロコンテンツを一緒に見ることについてどう思いますか?
+
+0436. DE: Wie zeigst du deine Zuneigung am liebsten außerhalb von Sex?
+      EN: How do you most like to show affection outside of sex?
+      JA: セックス以外で愛情を示すお気に入りの方法は何ですか?
+
+0437. DE: Beschreibe unser Sexleben mit einem Emoji.
+      EN: Describe our sex life with one emoji.
+      JA: 私たちの性生活を絵文字で説明してください。
+
+0438. DE: Unbeliebte Meinungen
+      EN: Unpopular Opinions
+      JA: 不人気な意見
+
+0439. DE: Ananas auf der Pizza schmeckt köstlich.
+      EN: Pineapple on pizza tastes delicious.
+      JA: ピザのパイナップルはおいしいです。
+
+0440. DE: Berühmte Touristenorte sind immer eine Enttäuschung.
+      EN: Famous tourist attractions are always disappointing.
+      JA: 有名な観光地はいつもがっかりします。
+
+0441. DE: Geister existieren wirklich.
+      EN: Ghosts really exist.
+      JA: 幽霊は本当に存在します。
+
+0442. DE: Fernsehwerbung ist manchmal interessant anzusehen.
+      EN: TV commercials can sometimes be interesting to watch.
+      JA: テレビコマーシャルは時々見ると面白いものです。
+
+0443. DE: Eine neue Sprache zu lernen ist einfach.
+      EN: Learning a new language is easy.
+      JA: 新しい言語を学ぶのは簡単です。
+
+0444. DE: Denselben Film zweimal zu schauen, ist Zeitverschwendung.
+      EN: Watching the same movie twice is a waste of time.
+      JA: 同じ映画を二度見るのは時間の無駄です。
+
+0445. DE: Ehepaar Leben
+      EN: Married Life
+      JA: 夫婦生活
+
+0446. DE: Wer ist romantischer?
+      EN: Who is more romantic?
+      JA: 誰がよりロマンチックですか?
+
+0447. DE: Wer ist der beste Tänzer?
+      EN: Who is the better dancer?
+      JA: 最高のダンサーは誰ですか?
+
+0448. DE: Wer gibt mehr Herzlichkeit?
+      EN: Who is more affectionate?
+      JA: 誰がより多くの暖かさを与えますか？
+
+0449. DE: Wer hat den besseren Musikgeschmack?
+      EN: Who has better taste in music?
+      JA: 音楽のセンスが優れているのは誰ですか?
+
+0450. DE: Wer findet die besten Restaurants?
+      EN: Who finds the best restaurants?
+      JA: 誰が最高のレストランを見つけますか?
+
+0451. DE: Wer hängt mehr an seinen Eltern?
+      EN: Who is more attached to their parents?
+      JA: どちらの方が両親に愛着を持っていますか?
+
+0452. DE: Wer ist besser organisiert?
+      EN: Who is better organized?
+      JA: 誰がより組織的に優れていますか?
+
+0453. DE: Wer ist der Beste bei der Filmauswahl?
+      EN: Who is better at choosing movies?
+      JA: 映画を選ぶのが一番上手いのは誰ですか?
+
+0454. DE: Wer kocht besser?
+      EN: Who is the better cook?
+      JA: 誰が料理が上手ですか?
+
+0455. DE: Wer ist der Beste bei der Planung romantischer Dates?
+      EN: Who is better at planning romantic dates?
+      JA: ロマンチックなデートを計画するのが得意なのは誰ですか?
+
+0456. DE: Gesprächsanreger
+      EN: Conversation Starters
+      JA: 会話のきっかけ
+
+0457. DE: Was möchtest du, dass dein Partner öfter tut?
+      EN: What would you like your partner to do more often?
+      JA: パートナーにもっと頻繁にしてもらいたいことは何ですか?
+
+0458. DE: Was ist dein Lieblingsfoto von uns? 📸
+      EN: What is your favorite photo of us? 📸
+      JA: 私たちのお気に入りの写真は何ですか? 📸
+
+0459. DE: Welches Lied macht dich an? 🥵
+      EN: Which song turns you on? 🥵
+      JA: あなたを元気づける曲はどれですか? 🥵
+
+0460. DE: Was magst du an deinem Partner am liebsten?
+      EN: What do you love most about your partner?
+      JA: あなたのパートナーの何が一番好きですか?
+
+0461. DE: Was ist deine größte Angst vor dem Zusammenleben?
+      EN: What is your biggest fear about living together?
+      JA: 一緒に住むことについて一番怖いことは何ですか?
+
+0462. DE: Was hast du von deinem Partner gelernt?
+      EN: What have you learned from your partner?
+      JA: あなたはパートナーから何を学びましたか?
+
+0463. DE: Liebe im Gleichgewicht
+      EN: Love in Balance
+      JA: バランスのとれた愛
+
+0464. DE: Lass dich von deinem Partner inspirieren, dein bestes Selbst zu sein
+      EN: Be inspired by your partner to become your best self
+      JA: パートナーに最高の自分になるようインスピレーションを与えてもらいましょう
+
+0465. DE: Werde so akzeptiert, wie du bist
+      EN: Be accepted exactly as you are
+      JA: ありのままに受け入れられる
+
+0466. DE: Ein Jahr lang eine Fernbeziehung führen
+      EN: Have a long-distance relationship for one year
+      JA: 遠距離恋愛をして1年になります
+
+0467. DE: Einen Monat lang überhaupt nicht miteinander reden
+      EN: Not speak to each other at all for one month
+      JA: 一ヶ月全く会話しなかった
+
+0468. DE: Intime Momente nur dann zu haben, wenn dein Partner sie initiiert
+      EN: Only have intimate moments when your partner initiates them
+      JA: パートナーが始めたときにのみ親密な瞬間を過ごす
+
+0469. DE: Alle intimen Momente selbst initiieren
+      EN: Initiate every intimate moment yourself
+      JA: 親密な瞬間はすべて自分で始める
+
+0470. DE: Deine tiefsten Geheimnisse lieber mit deinem Partner teilen
+      EN: Share your deepest secrets with your partner
+      JA: むしろ、あなたの最も深い秘密をパートナーと共有してください
+
+0471. DE: Einige Dinge für dich behalten
+      EN: Keep some things to yourself
+      JA: いくつかのことは自分だけのものにしておいてください
+
+0472. DE: Eine Million Dollar gewinnen
+      EN: Win one million dollars
+      JA: 100万ドルを勝ち取る
+
+0473. DE: Eine Million Dollar verdienen
+      EN: Earn one million dollars
+      JA: 100万ドルを稼ぐ
+
+0474. DE: Einen sehr emotionalen Partner haben
+      EN: Have a very emotional partner
+      JA: 非常に感情的なパートナーを持つ
+
+0475. DE: Einen sehr logischen Partner haben
+      EN: Have a very logical partner
+      JA: 非常に論理的なパートナーを持つ
+
+0476. DE: Deine Beziehung stabil und sicher machen
+      EN: Make your relationship stable and secure
+      JA: あなたの関係を安定させ、安全なものにする
+
+0477. DE: Deine Beziehung abenteuerlich und spontan machen
+      EN: Make your relationship adventurous and spontaneous
+      JA: あなたの関係を冒険的で自発的なものにしましょう
+
+0478. DE: Deinen besten Freund verlieren
+      EN: Lose your best friend
+      JA: 親友を失うこと
+
+0479. DE: Alle deine Freunde verlieren, außer deinem besten Freund
+      EN: Lose all your friends except your best friend
+      JA: 親友以外の友達をすべて失う
+
+0480. DE: Teile alle deine Hobbys mit deinem Partner
+      EN: Share all your hobbies with your partner
+      JA: すべての趣味をパートナーと共有する
+
+0481. DE: Von deinem Partner in neue Hobbys eingeführt werden
+      EN: Be introduced to new hobbies by your partner
+      JA: パートナーから新しい趣味を紹介される
+
+0482. DE: Derjenige sein, der umarmt wird
+      EN: Be the one who gets hugged
+      JA: 抱きしめられる側になってください
+
+0483. DE: Diejenige sein, die umarmt
+      EN: Be the one giving the hug
+      JA: 抱きしめる人になってください
+
+0484. DE: Verbringe die Feiertage mit deiner Familie
+      EN: Spend the holidays with your family
+      JA: 休日は家族と一緒に過ごしましょう
+
+0485. DE: Die Feiertage mit der Familie deines Partners verbringen
+      EN: Spend the holidays with your partner's family
+      JA: 休日はパートナーの家族と過ごす
+
+0486. DE: Neue Liebe, neue Erfahrungen
+      EN: New Love, New Experiences
+      JA: 新しい愛、新しい経験
+
+0487. DE: Ich lache viel mit meinem Partner.
+      EN: I laugh a lot with my partner.
+      JA: パートナーと一緒によく笑います。
+
+0488. DE: Ich entdecke gerne neue Hobbys oder Aktivitäten mit meinem Partner.
+      EN: I enjoy discovering new hobbies or activities with my partner.
+      JA: パートナーと一緒に新しい趣味や活動を見つけるのが楽しいです。
+
+0489. DE: Ich teile gerne Memes und Witze mit meinem Partner.
+      EN: I enjoy sharing memes and jokes with my partner.
+      JA: 私はパートナーとミームやジョークを共有するのが好きです。
+
+0490. DE: Ich priorisiere es, Zeit mit meinem Partner zu verbringen, auch wenn ich beschäftigt bin.
+      EN: I make spending time with my partner a priority, even when I'm busy.
+      JA: たとえ忙しくても、パートナーと過ごす時間を優先します。
+
+0491. DE: Ich schreibe meinem Partner jeden Tag.
+      EN: I message my partner every day.
+      JA: 私は毎日パートナーにテキストメッセージを送ります。
+
+0492. DE: Ich teile gerne alle Details meines Tages mit meinem Partner.
+      EN: I enjoy sharing all the details of my day with my partner.
+      JA: 私は、その日のすべての詳細をパートナーと共有するのが好きです。
+
+0493. DE: Ich lerne gerne die Hobbys und Interessen meines Partners kennen.
+      EN: I enjoy learning about my partner's hobbies and interests.
+      JA: 私はパートナーの趣味や興味を知るのが好きです。
+
+0494. DE: Es nervt mich, wenn mein Partner zu lange braucht, um auf Nachrichten zu antworten.
+      EN: It bothers me when my partner takes too long to reply to messages.
+      JA: パートナーがメッセージに返信するのに時間がかかりすぎるとイライラします。
+
+0495. DE: Ich plane gerne Dates mit meinem Partner.
+      EN: I enjoy planning dates with my partner.
+      JA: 私はパートナーとのデートの計画を立てるのが好きです。
+
+0496. DE: Ich liebe es, Filme mit meinem Partner zu schauen, die keiner von uns zuvor gesehen hat.
+      EN: I love watching movies with my partner that neither of us has seen before.
+      JA: 私はパートナーと一緒に、お互いが見たことのない映画を見るのが大好きです。
+
+0497. DE: Ich liebe es, meine Lieblingsmusik mit meinem Partner zu teilen.
+      EN: I love sharing my favorite music with my partner.
+      JA: お気に入りの音楽をパートナーと共有するのが大好きです。
+
+0498. DE: Romantische Gesten wie Nachrichten, Zettelchen oder Geschenke machen mich glücklich.
+      EN: Romantic gestures such as messages, notes, or gifts make me happy.
+      JA: メッセージ、メモ、プレゼントなどのロマンチックなジェスチャーは私を幸せにします。
+
+0499. DE: Ich bevorzuge romantische Spaziergänge im Park gegenüber einem Kinobesuch.
+      EN: I prefer romantic walks in the park to going to the movies.
+      JA: 私は映画を見に行くよりも、ロマンチックな公園での散歩の方が好きです。
+
+0500. DE: Ich genieße es, mit meinem Partner neue Restaurants auszuprobieren, anstatt immer an die gleichen Orte zu gehen.
+      EN: I enjoy trying new restaurants with my partner instead of always going to the same places.
+      JA: いつも同じ場所に行くのではなく、パートナーと一緒に新しいレストランを試すのが楽しいです。
+
+0501. DE: Ein Filmabend
+      EN: Movie Night
+      JA: 映画の夜
+
+0502. DE: Ein Spieleabend
+      EN: Game Night
+      JA: ゲームの夜
+
+0503. DE: Ein aktives Abenteuer
+      EN: An Active Adventure
+      JA: アクティブな冒険
+
+0504. DE: Ein entspannender Spa-Tag
+      EN: A Relaxing Spa Day
+      JA: リラックスしたスパの一日
+
+0505. DE: Ein gemütliches Date drinnen
+      EN: A Cozy Indoor Date
+      JA: 室内での居心地の良いデート
+
+0506. DE: Eine Autoreise
+      EN: A Road Trip
+      JA: ロードトリップ
+
+0507. DE: Einen Film anschauen
+      EN: Watch a Movie
+      JA: 映画を見る
+
+0508. DE: Gemeinsam ein Lego bauen
+      EN: Build a Lego Set Together
+      JA: 一緒にレゴを組み立てよう
+
+0509. DE: Eine Weinverkostung
+      EN: Wine Tasting
+      JA: ワインの試飲
+
+0510. DE: Eine Schokoladenverkostung
+      EN: Chocolate Tasting
+      JA: チョコレートの試飲
+
+0511. DE: Eine gemütliche Nacht zu Hause
+      EN: A Cozy Night at Home
+      JA: 自宅で心地よい夜を
+
+0512. DE: Ein Abenteuer in einer neuen Stadt
+      EN: An Adventure in a New City
+      JA: 新しい街での冒険
+
+0513. DE: Zu einem Picknick gehen
+      EN: Go on a Picnic
+      JA: ピクニックに行く
+
+0514. DE: Zu einem ausgefallenen Abendessen gehen
+      EN: Go Out for a Fancy Dinner
+      JA: 豪華なディナーに行く
+
+0515. DE: Ein romantischer Abend
+      EN: A Romantic Evening
+      JA: ロマンチックな夜
+
+0516. DE: Eine Nacht in einem Club
+      EN: A Night at a Club
+      JA: クラブでの一夜
+
+0517. DE: Eine Date-Nacht unter den Sternen
+      EN: A Date Night Under the Stars
+      JA: 星空の下でデートの夜
+
+0518. DE: Ein romantisches Abendessen bei Kerzenlicht
+      EN: A Romantic Candlelit Dinner
+      JA: キャンドルライトでロマンチックなディナー
+
+0519. DE: In einen Coffeeshop gehen
+      EN: Go to a Coffee Shop
+      JA: コーヒーショップに行く
+
+0520. DE: In eine Bar gehen
+      EN: Go to a Bar
+      JA: バーに行く
+
+0521. DE: Ein gemütlicher Abend im Haus während eines Gewitters
+      EN: A Cozy Evening at Home During a Thunderstorm
+      JA: 雷雨の中、家で過ごす居心地の良い夜
+
+0522. DE: Ein tolles Date im Freien unter dem Mondlicht
+      EN: An Amazing Outdoor Date in the Moonlight
+      JA: 月明かりの下、屋外で素敵なデート
+
+0523. DE: Einen Vergnügungspark erkunden
+      EN: Explore an Amusement Park
+      JA: 遊園地を探索する
+
+0524. DE: Ein Museum besuchen
+      EN: Visit a Museum
+      JA: 美術館を訪ねる
+
+0525. DE: Ein Spieleabend mit Freunden
+      EN: A Game Night with Friends
+      JA: 友達とゲームの夜
+
+0526. DE: Ein romantisches Picknick an einem schönen Ort
+      EN: A Romantic Picnic Somewhere Beautiful
+      JA: 美しいロケーションでロマンチックなピクニック
+
+0527. DE: Gemeinsam in der Küche ein neues Rezept ausprobieren
+      EN: Try a New Recipe Together
+      JA: キッチンで一緒に新しいレシピを試してみましょう
+
+0528. DE: In einem feinen Restaurant essen gehen
+      EN: Dine at a Fine Restaurant
+      JA: 高級レストランでの外食
+
+0529. DE: Zelten gehen
+      EN: Go Camping
+      JA: キャンプに行く
+
+0530. DE: Einen Wellness-Tag
+      EN: Have a Spa Day
+      JA: 健康の日
+
+0531. DE: Einen Tanzkurs besuchen
+      EN: Take a Dance Class
+      JA: ダンスのクラスを受ける
+
+0532. DE: Eine Wanderung mit Panoramablick machen
+      EN: Go on a Scenic Hike
+      JA: パノラマの景色を眺めながらハイキングに出かけましょう
+
+0533. DE: Spiele spielen und Spaß haben
+      EN: Play Games and Have Fun
+      JA: ゲームをして楽しんでください
+
+0534. DE: Tiefgründige Gespräche führen
+      EN: Have Deep Conversations
+      JA: 深い会話をする
+
+0535. DE: Ein Live-Musik-Konzert besuchen
+      EN: Go to a Live Music Concert
+      JA: ライブ音楽コンサートに参加する
+
+0536. DE: Auf eine Bootsparty gehen
+      EN: Go to a Boat Party
+      JA: ボートパーティーに行く
+
+0537. DE: Geh früh am Morgen, um den Sonnenaufgang zu sehen
+      EN: Get Up Early to Watch the Sunrise
+      JA: 日の出を見るために早朝に行きます
+
+0538. DE: In eine Strandbar gehen, um den Sonnenuntergang zu sehen
+      EN: Go to a Beach Bar to Watch the Sunset
+      JA: 夕日を見にビーチバーに行く
+
+0539. DE: Gourmet Eis-Sorten
+      EN: Gourmet Ice Cream Flavors
+      JA: グルメアイスクリームの種類
+
+0540. DE: Vanille
+      EN: Vanilla
+      JA: バニラ
+
+0541. DE: Schokolade
+      EN: Chocolate
+      JA: チョコレート
+
+0542. DE: Erdbeere
+      EN: Strawberry
+      JA: いちご
+
+0543. DE: Zitrone
+      EN: Lemon
+      JA: レモン
+
+0544. DE: Stracciatella
+      EN: Stracciatella
+      JA: ストラッチャテッラ
+
+0545. DE: Pistazie
+      EN: Pistachio
+      JA: ピスタチオ
+
+0546. DE: Mango Sorbet
+      EN: Mango Sorbet
+      JA: マンゴーシャーベット
+
+0547. DE: Himbeere
+      EN: Raspberry
+      JA: ラズベリー
+
+0548. DE: Salted Caramel
+      EN: Salted Caramel
+      JA: 塩キャラメル
+
+0549. DE: Cookie Dough
+      EN: Cookie Dough
+      JA: クッキー生地
+
+0550. DE: Hazelnut
+      EN: Hazelnut
+      JA: ヘーゼルナッツ
+
+0551. DE: White Chocolate
+      EN: White Chocolate
+      JA: ホワイトチョコレート
+
+0552. DE: Walnuss
+      EN: Walnut
+      JA: クルミ
+
+0553. DE: Banane
+      EN: Banana
+      JA: バナナ
+
+0554. DE: 6 Monate im Altbau mit Charme
+      EN: 6 Months in a Charming Period Home
+      JA: 魅力的な古い建物での6ヶ月間
+
+0555. DE: 📂 Ordner
+      EN: 📂 Folder
+      JA: 📂 フォルダー
+
+0556. DE: 📝 Spiele
+      EN: 📝 Games
+      JA: 📝 ゲーム
+
+0557. DE: 🔗 Ketten
+      EN: 🔗 Chains
+      JA: 🔗 チェーン
+
+0558. DE: 🖼️ Bilder
+      EN: 🖼️ Images
+      JA: 🖼️写真
+
+0559. DE: ⚡ Test
+      EN: ⚡ Test
+      JA: ⚡ テスト
+
+0560. DE: 📤 Export
+      EN: 📤 Export
+      JA: 📤 輸出
+
+0561. DE: Entwickler Studio
+      EN: Developer Studio
+      JA: 開発者スタジオ
+
+0562. DE: Ordner rein · Paare raus · Export für AI Studio
+      EN: Import a folder · Create pairs · Export for AI Studio
+      JA: フォルダーイン · ペアアウト · AI Studio のエクスポート
+
+0563. DE: Ordner wird gelesen…
+      EN: Reading folder…
+      JA: フォルダーを読み取っています...
+
+0564. DE: Keine Bilder in diesem Ordner gefunden.
+      EN: No images found in this folder.
+      JA: このフォルダーには画像が見つかりません。
+
+0565. DE: Bilder werden gelesen…
+      EN: Reading images…
+      JA: 画像が読み込まれます...
+
+0566. DE: Bilder-Ordner einlesen
+      EN: Import Image Folder
+      JA: 画像フォルダーの読み取り
+
+0567. DE: Je zwei Bilder werden ein Paar. Die Reihenfolge unten ist die Reihenfolge im Spiel —
+      EN: Every two images form a pair. The order below is the order used in the game —
+      JA: 2枚の写真がペアになります。以下の順序はゲーム内での順序です —
+
+0568. DE: verschiebe Zeilen mit den Pfeilen, wenn ein Paar nicht passt.
+      EN: move rows with the arrows if a pair does not match.
+      JA: ペアが一致しない場合は、矢印を使用して行を移動します。
+
+0569. DE: Ordner
+      EN: Folder
+      JA: フォルダ
+
+0570. DE: Bilder
+      EN: Images
+      JA: 写真
+
+0571. DE: Kategorie (z.B. Eis)
+      EN: Category (e.g. ice cream)
+      JA: カテゴリ (例: アイスクリーム)
+
+0572. DE: Name
+      EN: Name
+      JA: 名前
+
+0573. DE: Emoji
+      EN: Emoji
+      JA: 絵文字
+
+0574. DE: Titel des Spiels
+      EN: Game Title
+      JA: ゲームタイトル
+
+0575. DE: Spiel-Emoji
+      EN: Game Emoji
+      JA: ゲームの絵文字
+
+0576. DE: Ein Bild bleibt übrig und wird ignoriert.
+      EN: One image is left over and will be ignored.
+      JA: 1 つのイメージが残り、無視されます。
+
+0577. DE: Leeren
+      EN: Clear
+      JA: 空の
+
+0578. DE: Paket erstellen & freischalten
+      EN: Create & Unlock Pack
+      JA: パッケージの作成とアクティブ化
+
+0579. DE: Dateinamen wie 01a_vanille.jpg / 01b_schoko.jpg werden automatisch als Paar erkannt.
+      EN: File names such as 01a_vanilla.jpg / 01b_chocolate.jpg are automatically recognized as a pair.
+      JA: 01a_vanille.jpg / 01b_schoko.jpg のようなファイル名は自動的にペアとして認識されます。
+
+0580. DE: Sonst zählt die alphabetische Reihenfolge.
+      EN: Otherwise, alphabetical order is used.
+      JA: それ以外の場合は、アルファベット順が考慮されます。
+
+0581. DE: Name (optional - leer lassen für kein Text)
+      EN: Name (optional — leave blank for no text)
+      JA: 名前 (オプション - テキストを入力しない場合は空白のままにします)
+
+0582. DE: Nach oben
+      EN: Move Up
+      JA: 上
+
+0583. DE: Nach unten
+      EN: Move Down
+      JA: 下向き
+
+0584. DE: Entfernen
+      EN: Remove
+      JA: 取り除く
+
+0585. DE: Senden
+      EN: Send
+      JA: 送信
+
+0586. DE: GFK Brücke
+      EN: NVC Bridge
+      JA: GRPブリッジ
+
+0587. DE: Spiel suchen…
+      EN: Search Games…
+      JA: 検索ゲーム...
+
+0588. DE: Kategorien & Farben
+      EN: Categories & Colors
+      JA: カテゴリと色
+
+0589. DE: Neues Spiel
+      EN: New Game
+      JA: 新しいゲーム
+
+0590. DE: Alle
+      EN: All
+      JA: 全て
+
+0591. DE: ⚖️ Das oder Das
+      EN: ⚖️ This or That
+      JA: ⚖️あれやこれや
+
+0592. DE: 🧠 Quiz
+      EN: 🧠 Quiz
+      JA: 🧠 クイズ
+
+0593. DE: 🗣️ Diskussion
+      EN: 🗣️ Discussion
+      JA: 🗣️ ディスカッション
+
+0594. DE: Das oder Das
+      EN: This or That
+      JA: あれこれ
+
+0595. DE: Quiz
+      EN: Quiz
+      JA: クイズ
+
+0596. DE: Diskussion
+      EN: Discussion
+      JA: 議論
+
+0597. DE: Bearbeiten
+      EN: Edit
+      JA: 編集
+
+0598. DE: Löschen
+      EN: Delete
+      JA: 消去
+
+0599. DE: Schließen
+      EN: Close
+      JA: 近い
+
+0600. DE: Spiel bearbeiten
+      EN: Edit Game
+      JA: ゲームを編集する
+
+0601. DE: Speichern
+      EN: Save
+      JA: 保存
+
+0602. DE: Titel
+      EN: Title
+      JA: タイトル
+
+0603. DE: Kategorie
+      EN: Category
+      JA: カテゴリ
+
+0604. DE: 🎨 Farben & Kategorien verwalten
+      EN: 🎨 Manage Colors & Categories
+      JA: 🎨 色とカテゴリを管理
+
+0605. DE: Spieltyp
+      EN: Game Type
+      JA: ゲームの種類
+
+0606. DE: Paare — tippe auf ein Bild, um es zu tauschen
+      EN: Pairs — tap an image to replace it
+      JA: ペア — 画像をタップして交換します
+
+0607. DE: Paar
+      EN: Pair
+      JA: カップル
+
+0608. DE: Galerie
+      EN: Gallery
+      JA: ギャラリー
+
+0609. DE: Paare mischen
+      EN: Shuffle Pairs
+      JA: ミックスペア
+
+0610. DE: Fragen
+      EN: Questions
+      JA: 質問
+
+0611. DE: Frage hinzufügen
+      EN: Add Question
+      JA: 質問を追加
+
+0612. DE: Paar löschen
+      EN: Delete Pair
+      JA: ペアの削除
+
+0613. DE: Bild ändern
+      EN: Change Image
+      JA: イメージを変更する
+
+0614. DE: Name (optional)
+      EN: Name (optional)
+      JA: 名前 (オプション)
+
+0615. DE: Fragetext
+      EN: Question Text
+      JA: 質問文
+
+0616. DE: Frage löschen
+      EN: Delete Question
+      JA: 質問を削除する
+
+0617. DE: Antworten, getrennt mit |
+      EN: Answers, separated by |
+      JA: | で区切られた回答
+
+0618. DE: Bilder & Städte
+      EN: Images & Cities
+      JA: 画像と都市
+
+0619. DE: Jede Option aus allen Spielen. Tippen und ein eigenes Bild aus der Galerie wählen.
+      EN: Every option from every game. Tap one to choose a custom image from the gallery.
+      JA: すべてのゲームのすべてのオプション。タップしてギャラリーから自分の写真を選択します。
+
+0620. DE: Option suchen…
+      EN: Search Options…
+      JA: 検索オプション...
+
+0621. DE: Nur Optionen ohne eigenes Bild
+      EN: Only options without a custom image
+      JA: 自分のイメージのないオプションのみ
+
+0622. DE: Eigenes Bild
+      EN: Custom Image
+      JA: カスタム画像
+
+0623. DE: Zurücksetzen
+      EN: Reset
+      JA: リセット
+
+0624. DE: Schnelltest
+      EN: Quick Test
+      JA: 迅速なテスト
+
+0625. DE: Mindestens zwei Bilder auswählen.
+      EN: Select at least two images.
+      JA: 少なくとも2枚の画像を選んでください。
+
+0626. DE: Dem Spiel fehlt noch ein Titel.
+      EN: The game still needs a title.
+      JA: ゲームにはまだタイトルがありません。
+
+0627. DE: Bilder werden gespeichert…
+      EN: Saving images…
+      JA: 画像が保存されます...
+
+0628. DE: Bild wird übernommen…
+      EN: Importing image…
+      JA: 画像は撮影されています...
+
+0629. DE: Bilder werden eingelesen…
+      EN: Reading images…
+      JA: 画像を読み込んでいます...
+
+0630. DE: Bild konnte nicht gelesen werden.
+      EN: The image could not be read.
+      JA: 画像を読み取れませんでした。
+
+0631. DE: Keine Pakete zum Exportieren.
+      EN: No packs available to export.
+      JA: エクスポートするパッケージがありません。
+
+0632. DE: Export wird gebaut…
+      EN: Building export…
+      JA: エクスポートを構築中です…
+
+0633. DE: Über 3 MB — nimm eine kleinere Bildgröße oder exportiere die Pakete einzeln.
+      EN: Over 3 MB — choose a smaller image size or export the packs individually.
+      JA: 3MB を超える場合 - より小さい画像サイズを使用するか、パッケージを個別にエクスポートします。
+
+0634. DE: Keine eigenen Bilder vorhanden.
+      EN: No custom images available.
+      JA: 独自の写真はありません。
+
+0635. DE: Startet ein Spiel im echten Runner — genau so, wie ihr es später spielt.
+      EN: Starts a game in the real runner — exactly as it will be played later.
+      JA: 後でプレイするのとまったく同じように、実際の Runner でゲームを開始します。
+
+0636. DE: Testen
+      EN: Test
+      JA: テスト
+
+0637. DE: Export für Google AI Studio
+      EN: Export for Google AI Studio
+      JA: Google 用にエクスポート AI Studio
+
+0638. DE: Eine einzige Textdatei mit Paketen und Bildern. AI Studio nimmt keine ZIPs —
+      EN: One text file containing packs and images. AI Studio does not accept ZIP files —
+      JA: パッケージとイメージを含む単一のテキスト ファイル。 AI Studio は ZIP を使用しません —
+
+0639. DE: deshalb stecken die Bilder als Base64 direkt im Kotlin-Code.
+      EN: so the images are embedded directly in the Kotlin code as Base64.
+      JA: 画像が Kotlin コード内で直接 Base64 になっているのはそのためです。
+
+0640. DE: Noch nichts zum Exportieren. Leg im Tab "Ordner" ein erstes Paket an.
+      EN: Nothing to export yet. Create your first pack in the Folder tab.
+      JA: まだエクスポートするものがありません。"フォルダー"タブで最初のパックを作成してください。
+
+0641. DE: Pakete (nichts ausgewählt = alle)
+      EN: Packs (nothing selected = all)
+      JA: パッケージ (何も選択されていない = すべて)
+
+0642. DE: Bilder mitschicken
+      EN: Include Images
+      JA: 写真も一緒に送る
+
+0643. DE: Aus: nur Texte, Datei bleibt winzig
+      EN: Off: text only, keeping the file tiny
+      JA: オフ: テキストのみ、ファイルは小さいままです
+
+0644. DE: Bildgröße im Export
+      EN: Export Image Size
+      JA: エクスポート時の画像サイズ
+
+0645. DE: Klein · 480px
+      EN: Small · 480px
+      JA: 小・480px
+
+0646. DE: Mittel · 720px
+      EN: Medium · 720px
+      JA: 中・720px
+
+0647. DE: Groß · 960px
+      EN: Large · 960px
+      JA: 大・960px
+
+0648. DE: Für AI Studio exportieren
+      EN: Export for AI Studio
+      JA: AI Studio のエクスポート
+
+0649. DE: Bilder einzeln teilen
+      EN: Share Images Separately
+      JA: 画像を個別に共有する
+
+0650. DE: Vollständiges Projekt-Backup (JSON)
+      EN: Complete Project Backup (JSON)
+      JA: プロジェクトの完全バックアップ (JSON)
+
+0651. DE: Enthält alle Spiele, Ketten, Kategorien UND alle eingebetteten Bilder als Base64. Ideal zur Sicherung, Übertragung & Wiederherstellung.
+      EN: Contains every game, chain, category, and all embedded images as Base64. Ideal for backup, transfer, and recovery.
+      JA: すべてのゲーム、チェーン、カテゴリ、およびすべての埋め込み画像が Base64 として含まれます。バックアップ、転送、復元に最適です。
+
+0652. DE: Kopieren
+      EN: Copy
+      JA: コピー
+
+0653. DE: JSON teilen
+      EN: Share JSON
+      JA: JSONを共有する
+
+0654. DE: Einspielen
+      EN: Import
+      JA: プレイイン
+
+0655. DE: JSON oder Export-Inhalt (mit Base64) hier einfügen
+      EN: Paste JSON or export content, including Base64, here
+      JA: ここに JSON を貼り付けるか、コンテンツ (Base64 を使用) をエクスポートします
+
+0656. DE: Inhalt & Bilder jetzt einspielen
+      EN: Import Content & Images Now
+      JA: コンテンツと画像を今すぐインポート
+
+0657. DE: 🔗 Ketten-Spiele
+      EN: 🔗 Chain Games
+      JA: 🔗 チェーンゲーム
+
+0658. DE: Pakete mit dynamischen Bauanleitungen, die sich aus bisherigen Antworten zusammensetzen.
+      EN: Packs with dynamic templates assembled from previous answers.
+      JA: 以前の回答から構成される動的な構築手順が含まれたパック。
+
+0659. DE: Neue Kette
+      EN: New Chain
+      JA: 新しいチェーン
+
+0660. DE: Kette bauen
+      EN: Build Chain
+      JA: チェーンを構築する
+
+0661. DE: 1 Jahr lang in {}
+      EN: 1 Year in {}
+      JA: {} で 1 年間
+
+0662. DE: 6 Monate im {}
+      EN: 6 Months in {}
+      JA: {} の 6 か月
+
+0663. DE: Weil du {A} gewählt hast …
+      EN: Because You Chose {A}…
+      JA: {A} を選択したため...
+
+0664. DE: Noch keine Ketten angelegt
+      EN: No Chains Yet
+      JA: まだチェーンはつけていません
+
+0665. DE: Erstelle ein Ketten-Paket, um Fragen dynamisch mit bisherigen Antworten zu verknüpfen.
+      EN: Create a chain pack to connect questions dynamically with previous answers.
+      JA: これまでの回答と質問を動的につなげるチェーンパックを作成します。
+
+0666. DE: Spielen
+      EN: Play
+      JA: 遊ぶ
+
+0667. DE: Kette bearbeiten
+      EN: Edit Chain
+      JA: チェーンの編集
+
+0668. DE: Neue Kette erstellen
+      EN: Create New Chain
+      JA: 新しいチェーンを作成する
+
+0669. DE: Kopfzeile (z.B. Weil du {A} gewählt hast …)
+      EN: Caption (e.g. Because you chose {A}…)
+      JA: ヘッダー (例: {A} を選択したため…)
+
+0670. DE: Satzmuster (z.B. 6 Monate im {})
+      EN: Sentence Pattern (e.g. 6 months in {})
+      JA: 文のパターン (例: {} の 6 か月)
+
+0671. DE: Neuen Schritt hinzufügen
+      EN: Add New Step
+      JA: 新しいステップを追加
+
+0672. DE: Abbrechen
+      EN: Cancel
+      JA: キャンセル
+
+0673. DE: Speichern & testen
+      EN: Save & Test
+      JA: 保存してテストする
+
+0674. DE: Quelle wählen:
+      EN: Choose Source:
+      JA: ソースを選択:
+
+0675. DE: Gewählt
+      EN: Selected
+      JA: 選ばれた
+
+0676. DE: Nicht gewählt
+      EN: Not Selected
+      JA: 未選出
+
+0677. DE: Feste Option
+      EN: Fixed Option
+      JA: 固定オプション
+
+0678. DE: Fester Text
+      EN: Fixed Text
+      JA: 固定テキスト
+
+0679. DE: Quell-Paket:
+      EN: Source Pack:
+      JA: ソースパッケージ:
+
+0680. DE: Türkis
+      EN: Turquoise
+      JA: ターコイズ
+
+0681. DE: Limetten grün
+      EN: Lime Green
+      JA: ライムグリーン
+
+0682. DE: Kategorie-Farbe wählen
+      EN: Choose Category Color
+      JA: カテゴリの色を選択してください
+
+0683. DE: Neue Kategorie erstellen
+      EN: Create New Category
+      JA: 新しいカテゴリを作成する
+
+0684. DE: Kategorie bearbeiten
+      EN: Edit Category
+      JA: カテゴリを編集する
+
+0685. DE: Neue Kategorie
+      EN: New Category
+      JA: 新しいカテゴリ
+
+0686. DE: leer
+      EN: empty
+      JA: 空の
+
+0687. DE: Kein Paket gewählt
+      EN: No Pack Selected
+      JA: パッケージが選択されていません
+
+0688. DE: Gewählte Antwort
+      EN: Selected Answer
+      JA: 選択された回答
+
+0689. DE: Verworfene Antwort
+      EN: Rejected Answer
+      JA: 拒否された回答
+
+0690. DE: beliebiges Paar
+      EN: Any Pair
+      JA: 任意のペア
+
+0691. DE: Paris oder Rom
+      EN: Paris or Rome
+      JA: パリとかローマとか
+
+0692. DE: JSON Backup wird vorbereitet…
+      EN: Preparing JSON Backup…
+      JA: JSON バックアップを準備中です…
+
+0693. DE: 🎉 JSON inkl. Bildern & Ketten kopiert!
+      EN: 🎉 JSON including images and chains copied!
+      JA: 🎉 画像とチェーンを含む JSON がコピーされました!
+
+0694. DE: JSON Backup Datei wird erstellt…
+      EN: Creating JSON Backup File…
+      JA: JSONバックアップファイルが作成されました...
+
+0695. DE: Daten werden eingespielt…
+      EN: Importing Data…
+      JA: データがインポートされています...
+
+0696. DE: Kette gestartet
+      EN: Chain Started
+      JA: チェーンが開始されました
+
+0697. DE: 🔗 Ketten-Bauer
+      EN: 🔗 Chain Builder
+      JA: 🔗 チェーン作成者
+
+0698. DE: Linke Karte (Seite A)
+      EN: Left Card (Side A)
+      JA: 左のカード（A面）
+
+0699. DE: Rechte Karte (Seite B)
+      EN: Right Card (Side B)
+      JA: 右のカード（B面）
+
+0700. DE: Vorschau:
+      EN: Preview:
+      JA: プレビュー:
+
+0701. DE: Paar / Option:
+      EN: Pair / Option:
+      JA: ペア/オプション:
+
+0702. DE: Beliebiges / letztes Paar
+      EN: Any / Last Pair
+      JA: 任意の/最後のペア
+
+0703. DE: Seite:
+      EN: Side:
+      JA: ページ：
+
+0704. DE: Linke Option (0)
+      EN: Left Option (0)
+      JA: 左のオプション (0)
+
+0705. DE: Rechte Option (1)
+      EN: Right Option (1)
+      JA: 右のオプション (1)
+
+0706. DE: 🏷️ Kategorien & Farben
+      EN: 🏷️ Categories & Colors
+      JA: 🏷️ カテゴリとカラー
+
+0707. DE: Titel des Ketten-Spiels
+      EN: Chain Game Title
+      JA: チェーンゲームのタイトル
+
+0708. DE: Unbenannte Kette
+      EN: Untitled Chain
+      JA: 名前のないチェーン
+
+0709. DE: Verworfen
+      EN: Rejected
+      JA: 廃棄されました
+
+0710. DE: Freier Text
+      EN: Free Text
+      JA: フリーテキスト
+
+0711. DE: Satzmuster (z.B. 1 Jahr lang in {})
+      EN: Sentence Pattern (e.g. 1 year in {})
+      JA: 文パターン (例: {} の 1 年間)
+
+0712. DE: Standardbild
+      EN: Default Image
+      JA: デフォルトの画像
+
+0713. DE: eigen
+      EN: custom
+      JA: 自分の
+
+0714. DE: Eis
+      EN: Ice Cream
+      JA: 氷
+
+0715. DE: Eissorten
+      EN: Ice Cream Flavors
+      JA: アイスクリーム味
+
+0716. DE: Gold
+      EN: Gold
+      JA: 金
+
+0717. DE: Rosa
+      EN: Pink
+      JA: ピンク
+
+0718. DE: Lila
+      EN: Purple
+      JA: 紫
+
+0719. DE: Blau
+      EN: Blue
+      JA: 青
+
+0720. DE: Koralle
+      EN: Coral
+      JA: コーラル
+
+0721. DE: Smaragd
+      EN: Emerald
+      JA: エメラルド
+
+0722. DE: Rubinrot
+      EN: Ruby Red
+      JA: ルビーレッド
+
+0723. DE: Lavendel
+      EN: Lavender
+      JA: ラベンダー
+
+0724. DE: Magenta
+      EN: Magenta
+      JA: マゼンタ
+
+0725. DE: Orange
+      EN: Orange
+      JA: オレンジ
+
+0726. DE: Neubau mit Technik
+      EN: Tech-Enabled New Build
+      JA: テクノロジーを駆使した新しい建物
+
+0727. DE: Offene Küche
+      EN: Open-Plan Kitchen
+      JA: オープンキッチン
+
+0728. DE: Gemüsebeet
+      EN: Vegetable Garden
+      JA: 野菜畑
+
+0729. DE: Hängematte
+      EN: Hammock
+      JA: ハンモック
+
+0730. DE: Blumenwiese
+      EN: Flower Meadow
+      JA: 花の草原
+
+0731. DE: Dachterrasse
+      EN: Rooftop Terrace
+      JA: 屋上テラス
+
+0732. DE: Grillplatz
+      EN: Barbecue Area
+      JA: バーベキューエリア
+
+0733. DE: Kamin
+      EN: Fireplace
+      JA: 煙突
+
+0734. DE: Belgische Schokolade
+      EN: Belgian Chocolate
+      JA: ベルギーチョコレート
+
+0735. DE: In AI Studio hochladen und schreiben: "Ersetze GeneratedHarmonyContent.kt komplett durch den Inhalt dieser Datei."
+      EN: Upload to AI Studio and write: "Replace GeneratedHarmonyContent.kt completely with the contents of this file."
+      JA: AI Studio にアップロードし、「GeneratedHarmonyContent.kt をこのファイルの内容で完全に置き換えます。」と書き込みます。
+
+0736. DE: Fragen & Spiele
+      EN: Questions & Games
+      JA: 質問とゲーム
+
+0737. DE: Kategorien
+      EN: Categories
+      JA: カテゴリー
+
+0738. DE: Themen
+      EN: Topics
+      JA: テーマ
+
+0739. DE: Für dich empfohlen
+      EN: Recommended for You
+      JA: あなたへのおすすめ
+
+0740. DE: Paar-Statistiken
+      EN: Couple Statistics
+      JA: カップルの統計
+
+0741. DE: Gemeinsame Tage
+      EN: Days Together
+      JA: 一緒に過ごした日数
+
+0742. DE: Beantwortete Fragen
+      EN: Questions Answered
+      JA: 回答済みの質問
+
+0743. DE: Besuchte Städte
+      EN: Cities Visited
+      JA: 訪れた都市
+
+0744. DE: Besuchte Länder
+      EN: Countries Visited
+      JA: 訪れた国
+
+0745. DE: Widgets
+      EN: Widgets
+      JA: ウィジェット
+
+0746. DE: Du fehlst mir
+      EN: I Miss You
+      JA: 会いたい
+
+0747. DE: Denke an dich
+      EN: Thinking of You
+      JA: あなたのことを考えてる
+
+0748. DE: Ich denke an dich
+      EN: I'm Thinking of You
+      JA: あなたのことを考えてる
+
+0749. DE: Kuss senden
+      EN: Send a Kiss
+      JA: キスを送る
+
+0750. DE: Kuss
+      EN: Kiss
+      JA: キス
+
+0751. DE: ERGEBNISSE
+      EN: RESULTS
+      JA: 結果
+
+0752. DE: BEANTWORTE
+      EN: ANSWER
+      JA: 回答する
+
+0753. DE: Alle Pakete
+      EN: All Packs
+      JA: すべてのパック
+
+0754. DE: Profil
+      EN: Profile
+      JA: プロフィール
+
+0755. DE: Dein Name
+      EN: Your Name
+      JA: あなたの名前
+
+0756. DE: Partnerin
+      EN: Partner
+      JA: パートナー
+
+0757. DE: Zusammen seit
+      EN: Together Since
+      JA: 交際開始日
+
+0758. DE: Partner-Simulator
+      EN: Partner Simulator
+      JA: パートナーシミュレーター
+
+0759. DE: Sprache
+      EN: Language
+      JA: 言語
+
+0760. DE: Deutsch
+      EN: German
+      JA: ドイツ語
+
+0761. DE: Englisch
+      EN: English
+      JA: 英語
+
+0762. DE: Entwickler-Modus
+      EN: Developer Mode
+      JA: 開発者モード
+
+0763. DE: Entwickler Studio Öffnen
+      EN: Open Developer Studio
+      JA: 開発者スタジオを開く
+
+0764. DE: Profil bearbeiten
+      EN: Edit Profile
+      JA: プロフィールを編集
+
+0765. DE: Name Partnerin
+      EN: Partner's Name
+      JA: パートナーの名前
+
+0766. DE: Hinzufügen
+      EN: Add
+      JA: 追加
+
+0767. DE: Momente
+      EN: Moments
+      JA: 思い出
+
+0768. DE: Was ist passiert?
+      EN: What Happened?
+      JA: 何があった？
+
+0769. DE: oder
+      EN: or
+      JA: または
+
+0770. DE: Zurück
+      EN: Back
+      JA: 戻る
+
+0771. DE: Deine eigene Antwort
+      EN: Your Own Answer
+      JA: あなた自身の回答
+
+0772. DE: Deine Antwort...
+      EN: Your Answer...
+      JA: あなたの回答…
+
+0773. DE: Übernehmen
+      EN: Save
+      JA: 保存
+
+0774. DE: Antwortähnlichkeit
+      EN: Answer Similarity
+      JA: 回答の一致度
+
+0775. DE: Diskutiert eure Antworten
+      EN: Discuss Your Answers
+      JA: お互いの回答について話そう
+
+0776. DE: Fertig!
+      EN: Done!
+      JA: 完了！
+
+0777. DE: ✎ Tippe, um zu antworten
+      EN: ✎ Tap to Answer
+      JA: ✎ タップして答える
+
+0778. DE: Schreibe deine eigene Antwort
+      EN: Write Your Own Answer
+      JA: 自分の回答を書く
+
+0779. DE: Quiz verlassen?
+      EN: Leave Quiz?
+      JA: クイズを終了しますか？
+
+0780. DE: Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.
+      EN: Are you sure you want to leave the quiz? Your progress will remain saved.
+      JA: 本当にクイズを終了しますか?前回の進行状況は保存されたままになります。
+
+0781. DE: Schreib frei, was dir wirklich dazu einfällt.
+      EN: Write freely about what truly comes to mind.
+      JA: 本当に思ったことを自由に書いてください。
+
+0782. DE: Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!
+      EN: Did you discover any surprising differences? Talk about why you each prefer certain options!
+      JA: 驚くべき違いを発見しましたか?特定のオプションがより良いと思う理由について話してください。
+
+0783. DE: ✕ Schließen
+      EN: ✕ Close
+      JA: ✕ 閉じる
+
+0784. DE: Hier ist gerade nichts. ↵ Wechsle den Filter oder wähle ein anderes Thema.
+      EN: There is nothing here right now. ↵ Change the filter or choose another topic.
+      JA: ここにはまだ何もありません。 ↵ フィルターを変えるか、別のテーマを選んでください。
+
+0785. DE: ✨ GFK-Brücke
+      EN: ✨ NVC Bridge
+      JA: ✨ 非暴力コミュニケーションの橋
+
+0786. DE: Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.
+      EN: Rewrite your draft using nonviolent communication: observation, feeling, need, request.
+      JA: 観察・感情・ニーズ・お願いを使って、あなたの下書きを非暴力的な表現に書き換えます。
+
+0787. DE: Was möchtest du eigentlich sagen?
+      EN: What would you really like to say?
+      JA: 本当は何が言いたいのですか？
+
+0788. DE: In Chat einfügen
+      EN: Insert into Chat
+      JA: チャットに追加
+
+0789. DE: Analysiert eure Antworten & Chats nach Gottman und GFK.
+      EN: Analyzes your answers and chats using the Gottman method and NVC.
+      JA: ゴットマン理論と非暴力コミュニケーションに基づいて、二人の回答とチャットを分析します。
+
+0790. DE: Wünsche? z.B. günstig, draußen
+      EN: Preferences? e.g. affordable, outdoors
+      JA: 願い事？例えば安い、屋外
+
+0791. DE: Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen
+      EN: Edit games and cities, import folders, and customize images
+      JA: ゲームと都市の編集、フォルダーのロード、画像の調整
+
+0792. DE: 🔥 Tägliche Aktivität
+      EN: 🔥 Daily Activity
+      JA: 🔥 今日のアクティビティ
+
+0793. DE: + Hinzufügen
+      EN: + Add
+      JA: + 追加
+
+0794. DE: Noch keine Momente. ↵ Haltet euer erstes Erlebnis fest 💞
+      EN: No moments yet. ↵ Capture your first memory together 💞
+      JA: まだ思い出はありません。 ↵ 二人の最初の体験を残しましょう 💞
+
+0795. DE: Ein Harmony-Meilenstein eurer Liebe.
+      EN: A Harmony Milestone in Your Love Story.
+      JA: あなたの愛の調和のマイルストーン。
+
+0796. DE: Was wollt ihr nie vergessen?
+      EN: What Do You Never Want to Forget?
+      JA: 絶対に忘れたくないことは何ですか？
+
+0797. DE: 🟠 Du bist dran
+      EN: 🟠 Your Turn
+      JA: 🟠 あなたの番
+
+0798. DE: Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.
+      EN: Answer questions at the same time — answers become visible only after you have both finished.
+      JA: 質問に同時に回答します。回答は両方が終了するまで表示されません。
+
+0799. DE: Wir
+      EN: Profile
+      JA: 私たち
+
+0800. DE: Hey du 💕 wie war dein Tag?
+      EN: Hey you 💕 how was your day?
+      JA: こんにちは💕今日はどうでしたか？
+
+0801. DE: Stressig — aber jetzt wird’s besser ☺️
+      EN: Stressful — but it's getting better now ☺️
+      JA: ストレスはありますが、今は良くなってきています☺️
+
+0802. DE: Ich hab schon an unser Wiedersehen gedacht 🥹
+      EN: I've already been thinking about seeing you again 🥹
+      JA: 私はすでに再会のことを考えていました 🥹
+
+0803. DE: Unser erstes Videodate
+      EN: Our First Video Date
+      JA: 初めてのビデオデート
+
+0804. DE: Vier Stunden geredet und die Zeit vergessen.
+      EN: We talked for four hours and completely lost track of time.
+      JA: 4時間も話し続けて、時間を忘れてしまいました。
+
+0805. DE: Überraschungspaket
+      EN: Surprise Package
+      JA: サプライズパッケージ
+
+0806. DE: Kekse und ein Brief — ich musste weinen vor Freude.
+      EN: Cookies and a letter — I cried happy tears.
+      JA: クッキーと手紙 - 嬉しくて泣きました。
+
+0807. DE: Das klingt schön 🥰
+      EN: That sounds lovely 🥰
+      JA: それはいいですね🥰
+
+0808. DE: Ich vermiss dich gerade richtig
+      EN: I really miss you right now
+      JA: 今は本当にあなたがいなくて寂しいです
+
+0809. DE: Erzähl mir mehr davon 💕
+      EN: Tell me more about it 💕
+      JA: 詳しく教えてください💕
+
+0810. DE: Haha du bringst mich immer zum Lachen 😄
+      EN: Haha, you always make me laugh 😄
+      JA: ハハ、あなたはいつも私を笑わせてくれます 😄
+
+0811. DE: Können wir heute Abend telefonieren?
+      EN: Can we call tonight?
+      JA: 今晩電話で話せませんか？
+
+0812. DE: Ich denk so oft an dich ❤️
+      EN: I think about you so often ❤️
+      JA: あなたのことをよく思い出します❤️
+
+0813. DE: Gemini API Key ist nicht konfiguriert. Bitte füge deinen GEMINI_API_KEY im AI Studio Secrets Panel ein.
+      EN: The Gemini API key is not configured. Add your GEMINI_API_KEY in the AI Studio Secrets panel.
+      JA: Gemini API キーが設定されていません。 GEMINI_API_KEY を AI Studio シークレット パネルに貼り付けてください。
+
+0814. DE: Keine Antwort erhalten.
+      EN: No response received.
+      JA: 回答が届きませんでした。
+
+0815. DE: Du bist dran
+      EN: Your Turn
+      JA: あなたの番
+
+0816. DE: Beantwortet
+      EN: Answered
+      JA: 回答済み
+
+0817. DE: Überspringen
+      EN: Skip
+      JA: スキップ
+
+0818. DE: Weiter
+      EN: Next
+      JA: 次へ
+
+0819. DE: KI-Beziehungscoach
+      EN: AI Relationship Coach
+      JA: AI恋愛コーチ
+
+0820. DE: KI-Date-Ideen
+      EN: AI Date Ideas
+      JA: AIデートアイデア
+
+0821. DE: Analyse starten
+      EN: Start Analysis
+      JA: 分析を開始
+
+0822. DE: Ideen generieren
+      EN: Generate Ideas
+      JA: アイデアを生成
+
+0823. DE: Namen und Startdatum eurer Beziehung.
+      EN: Your names and relationship start date.
+      JA: 名前と交際開始日。
+
+0824. DE: Fertig
+      EN: Done
+      JA: 完了
+
+0825. DE: Weiter spielen
+      EN: Keep Playing
+      JA: 続けて遊ぶ
+
+0826. DE: Formuliere um...
+      EN: Reframing...
+      JA: 書き換え中…
+
+0827. DE: Umformulieren
+      EN: Reframe
+      JA: 書き換える
+
+0828. DE: Nachricht an $partnerName...
+      EN: Message to $partnerName...
+      JA: $partnerName へのメッセージ...
+
+0829. DE: ✅ Beantwortet
+      EN: ✅ Answered
+      JA: ✅ 回答済み
+
+0830. DE: Verbinde dich mit $partnerName
+      EN: Connect with $partnerName
+      JA: $partnerName と接続する
+
+0831. DE: 1 Jahr zusammen 🎉
+      EN: Together for 1 year 🎉
+      JA: 一緒に1年🎉
+
+0832. DE: 2 Jahre zusammen 🎉
+      EN: Together for 2 years 🎉
+      JA: 一緒に2年🎉
+
+0833. DE: 3 Jahre zusammen 🎉
+      EN: Together for 3 years 🎉
+      JA: 一緒に3年🎉
+
+0834. DE: $d Tage zusammen 💞
+      EN: $d days together 💞
+      JA: $d 日間一緒に過ごしました 💞
+
+0835. DE: Moment festhalten
+      EN: Capture a moment
+      JA: 思い出を残す
+
+0836. DE: Invite-Code: HRM-8731 · alles freigeschaltet
+      EN: Invite code: HRM-8731 · everything unlocked
+      JA: 招待コード: HRM-8731 · すべてのロックが解除されました
+
+0837. DE: ✨ KI-Beziehungscoach
+      EN: ✨ AI relationship coach
+      JA: ✨ AIリレーションシップコーチ
+
+0838. DE: Analysiere eure Muster...
+      EN: Analyzing your patterns...
+      JA: パターンを分析してください...
+
+0839. DE: 💡 KI-Date-Ideen
+      EN: 💡 AI date ideas
+      JA: 💡 AI デートのアイデア
+
+0840. DE: Sammle Ideen...
+      EN: Collecting ideas...
+      JA: アイデアを集めて…
+
+0841. DE: 🛠️ Entwickler-Modus
+      EN: 🛠️ Developer mode
+      JA: 🛠️ 開発者モード
+
+0842. DE: Zusammen seit (TT.MM.JJJJ)
+      EN: Together since (DD.MM.YYYY)
+      JA: (DD.MM.YYYY) 以来一緒に
+
+0843. DE: Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
+      EN: Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together.
+      JA: 回答は保存されます。 ${profile.partnerName} がパッケージを完了すると、両方の応答が一緒に表示されます。
+
+0844. DE: Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen
+      EN: Connect with ${profile.partnerName} to see the answer
+      JA: 回答を見るには ${profile.partnerName} と接続してください
+
+0845. DE: Quiz verlassen
+      EN: Leave quiz
+      JA: クイズを終了
+
+0846. DE: Ergebnisse
+      EN: Results
+      JA: 結果
+
+0847. DE: Unterhaltung
+      EN: Entertainment
+      JA: エンターテインメント
+
+0848. DE: Hochzeit
+      EN: Wedding
+      JA: 結婚式
+
+0849. DE: Kinder
+      EN: Children
+      JA: 子ども
+
+0850. DE: Reden vor...
+      EN: Talk Before...
+      JA: …の前に話す
+
+0851. DE: {ANZAHL} Bilder geladen — Namen prüfen, dann erstellen.
+      EN: {COUNT} images loaded — review the names, then create the pack.
+      JA: {ANZAHL} 枚の画像を読み込みました。名前を確認してから作成してください。
+
+0852. DE: {ANZAHL} Bilder geladen.
+      EN: {COUNT} images loaded.
+      JA: {ANZAHL} 画像がロードされました。
+
+0853. DE: {ANZAHL} Paare aus {ANZAHL} Bildern
+      EN: {COUNT} pairs from {COUNT} images
+      JA: {ANZAHL} 個の {ANZAHL} 画像のペア
+
+0854. DE: Bild {NUMMER} von {ANZAHL}…
+      EN: Image {NUMBER} of {COUNT}…
+      JA: {ANZAHL} からの画像 {NUMMER}…
+
+0855. DE: Speichere Bild {NUMMER} von {ANZAHL}…
+      EN: Saving image {NUMBER} of {COUNT}…
+      JA: 画像 {NUMMER}/{ANZAHL} を保存中…
+
+0856. DE: Paar {NUMMER}
+      EN: Pair {NUMBER}
+      JA: ペア {NUMMER}
+
+0857. DE: Frage {NUMMER}
+      EN: Question {NUMBER}
+      JA: 質問 {NUMMER}
+
+0858. DE: Schritt {NUMMER}
+      EN: Step {NUMBER}
+      JA: ステップ {NUMMER}
+
+0859. DE: {ANZAHL} Paare
+      EN: {COUNT} pairs
+      JA: {ANZAHL} ペア
+
+0860. DE: {ANZAHL} Fragen
+      EN: {COUNT} questions
+      JA: {ANZAHL} 質問
+
+0861. DE: {ANZAHL} Schritt(e)
+      EN: {COUNT} steps
+      JA: {ANZAHL} ステップ
+
+0862. DE: {ANZAHL} Paare · {ANZAHL} Fragen
+      EN: {COUNT} pairs · {COUNT} questions
+      JA: {ANZAHL} カップル · {ANZAHL} の質問
+
+0863. DE: {ANZAHL} Einträge
+      EN: {COUNT} entries
+      JA: {ANZAHL} エントリ
+
+0864. DE: Fertig: {PAKETE} Pakete · {BILDER} Bilder · {DETAILS}
+      EN: Done: {PACKS} packs · {IMAGES} images · {DETAILS}
+      JA: 完了: {PAKETE} パッケージ · {BILDER} イメージ · {DETAILS}
+
+0865. DE: 🎉 {ANZAHL} Pakete/Ketten & Bilder erfolgreich eingespielt!
+      EN: 🎉 {COUNT} packs/chains and images imported successfully!
+      JA: 🎉 {ANZAHL} パッケージ/チェーンと写真が正常にインポートされました!
+
+0866. DE: 🎉 '{TITEL}' angelegt · {ANZAHL} Paare spielbereit
+      EN: 🎉 '{TITLE}' created · {COUNT} pairs ready to play
+      JA: 🎉 '{TITEL}' が作成されました · {ANZAHL} ペアがプレイ可能になりました
+
+0867. DE: • A: {OPTION} (Bild: {BILD})
+      EN: • A: {OPTION} (Image: {IMAGE})
+      JA: • A: {OPTION} (画像: {BILD})
+
+0868. DE: • B: {OPTION} (Bild: {BILD})
+      EN: • B: {OPTION} (Image: {IMAGE})
+      JA: • B: {OPTION} (画像: {BILD})
+
+0869. DE: '{TITEL}' gelöscht.
+      EN: '{TITLE}' deleted.
+      JA: 「{TITEL}」が削除されました。
+
+0870. DE: '{TITEL}' gespeichert.
+      EN: '{TITLE}' saved.
+      JA: 「{TITEL}」が保存されました。
+
+0871. DE: Kategorie '{TITEL}' gespeichert.
+      EN: Category '{TITLE}' saved.
+      JA: カテゴリ「{TITEL}」が保存されました。
+
+0872. DE: Kette '{TITEL}' gespeichert.
+      EN: Chain '{TITLE}' saved.
+      JA: チェーン「{TITEL}」が保存されました。
+
+0873. DE: Kette '{TITEL}' gelöscht.
+      EN: Chain '{TITLE}' deleted.
+      JA: チェーン「{TITEL}」が削除されました。
+
+0874. DE: Bild für '{OPTION}' gesetzt.
+      EN: Image set for '{OPTION}'.
+      JA: 「{OPTION}」に設定された画像。
+
+0875. DE: Eigenes Bild für '{OPTION}' entfernt.
+      EN: Custom image removed for '{OPTION}'.
+      JA: 「{OPTION}」のカスタム画像を削除しました。
+
+0876. DE: {EMOJI} „{WIDGET}“ an {PARTNER} gesendet
+      EN: {EMOJI} “{WIDGET}” sent to {PARTNER}
+      JA: {EMOJI} 「{WIDGET}」を {PARTNER} に送信しました
+
+0877. DE: 6 Monate im {ORT}
+      EN: 6 months in {PLACE}
+      JA: {ORT} で 6 か月
+
+0878. DE: 1 Jahr lang in {ORT}
+      EN: 1 year in {PLACE}
+      JA: {ORT} で 1 年
+
+0879. DE: Weil du {OPTION} gewählt hast …
+      EN: Because you chose {OPTION}…
+      JA: {OPTION} を選択したため...
+
+0880. DE: Verbinde dich mit {PARTNER}, um die Antwort zu sehen
+      EN: Connect with {PARTNER} to see the answer
+      JA: 回答を見るには {PARTNER} と接続してください
+
+0881. DE: Verbinde dich mit {PARTNER}
+      EN: Connect with {PARTNER}
+      JA: {PARTNER} と接続する
+
+0882. DE: Deine Antworten sind gespeichert. Sobald {PARTNER} das Paket beendet, werden beide Antworten gemeinsam sichtbar.
+      EN: Your answers have been saved. Once {PARTNER} finishes the pack, both sets of answers will appear together.
+      JA: 回答は保存されます。 {PARTNER} がパッケージを完了すると、両方の応答が一緒に表示されます。
+
+0883. DE: Fehler bei der Umformulierung: {FEHLER}
+      EN: Rewriting failed: {ERROR}
+      JA: 言い換えエラー: {FEHLER}
+
+0884. DE: Fehler bei der Analyse: {FEHLER}
+      EN: Analysis failed: {ERROR}
+      JA: 解析エラー: {FEHLER}
+
+0885. DE: Fehler bei der Ideengenerierung: {FEHLER}
+      EN: Idea generation failed: {ERROR}
+      JA: アイデア生成エラー: {FEHLER}
+
+0886. DE: {EMOJI} {INHALT}
+      EN: {EMOJI} {LOCALIZED CONTENT}
+      JA: {EMOJI} {INHALT}
+
+0887. DE: {NUMMER}. {INHALT}
+      EN: {NUMBER}. {LOCALIZED CONTENT}
+      JA: {NUMMER}。 {INHALT}
+
+0888. DE: HARMONY
+      EN: HARMONY
+      JA: HARMONY
+
+0889. DE: Home
+      EN: Home
+      JA: ホーム
+
+0890. DE: Chat
+      EN: Chat
+      JA: チャット
+
+0891. DE: Dev
+      EN: Dev
+      JA: 開発
+
+0892. DE: Jerome
+      EN: Jerome
+      JA: Jerome
+
+0893. DE: Alex
+      EN: Alex
+      JA: Alex
+
+0894. DE: OR
+      EN: OR
+      JA: または
+
+0895. DE: VS
+      EN: VS
+      JA: VS
