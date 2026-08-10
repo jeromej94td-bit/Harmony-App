@@ -12,6 +12,14 @@ CONTENUTO INTEGRATO AGGIUNTIVO
       EN: Animals
       IT: Animali
 
+0897. DE: Export teilen
+      EN: Share export
+      IT: Condividi esportazione
+
+0898. DE: Bilder teilen
+      EN: Share images
+      IT: Condividi immagini
+
 0001. DE: Wer würde eher?
       EN: Who's more likely?
       IT: Chi preferirebbe?
