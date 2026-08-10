@@ -111,14 +111,18 @@ fun ProfileSheet(
                 Text(text = "💞", fontSize = 34.sp)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${profile.userName} & ${profile.partnerName}",
+                    text = if (profile.userName.isBlank() && profile.partnerName.isBlank()) {
+                        tr("Profil", "Profile")
+                    } else {
+                        "${profile.userName} & ${profile.partnerName}"
+                    },
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = HarmonyText
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = tr("Invite-Code: HRM-8731 · alles freigeschaltet", "Invite code: HRM-8731 · everything unlocked"),
+                    text = tr("Profil noch nicht eingerichtet", "Profile not set up yet"),
                     fontSize = 12.sp,
                     color = HarmonyMuted
                 )
@@ -269,7 +273,10 @@ fun ProfileSheet(
                     Spacer(modifier = Modifier.height(8.dp))
                     ProfileRow(label = tr("Dein Name", "Your name"), value = profile.userName)
                     ProfileRow(label = tr("Partnerin", "Partner"), value = profile.partnerName)
-                    ProfileRow(label = tr("Zusammen seit", "Together since"), value = formatTimestamp(profile.startDate))
+                    ProfileRow(
+                        label = tr("Zusammen seit", "Together since"),
+                        value = if (profile.startDate > 0L) formatTimestamp(profile.startDate) else tr("Noch nicht festgelegt", "Not set yet")
+                    )
 
                     Row(
                         modifier = Modifier
@@ -422,7 +429,7 @@ fun ProfileSheet(
     if (isEditProfileOpen) {
         var userEdit by remember { mutableStateOf(profile.userName) }
         var partnerEdit by remember { mutableStateOf(profile.partnerName) }
-        var startEdit by remember { mutableStateOf(formatTimestamp(profile.startDate)) }
+        var startEdit by remember { mutableStateOf(if (profile.startDate > 0L) formatTimestamp(profile.startDate) else "") }
 
         Dialog(onDismissRequest = onCloseEditProfile) {
             Box(

@@ -26,41 +26,10 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
             db.profileDao().insertOrUpdateProfile(
                 ProfileEntity(
                     id = 1,
-                    userName = "Jerome",
-                    partnerName = "Alex",
-                    startDate = System.currentTimeMillis() - (830L * 24 * 3600 * 1000),
+                    userName = "",
+                    partnerName = "",
+                    startDate = 0L,
                     simulatorEnabled = true
-                )
-            )
-        }
-
-        // Initialize chat messages if empty
-        val messages = db.chatDao().getAllMessages().firstOrNull()
-        if (messages.isNullOrEmpty()) {
-            val now = System.currentTimeMillis()
-            db.chatDao().insertMessage(ChatMessageEntity(sender = "them", text = "Hey du 💕 wie war dein Tag?", timestamp = now - 3 * 3600000))
-            db.chatDao().insertMessage(ChatMessageEntity(sender = "me", text = "Stressig — aber jetzt wird’s besser ☺️", timestamp = now - 3 * 3600000 + 60000))
-            db.chatDao().insertMessage(ChatMessageEntity(sender = "them", text = "Ich hab schon an unser Wiedersehen gedacht 🥹", timestamp = now - 2 * 3600000))
-        }
-
-        // Initialize moments if empty
-        val moments = db.momentDao().getAllMoments().firstOrNull()
-        if (moments.isNullOrEmpty()) {
-            val now = System.currentTimeMillis()
-            db.momentDao().insertMoment(
-                MomentEntity(
-                    title = "Unser erstes Videodate",
-                    content = "Vier Stunden geredet und die Zeit vergessen.",
-                    emoji = "🥰",
-                    timestamp = now - (40L * 24 * 3600 * 1000)
-                )
-            )
-            db.momentDao().insertMoment(
-                MomentEntity(
-                    title = "Überraschungspaket",
-                    content = "Kekse und ein Brief — ich musste weinen vor Freude.",
-                    emoji = "💌",
-                    timestamp = now - (12L * 24 * 3600 * 1000)
                 )
             )
         }
@@ -68,7 +37,7 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         // Initialize stats if empty
         val stats = db.coupleStatsDao().getStats().firstOrNull()
         if (stats == null) {
-            db.coupleStatsDao().insertOrUpdateStats(CoupleStatsEntity(id = 1, visitedCities = 7, visitedCountries = 3))
+            db.coupleStatsDao().insertOrUpdateStats(CoupleStatsEntity(id = 1, visitedCities = 0, visitedCountries = 0))
         }
     }
 

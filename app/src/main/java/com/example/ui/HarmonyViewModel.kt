@@ -12,6 +12,7 @@ import com.example.data.model.HarmonyPacksData
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
+import com.example.data.model.isAvailableIn
 import com.example.data.repository.HarmonyRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -204,13 +205,16 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun sendWidget(name: String, emoji: String) {
-        showToast(copy("$emoji „$name\" an Alex gesendet", "$emoji “$name” sent to Alex"))
+        val partnerName = uiState.value.profile.partnerName.ifBlank { copy("deinen Partner", "your partner") }
+        showToast(copy("$emoji „$name\" an $partnerName gesendet", "$emoji “$name” sent to $partnerName"))
     }
 
     // --- QUIZ RUNNER ---
 
     fun startPack(packId: String) {
-        val pack = HarmonyPacksData.PACKS.find { it.id == packId } ?: return
+        val pack = HarmonyPacksData.PACKS.find {
+            it.id == packId && it.isAvailableIn(_appLanguage.value.code)
+        } ?: return
         val currentAnswers = uiState.value.answers.filter { it.packId == packId }
             .associate { it.questionIndex to it.answerText }
         _activeRun.value = ActivePackRun(
