@@ -12,6 +12,7 @@ enum class AppLanguage(val code: String, val nativeName: String, val englishName
     GERMAN("de", "Deutsch", "German"),
     ENGLISH("en", "English", "English"),
     ITALIAN("it", "Italiano", "Italian"),
+    FRENCH("fr", "Français", "French"),
     SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish"),
     SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)");
 
