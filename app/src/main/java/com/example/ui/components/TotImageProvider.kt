@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.R
 import com.example.ui.EXACT_ENGLISH_CONTENT
+import com.example.ui.EXACT_FRENCH_CONTENT
 import com.example.ui.EXACT_ITALIAN_CONTENT
 import com.example.ui.EXACT_SPANISH_LATIN_AMERICA_CONTENT
 import com.example.ui.EXACT_SPANISH_SPAIN_CONTENT
@@ -288,6 +289,7 @@ object TotImageProvider {
         // resolves the same image after a language switch.
         (
             EXACT_ENGLISH_CONTENT.entries +
+                EXACT_FRENCH_CONTENT.entries +
                 EXACT_ITALIAN_CONTENT.entries +
                 EXACT_SPANISH_LATIN_AMERICA_CONTENT.entries +
                 EXACT_SPANISH_SPAIN_CONTENT.entries
