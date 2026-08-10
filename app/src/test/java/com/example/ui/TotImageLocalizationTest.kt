@@ -46,6 +46,33 @@ class TotImageLocalizationTest {
     }
 
     @Test
+    fun `italian labels keep stable image keys and legacy labels still resolve`() {
+        val pack = HarmonyPacksData.DEFAULT_PACKS.first { it.id == "traumhaus" }
+        val garden = pack.totChoiceAt(3, TotChoiceSide.FIRST)
+        val terrace = pack.totChoiceAt(3, TotChoiceSide.SECOND)
+
+        assertEquals("Grande giardino", localizedContent(garden.answerValue, AppLanguage.ITALIAN))
+        assertEquals(
+            R.drawable.traumhaus_garten,
+            TotImageProvider.getImageUrl(garden.assetKey, garden.legacyAssetKey)
+        )
+        assertEquals(
+            R.drawable.traumhaus_dachterrasse,
+            TotImageProvider.getImageUrl(terrace.assetKey, terrace.legacyAssetKey)
+        )
+
+        // Protect older renderers and imported content that still pass the visible label.
+        assertEquals(
+            R.drawable.traumhaus_garten,
+            TotImageProvider.getImageUrl("Grande giardino")
+        )
+        assertEquals(
+            R.drawable.traumhaus_dachterrasse,
+            TotImageProvider.getImageUrl("Terrazza soleggiata sul tetto")
+        )
+    }
+
+    @Test
     fun `future images registered under stable keys override legacy text mappings`() {
         val stableKey = "tot:future-pack:3:b"
         val stableImage = "file:///stable/future-image.webp"
