@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "profiles")
 data class ProfileEntity(
     @PrimaryKey val id: Int = 1,
-    val userName: String = "Jerome",
-    val partnerName: String = "Alex",
-    val startDate: Long = System.currentTimeMillis() - (830L * 24 * 3600 * 1000), // ~2.28 years ago
+    val userName: String = "",
+    val partnerName: String = "",
+    val startDate: Long = 0L,
     val simulatorEnabled: Boolean = true
 )
 
@@ -77,8 +77,13 @@ data class QuestionPack(
     val type: String, // "quiz", "tot", "disc"
     val questions: List<Question> = emptyList(),
     val pairs: List<Pair<String, String>> = emptyList(),
-    val emoji: String = ""
+    val emoji: String = "",
+    /** Empty means global; otherwise this pack is shown only for these BCP-47 locale codes. */
+    val availableLanguageCodes: Set<String> = emptySet()
 )
+
+fun QuestionPack.isAvailableIn(languageCode: String): Boolean =
+    availableLanguageCodes.isEmpty() || availableLanguageCodes.any { it.equals(languageCode, true) }
 
 object HarmonyPacksData {
 
@@ -343,6 +348,51 @@ object HarmonyPacksData {
                 "Sushi" to "Burger",
                 "Süß" to "Herzhaft",
                 "Selbst kochen" to "Bestellen"
+            )
+        ),
+
+        // ★ Italienisch-exklusive lokale Bildkarten. Die Texte sind absichtlich italienisch,
+        // weil dieses regionale Deck ausschließlich gewählt wird, wenn Italiano aktiv ist.
+        QuestionPack(
+            id = "tot_italian_cuisine_mixed",
+            title = "🍝 Cucina italiana — scelte regionali",
+            tags = listOf("dasoderdas", "cucina", "italia"),
+            cat = "tot",
+            topic = "kennen",
+            type = "tot",
+            emoji = "🍝",
+            availableLanguageCodes = setOf("it"),
+            pairs = listOf(
+                "Pizza napoletana" to "Calzone",
+                "Sformatino di zucchine con fonduta di pecorino" to "Pappa al pomodoro",
+                "Spaghetti alle vongole" to "Fritto misto di mare",
+                "Carbonara" to "Amatriciana",
+                "Pasta alla Norma" to "Risotto ai funghi",
+                "Pappardelle al cinghiale" to "Pici senesi al ragù di chianina",
+                "Lasagne alla bolognese" to "Cannelloni",
+                "Cacciucco" to "Brodetto di pesce",
+                "Risotto alla milanese" to "Polenta",
+                "Arancini" to "Supplì",
+                "Ribollita" to "Panzanella",
+                "Bruschetta al pomodoro e basilico" to "Crostini toscani con fegato di pollo",
+                "Pesto alla genovese" to "Ragù alla bolognese",
+                "Baccalà mantecato" to "Sarde in saor",
+                "Orecchiette alle cime di rapa" to "Trofie al pesto",
+                "Insalata Caprese" to "Fiori di zucca ripieni",
+                "Parmigiana di melanzane" to "Caponata",
+                "Trippa alla fiorentina" to "Peposo all’Impruneta",
+                "Risotto alla pescatora" to "Orata al cartoccio",
+                "Ossobuco" to "Saltimbocca alla romana",
+                "Gnocchi alla sorrentina" to "Pasta e fagioli",
+                "Bistecca alla fiorentina" to "Arrosticini",
+                "Insalata di polpo" to "Spaghetti allo scoglio",
+                "Focaccia genovese" to "Piadina romagnola",
+                "Carciofi alla romana" to "Polenta ai funghi",
+                "Gnocchi" to "Ravioli",
+                "Cantucci con vin santo" to "Tortino al cioccolato con cuore caldo",
+                "Tiramisù" to "Panna cotta",
+                "Cannoli siciliani" to "Sfogliatella",
+                "Gelato" to "Semifreddo"
             )
         ),
 

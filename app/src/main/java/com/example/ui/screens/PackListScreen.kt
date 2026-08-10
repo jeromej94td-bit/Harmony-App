@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.AnswerEntity
 import com.example.data.model.HarmonyPacksData
+import com.example.data.model.isAvailableIn
+import com.example.ui.LocalAppLanguage
 import com.example.ui.theme.HarmonyMuted
 import com.example.ui.theme.HarmonyText
 
@@ -38,6 +40,7 @@ fun PackListScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val language = LocalAppLanguage.current
 
     val topic = HarmonyPacksData.TOPICS.find { it.id == selectedTopicId }
     val category = HarmonyPacksData.CATEGORIES.find { it.id == selectedCategoryId }
@@ -48,6 +51,7 @@ fun PackListScreen(
     }
 
     var list = HarmonyPacksData.PACKS.filter { pack ->
+        pack.isAvailableIn(language.code) &&
         when {
             selectedTopicId != null -> pack.topic == selectedTopicId
             selectedCategoryId != null -> pack.cat == selectedCategoryId
