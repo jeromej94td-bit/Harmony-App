@@ -2,6 +2,7 @@ package com.example.ui
 
 import com.example.data.GeneratedHarmonyContent
 import com.example.data.model.HarmonyPacksData
+import com.example.data.model.isAvailableIn
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -18,7 +19,7 @@ class EnglishLocalizationCoverageTest {
             addAll(HarmonyPacksData.CATEGORIES.map { it.name })
             addAll(HarmonyPacksData.TOPICS.map { it.name })
 
-            HarmonyPacksData.DEFAULT_PACKS.forEach { pack ->
+            HarmonyPacksData.DEFAULT_PACKS.filter { it.isAvailableIn(AppLanguage.ENGLISH.code) }.forEach { pack ->
                 add(pack.title)
                 pack.questions.forEach { question ->
                     add(question.q)

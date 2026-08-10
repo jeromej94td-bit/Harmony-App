@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.AnswerEntity
 import com.example.data.model.Category
 import com.example.data.model.HarmonyPacksData
+import com.example.data.model.isAvailableIn
+import com.example.ui.LocalAppLanguage
 import com.example.data.model.Topic
 import com.example.ui.components.HarmonyCard
 import com.example.ui.contentText
@@ -70,10 +72,12 @@ fun GamesScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val language = LocalAppLanguage.current
+    val availablePacks = HarmonyPacksData.PACKS.filter { it.isAvailableIn(language.code) }
 
     // Find daily pack
     val answeredPackIds = answers.groupBy { it.packId }.keys
-    val dailyPack = HarmonyPacksData.PACKS.find { it.id !in answeredPackIds } ?: HarmonyPacksData.PACKS.first()
+    val dailyPack = availablePacks.find { it.id !in answeredPackIds } ?: availablePacks.first()
 
     Column(
         modifier = modifier
@@ -160,7 +164,7 @@ fun GamesScreen(
 
         // Topics List with progress bars
         HarmonyPacksData.TOPICS.forEach { topic ->
-            val packsForTopic = HarmonyPacksData.PACKS.filter { it.topic == topic.id }
+            val packsForTopic = availablePacks.filter { it.topic == topic.id }
             val donePacksCount = packsForTopic.count { pack ->
                 val totalLen = if (pack.type == "tot") pack.pairs.size else pack.questions.size
                 val ansCount = answers.count { it.packId == pack.id }

@@ -3,10 +3,13 @@ package com.example.ui
 import com.example.R
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.TotChoiceSide
+import com.example.data.model.isAvailableIn
 import com.example.data.model.totChoiceAt
 import com.example.ui.components.TotImageProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TotImageLocalizationTest {
@@ -143,6 +146,35 @@ class TotImageLocalizationTest {
         assertEquals(
             stableImage,
             TotImageProvider.getImageUrl(stableKey, "Beliebig veränderbarer Quelltext")
+        )
+    }
+
+    @Test
+    fun `Italian cuisine deck is Italian-only and every card resolves local splash art`() {
+        val pack = HarmonyPacksData.DEFAULT_PACKS.first { it.id == "tot_italian_cuisine_mixed" }
+
+        assertEquals(30, pack.pairs.size)
+        assertEquals("Pizza napoletana", pack.pairs.first().first)
+        assertEquals("Calzone", pack.pairs.first().second)
+        assertTrue(pack.isAvailableIn(AppLanguage.ITALIAN.code))
+        assertFalse(pack.isAvailableIn(AppLanguage.ENGLISH.code))
+
+        pack.pairs.indices.forEach { pairIndex ->
+            listOf(TotChoiceSide.FIRST, TotChoiceSide.SECOND).forEach { side ->
+                val choice = pack.totChoiceAt(pairIndex, side)
+                assertTrue(
+                    "Missing local art for ${choice.assetKey}",
+                    TotImageProvider.getImageUrl(choice.assetKey, choice.legacyAssetKey) is Int
+                )
+            }
+        }
+        assertEquals(
+            R.drawable.it_01_pizza_napoletana,
+            TotImageProvider.getImageUrl("tot:tot_italian_cuisine_mixed:0:a", "Pizza napoletana")
+        )
+        assertEquals(
+            R.drawable.it_15_semifreddo,
+            TotImageProvider.getImageUrl("tot:tot_italian_cuisine_mixed:29:b", "Semifreddo")
         )
     }
 }

@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.AnswerEntity
 import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.HarmonyPacksData
+import com.example.data.model.isAvailableIn
+import com.example.ui.LocalAppLanguage
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.components.CategoryTag
@@ -66,11 +68,13 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val language = LocalAppLanguage.current
+    val availablePacks = HarmonyPacksData.PACKS.filter { it.isAvailableIn(language.code) }
 
     // Find daily pack (first unanswered or default to first pack)
     val answeredPackIds = answers.groupBy { it.packId }.keys
-    val dailyPack = HarmonyPacksData.PACKS.find { it.id !in answeredPackIds } ?: HarmonyPacksData.PACKS.first()
-    val recommendedPacks = HarmonyPacksData.PACKS.filter { it.id != dailyPack.id }.take(3)
+    val dailyPack = availablePacks.find { it.id !in answeredPackIds } ?: availablePacks.first()
+    val recommendedPacks = availablePacks.filter { it.id != dailyPack.id }.take(3)
 
     // Calculate days together
     val daysTogether = TimeUnit.MILLISECONDS.toDays(
