@@ -1,0 +1,22 @@
+HARMONY - Dansk sprogpakke
+
+Locale code: da
+Native name: Dansk
+Flag: 🇩🇰
+
+The complete Danish catalog is embedded in app/src/main/java/com/example/ui/DanishContent.kt as DANISH_CONTENT_DATA and exposes EXACT_DANISH_CONTENT with 898 entries.
+
+Validation target:
+- 898 unique source strings
+- 0 placeholder mismatches
+- 0 Unicode replacement characters
+
+Representative strings:
+DE: Fragen & Spiele
+DA: Spørgsmål og spil
+
+DE: Wer würde eher?
+DA: Hvem ville mest sandsynligt?
+
+DE: Das oder das?
+DA: Det eller det?
