@@ -26,7 +26,8 @@ internal object TranslationCatalog {
             EXACT_SPANISH_SPAIN_CONTENT,
             ::localizeSpainSpanishDynamicContent
         ),
-        "pt-BR" to localePack(EXACT_PORTUGUESE_BRAZIL_CONTENT, ::localizeBrazilianPortugueseDynamicContent)
+        "pt-BR" to localePack(EXACT_PORTUGUESE_BRAZIL_CONTENT, ::localizeBrazilianPortugueseDynamicContent),
+        "pt-PT" to localePack(EXACT_PORTUGUESE_PORTUGAL_CONTENT, ::localizePortuguesePortugalDynamicContent)
     )
 
     private fun localePack(
