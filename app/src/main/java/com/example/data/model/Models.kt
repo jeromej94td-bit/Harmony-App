@@ -396,6 +396,36 @@ object HarmonyPacksData {
             )
         ),
 
+        // Polnisch-exklusive lokale Bildkarten. Das Deck wird freigeschaltet, sobald
+        // das vollständige Locale-Paket `pl` in der Sprachauswahl verfügbar ist.
+        QuestionPack(
+            id = "tot_polish_cuisine_traditional",
+            title = "🇵🇱 Tradycyjna kuchnia polska",
+            tags = listOf("dasoderdas", "kuchnia", "polska"),
+            cat = "tot",
+            topic = "kennen",
+            type = "tot",
+            emoji = "🇵🇱",
+            availableLanguageCodes = setOf("pl"),
+            pairs = listOf(
+                "Pierogi ruskie" to "Bigos",
+                "Żurek" to "Barszcz czerwony",
+                "Gołąbki" to "Kotlet schabowy",
+                "Placki ziemniaczane" to "Kopytka",
+                "Oscypek" to "Kwaśnica",
+                "Rosół" to "Flaki",
+                "Zapiekanka krakowska" to "Obwarzanek krakowski",
+                "Kluski śląskie" to "Pyzy",
+                "Kaszanka" to "Golonka",
+                "Śledź w oleju" to "Pstrąg po góralsku",
+                "Fasolka po bretońsku" to "Kapusta z grochem",
+                "Sernik krakowski" to "Makowiec",
+                "Pączki" to "Faworki",
+                "Babka piaskowa" to "Piernik toruński",
+                "Szarlotka" to "Kremówka papieska"
+            )
+        ),
+
         QuestionPack(
             id = "ringe",
             title = "Verlobungsringe",
