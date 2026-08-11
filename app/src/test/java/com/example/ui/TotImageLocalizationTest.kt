@@ -177,4 +177,33 @@ class TotImageLocalizationTest {
             TotImageProvider.getImageUrl("tot:tot_italian_cuisine_mixed:29:b", "Semifreddo")
         )
     }
+
+    @Test
+    fun `Polish cuisine deck is reserved for Polish and every card resolves local splash art`() {
+        val pack = HarmonyPacksData.DEFAULT_PACKS.first { it.id == "tot_polish_cuisine_traditional" }
+
+        assertEquals(15, pack.pairs.size)
+        assertEquals("Pierogi ruskie", pack.pairs.first().first)
+        assertEquals("Kremówka papieska", pack.pairs.last().second)
+        assertTrue(pack.isAvailableIn("pl"))
+        assertFalse(pack.isAvailableIn(AppLanguage.ENGLISH.code))
+
+        pack.pairs.indices.forEach { pairIndex ->
+            listOf(TotChoiceSide.FIRST, TotChoiceSide.SECOND).forEach { side ->
+                val choice = pack.totChoiceAt(pairIndex, side)
+                assertTrue(
+                    "Missing local art for ${choice.assetKey}",
+                    TotImageProvider.getImageUrl(choice.assetKey, choice.legacyAssetKey) is Int
+                )
+            }
+        }
+        assertEquals(
+            R.drawable.pl_01_pierogi_ruskie,
+            TotImageProvider.getImageUrl("tot:tot_polish_cuisine_traditional:0:a", "Pierogi ruskie")
+        )
+        assertEquals(
+            R.drawable.pl_15_kremowka_papieska,
+            TotImageProvider.getImageUrl("tot:tot_polish_cuisine_traditional:14:b", "Kremówka papieska")
+        )
+    }
 }
