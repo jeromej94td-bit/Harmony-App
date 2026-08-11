@@ -14,13 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -320,28 +317,36 @@ fun ProfileSheet(
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    LazyRow(
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(
-                            AppLanguage.entries.filter(TranslationCatalog::hasCompletePack),
-                            key = { it.code }
-                        ) { option ->
+                        AppLanguage.entries.filter(TranslationCatalog::hasCompletePack).forEach { option ->
                             Button(
                                 onClick = { onLanguageChange(option) },
-                                modifier = Modifier.widthIn(min = 116.dp).height(50.dp),
-                                shape = CircleShape,
+                                modifier = Modifier.fillMaxWidth().height(54.dp),
+                                shape = RoundedCornerShape(16.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = if (language == option) HarmonyPink else Color.White.copy(alpha = 0.06f)
                                 )
                             ) {
-                                Text(
-                                    if (language == AppLanguage.ENGLISH) option.englishName else option.nativeName,
-                                    color = Color.White,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(text = option.flagEmoji, fontSize = 22.sp)
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Text(
+                                        text = if (language == AppLanguage.ENGLISH) option.englishName else option.nativeName,
+                                        modifier = Modifier.weight(1f),
+                                        color = Color.White,
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    if (language == option) {
+                                        Text(text = "✓", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                    }
+                                }
                             }
                         }
                     }

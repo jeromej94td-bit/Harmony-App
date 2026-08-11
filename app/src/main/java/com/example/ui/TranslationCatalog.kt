@@ -15,7 +15,8 @@ internal object TranslationCatalog {
 
     private val packs: Map<String, LocalePack> = mapOf(
         "en" to localePack(EXACT_ENGLISH_CONTENT, ::localizeEnglishDynamicContent),
-        "it" to localePack(EXACT_ITALIAN_CONTENT, ::localizeItalianDynamicContent)
+        "it" to localePack(EXACT_ITALIAN_CONTENT, ::localizeItalianDynamicContent),
+        "pt" to localePack(EXACT_PORTUGUESE_CONTENT, ::localizePortugueseDynamicContent)
     )
 
     private fun localePack(
