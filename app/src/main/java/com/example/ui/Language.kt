@@ -23,7 +23,8 @@ enum class AppLanguage(
     SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish", "🌎"),
     SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸"),
     PORTUGUESE_BRAZIL("pt-BR", "Português (Brasil)", "Brazilian Portuguese", "🇧🇷"),
-    PORTUGUESE_PORTUGAL("pt-PT", "Português (Portugal)", "European Portuguese", "🇵🇹");
+    PORTUGUESE_PORTUGAL("pt-PT", "Português (Portugal)", "European Portuguese", "🇵🇹"),
+    DANISH("da", "Dansk", "Danish", "🇩🇰");
 
     companion object {
         fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
