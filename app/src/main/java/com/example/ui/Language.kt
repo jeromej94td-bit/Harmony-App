@@ -21,7 +21,8 @@ enum class AppLanguage(
     JAPANESE("ja", "日本語", "Japanese", "🇯🇵"),
     // Latin America is a region rather than one country, so it uses the regional globe.
     SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish", "🌎"),
-    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸");
+    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸"),
+    PORTUGUESE_BRAZIL("pt-BR", "Português (Brasil)", "Brazilian Portuguese", "🇧🇷");
 
     companion object {
         fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
