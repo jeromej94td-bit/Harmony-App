@@ -410,19 +410,18 @@ object HarmonyPacksData {
             pairs = listOf(
                 "Pierogi ruskie" to "Bigos",
                 "Żurek" to "Barszcz czerwony",
-                "Gołąbki" to "Kotlet schabowy",
-                "Placki ziemniaczane" to "Kopytka",
-                "Oscypek" to "Kwaśnica",
+                "Kotlet schabowy" to "Placki ziemniaczane",
+                "Gołąbki" to "Kopytka",
                 "Rosół" to "Flaki",
-                "Zapiekanka krakowska" to "Obwarzanek krakowski",
-                "Kluski śląskie" to "Pyzy",
-                "Kaszanka" to "Golonka",
-                "Śledź w oleju" to "Pstrąg po góralsku",
-                "Fasolka po bretońsku" to "Kapusta z grochem",
-                "Sernik krakowski" to "Makowiec",
-                "Pączki" to "Faworki",
-                "Babka piaskowa" to "Piernik toruński",
-                "Szarlotka" to "Kremówka papieska"
+                "Żeberka w kapuście" to "Kaszanka",
+                "Łazanki" to "Zrazy wołowe",
+                "Kaczka po poznańsku" to "Gulasz",
+                "Ryba po grecku" to "Śledź w śmietanie",
+                "Placki po węgiersku" to "Racuchy",
+                "Pyzy ziemniaczane" to "Kartacze",
+                "Oscypek z żurawiną" to "Bryndza",
+                "Makowiec" to "Sernik",
+                "Szarlotka" to "Pączki"
             )
         ),
 
