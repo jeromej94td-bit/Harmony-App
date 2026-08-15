@@ -346,6 +346,21 @@ object HarmonyPacksData {
             )
         ),
 
+        // ★ Traditionelle italienische Gerichte (für italienische Sprache)
+        QuestionPack(
+            id = "tot_traditional_it_food",
+            title = "Traditionelle Gerichte",
+            tags = listOf("dasoderdas"),
+            cat = "tot",
+            topic = "kennen",
+            type = "tot",
+            emoji = "🍝",
+            pairs = listOf(
+                "Gnocchi alla sorrentina" to "Pasta e fagioli"
+                // Weitere Paare werden später ergänzt (01–25 laut README)
+            )
+        ),
+
         QuestionPack(
             id = "ringe",
             title = "Verlobungsringe",
