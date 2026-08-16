@@ -1,6 +1,7 @@
 package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import com.example.util.LanguageManager
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -30,10 +31,12 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Psychology
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,8 +53,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.contentText
-import com.example.ui.tr
 import com.example.ui.theme.HarmonyBlue
 import com.example.ui.theme.HarmonyGold
 import com.example.ui.theme.HarmonyLine
@@ -76,6 +77,7 @@ fun HarmonyTopBar(
     userName: String,
     partnerName: String,
     onProfileClick: () -> Unit,
+    onRefresh: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -98,14 +100,27 @@ fun HarmonyTopBar(
         )
 
         Row(
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable(onClick = onProfileClick)
-                .padding(2.dp)
-                .testTag("avatars_button"),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            androidx.compose.material3.IconButton(
+                onClick = onRefresh,
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Refresh",
+                    tint = HarmonyText
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(onClick = onProfileClick)
+                    .padding(2.dp)
+                    .testTag("avatars_button"),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
                 modifier = Modifier
                     .size(34.dp)
                     .clip(CircleShape)
@@ -136,6 +151,7 @@ fun HarmonyTopBar(
                 )
             }
         }
+        }
     }
 }
 
@@ -143,6 +159,7 @@ fun HarmonyTopBar(
 fun HarmonyBottomNav(
     selectedTab: Int,
     onTabSelected: (Int) -> Unit,
+    appLanguage: String = "de",
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -156,11 +173,11 @@ fun HarmonyBottomNav(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val navItems = listOf(
-            Triple(0, "Home", Icons.Default.Home),
-            Triple(1, tr("Fragen", "Games"), Icons.Default.Psychology),
-            Triple(2, "Chat", Icons.Default.ChatBubble),
-            Triple(3, tr("Momente", "Moments"), Icons.Default.PhotoLibrary),
-            Triple(4, tr("Wir", "Profile"), Icons.Default.Favorite),
+            Triple(0, LanguageManager.tr("Home", appLanguage), Icons.Default.Home),
+            Triple(1, LanguageManager.tr("Spiele", appLanguage), Icons.Default.Psychology),
+            Triple(2, LanguageManager.tr("Chat", appLanguage), Icons.Default.ChatBubble),
+            Triple(3, LanguageManager.tr("Momente", appLanguage), Icons.Default.PhotoLibrary),
+            Triple(4, LanguageManager.tr("Profil", appLanguage), Icons.Default.Favorite),
             Triple(5, "Dev", Icons.Default.Build)
         )
 
@@ -200,19 +217,15 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
     
     val (bg, fg, label) = if (category != null) {
         val catColor = Color(category.tagColorHex)
-        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${contentText(category.name)}")
+        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${category.name}")
     } else {
         when (tag.lowercase()) {
-            "unterhaltung", "entertainment" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, tr("Unterhaltung", "Entertainment"))
-            "dasoderdas", "tot", "this or that" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, tr("Das oder das", "This or That"))
-            "hochzeit", "wedding" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, tr("Hochzeit", "Wedding"))
-            "kinder", "children" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, tr("Kinder", "Children"))
-            "reden", "discussion" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, tr("Reden vor...", "Talk Before..."))
-            else -> Triple(
-                Color.White.copy(alpha = 0.12f),
-                HarmonyText,
-                contentText(tag).replaceFirstChar { it.uppercase() }
-            )
+            "unterhaltung" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, "Unterhaltung")
+            "dasoderdas", "tot" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, "Das oder das")
+            "hochzeit" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, "Hochzeit")
+            "kinder" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, "Kinder")
+            "reden" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, "Reden vor...")
+            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, tag.replaceFirstChar { it.uppercase() })
         }
     }
 
@@ -224,7 +237,7 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
             .padding(horizontal = 9.dp, vertical = 4.dp)
     ) {
         Text(
-            text = label.uppercase(Locale.ROOT),
+            text = label.uppercase(Locale.GERMAN),
             fontSize = 9.5.sp,
             fontWeight = FontWeight.ExtraBold,
             color = fg,

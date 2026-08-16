@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.contentText
-import com.example.ui.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import com.example.ui.components.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.util.LanguageManager
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
 import com.example.ui.components.CategoryTag
@@ -56,6 +55,7 @@ fun MomentsScreen(
     moments: List<MomentEntity>,
     profile: ProfileEntity,
     isAddMomentOpen: Boolean,
+    appLanguage: String = "de",
     onOpenAddMoment: () -> Unit,
     onCloseAddMoment: () -> Unit,
     onAddMoment: (String, String) -> Unit,
@@ -72,15 +72,15 @@ fun MomentsScreen(
     val milestoneTargets = listOf(100, 365, 500, 730, 1000, 1095)
     val computedMilestones = milestoneTargets.filter { daysTogether >= it }.map { d ->
         val milestoneTitle = when (d) {
-            365 -> tr("1 Jahr zusammen 🎉", "Together for 1 year 🎉")
-            730 -> tr("2 Jahre zusammen 🎉", "Together for 2 years 🎉")
-            1095 -> tr("3 Jahre zusammen 🎉", "Together for 3 years 🎉")
-            else -> tr("$d Tage zusammen 💞", "$d days together 💞")
+            365 -> "1 " + LanguageManager.tr("Jahr zusammen 🎉", appLanguage)
+            730 -> "2 " + LanguageManager.tr("Jahre zusammen 🎉", appLanguage)
+            1095 -> "3 " + LanguageManager.tr("Jahre zusammen 🎉", appLanguage)
+            else -> "$d " + LanguageManager.tr("Tage zusammen 💞", appLanguage)
         }
         MomentEntity(
             id = -d.toLong(),
             title = milestoneTitle,
-            content = tr("Ein Harmony-Meilenstein eurer Liebe.", "A Harmony milestone in your love story."),
+            content = LanguageManager.tr("Ein Harmony-Meilenstein eurer Liebe.", appLanguage),
             emoji = "🏆",
             timestamp = profile.startDate + (d * dayMs),
             isMilestone = true
@@ -103,7 +103,7 @@ fun MomentsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = tr("Momente", "Moments"),
+                text = LanguageManager.tr("Momente", appLanguage),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
@@ -112,7 +112,7 @@ fun MomentsScreen(
                 onClick = onOpenAddMoment,
                 modifier = Modifier.testTag("add_moment_button")
             ) {
-                Text(text = tr("+ Hinzufügen", "+ Add"), color = HarmonyPink, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                Text(text = "+ " + LanguageManager.tr("Hinzufügen", appLanguage), color = HarmonyPink, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
             }
         }
 
@@ -124,7 +124,7 @@ fun MomentsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = tr("Noch keine Momente.\nHaltet euer erstes Erlebnis fest 💞", "No moments yet.\nCapture your first memory 💞"),
+                    text = LanguageManager.tr("Noch keine Momente.\nHaltet euer erstes Erlebnis fest 💞", appLanguage),
                     color = HarmonyMuted,
                     fontSize = 13.5.sp,
                     lineHeight = 20.sp,
@@ -143,7 +143,7 @@ fun MomentsScreen(
                             verticalAlignment = Alignment.Top
                         ) {
                             Text(
-                                text = "${moment.emoji} ${contentText(moment.title)}",
+                                text = "${moment.emoji} ${moment.title}",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyText
@@ -188,14 +188,14 @@ fun MomentsScreen(
             ) {
                 Column {
                     Text(
-                        text = tr("Moment festhalten", "Capture a moment"),
+                        text = LanguageManager.tr("Moment festhalten", appLanguage),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = HarmonyText
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = tr("Was wollt ihr nie vergessen?", "What do you never want to forget?"),
+                        text = LanguageManager.tr("Was wollt ihr nie vergessen?", appLanguage),
                         fontSize = 13.sp,
                         color = HarmonyMuted
                     )
@@ -204,7 +204,7 @@ fun MomentsScreen(
                     OutlinedTextField(
                         value = titleInput,
                         onValueChange = { titleInput = it },
-                        placeholder = { Text(tr("Titel", "Title"), color = HarmonyMuted) },
+                        placeholder = { Text(LanguageManager.tr("Titel", appLanguage), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("moment_title_input"),
@@ -221,7 +221,7 @@ fun MomentsScreen(
                     OutlinedTextField(
                         value = contentInput,
                         onValueChange = { contentInput = it },
-                        placeholder = { Text(tr("Was ist passiert?", "What happened?"), color = HarmonyMuted) },
+                        placeholder = { Text(LanguageManager.tr("Was ist passiert?", appLanguage), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp)
@@ -246,7 +246,7 @@ fun MomentsScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                         ) {
-                            Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText)
+                            Text(text = LanguageManager.tr("Abbrechen", appLanguage), color = HarmonyText)
                         }
                         Button(
                             onClick = { onAddMoment(titleInput, contentInput) },
@@ -255,7 +255,7 @@ fun MomentsScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
                         ) {
-                            Text(text = tr("Hinzufügen", "Add"), color = Color.White)
+                            Text(text = LanguageManager.tr("Hinzufügen", appLanguage), color = Color.White)
                         }
                     }
                 }

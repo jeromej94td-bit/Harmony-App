@@ -28,6 +28,180 @@ object GeneratedHarmonyContent {
             ),
             questions = emptyList()
         )
+        ,
+        GenPack(
+            id = "cj_disney_quiz",
+            title = "Prinzessinnen, Piraten und Feenstaub: Disney-Quiz",
+            cat = "nie",
+            topic = "filme_serien",
+            type = "quiz",
+            tags = listOf("disney", "ichhabenochnie"),
+            questions = listOf(
+                GenQuestion(q = "Ich habe noch nie bei einem Disney-Film geweint.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie alle Lieder aus \"Der König der Löwen\" auswendig gekonnt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie heimlich gehofft, dass mein Haustier sprechen kann wie bei Disney.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Disney-Film dreimal hintereinander geschaut.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Bösewicht cooler als den Helden gefunden.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie versucht, mit Tieren zu singen wie Schneewittchen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie von einem Ausflug ins Disneyland geträumt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Disney-Ohrwurm für eine ganze Woche gehabt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie behauptet, ich sei zu alt für Disney-Filme (und es heimlich genossen).", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein Zitat von Meister Yoda aus Star Wars im Alltag verwendet.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Marvel-Film nur wegen der Post-Credit-Scene bis zum Ende geschaut.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bei \"Oben\" (Up) schon in den ersten 10 Minuten Tränen in den Augen gehabt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Charakter aus Toy Story in meinem eigenen Spielzeug wiedererkannt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie so getan, als hätte ich Zauberkräfte wie Elsa.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein Disney-Lied unter der Dusche geschmettert.", options = listOf("Habe ich", "Habe ich noch nie"))
+            )
+        ),
+        GenPack(
+            id = "cj_entertainment_quiz",
+            title = "Die ultimative Entertainment-Quiz-Herausforderung",
+            cat = "nie",
+            topic = "filme_serien",
+            type = "quiz",
+            tags = listOf("entertainment", "ichhabenochnie"),
+            questions = listOf(
+                GenQuestion(q = "Ich habe noch nie eine ganze Serienstaffel an einem Tag durchgeschaut (Binge-Watching).", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie das Ende eines Films gegoogelt, weil ich nicht abwarten konnte.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Film-Spoiler verraten und es sofort bereut.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie für meinen Lieblingscharakter in einer Serie geschwärmt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Film nur wegen eines bestimmten Schauspielers geschaut.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie das Intro meiner Lieblingsserie übersprungen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bei einem Horrorfilm die Augen zugehalten.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie das Netflix-Passwort von jemand anderem mitbenutzt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie so laut gelacht, dass ich eine wichtige Film-Szene verpasst habe.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie eine Serie abgebrochen, weil die letzte Staffel so schlecht war.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Film-Soundtrack stundenlang auf Repeat gehört.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie eine Film-Empfehlung gegeben, die der andere furchtbar fand.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie eine Oscar-Verleihung live mitten in der Nacht verfolgt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bei einer peinlichen Szene den Raum verlassen (Cringe-Faktor).", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein Popcorn im Kino fallen gelassen und es trotzdem gegessen.", options = listOf("Habe ich", "Habe ich noch nie"))
+            )
+        ),
+        GenPack(
+            id = "cj_hogwarts_quiz",
+            title = "Hogwarts Haus Stolz: Wo gehörst du hin?",
+            cat = "nie",
+            topic = "filme_serien",
+            type = "quiz",
+            tags = listOf("harrypotter", "ichhabenochnie"),
+            questions = listOf(
+GenQuestion(q = "Ich habe noch nie auf meinen Brief aus Hogwarts gewartet.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Online-Test gemacht, um mein Hogwarts-Haus herauszufinden.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie mit einem Freund gestritten, welches Haus das beste ist.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen der dicken Harry Potter Bände gelesen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie geträumt, Quidditch zu spielen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie jemanden als \"Muggel\" bezeichnet, weil er etwas nicht verstanden hat.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Harry-Potter-Film-Marathon an Weihnachten gemacht.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein Haustier nach einem Charakter aus Hogwarts benannt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie behauptet, Slytherin sei eigentlich gar nicht so böse."
+            )
+            )
+        ),
+        GenPack(
+            id = "cj_videogame_quiz",
+            title = "Bist du ein Videospiel-Guru?",
+            cat = "nie",
+            topic = "hobbys",
+            type = "quiz",
+            tags = listOf("games", "ichhabenochnie"),
+            questions = listOf(
+                GenQuestion(q = "Ich habe noch nie die Schuld auf den Controller geschoben, wenn ich verloren habe.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bis spät in die Nacht gezockt und am nächsten Tag bereut, wie müde ich war.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie \"Nur noch eine Runde\" gesagt und dann noch drei Stunden gespielt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bei einem Spiel vergessen zu speichern und stundenlangen Fortschritt verloren.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Wutanfall bekommen (Rage Quit) und das Spiel beendet.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie heimlich gegoogelt, wie man ein schweres Level löst.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie echtes Geld für kosmetische Items in einem Spiel ausgegeben.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Boss beim ersten Versuch besiegt und mich wie ein Gott gefühlt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie bei Mario Kart absichtlich jemanden mit einem blauen Panzer abgeschossen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie in Sims den Pool-Leiter entfernt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen NPC (Non-Player Character) absichtlich geärgert.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie die Tastatur oder den Controller vor Wut weggeworfen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Charakter in einem RPG genau nach meinem Aussehen erstellt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie vor einem Jump-Scare im Spiel laut geschrien.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie den Soundtrack eines Spiels beim Arbeiten oder Lernen gehört.", options = listOf("Habe ich", "Habe ich noch nie"))
+            )
+        ),
+        GenPack(
+            id = "cj_universal_quiz",
+            title = "Universal Studios Genie oder Neuling?",
+            cat = "nie",
+            topic = "filme_serien",
+            type = "quiz",
+            tags = listOf("universal", "parks", "ichhabenochnie"),
+            questions = listOf(
+                GenQuestion(q = "Ich habe noch nie von einer Fahrt in der Jurassic Park Wasserbahn geträumt.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Themenpark besucht und von morgens bis abends durchgehalten.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie Angst vor einer Achterbahn gehabt und bin trotzdem eingestiegen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein überteuertes Souvenir im Freizeitpark gekauft.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie ein Foto mit einem Park-Maskottchen gemacht.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie mehr als zwei Stunden für eine einzige Attraktion angestanden.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie beim Achterbahn-Foto eine lustige Pose gemacht.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie Fast-Pass-Tickets gekauft, weil ich ungeduldig war.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie in einem 3D-Simulator-Ride die Orientierung verloren.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Transformers- oder Marvel-Ride völlig fasziniert verlassen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Churro in einem Themenpark gegessen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie das Gefühl gehabt, in einem Filmset zu stehen.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie so viel Adrenalin gespürt, dass ich direkt nochmal fahren wollte.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie meine Wertsachen bei einer Wasserbahn nass gemacht.", options = listOf("Habe ich", "Habe ich noch nie")),
+                GenQuestion(q = "Ich habe noch nie einen Tag im Themenpark als den besten Tag des Jahres bezeichnet.", options = listOf("Habe ich", "Habe ich noch nie"))
+            )
+        ),
+        GenPack(
+            id = "cj_party_wer1",
+            title = "Party Edition",
+            cat = "wer",
+            topic = "aufwaermen",
+            type = "quiz",
+            tags = listOf("party", "werwuerde"),
+            questions = listOf(
+                GenQuestion(q = "Wer würde eher auf einer Party als Erster einschlafen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher den Text eines Songs falsch mitsingen, aber voller Überzeugung?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher versehentlich das Getränk von jemand anderem trinken?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher eine peinliche Tanz-Performance hinlegen und es feiern?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher am nächsten Morgen seinen eigenen Namen vergessen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher heimlich die Party verlassen, ohne sich zu verabschieden?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher den DJ nerven, um den eigenen Lieblingssong zu wünschen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf einer Party plötzlich anfangen aufzuräumen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher stundenlang tiefgründige Gespräche in der Küche führen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher bei einem Trinkspiel betrügen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher versehentlich eine teure Vase oder etwas Zerbrechliches umwerfen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher die Nachbarn einladen, wenn sie sich über den Lärm beschweren?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf dem Sofa eines Fremden übernachten?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf einer Party Pizza für alle bestellen und sie selbst aufessen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher mit dem Haustier des Gastgebers spielen, anstatt mit den Gästen zu reden?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher das peinlichste Foto des Abends in seiner Story posten?", options = listOf("{user}", "{partner}", "Beide", "Niemand"))
+            )
+        ),
+        GenPack(
+            id = "cj_party_wer2",
+            title = "Party Edition II",
+            cat = "wer",
+            topic = "aufwaermen",
+            type = "quiz",
+            tags = listOf("party", "werwuerde"),
+            questions = listOf(
+                GenQuestion(q = "Wer würde eher eine Flasche öffnen, ohne einen Flaschenöffner zu benutzen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher eine Rede halten, obwohl absolut niemand danach gefragt hat?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf der Tanzfläche ausrutschen, es aber wie einen coolen Move aussehen lassen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher den teuersten Drink auf der Karte bestellen und es bereuen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher einen Ex-Partner anrufen, nachdem die Party vorbei ist?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher die Türsteher anfreunden, um VIP-Zugang zu bekommen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher ein spontanes Karaoke-Battle starten?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher am nächsten Tag ein Video finden, von dem er nichts mehr wusste?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher das Buffet plündern und heimlich Essen mit nach Hause nehmen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher einen fremden Gast versehentlich beleidigen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf der Party einschlafen und mit Edding im Gesicht aufwachen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher versuchen, einen komplizierten Cocktail selbst zu mixen und kläglich scheitern?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher die Party-Spiele (wie Beer Pong) viel zu ernst nehmen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher eine Stunde im Badezimmer verbringen, um Selfies zu machen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher auf einer Hausparty die Kontrolle über die Spotify-Playlist an sich reißen?", options = listOf("{user}", "{partner}", "Beide", "Niemand")),
+                GenQuestion(q = "Wer würde eher behaupten, komplett nüchtern zu sein, während das Gegenteil der Fall ist?", options = listOf("{user}", "{partner}", "Beide", "Niemand"))
+            )
+        )
+
     )
 
     val LINK_PACKS: List<GenLinkPack> = emptyList()

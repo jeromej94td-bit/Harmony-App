@@ -1,6 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.contentText
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -32,13 +30,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
@@ -57,7 +53,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import com.example.ui.components.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -158,6 +154,7 @@ fun DevStudioScreen(
         ) {
             val tabs = listOf(
                 "📂 Ordner",
+                "🏷️ Kategorien",
                 "📝 Spiele",
                 "🔗 Ketten",
                 "🖼️ Bilder",
@@ -187,12 +184,20 @@ fun DevStudioScreen(
                 onDone = { pack ->
                     updateCounter++
                     onShowToast("🎉 '${pack.title}' angelegt · ${pack.pairs.size} Paare spielbereit")
-                    selectedTab = 4
+                    selectedTab = 5
                 },
                 onShowToast = onShowToast
             )
 
-            1 -> DevPacksTab(
+            1 -> DevCategoriesTab(
+                categories = categories,
+                onChanged = { msg ->
+                    updateCounter++
+                    onShowToast(msg)
+                }
+            )
+
+            2 -> DevPacksTab(
                 packs = packs,
                 categories = categories,
                 onChanged = { msg ->
@@ -202,7 +207,7 @@ fun DevStudioScreen(
                 onStartPack = onStartPack
             )
 
-            2 -> DevLinkPacksTab(
+            3 -> DevLinkPacksTab(
                 updateCounter = updateCounter,
                 packs = packs,
                 categories = categories,
@@ -213,7 +218,7 @@ fun DevStudioScreen(
                 onStartPack = onStartPack
             )
 
-            3 -> DevImagesTab(
+            4 -> DevImagesTab(
                 updateCounter = updateCounter,
                 onChanged = { msg ->
                     updateCounter++
@@ -221,9 +226,9 @@ fun DevStudioScreen(
                 }
             )
 
-            4 -> DevTestTab(packs = packs, categories = categories, onStartPack = onStartPack)
+            5 -> DevTestTab(packs = packs, onStartPack = onStartPack)
 
-            5 -> DevExportTab(
+            6 -> DevExportTab(
                 packs = packs,
                 onShowToast = onShowToast,
                 onChanged = { updateCounter++ }
@@ -277,7 +282,6 @@ private fun DevFolderImportTab(
 
     var categoryName by remember { mutableStateOf("Eis") }
     var categoryEmoji by remember { mutableStateOf("🍦") }
-    var categoryColorHex by remember { mutableStateOf(0xFFFFC46B) }
     var packTitle by remember { mutableStateOf("Eissorten") }
     var packEmoji by remember { mutableStateOf("🍦") }
 
@@ -404,13 +408,6 @@ private fun DevFolderImportTab(
             }
 
             item {
-                CategoryColorPicker(
-                    selectedColorHex = categoryColorHex,
-                    onColorSelected = { categoryColorHex = it }
-                )
-            }
-
-            item {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                     DevField(
                         value = packTitle,
@@ -531,7 +528,6 @@ private fun DevFolderImportTab(
                                         packTitle = packTitle,
                                         packEmoji = packEmoji,
                                         items = items,
-                                        categoryColorHex = categoryColorHex,
                                         onProgress = { done, total ->
                                             busyText = "Bild $done von $total…"
                                         }
@@ -620,14 +616,14 @@ private fun StagedRowItem(
         )
         Column {
             IconButton(onClick = onUp, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.ArrowUpward, contentText("Nach oben"), tint = HarmonyMuted, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.ArrowUpward, "Nach oben", tint = HarmonyMuted, modifier = Modifier.size(16.dp))
             }
             IconButton(onClick = onDown, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.ArrowDownward, contentText("Nach unten"), tint = HarmonyMuted, modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.ArrowDownward, "Nach unten", tint = HarmonyMuted, modifier = Modifier.size(16.dp))
             }
         }
         IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
-            Icon(Icons.Default.Delete, contentText("Entfernen"), tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))
+            Icon(Icons.Default.Delete, "Entfernen", tint = Color(0xFFFF5252), modifier = Modifier.size(18.dp))
         }
     }
 }
@@ -647,7 +643,6 @@ private fun DevPacksTab(
     var filterType by remember { mutableStateOf("all") }
     var editingPack by remember { mutableStateOf<QuestionPack?>(null) }
     var creatingNew by remember { mutableStateOf(false) }
-    var showingCategoryManager by remember { mutableStateOf(false) }
 
     val filtered = remember(packs, searchQuery, filterType) {
         packs.filter { p ->
@@ -684,23 +679,13 @@ private fun DevPacksTab(
                     .height(52.dp)
             )
             IconButton(
-                onClick = { showingCategoryManager = true },
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(HarmonySurface)
-                    .border(1.dp, HarmonyPurpleLight, RoundedCornerShape(12.dp))
-            ) {
-                Icon(Icons.Default.Palette, contentText("Kategorien & Farben"), tint = HarmonyPurpleLight)
-            }
-            IconButton(
                 onClick = { creatingNew = true },
                 modifier = Modifier
                     .size(46.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(HarmonyPurple)
             ) {
-                Icon(Icons.Default.Add, contentText("Neues Spiel"), tint = Color.White)
+                Icon(Icons.Default.Add, "Neues Spiel", tint = Color.White)
             }
         }
 
@@ -781,28 +766,22 @@ private fun DevPacksTab(
                             val count = if (pack.type == "tot") "${pack.pairs.size} Paare"
                             else "${pack.questions.size} Fragen"
                             val ownTag = if (DeveloperDataManager.isEditable(pack.id)) " · eigen" else ""
-                            val typeLabel = when (pack.type.lowercase()) {
-                                "tot" -> "Das oder Das"
-                                "quiz" -> "Quiz"
-                                "disc" -> "Diskussion"
-                                else -> pack.type.replaceFirstChar { it.uppercase() }
-                            }
                             Text(
-                                "$typeLabel · $count$ownTag",
+                                "${pack.type.uppercase()} · $count$ownTag",
                                 fontSize = 11.5.sp,
                                 color = HarmonyMuted
                             )
                         }
 
                         IconButton(onClick = { editingPack = pack }) {
-                            Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyPurpleLight)
+                            Icon(Icons.Default.Edit, "Bearbeiten", tint = HarmonyPurpleLight)
                         }
                         if (DeveloperDataManager.isEditable(pack.id)) {
                             IconButton(onClick = {
                                 DeveloperDataManager.deletePack(context, pack.id)
                                 onChanged("'${pack.title}' gelöscht.")
                             }) {
-                                Icon(Icons.Default.Delete, contentText("Löschen"), tint = Color(0xFFFF5252))
+                                Icon(Icons.Default.Delete, "Löschen", tint = Color(0xFFFF5252))
                             }
                         }
                     }
@@ -853,17 +832,6 @@ private fun DevPacksTab(
             }
         )
     }
-
-    if (showingCategoryManager) {
-        CategoryManagerDialog(
-            categories = categories,
-            onDismiss = { showingCategoryManager = false },
-            onChanged = { msg ->
-                showingCategoryManager = false
-                onChanged(msg)
-            }
-        )
-    }
 }
 
 // =====================================================================
@@ -881,7 +849,6 @@ private fun EditPackSheet(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    var showingCategoryManager by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf(pack.title) }
     var packEmoji by remember { mutableStateOf(pack.emoji) }
     var categoryId by remember { mutableStateOf(pack.cat) }
@@ -969,7 +936,7 @@ private fun EditPackSheet(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
+                        Icon(Icons.Default.Close, "Schließen", tint = HarmonyMuted)
                     }
                     Text(
                         if (isNew) "Neues Spiel" else "Spiel bearbeiten",
@@ -1038,51 +1005,27 @@ private fun EditPackSheet(
                     }
 
                     item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Kategorie", fontSize = 12.sp, color = HarmonyMuted)
-                            Text(
-                                "🎨 Farben & Kategorien verwalten",
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = HarmonyPurpleLight,
-                                modifier = Modifier.clickable { showingCategoryManager = true }
-                            )
-                        }
-                        Spacer(Modifier.height(4.dp))
+                        Text("Kategorie", fontSize = 12.sp, color = HarmonyMuted)
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             items(categories, key = { it.id }) { cat ->
                                 val sel = cat.id == categoryId
-                                val catColor = Color(cat.tagColorHex)
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(16.dp))
                                         .background(if (sel) HarmonyPurple else HarmonySurface)
                                         .border(
-                                            1.5.dp,
-                                            if (sel) HarmonyPurpleLight else catColor.copy(alpha = 0.5f),
+                                            1.dp,
+                                            if (sel) HarmonyPurpleLight else HarmonyLine,
                                             RoundedCornerShape(16.dp)
                                         )
                                         .clickable { categoryId = cat.id }
                                         .padding(horizontal = 10.dp, vertical = 6.dp)
                                 ) {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(8.dp)
-                                                .clip(CircleShape)
-                                                .background(catColor)
-                                        )
-                                        Spacer(Modifier.width(6.dp))
-                                        Text(
-                                            "${cat.emoji} ${contentText(cat.name)}",
-                                            fontSize = 11.5.sp,
-                                            color = if (sel) Color.White else HarmonyText
-                                        )
-                                    }
+                                    Text(
+                                        "${cat.emoji} ${cat.name}",
+                                        fontSize = 11.5.sp,
+                                        color = if (sel) Color.White else HarmonyText
+                                    )
                                 }
                             }
                         }
@@ -1214,14 +1157,6 @@ private fun EditPackSheet(
             }
 
             busyText?.let { BusyOverlay(it) }
-
-            if (showingCategoryManager) {
-                CategoryManagerDialog(
-                    categories = categories,
-                    onDismiss = { showingCategoryManager = false },
-                    onChanged = { showingCategoryManager = false }
-                )
-            }
         }
     }
 }
@@ -1249,7 +1184,7 @@ private fun PairEditor(
         ) {
             Text("Paar ${index + 1}", fontSize = 11.sp, color = HarmonyMuted, fontWeight = FontWeight.Bold)
             IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Delete, contentText("Paar löschen"), tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Delete, "Paar löschen", tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
             }
         }
         Spacer(Modifier.height(4.dp))
@@ -1361,7 +1296,7 @@ private fun QuestionEditor(
         ) {
             Text("Frage ${index + 1}", fontSize = 11.sp, color = HarmonyMuted, fontWeight = FontWeight.Bold)
             IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Delete, contentText("Frage löschen"), tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Delete, "Frage löschen", tint = Color(0xFFFF5252), modifier = Modifier.size(16.dp))
             }
         }
         OutlinedTextField(
@@ -1542,7 +1477,7 @@ private fun DevImagesTab(
                                 localVersion++
                                 onChanged("Eigenes Bild für '$name' entfernt.")
                             }) {
-                                Icon(Icons.Default.Delete, contentText("Zurücksetzen"), tint = Color(0xFFFF5252))
+                                Icon(Icons.Default.Delete, "Zurücksetzen", tint = Color(0xFFFF5252))
                             }
                         }
                     }
@@ -1561,7 +1496,6 @@ private fun DevImagesTab(
 @Composable
 private fun DevTestTab(
     packs: List<QuestionPack>,
-    categories: List<Category>,
     onStartPack: (String) -> Unit
 ) {
     LazyColumn(
@@ -1592,9 +1526,7 @@ private fun DevTestTab(
                         Spacer(Modifier.height(2.dp))
                         val details = if (pack.type == "tot") "${pack.pairs.size} Paare"
                         else "${pack.questions.size} Fragen"
-                        val catObj = categories.find { it.id == pack.cat }
-                        val catName = catObj?.let { "${it.emoji} ${contentText(it.name)}" } ?: pack.cat
-                        Text("$catName · $details", fontSize = 12.sp, color = HarmonyMuted)
+                        Text("${pack.cat} · $details", fontSize = 12.sp, color = HarmonyMuted)
                     }
                     Button(
                         onClick = { onStartPack(pack.id) },
@@ -1783,6 +1715,37 @@ private fun DevExportTab(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     "Für AI Studio exportieren",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+
+            Spacer(Modifier.height(10.dp))
+
+            Button(
+                onClick = {
+                    scope.launch {
+                        busyText = "Projekt wird als ZIP gepackt…"
+                        val zipFile = withContext(Dispatchers.IO) {
+                            DevExporter.exportFullProjectZip(context)
+                        }
+                        busyText = null
+                        onShowToast("🎉 Vollständiges Android Studio Projekt vorbereitet!")
+                        DevExporter.shareFile(context, zipFile, mime = "application/zip")
+                    }
+                },
+                enabled = busyText == null,
+                colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurpleLight),
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp)
+            ) {
+                Icon(Icons.Default.Folder, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    "Kompletten Code exportieren",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -2086,13 +2049,13 @@ private fun DevLinkPacksTab(
                                     isCreatingNew = false
                                     activeLinkPackForEdit = linkPack
                                 }) {
-                                    Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyMuted)
+                                    Icon(Icons.Default.Edit, "Bearbeiten", tint = HarmonyMuted)
                                 }
                                 IconButton(onClick = {
                                     DeveloperDataManager.deleteLinkPack(context, linkPack.id)
                                     onChanged("Kette '${linkPack.title}' gelöscht.")
                                 }) {
-                                    Icon(Icons.Default.Delete, contentText("Löschen"), tint = HarmonyPink)
+                                    Icon(Icons.Default.Delete, "Löschen", tint = HarmonyPink)
                                 }
                             }
                         }
@@ -2176,7 +2139,7 @@ private fun DevLinkPackEditorDialog(
                 ) {
                     Text("🔗 Ketten-Bauer", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
+                        Icon(Icons.Default.Close, "Schließen", tint = HarmonyMuted)
                     }
                 }
 
@@ -2215,7 +2178,7 @@ private fun DevLinkPackEditorDialog(
                                                 mutable[idx - 1] = tmp
                                                 steps = mutable
                                             }) {
-                                                Icon(Icons.Default.ArrowUpward, contentText("Nach oben"), tint = HarmonyMuted, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.ArrowUpward, "Nach oben", tint = HarmonyMuted, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                         if (idx < steps.lastIndex) {
@@ -2226,14 +2189,14 @@ private fun DevLinkPackEditorDialog(
                                                 mutable[idx + 1] = tmp
                                                 steps = mutable
                                             }) {
-                                                Icon(Icons.Default.ArrowDownward, contentText("Nach unten"), tint = HarmonyMuted, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.ArrowDownward, "Nach unten", tint = HarmonyMuted, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                         if (steps.size > 1) {
                                             IconButton(onClick = {
                                                 steps = steps.filterIndexed { i, _ -> i != idx }
                                             }) {
-                                                Icon(Icons.Default.Delete, contentText("Löschen"), tint = HarmonyPink, modifier = Modifier.size(18.dp))
+                                                Icon(Icons.Default.Delete, "Löschen", tint = HarmonyPink, modifier = Modifier.size(18.dp))
                                             }
                                         }
                                     }
@@ -2498,11 +2461,7 @@ private fun DevSlotEditor(
                                 .clickable { onSlotChanged(slot.copy(pairIndex = pIdx)) }
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
-                            Text(
-                                "${pIdx + 1}: ${contentText(pair.first)} / ${contentText(pair.second)}",
-                                fontSize = 11.sp,
-                                color = if (sel) Color.White else HarmonyMuted
-                            )
+                            Text("${pIdx + 1}: ${pair.first} / ${pair.second}", fontSize = 11.sp, color = if (sel) Color.White else HarmonyMuted)
                         }
                     }
                 }
@@ -2581,234 +2540,231 @@ private fun BusyOverlay(text: String) {
         }
     }
 }
+@Composable
+fun DevCategoriesTab(
+    categories: List<Category>,
+    onChanged: (String) -> Unit
+) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    var editCategory by remember { mutableStateOf<Category?>(null) }
+    
+    val ownCategories = categories.filter { c -> 
+        DeveloperDataManager._customCategories.any { it.id == c.id } 
+    }
+    val generatedCategories = categories.filter { c ->
+        DeveloperDataManager.getGeneratedCategories().any { it.id == c.id } && 
+        DeveloperDataManager._customCategories.none { it.id == c.id }
+    }
 
-val CATEGORY_PRESET_COLORS = listOf(
-    0xFFFFC46B to "Gold",
-    0xFFFF4B81 to "Rosa",
-    0xFF9D4EDD to "Lila",
-    0xFF00F5D4 to "Türkis",
-    0xFF4895EF to "Blau",
-    0xFFFF70A6 to "Koralle",
-    0xFF2EC4B6 to "Smaragd",
-    0xFFE63946 to "Rubinrot",
-    0xFFC77DFF to "Lavendel",
-    0xFF70E000 to "Limetten grün",
-    0xFFFF007F to "Magenta",
-    0xFFFF9F1C to "Orange"
-)
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Text(
+                    text = "Eigene Kategorien",
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
+            if (ownCategories.isEmpty()) {
+                item {
+                    Text(
+                        text = "Noch keine eigenen Kategorien vorhanden.",
+                        color = HarmonyMuted,
+                        fontSize = 13.sp
+                    )
+                }
+            }
+            items(ownCategories, key = { it.id }) { cat ->
+                CategoryEditCard(
+                    category = cat,
+                    onEdit = {
+                        editCategory = cat
+                        showDialog = true
+                    },
+                    onDelete = {
+                        DeveloperDataManager.deleteCategory(context, cat.id)
+                        DeveloperDataManager.syncWithHarmonyData()
+                        onChanged("Kategorie gelöscht")
+                    }
+                )
+            }
+            
+            item { Spacer(modifier = Modifier.height(16.dp)) }
+            
+            item {
+                Text(
+                    text = "Generierte Kategorien",
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
+            items(generatedCategories, key = { it.id }) { cat ->
+                CategoryEditCard(
+                    category = cat,
+                    onEdit = {
+                        editCategory = cat
+                        showDialog = true
+                    },
+                    onDelete = null // Generierte Kategorien können nicht direkt gelöscht werden
+                )
+            }
+        }
+
+        Button(
+            onClick = {
+                editCategory = null
+                showDialog = true
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(24.dp)
+                .size(56.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurpleLight),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Kategorie hinzufügen", tint = Color.White)
+        }
+    }
+
+    if (showDialog) {
+        CategoryEditDialog(
+            category = editCategory,
+            onDismiss = { showDialog = false },
+            onSave = { name, emoji ->
+                val newCat = DeveloperDataManager.addOrUpdateCategory(context, name, emoji)
+                DeveloperDataManager.syncWithHarmonyData()
+                showDialog = false
+                if (editCategory == null) {
+                    onChanged("Kategorie '${newCat.name}' erstellt")
+                } else {
+                    onChanged("Kategorie '${newCat.name}' aktualisiert")
+                }
+            }
+        )
+    }
+}
 
 @Composable
-fun CategoryColorPicker(
-    selectedColorHex: Long,
-    onColorSelected: (Long) -> Unit,
-    modifier: Modifier = Modifier
+fun CategoryEditCard(
+    category: Category,
+    onEdit: () -> Unit,
+    onDelete: (() -> Unit)?
 ) {
-    Column(modifier = modifier) {
-        Text("Kategorie-Farbe wählen", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = HarmonyMuted)
-        Spacer(Modifier.height(6.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(CATEGORY_PRESET_COLORS) { (hex, _) ->
-                val color = Color(hex)
-                val isSel = selectedColorHex == hex
-                Box(
-                    modifier = Modifier
-                        .size(34.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .border(
-                            width = if (isSel) 3.dp else 1.dp,
-                            color = if (isSel) Color.White else Color.White.copy(alpha = 0.3f),
-                            shape = CircleShape
-                        )
-                        .clickable { onColorSelected(hex) },
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (isSel) {
-                        Icon(Icons.Default.Check, null, tint = Color.White, modifier = Modifier.size(18.dp))
-                    }
-                }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(HarmonySurface)
+            .border(1.dp, HarmonyLine, RoundedCornerShape(12.dp))
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = category.emoji,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(end = 12.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = category.name, fontWeight = FontWeight.Bold, color = HarmonyText)
+            Text(text = category.id, fontSize = 11.sp, color = HarmonyMuted)
+        }
+        IconButton(onClick = onEdit) {
+            Icon(Icons.Default.Edit, contentDescription = "Bearbeiten", tint = HarmonyMuted)
+        }
+        if (onDelete != null) {
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Default.Delete, contentDescription = "Löschen", tint = HarmonyPink)
             }
         }
     }
 }
 
 @Composable
-fun CategoryManagerDialog(
-    categories: List<Category>,
+fun CategoryEditDialog(
+    category: Category?,
     onDismiss: () -> Unit,
-    onChanged: (String) -> Unit
+    onSave: (String, String) -> Unit
 ) {
-    val context = LocalContext.current
-    var editingCategory by remember { mutableStateOf<Category?>(null) }
-    var isAddingNew by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf(category?.name ?: "") }
+    var emoji by remember { mutableStateOf(category?.emoji ?: "🎯") }
 
-    var editName by remember { mutableStateOf("") }
-    var editEmoji by remember { mutableStateOf("🎯") }
-    var editColorHex by remember { mutableStateOf(0xFFFFC46B) }
-
-    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
-        androidx.compose.material3.Card(
-            colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = HarmonySurface),
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
             shape = RoundedCornerShape(20.dp),
+            color = HarmonySurface,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
+                .fillMaxWidth(0.9f)
+                .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(18.dp)
-                    .fillMaxWidth()
+                modifier = Modifier.padding(20.dp)
             ) {
+                Text(
+                    text = if (category == null) "Neue Kategorie" else "Kategorie bearbeiten",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Name") },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = HarmonyPurpleLight,
+                        unfocusedBorderColor = HarmonyLine,
+                        focusedTextColor = HarmonyText,
+                        unfocusedTextColor = HarmonyText,
+                        focusedLabelColor = HarmonyPurpleLight
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = emoji,
+                    onValueChange = { emoji = it },
+                    label = { Text("Emoji (z.B. 🚀)") },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = HarmonyPurpleLight,
+                        unfocusedBorderColor = HarmonyLine,
+                        focusedTextColor = HarmonyText,
+                        unfocusedTextColor = HarmonyText,
+                        focusedLabelColor = HarmonyPurpleLight
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+                    singleLine = true
+                )
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text("🏷️ Kategorien & Farben", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentText("Schließen"), tint = HarmonyMuted)
+                    TextButton(onClick = onDismiss) {
+                        Text("Abbrechen", color = HarmonyMuted)
                     }
-                }
-
-                Spacer(Modifier.height(8.dp))
-
-                if (editingCategory == null && !isAddingNew) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .heightIn(max = 340.dp)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(categories, key = { it.id }) { cat ->
-                            val catColor = Color(cat.tagColorHex)
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(HarmonySurface)
-                                    .border(1.dp, catColor.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
-                                    .clickable {
-                                        editingCategory = cat
-                                        editName = cat.name
-                                        editEmoji = cat.emoji
-                                        editColorHex = cat.tagColorHex
-                                    }
-                                    .padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(16.dp)
-                                            .clip(CircleShape)
-                                            .background(catColor)
-                                    )
-                                    Spacer(Modifier.width(10.dp))
-                                    Text(
-                                        "${cat.emoji}  ${contentText(cat.name)}",
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = HarmonyText
-                                    )
-                                }
-                                Icon(Icons.Default.Edit, contentText("Bearbeiten"), tint = HarmonyPurpleLight, modifier = Modifier.size(18.dp))
-                            }
-                        }
-                    }
-
-                    Spacer(Modifier.height(12.dp))
-
+                    Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            isAddingNew = true
-                            editName = ""
-                            editEmoji = "🎯"
-                            editColorHex = 0xFFFFC46B
+                            if (name.isNotBlank()) {
+                                onSave(name, emoji)
+                            }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurple),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        enabled = name.isNotBlank(),
+                        colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurpleLight)
                     ) {
-                        Icon(Icons.Default.Add, null, modifier = Modifier.size(16.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text("Neue Kategorie erstellen", fontWeight = FontWeight.Bold)
-                    }
-                } else {
-                    val catToEdit = editingCategory
-                    Text(
-                        if (catToEdit != null) "Kategorie bearbeiten" else "Neue Kategorie",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HarmonyText
-                    )
-
-                    Spacer(Modifier.height(10.dp))
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                        DevField(
-                            value = editName,
-                            onValueChange = { editName = it },
-                            label = "Name",
-                            modifier = Modifier.weight(1f)
-                        )
-                        DevField(
-                            value = editEmoji,
-                            onValueChange = { editEmoji = it },
-                            label = "Emoji",
-                            modifier = Modifier.width(72.dp)
-                        )
-                    }
-
-                    Spacer(Modifier.height(12.dp))
-
-                    CategoryColorPicker(
-                        selectedColorHex = editColorHex,
-                        onColorSelected = { editColorHex = it }
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                editingCategory = null
-                                isAddingNew = false
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text("Abbrechen", color = HarmonyMuted)
-                        }
-
-                        Button(
-                            onClick = {
-                                if (editName.isNotBlank()) {
-                                    val catId = catToEdit?.id ?: DeveloperDataManager.makeCategoryId(editName)
-                                    val updatedCat = Category(
-                                        id = catId,
-                                        name = editName.trim(),
-                                        emoji = editEmoji.ifBlank { "🎯" },
-                                        tagColorHex = editColorHex
-                                    )
-                                    DeveloperDataManager.updateCategory(context, updatedCat)
-                                    onChanged("Kategorie '${updatedCat.name}' gespeichert.")
-                                    editingCategory = null
-                                    isAddingNew = false
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = HarmonyPurple),
-                            shape = RoundedCornerShape(10.dp),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text("Speichern", fontWeight = FontWeight.Bold)
-                        }
+                        Text("Speichern", color = Color.White)
                     }
                 }
             }

@@ -130,7 +130,8 @@ object HarmonyPacksData {
         Topic("kennen", "Einander kennenlernen", "🫶"),
         Topic("reisen", "Reisen", "✈️"),
         Topic("familie", "Familie", "👨‍👩‍👧"),
-        Topic("hobbys", "Hobbys", "🎯")
+        Topic("hobbys", "Hobbys", "🎯"),
+        Topic("filme_serien", "Filme/Serien", "📺")
     )
 
     val DEFAULT_PACKS = listOf(
@@ -194,15 +195,15 @@ object HarmonyPacksData {
             tags = listOf("kinder", "unterhaltung"),
             cat = "reden",
             topic = "familie",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken? 💰", defaultMine = "Möglicherweise müssen wir Einsparungen vornehmen"),
-                Question("Werden wir genug Zeit für das Kind / die Kinder haben? ⏳", defaultMine = "Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat."),
-                Question("Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?", defaultMine = "Regelmäßige Rendezvous oder gemeinsame Zeit einplanen"),
-                Question("Wie möchtest du, dass unsere Zukunft aussieht?", defaultMine = "Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden"),
-                Question("Wie würdest du sie/ihn nennen?"),
-                Question("Willst du ein Mädchen oder einen Jungen? 👶"),
-                Question("Was soll aus unserem Kind werden, wenn es erwachsen ist?")
+                Question("Sind wir in der Lage, alle Kosten für ein Kind/mehrere Kinder zu decken? 💰", listOf("Ja, absolut", "Müssen sparen", "Eher knapp"), defaultMine = "Möglicherweise müssen wir Einsparungen vornehmen"),
+                Question("Werden wir genug Zeit für das Kind / die Kinder haben? ⏳", listOf("Ja, genug", "Müssen es planen", "Wird stressig"), defaultMine = "Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat."),
+                Question("Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?", listOf("Feste Date-Nights", "Zeit, wenn das Baby schläft", "Spontan"), defaultMine = "Regelmäßige Rendezvous oder gemeinsame Zeit einplanen"),
+                Question("Wie möchtest du, dass unsere Zukunft aussieht?", listOf("Große Familie", "Zu zweit reisen", "Karriere & Erfolg"), defaultMine = "Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden"),
+                Question("Wie würdest du sie/ihn nennen?", listOf("Traditioneller Name", "Moderner Name", "Ausgefallener Name")),
+                Question("Willst du ein Mädchen oder einen Jungen? 👶", listOf("Mädchen", "Junge", "Egal, Hauptsache gesund")),
+                Question("Was soll aus unserem Kind werden, wenn es erwachsen ist?", listOf("Erfolgreich", "Glücklich und frei", "Familienmensch"))
             )
         ),
 
@@ -212,12 +213,12 @@ object HarmonyPacksData {
             tags = listOf("reden", "unterhaltung"),
             cat = "reden",
             topic = "familie",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wer übernimmt die tägliche Versorgung?"),
-                Question("Was passiert mit dem Tier, wenn wir verreisen?"),
-                Question("Welches Budget planen wir für Futter und Tierarzt ein?"),
-                Question("Passt ein Tier überhaupt zu unserem Alltag?")
+                Question("Wer übernimmt die tägliche Versorgung?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Was passiert mit dem Tier, wenn wir verreisen?", listOf("Kommt mit", "Familie/Freunde", "Tierpension")),
+                Question("Welches Budget planen wir für Futter und Tierarzt ein?", listOf("Unter 50€/Monat", "50-100€/Monat", "Über 100€/Monat")),
+                Question("Passt ein Tier überhaupt zu unserem Alltag?", listOf("Ja, perfekt", "Mit Kompromissen", "Eher schwierig"))
             )
         ),
 
@@ -227,12 +228,12 @@ object HarmonyPacksData {
             tags = listOf("reden", "unterhaltung"),
             cat = "reden",
             topic = "reisen",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wie viel wollen wir insgesamt ausgeben?"),
-                Question("Lieber durchgeplant oder spontan?"),
-                Question("Wie viel Zeit wollen wir getrennt verbringen?"),
-                Question("Was ist für jeden von uns das absolute Highlight?")
+                Question("Wie viel wollen wir insgesamt ausgeben?", listOf("Unter 1000", "1000 bis 3000", "3000 bis 5000", "Open End")),
+                Question("Lieber durchgeplant oder spontan?", listOf("Durchgeplant", "Spontan", "Beides")),
+                Question("Wie viel Zeit wollen wir getrennt verbringen?", listOf("Viel getrennt", "Ein paar Stunden", "Am liebsten alles zusammen")),
+                Question("Was ist für jeden von uns das absolute Highlight?", listOf("Kultur & Sehenswürdigkeiten", "Entspannung", "Abenteuer", "Gutes Essen"))
             )
         ),
 
@@ -242,12 +243,12 @@ object HarmonyPacksData {
             tags = listOf("reden", "unterhaltung"),
             cat = "reden",
             topic = "geld",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wie viel Kredit ist für uns realistisch tragbar?"),
-                Question("Stadt oder Land — was ist uns wichtiger?"),
-                Question("Wie lange wollen wir dort mindestens bleiben?"),
-                Question("Wer kümmert sich um Renovierung und Instandhaltung?")
+                Question("Wie viel Kredit ist für uns realistisch tragbar?", listOf("Unter 1000 im Monat", "1000 - 1500 im Monat", "1500 - 2000 im Monat", "Über 2000 im Monat")),
+                Question("Stadt oder Land — was ist uns wichtiger?", listOf("Stadt", "Land", "Vorort")),
+                Question("Wie lange wollen wir dort mindestens bleiben?", listOf("1-5 Jahre", "5-10 Jahre", "Für immer", "Weiß ich noch nicht")),
+                Question("Wer kümmert sich um Renovierung und Instandhaltung?", listOf("{user}", "{partner}", "Beide", "Niemand"))
             )
         ),
 
@@ -343,21 +344,6 @@ object HarmonyPacksData {
                 "Sushi" to "Burger",
                 "Süß" to "Herzhaft",
                 "Selbst kochen" to "Bestellen"
-            )
-        ),
-
-        // ★ Traditionelle italienische Gerichte (für italienische Sprache)
-        QuestionPack(
-            id = "tot_traditional_it_food",
-            title = "Traditionelle Gerichte",
-            tags = listOf("dasoderdas"),
-            cat = "tot",
-            topic = "kennen",
-            type = "tot",
-            emoji = "🍝",
-            pairs = listOf(
-                "Gnocchi alla sorrentina" to "Pasta e fagioli"
-                // Weitere Paare werden später ergänzt (01–25 laut README)
             )
         ),
 
@@ -508,12 +494,12 @@ object HarmonyPacksData {
             tags = listOf("unterhaltung"),
             cat = "reden",
             topic = "geld",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Führen wir getrennte oder gemeinsame Konten?"),
-                Question("Wie gehen wir mit unterschiedlichen Einkommen um?"),
-                Question("Wofür sparen wir gemeinsam?"),
-                Question("Ab welchem Betrag sprechen wir vor einer Anschaffung?")
+                Question("Führen wir getrennte oder gemeinsame Konten?", listOf("Getrennte Konten", "Gemeinsame Konten", "Sowohl als auch")),
+                Question("Wie gehen wir mit unterschiedlichen Einkommen um?", listOf("Jeder zahlt 50%", "Prozentual nach Einkommen", "Einer zahlt alles")),
+                Question("Wofür sparen wir gemeinsam?", listOf("Urlaub", "Haus/Wohnung", "Auto", "Für die Zukunft")),
+                Question("Ab welchem Betrag sprechen wir vor einer Anschaffung?", listOf("Ab 50€", "Ab 100€", "Ab 500€", "Erst bei sehr großen Summen"))
             )
         ),
 
@@ -569,10 +555,10 @@ object HarmonyPacksData {
             tags = listOf("unterhaltung"),
             cat = "tief",
             topic = "aufwaermen",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wie kann dein Partner ein noch besserer Partner für dich sein?"),
-                Question("Kennst du die Essensvorlieben deines Partners?")
+                Question("Wie kann dein Partner ein noch besserer Partner für dich sein?", listOf("Mehr zuhören", "Mehr gemeinsame Zeit", "Mehr Unterstützung", "Ist schon perfekt")),
+                Question("Kennst du die Essensvorlieben deines Partners?", listOf("Ja, in- und auswendig", "Das meiste weiß ich", "Bin manchmal unsicher"))
             )
         ),
 
@@ -605,14 +591,14 @@ object HarmonyPacksData {
             tags = listOf("reden"),
             cat = "reden",
             topic = "sex",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wie kann dein Partner am besten Sex mit dir initiieren?"),
-                Question("Wie stehst du zu schmutzigem Gerede beim Sex?"),
-                Question("Was ist das Wichtigste, das du bei einer sexuellen Begegnung suchst?"),
-                Question("Was hältst du davon, gemeinsam erotische Inhalte anzuschauen?"),
-                Question("Wie zeigst du deine Zuneigung am liebsten außerhalb von Sex?"),
-                Question("Beschreibe unser Sexleben mit einem Emoji.")
+                Question("Wie kann dein Partner am besten Sex mit dir initiieren?", listOf("Direkt ansprechen", "Körperliche Annäherung", "Romantische Stimmung", "Überraschend")),
+                Question("Wie stehst du zu schmutzigem Gerede beim Sex?", listOf("Ich liebe es", "Ist okay für mich", "Nicht mein Fall")),
+                Question("Was ist das Wichtigste, das du bei einer sexuellen Begegnung suchst?", listOf("Leidenschaft", "Romantik", "Spaß & Abenteuer", "Verbindung")),
+                Question("Was hältst du davon, gemeinsam erotische Inhalte anzuschauen?", listOf("Sehr gerne", "Ab und zu", "Lieber nicht")),
+                Question("Wie zeigst du deine Zuneigung am liebsten außerhalb von Sex?", listOf("Kuscheln", "Worte/Komplimente", "Kleine Geschenke", "Hilfe im Alltag")),
+                Question("Beschreibe unser Sexleben mit einem Emoji.", listOf("🔥", "❤️", "🎢", "🧸"))
             )
         ),
 
@@ -622,14 +608,14 @@ object HarmonyPacksData {
             tags = listOf("unterhaltung"),
             cat = "zust",
             topic = "moral",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Ananas auf der Pizza schmeckt köstlich."),
-                Question("Berühmte Touristenorte sind immer eine Enttäuschung."),
-                Question("Geister existieren wirklich."),
-                Question("Fernsehwerbung ist manchmal interessant anzusehen."),
-                Question("Eine neue Sprache zu lernen ist einfach."),
-                Question("Denselben Film zweimal zu schauen, ist Zeitverschwendung.")
+                Question("Ananas auf der Pizza schmeckt köstlich.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Berühmte Touristenorte sind immer eine Enttäuschung.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Geister existieren wirklich.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Fernsehwerbung ist manchmal interessant anzusehen.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Eine neue Sprache zu lernen ist einfach.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Denselben Film zweimal zu schauen, ist Zeitverschwendung.", listOf("Stimmt", "Stimmt nicht", "Teils teils"))
             )
         ),
 
@@ -639,18 +625,18 @@ object HarmonyPacksData {
             tags = listOf("unterhaltung"),
             cat = "wer",
             topic = "beziehung",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Wer ist romantischer?"),
-                Question("Wer ist der beste Tänzer?"),
-                Question("Wer gibt mehr Herzlichkeit?"),
-                Question("Wer hat den besseren Musikgeschmack?"),
-                Question("Wer findet die besten Restaurants?"),
-                Question("Wer hängt mehr an seinen Eltern?"),
-                Question("Wer ist besser organisiert?"),
-                Question("Wer ist der Beste bei der Filmauswahl?"),
-                Question("Wer kocht besser?"),
-                Question("Wer ist der Beste bei der Planung romantischer Dates?")
+                Question("Wer ist romantischer?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer ist der beste Tänzer?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer gibt mehr Herzlichkeit?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer hat den besseren Musikgeschmack?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer findet die besten Restaurants?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer hängt mehr an seinen Eltern?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer ist besser organisiert?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer ist der Beste bei der Filmauswahl?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer kocht besser?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer ist der Beste bei der Planung romantischer Dates?", listOf("{user}", "{partner}", "Beide", "Niemand"))
             )
         ),
 
@@ -660,14 +646,14 @@ object HarmonyPacksData {
             tags = listOf("reden"),
             cat = "reden",
             topic = "beziehung",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Was möchtest du, dass dein Partner öfter tut?"),
-                Question("Was ist dein Lieblingsfoto von uns? 📸"),
-                Question("Welches Lied macht dich an? 🥵"),
-                Question("Was magst du an deinem Partner am liebsten?"),
-                Question("Was ist deine größte Angst vor dem Zusammenleben?"),
-                Question("Was hast du von deinem Partner gelernt?")
+                Question("Was möchtest du, dass dein Partner öfter tut?", listOf("Mich überraschen", "Zuhören", "Im Haushalt helfen", "Zärtlich sein")),
+                Question("Was ist dein Lieblingsfoto von uns? 📸", listOf("Ein lustiges Bild", "Ein romantisches Bild", "Aus dem Urlaub")),
+                Question("Welches Lied macht dich an? 🥵", listOf("RnB / Soul", "Pop", "Rock", "Keine Musik")),
+                Question("Was magst du an deinem Partner am liebsten?", listOf("Humor", "Aussehen", "Intelligenz", "Fürsorglichkeit")),
+                Question("Was ist deine größte Angst vor dem Zusammenleben?", listOf("Keine Privatsphäre", "Streit über Haushalt", "Alltagsroutine")),
+                Question("Was hast du von deinem Partner gelernt?", listOf("Geduld", "Gelassenheit", "Neues Hobby", "Besser kommunizieren"))
             )
         ),
 
@@ -699,22 +685,22 @@ object HarmonyPacksData {
             tags = listOf("unterhaltung"),
             cat = "zust",
             topic = "beziehung",
-            type = "disc",
+            type = "quiz",
             questions = listOf(
-                Question("Ich lache viel mit meinem Partner."),
-                Question("Ich entdecke gerne neue Hobbys oder Aktivitäten mit meinem Partner."),
-                Question("Ich teile gerne Memes und Witze mit meinem Partner."),
-                Question("Ich priorisiere es, Zeit mit meinem Partner zu verbringen, auch wenn ich beschäftigt bin."),
-                Question("Ich schreibe meinem Partner jeden Tag."),
-                Question("Ich teile gerne alle Details meines Tages mit meinem Partner."),
-                Question("Ich lerne gerne die Hobbys und Interessen meines Partners kennen."),
-                Question("Es nervt mich, wenn mein Partner zu lange braucht, um auf Nachrichten zu antworten."),
-                Question("Ich plane gerne Dates mit meinem Partner."),
-                Question("Ich liebe es, Filme mit meinem Partner zu schauen, die keiner von uns zuvor gesehen hat."),
-                Question("Ich liebe es, meine Lieblingsmusik mit meinem Partner zu teilen."),
-                Question("Romantische Gesten wie Nachrichten, Zettelchen oder Geschenke machen mich glücklich."),
-                Question("Ich bevorzuge romantische Spaziergänge im Park gegenüber einem Kinobesuch."),
-                Question("Ich genieße es, mit meinem Partner neue Restaurants auszuprobieren, anstatt immer an die gleichen Orte zu gehen.")
+                Question("Ich lache viel mit meinem Partner.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich entdecke gerne neue Hobbys oder Aktivitäten mit meinem Partner.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich teile gerne Memes und Witze mit meinem Partner.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich priorisiere es, Zeit mit meinem Partner zu verbringen, auch wenn ich beschäftigt bin.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich schreibe meinem Partner jeden Tag.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich teile gerne alle Details meines Tages mit meinem Partner.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich lerne gerne die Hobbys und Interessen meines Partners kennen.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Es nervt mich, wenn mein Partner zu lange braucht, um auf Nachrichten zu antworten.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich plane gerne Dates mit meinem Partner.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich liebe es, Filme mit meinem Partner zu schauen, die keiner von uns zuvor gesehen hat.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich liebe es, meine Lieblingsmusik mit meinem Partner zu teilen.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Romantische Gesten wie Nachrichten, Zettelchen oder Geschenke machen mich glücklich.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich bevorzuge romantische Spaziergänge im Park gegenüber einem Kinobesuch.", listOf("Stimmt", "Stimmt nicht", "Teils teils")),
+                Question("Ich genieße es, mit meinem Partner neue Restaurants auszuprobieren, anstatt immer an die gleichen Orte zu gehen.", listOf("Stimmt", "Stimmt nicht", "Teils teils"))
             )
         ),
 

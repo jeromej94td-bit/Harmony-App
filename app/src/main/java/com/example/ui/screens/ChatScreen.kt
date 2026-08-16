@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.tr
-import com.example.ui.contentText
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -35,7 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import com.example.ui.components.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +57,7 @@ import com.example.ui.theme.HarmonyPink
 import com.example.ui.theme.HarmonyPinkSoft
 import com.example.ui.theme.HarmonyPurple
 import com.example.ui.theme.HarmonySurface
+import com.example.util.LanguageManager
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 
@@ -69,6 +68,7 @@ fun ChatScreen(
     gfkPanelOpen: Boolean,
     gfkLoading: Boolean,
     gfkResult: String?,
+    appLanguage: String = "de",
     onSendMessage: (String) -> Unit,
     onToggleGfkPanel: () -> Unit,
     onRunGfk: (String) -> Unit,
@@ -115,7 +115,7 @@ fun ChatScreen(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = tr("✨ GFK-Brücke", "✨ NVC bridge"),
+                            text = "✨ " + LanguageManager.tr("GFK-Brücke", appLanguage),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = HarmonyText
@@ -124,7 +124,7 @@ fun ChatScreen(
 
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = tr("Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.", "Reframes your draft using observation, feeling, need, and request."),
+                        text = LanguageManager.tr("Formuliert deinen Entwurf gewaltfrei um: Beobachtung, Gefühl, Bedürfnis, Bitte.", appLanguage),
                         fontSize = 12.sp,
                         color = HarmonyMuted,
                         lineHeight = 16.sp
@@ -134,7 +134,7 @@ fun ChatScreen(
                     OutlinedTextField(
                         value = gfkDraftText,
                         onValueChange = { gfkDraftText = it },
-                        placeholder = { Text(tr("Was möchtest du eigentlich sagen?", "What do you actually want to say?"), color = HarmonyMuted) },
+                        placeholder = { Text(LanguageManager.tr("Was möchtest du eigentlich sagen?", appLanguage), color = HarmonyMuted) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("gfk_draft_input"),
@@ -160,9 +160,9 @@ fun ChatScreen(
                         if (gfkLoading) {
                             CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = tr("Formuliere um...", "Reframing..."), color = Color.White, fontSize = 13.sp)
+                            Text(text = LanguageManager.tr("Formuliere um...", appLanguage), color = Color.White, fontSize = 13.sp)
                         } else {
-                            Text(text = tr("Umformulieren", "Reframe"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            Text(text = LanguageManager.tr("Umformulieren", appLanguage), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -197,7 +197,7 @@ fun ChatScreen(
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
                         ) {
-                            Text(text = tr("In Chat einfügen", "Insert into chat"), color = HarmonyText, fontSize = 13.sp)
+                            Text(text = LanguageManager.tr("In Chat einfügen", appLanguage), color = HarmonyText, fontSize = 13.sp)
                         }
                     }
                 }
@@ -236,7 +236,7 @@ fun ChatScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.AutoAwesome,
-                    contentDescription = contentText("GFK Brücke"),
+                    contentDescription = "GFK",
                     tint = HarmonyPinkSoft,
                     modifier = Modifier.size(20.dp)
                 )
@@ -247,7 +247,7 @@ fun ChatScreen(
             OutlinedTextField(
                 value = chatInputText,
                 onValueChange = { chatInputText = it },
-                placeholder = { Text(tr("Nachricht an $partnerName...", "Message to $partnerName..."), color = HarmonyMuted) },
+                placeholder = { Text("${LanguageManager.tr("Nachricht an", appLanguage)} $partnerName...", color = HarmonyMuted) },
                 modifier = Modifier
                     .weight(1f)
                     .testTag("chat_input_field"),
@@ -280,7 +280,7 @@ fun ChatScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = contentText("Senden"),
+                    contentDescription = LanguageManager.tr("Senden", appLanguage),
                     tint = Color.White,
                     modifier = Modifier.size(18.dp)
                 )

@@ -4,8 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.R
+import com.example.ui.EXACT_DANISH_CONTENT
 import com.example.ui.EXACT_ENGLISH_CONTENT
+import com.example.ui.EXACT_FRENCH_CONTENT
 import com.example.ui.EXACT_ITALIAN_CONTENT
+import com.example.ui.EXACT_JAPANESE_CONTENT
+import com.example.ui.EXACT_NORWEGIAN_CONTENT
+import com.example.ui.EXACT_PORTUGUESE_BRAZIL_CONTENT
+import com.example.ui.EXACT_PORTUGUESE_CONTENT
+import com.example.ui.EXACT_PORTUGUESE_PORTUGAL_CONTENT
+import com.example.ui.EXACT_SPANISH_LATIN_AMERICA_CONTENT
+import com.example.ui.EXACT_SPANISH_SPAIN_CONTENT
 import java.io.File
 
 /**
@@ -199,7 +208,7 @@ object TotImageProvider {
         "Derjenige sein, der umarmt wird" to "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
         "Diejenige sein, die umarmt" to "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
         "Verbringe die Feiertage mit deiner Familie" to "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800&auto=format&fit=crop&q=80",
-        "Die Feiertage mit der Familie deines Partners verbringen" to "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80"
+        "Die Feiertage mit der Familie deines Partners verbringen" to "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80",
         // Harmony premium local artwork: explicit one-image-per-option mappings.
         "Altbau mit Charme" to R.drawable.traumhaus_altbau,
         "Neubau mit Smart Home" to R.drawable.traumhaus_smart_home,
@@ -280,21 +289,80 @@ object TotImageProvider {
     private val aliases = mutableMapOf<String, String>()
 
     init {
-        // Option labels are localized for display, but image resources are keyed by
-        // their canonical German source. Register both shipped locales up front so
-        // every renderer — including legacy screens that only pass display text —
-        // resolves the same image after a language switch.
-        (EXACT_ENGLISH_CONTENT.entries + EXACT_ITALIAN_CONTENT.entries).forEach { (source, localized) ->
-            if (!source.equals(localized, ignoreCase = true)) {
-                setAlias(localized, source)
+        // Register all shipped locales up front so every renderer — including
+        // screens that only pass localized display text — resolves the same image.
+        registerLocaleContent(EXACT_ENGLISH_CONTENT)
+        registerLocaleContent(EXACT_ITALIAN_CONTENT)
+        registerLocaleContent(EXACT_FRENCH_CONTENT)
+        registerLocaleContent(EXACT_JAPANESE_CONTENT)
+        registerLocaleContent(EXACT_SPANISH_LATIN_AMERICA_CONTENT)
+        registerLocaleContent(EXACT_SPANISH_SPAIN_CONTENT)
+        registerLocaleContent(EXACT_PORTUGUESE_BRAZIL_CONTENT)
+        registerLocaleContent(EXACT_PORTUGUESE_PORTUGAL_CONTENT)
+        registerLocaleContent(EXACT_PORTUGUESE_CONTENT)
+        registerLocaleContent(EXACT_DANISH_CONTENT)
+        registerLocaleContent(EXACT_NORWEGIAN_CONTENT)
+
+        // Also ensure every directMap entry gets direct aliases for its translated terms
+        directMap.keys.forEach { germanKey ->
+            EXACT_ENGLISH_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_ITALIAN_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_FRENCH_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_JAPANESE_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_SPANISH_LATIN_AMERICA_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_SPANISH_SPAIN_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_PORTUGUESE_BRAZIL_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_PORTUGUESE_PORTUGAL_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_PORTUGUESE_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_DANISH_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+            EXACT_NORWEGIAN_CONTENT[germanKey]?.let { setAlias(it, germanKey) }
+        }
+    }
+
+    /**
+     * Registers all non-identical translation pairs as aliases back to the German key.
+     */
+    fun registerLocaleContent(map: Map<String, String>) {
+        map.forEach { (source, localized) ->
+            val sTrim = source.trim()
+            val lTrim = localized.trim()
+            if (sTrim.isNotEmpty() && lTrim.isNotEmpty() && !sTrim.equals(lTrim, ignoreCase = true)) {
+                setAlias(lTrim, sTrim)
             }
         }
     }
 
     /**
+     * Resolves a localized or alias text back to its canonical key (usually German).
+     */
+    fun resolveCanonicalKey(text: String): String {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return ""
+        val lower = trimmed.lowercase()
+
+        // 1. Check explicit alias
+        aliases[trimmed]?.let { return it }
+        aliases[lower]?.let { return it }
+
+        // 2. Reverse lookup in translations
+        aliases.entries.firstOrNull { it.key.equals(trimmed, ignoreCase = true) }?.value?.let { return it }
+        EXACT_PORTUGUESE_BRAZIL_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_PORTUGUESE_PORTUGAL_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_PORTUGUESE_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_SPANISH_LATIN_AMERICA_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_SPANISH_SPAIN_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_FRENCH_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_JAPANESE_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_DANISH_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_NORWEGIAN_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_ITALIAN_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+        EXACT_ENGLISH_CONTENT.entries.firstOrNull { it.value.equals(trimmed, ignoreCase = true) }?.key?.let { return it }
+
+        return trimmed
+    }
+
+    /**
      * Resolves only an explicitly registered key and never returns the generic fallback.
-     * This lets a stable, language-independent asset key be attempted before a legacy
-     * display-text key without mistaking the fallback image for a successful lookup.
      */
     private fun getExplicitImageOrNull(text: String, visited: Set<String> = emptySet()): Any? {
         val trimmed = text.trim()
@@ -302,23 +370,42 @@ object TotImageProvider {
         val lower = trimmed.lowercase()
         if (lower in visited) return null
 
-        val targetText = aliases[trimmed] ?: aliases[lower]
-        if (targetText != null && !targetText.equals(trimmed, ignoreCase = true)) {
-            getExplicitImageOrNull(targetText, visited + lower)?.let { return it }
+        val canonical = resolveCanonicalKey(trimmed)
+        if (canonical.isNotEmpty() && !canonical.equals(trimmed, ignoreCase = true)) {
+            getExplicitImageOrNull(canonical, visited + lower)?.let { return it }
         }
 
         userOverrides[trimmed]?.let { return resolve(it) }
         userOverrides[lower]?.let { return resolve(it) }
         generatedOverrides[trimmed]?.let { return resolve(it) }
         generatedOverrides[lower]?.let { return resolve(it) }
+
+        iceCreamImageKey(trimmed)?.let { key ->
+            generatedOverrides[key]?.let { return resolve(it) }
+            generatedOverrides[key.lowercase()]?.let { return resolve(it) }
+            directMap[key]?.let { return it }
+            directMap[key.lowercase()]?.let { return it }
+        }
+
         directMap[trimmed]?.let { return it }
+        directMap[lower]?.let { return it }
+
+        if (canonical.isNotEmpty() && !canonical.equals(trimmed, ignoreCase = true)) {
+            userOverrides[canonical]?.let { return resolve(it) }
+            userOverrides[canonical.lowercase()]?.let { return resolve(it) }
+            generatedOverrides[canonical]?.let { return resolve(it) }
+            generatedOverrides[canonical.lowercase()]?.let { return resolve(it) }
+            directMap[canonical]?.let { return it }
+            directMap[canonical.lowercase()]?.let { return it }
+        }
+
         return null
     }
 
     fun setAlias(aliasText: String, sourceText: String) {
         val aTrim = aliasText.trim()
         val sTrim = sourceText.trim()
-        if (aTrim.isNotEmpty() && sTrim.isNotEmpty()) {
+        if (aTrim.isNotEmpty() && sTrim.isNotEmpty() && !aTrim.equals(sTrim, ignoreCase = true)) {
             aliases[aTrim] = sTrim
             aliases[aTrim.lowercase()] = sTrim
         }
@@ -358,9 +445,17 @@ object TotImageProvider {
     fun hasExplicitImage(text: String): Boolean {
         val t = text.trim()
         val l = t.lowercase()
+        val canonical = resolveCanonicalKey(t)
+        val cLower = canonical.lowercase()
+
         return userOverrides.containsKey(t) || userOverrides.containsKey(l) ||
                 generatedOverrides.containsKey(t) || generatedOverrides.containsKey(l) ||
-                directMap.containsKey(t)
+                directMap.containsKey(t) || directMap.containsKey(l) ||
+                (canonical.isNotEmpty() && (
+                    userOverrides.containsKey(canonical) || userOverrides.containsKey(cLower) ||
+                    generatedOverrides.containsKey(canonical) || generatedOverrides.containsKey(cLower) ||
+                    directMap.containsKey(canonical) || directMap.containsKey(cLower)
+                ))
     }
 
     /** Macht aus einem gespeicherten Wert etwas, das Coil laden kann. */
@@ -372,19 +467,19 @@ object TotImageProvider {
     private fun iceCreamImageKey(text: String): String? {
         val lower = text.trim().lowercase()
         return when {
-            "vanille" in lower -> "Vanille"
-            "schokolade" in lower || "chocolate" in lower -> "Schokolade"
-            "erdbeer" in lower -> "Erdbeere"
-            "zitrone" in lower || "lemon" in lower -> "Zitrone"
+            "vanille" in lower || "vanilla" in lower || "baunilha" in lower || "vaniglia" in lower -> "Vanille"
+            "schokolade" in lower || "chocolate" in lower || "cioccolato" in lower -> "Schokolade"
+            "erdbeer" in lower || "strawberry" in lower || "fragola" in lower || "morango" in lower -> "Erdbeere"
+            "zitrone" in lower || "lemon" in lower || "limone" in lower || "limão" in lower || "limao" in lower -> "Zitrone"
             "stracciatella" in lower -> "Stracciatella"
-            "pistaz" in lower -> "Pistazie"
-            "mango" in lower -> "Mango Sorbet"
-            "himbeer" in lower || "raspberry" in lower -> "Himbeere"
-            "salted caramel" in lower || "salzkaramell" in lower -> "Salted Caramel"
-            "cookie dough" in lower -> "Cookie Dough"
-            "hazelnut" in lower || "haselnuss" in lower -> "Hazelnut"
-            "white chocolate" in lower || "weiße schokolade" in lower -> "White Chocolate"
-            "walnuss" in lower -> "Walnuss"
+            "pistaz" in lower || "pistachio" in lower || "pistacchio" in lower || "pistache" in lower -> "Pistazie"
+            "mango" in lower || "manga" in lower -> "Mango Sorbet"
+            "himbeer" in lower || "raspberry" in lower || "lampone" in lower || "framboesa" in lower -> "Himbeere"
+            "salted caramel" in lower || "salzkaramell" in lower || "caramello salato" in lower || "caramelo salgado" in lower -> "Salted Caramel"
+            "cookie dough" in lower || "impasto per biscotti" in lower || "massa de bolachas" in lower || "massa de biscoito" in lower || "biscott" in lower || "bolacha" in lower -> "Cookie Dough"
+            "hazelnut" in lower || "haselnuss" in lower || "nocciola" in lower || "avelã" in lower || "avela" in lower -> "Hazelnut"
+            "white chocolate" in lower || "weiße schokolade" in lower || "cioccolato bianco" in lower || "chocolate branco" in lower -> "White Chocolate"
+            "walnuss" in lower || "walnut" in lower || "noce" in lower || "noz" in lower -> "Walnuss"
             "banane" in lower || "banana" in lower -> "Banane"
             else -> null
         }
@@ -392,82 +487,76 @@ object TotImageProvider {
 
     fun getImageUrl(text: String): Any {
         val trimmed = text.trim()
+        if (trimmed.isEmpty()) {
+            return "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
+        }
         val lower = trimmed.lowercase()
 
-        // 0. Alias prüfen (z.B. "1 Jahr lang in Rom" -> "Rom")
-        val targetText = aliases[trimmed] ?: aliases[lower]
-        if (targetText != null && targetText != trimmed) {
-            return getImageUrl(targetText)
+        // 0. Explizite Abfrage (inkl. Alias-Auflösung und direkter Maps)
+        getExplicitImageOrNull(trimmed)?.let { return it }
+
+        // 1. Kanonischer Schlüssel
+        val canonical = resolveCanonicalKey(trimmed)
+        if (canonical.isNotEmpty() && !canonical.equals(trimmed, ignoreCase = true)) {
+            getExplicitImageOrNull(canonical)?.let { return it }
         }
 
-        // 1. Vom Entwickler gesetzt
-        userOverrides[trimmed]?.let { return resolve(it) }
-        userOverrides[lower]?.let { return resolve(it) }
-
-        // 2. Aus dem generierten Content
-        generatedOverrides[trimmed]?.let { return resolve(it) }
-        generatedOverrides[lower]?.let { return resolve(it) }
-
-        // 3. Eingebettete/generated Bilder: robuste Sorten-Aliase.
-        // Der Content darf z.B. "Vanille Bourbon" oder "Belgische Schokolade"
-        // anzeigen, während das Bild unter "Vanille" bzw. "Schokolade" gespeichert ist.
-        iceCreamImageKey(trimmed)?.let { key ->
-            generatedOverrides[key]?.let { return resolve(it) }
-            generatedOverrides[key.lowercase()]?.let { return resolve(it) }
-        }
+        // 2. Fuzzy match auf generierte Overrides
         generatedOverrides.entries.firstOrNull { (key, _) ->
-            val canonical = key.trim().lowercase()
-            canonical.length >= 4 && (lower.contains(canonical) || canonical.contains(lower))
+            val can = key.trim().lowercase()
+            can.length >= 4 && (lower.contains(can) || can.contains(lower))
         }?.value?.let { return resolve(it) }
 
-        // 4. Fest eingebaut
-        directMap[text]?.let { return it }
-        directMap[trimmed]?.let { return it }
+        // 3. Multilinguale Stichwort-Heuristik
+        return getHeuristicFallback(lower, canonical.lowercase())
+    }
 
+    private fun getHeuristicFallback(lower: String, canonicalLower: String): Any {
+        val combined = "$lower $canonicalLower"
         return when {
-            "tokyo" in lower || "japan" in lower -> R.drawable.tokyo_tower_zojoji
-            "seychellen" in lower -> "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80"
-            "malediven" in lower -> "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&auto=format&fit=crop&q=80"
-            "gewitter" in lower || "regen" in lower || "sturm" in lower -> "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&auto=format&fit=crop&q=80"
-            "mond" in lower || "stern" in lower || "nacht" in lower -> "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=800&auto=format&fit=crop&q=80"
-            "lego" in lower -> "https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=800&auto=format&fit=crop&q=80"
-            "schokolade" in lower -> "https://images.unsplash.com/photo-1511381939415-e44015466834?w=800&auto=format&fit=crop&q=80"
-            "picknick" in lower -> "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?w=800&auto=format&fit=crop&q=80"
-            "grill" in lower -> "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800&auto=format&fit=crop&q=80"
-            "feuerstelle" in lower || "lagerfeuer" in lower -> "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=800&auto=format&fit=crop&q=80"
-            "gemüse" in lower || "beet" in lower -> "https://images.unsplash.com/photo-1592417817098-8f3d6eb12765?w=800&auto=format&fit=crop&q=80"
-            "blumenwiese" in lower || "wiese" in lower -> "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&auto=format&fit=crop&q=80"
-            "hängematte" in lower -> "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80"
-            "sofa" in lower || "lounge" in lower -> "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&auto=format&fit=crop&q=80"
-            "whirlpool" in lower || "jacuzzi" in lower || "hot tub" in lower || "hottub" in lower -> "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80"
-            "pool" in lower -> "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&auto=format&fit=crop&q=80"
-            "spa" in lower || "wellness" in lower -> "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&auto=format&fit=crop&q=80"
-            "wein" in lower || "sekt" in lower -> "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop&q=80"
-            "boot" in lower || "yacht" in lower -> "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=80"
-            "sonnenaufgang" in lower || "morgen" in lower -> "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&auto=format&fit=crop&q=80"
-            "sonnenuntergang" in lower || "abend" in lower -> "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=800&auto=format&fit=crop&q=80"
-            "spiel" in lower || "gaming" in lower || "board" in lower -> "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=800&auto=format&fit=crop&q=80"
-            "million" in lower || "dollar" in lower || "geld" in lower -> "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop&q=80"
-            "geheimnis" in lower || "vertrauen" in lower -> "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&fit=crop&q=80"
-            "umarm" in lower -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
-            "fernbeziehung" in lower || "telefon" in lower -> "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80"
-            "familie" in lower || "feiertag" in lower -> "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80"
-            "auto" in lower || "roadtrip" in lower || "reise" in lower -> "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80"
-            "tanz" in lower || "tanzen" in lower -> "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=800&auto=format&fit=crop&q=80"
-            "zelten" in lower || "camp" in lower -> "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&auto=format&fit=crop&q=80"
-            "feuer" in lower || "kamin" in lower -> "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80"
-            "küche" in lower || "kochen" in lower -> "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&auto=format&fit=crop&q=80"
-            "garten" in lower || "pflanze" in lower || "blume" in lower -> "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&auto=format&fit=crop&q=80"
-            "strand" in lower || "meer" in lower || "ozean" in lower -> "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
-            "berg" in lower || "wander" in lower -> "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80"
-            "hochzeit" in lower || "braut" in lower -> "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop&q=80"
-            "ring" in lower || "diamant" in lower || "gold" in lower -> "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80"
-            "essen" in lower || "restaurant" in lower || "diner" in lower -> "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80"
-            "film" in lower || "kino" in lower || "serie" in lower -> "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=80"
-            "musik" in lower || "konzert" in lower || "party" in lower || "club" in lower -> "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80"
-            "stadt" in lower || "flug" in lower -> "https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?w=800&auto=format&fit=crop&q=80"
-            "haus" in lower || "wohnung" in lower -> "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80"
-            "freund" in lower || "liebe" in lower || "paar" in lower -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
+            "tokyo" in combined || "japan" in combined || "giappone" in combined || "japão" in combined || "japao" in combined -> R.drawable.tokyo_tower_zojoji
+            "seychellen" in combined || "seychelles" in combined || "seicelle" in combined -> "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80"
+            "malediven" in combined || "maldives" in combined || "maldive" in combined || "maldivas" in combined -> "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&auto=format&fit=crop&q=80"
+            "gewitter" in combined || "regen" in combined || "sturm" in combined || "thunderstorm" in combined || "rain" in combined || "storm" in combined || "temporale" in combined || "pioggia" in combined || "tempestade" in combined || "chuva" in combined -> "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&auto=format&fit=crop&q=80"
+            "mond" in combined || "stern" in combined || "nacht" in combined || "moon" in combined || "star" in combined || "night" in combined || "notte" in combined || "luna" in combined || "stelle" in combined || "lua" in combined || "noite" in combined || "estrelas" in combined -> "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=800&auto=format&fit=crop&q=80"
+            "lego" in combined -> "https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=800&auto=format&fit=crop&q=80"
+            "schokolade" in combined || "chocolate" in combined || "cioccolato" in combined -> "https://images.unsplash.com/photo-1511381939415-e44015466834?w=800&auto=format&fit=crop&q=80"
+            "picknick" in combined || "picnic" in combined || "piquenique" in combined -> "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?w=800&auto=format&fit=crop&q=80"
+            "grill" in combined || "barbecue" in combined || "churrasco" in combined || "grigliata" in combined -> "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800&auto=format&fit=crop&q=80"
+            "feuerstelle" in combined || "lagerfeuer" in combined || "campfire" in combined || "fire pit" in combined || "focolare" in combined || "fogueira" in combined || "lareira" in combined -> "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=800&auto=format&fit=crop&q=80"
+            "gemüse" in combined || "beet" in combined || "vegetable" in combined || "garden bed" in combined || "verdure" in combined || "legumes" in combined || "horta" in combined || "orto" in combined -> "https://images.unsplash.com/photo-1592417817098-8f3d6eb12765?w=800&auto=format&fit=crop&q=80"
+            "blumenwiese" in combined || "wiese" in combined || "meadow" in combined || "flower" in combined || "prato" in combined || "fiori" in combined || "flores" in combined -> "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&auto=format&fit=crop&q=80"
+            "hängematte" in combined || "hammock" in combined || "amaca" in combined || "rede" in combined -> "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80"
+            "sofa" in combined || "lounge" in combined || "divano" in combined || "sofá" in combined -> "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&auto=format&fit=crop&q=80"
+            "whirlpool" in combined || "jacuzzi" in combined || "hot tub" in combined || "hottub" in combined || "hidromassagem" in combined || "idromassaggio" in combined -> "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80"
+            "pool" in combined || "piscina" in combined || "swimming" in combined -> "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&auto=format&fit=crop&q=80"
+            "spa" in combined || "wellness" in combined || "terme" in combined || "benessere" in combined || "bem-estar" in combined -> "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&auto=format&fit=crop&q=80"
+            "wein" in combined || "sekt" in combined || "wine" in combined || "champagne" in combined || "vino" in combined || "vinho" in combined -> "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop&q=80"
+            "boot" in combined || "yacht" in combined || "boat" in combined || "barca" in combined || "barco" in combined -> "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=80"
+            "sonnenaufgang" in combined || "morgen" in combined || "sunrise" in combined || "morning" in combined || "alba" in combined || "mattino" in combined || "nascer do sol" in combined || "amanhecer" in combined -> "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&auto=format&fit=crop&q=80"
+            "sonnenuntergang" in combined || "abend" in combined || "sunset" in combined || "evening" in combined || "tramonto" in combined || "sera" in combined || "pôr do sol" in combined || "entardecer" in combined -> "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=800&auto=format&fit=crop&q=80"
+            "spiel" in combined || "gaming" in combined || "board" in combined || "game" in combined || "gioco" in combined || "jogo" in combined -> "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=800&auto=format&fit=crop&q=80"
+            "million" in combined || "dollar" in combined || "geld" in combined || "money" in combined || "soldi" in combined || "dinheiro" in combined -> "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&auto=format&fit=crop&q=80"
+            "geheimnis" in combined || "vertrauen" in combined || "secret" in combined || "trust" in combined || "segreto" in combined || "fiducia" in combined || "segredo" in combined || "confiança" in combined || "confianca" in combined -> "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&fit=crop&q=80"
+            "umarm" in combined || "hug" in combined || "abbraccio" in combined || "abraço" in combined || "abraco" in combined -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
+            "fernbeziehung" in combined || "telefon" in combined || "long distance" in combined || "relazione a distanza" in combined || "relacionamento à distância" in combined || "relacionamento a distancia" in combined -> "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80"
+            "familie" in combined || "feiertag" in combined || "family" in combined || "holiday" in combined || "famiglia" in combined || "festa" in combined || "família" in combined || "familia" in combined || "feriado" in combined -> "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&auto=format&fit=crop&q=80"
+            "auto" in combined || "roadtrip" in combined || "reise" in combined || "trip" in combined || "travel" in combined || "viaggio" in combined || "viagem" in combined || "carro" in combined -> "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80"
+            "tanz" in combined || "tanzen" in combined || "dance" in combined || "ballo" in combined || "dança" in combined || "danca" in combined -> "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=800&auto=format&fit=crop&q=80"
+            "zelten" in combined || "camp" in combined || "camping" in combined || "campeggio" in combined || "acampamento" in combined || "acampar" in combined -> "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&auto=format&fit=crop&q=80"
+            "feuer" in combined || "kamin" in combined || "fireplace" in combined || "camino" in combined || "fogo" in combined -> "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80"
+            "küche" in combined || "kochen" in combined || "kitchen" in combined || "cook" in combined || "cucina" in combined || "cozinha" in combined || "culinária" in combined || "culinaria" in combined -> "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&auto=format&fit=crop&q=80"
+            "garten" in combined || "pflanze" in combined || "blume" in combined || "garden" in combined || "plant" in combined || "flower" in combined || "giardino" in combined || "pianta" in combined || "jardim" in combined || "flor" in combined -> "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&auto=format&fit=crop&q=80"
+            "strand" in combined || "meer" in combined || "ozean" in combined || "beach" in combined || "sea" in combined || "ocean" in combined || "spiaggia" in combined || "mare" in combined || "oceano" in combined || "praia" in combined -> "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+            "berg" in combined || "wander" in combined || "mountain" in combined || "hike" in combined || "montagna" in combined || "montanha" in combined || "caminhada" in combined || "trilha" in combined -> "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&auto=format&fit=crop&q=80"
+            "hochzeit" in combined || "braut" in combined || "wedding" in combined || "bride" in combined || "matrimonio" in combined || "sposa" in combined || "casamento" in combined || "noiva" in combined -> "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop&q=80"
+            "ring" in combined || "diamant" in combined || "gold" in combined || "diamond" in combined || "anello" in combined || "diamante" in combined || "ouro" in combined || "anel" in combined -> "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80"
+            "essen" in combined || "restaurant" in combined || "diner" in combined || "food" in combined || "mangiare" in combined || "comida" in combined || "ristorante" in combined || "restaurante" in combined -> "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80"
+            "film" in combined || "kino" in combined || "serie" in combined || "movie" in combined || "cinema" in combined -> "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=80"
+            "musik" in combined || "konzert" in combined || "party" in combined || "club" in combined || "concert" in combined || "musica" in combined || "concerto" in combined -> "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80"
+            "stadt" in combined || "flug" in combined || "city" in combined || "flight" in combined || "città" in combined || "citta" in combined || "volo" in combined || "cidade" in combined || "voo" in combined -> "https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?w=800&auto=format&fit=crop&q=80"
+            "haus" in combined || "wohnung" in combined || "house" in combined || "home" in combined || "apartment" in combined || "casa" in combined || "appartamento" in combined -> "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80"
+            "freund" in combined || "liebe" in combined || "paar" in combined || "friend" in combined || "love" in combined || "couple" in combined || "amico" in combined || "amore" in combined || "coppia" in combined || "amigo" in combined || "amor" in combined || "casal" in combined -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
             else -> "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
         }
     }
@@ -476,11 +565,18 @@ object TotImageProvider {
      * Language-safe image lookup.
      *
      * New content can register an image under [assetKey]. Existing German-keyed images
-     * continue to work through [legacyAssetKey]. The localized label is deliberately not
-     * accepted here, so switching to English or any future locale cannot change the image.
+     * continue to work through [legacyAssetKey]. Both assetKey and localized text are checked.
      */
     fun getImageUrl(assetKey: String, legacyAssetKey: String): Any {
-        getExplicitImageOrNull(assetKey)?.let { return it }
+        if (assetKey.isNotBlank()) {
+            getExplicitImageOrNull(assetKey)?.let { return it }
+        }
+        if (legacyAssetKey.isNotBlank()) {
+            getExplicitImageOrNull(legacyAssetKey)?.let { return it }
+        }
+        if (assetKey.isNotBlank()) {
+            return getImageUrl(assetKey)
+        }
         return getImageUrl(legacyAssetKey)
     }
 }

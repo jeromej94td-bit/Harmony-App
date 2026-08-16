@@ -15,18 +15,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.AppLanguage
 import com.example.ui.HarmonyViewModel
-import com.example.ui.LanguageStore
 import com.example.ui.LocalAppLanguage
 import com.example.ui.components.AmbientBackground
 import com.example.ui.components.HarmonyBottomNav
@@ -50,8 +44,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HarmonyTheme {
-                HarmonyApp(viewModel = viewModel)
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val currentLanguage = AppLanguage.fromCode(uiState.appLanguage)
+            CompositionLocalProvider(LocalAppLanguage provides currentLanguage) {
+                HarmonyTheme(darkTheme = uiState.isDarkMode) {
+                    HarmonyApp(viewModel = viewModel)
+                }
             }
         }
     }
@@ -84,7 +82,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
             uiState.isAddMomentOpen -> {
                 viewModel.closeAddMomentDialog()
             }
-            uiState.selectedTab == 2 -> { // PackListScreen
+            uiState.selectedTab == 6 -> { // PackListScreen
                 viewModel.selectTab(1) // Back to GamesScreen
             }
             uiState.selectedTab != 0 -> {
@@ -93,18 +91,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
         }
     }
 
-    val context = LocalContext.current
-    var languageCode by rememberSaveable { mutableStateOf(LanguageStore.get(context).code) }
-    val language = AppLanguage.fromStored(languageCode)
-
-    CompositionLocalProvider(LocalAppLanguage provides language) {
-        // Recreate the complete navigation tree when the locale changes. Some screens
-        // keep derived labels and lists in remember/rememberSaveable; without a locale
-        // key those cached German values can survive while the bottom navigation has
-        // already switched to English or Italian.
-        key(language.code) {
-            AmbientBackground {
-                Scaffold(
+    AmbientBackground {
+        Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = androidx.compose.ui.graphics.Color.Transparent,
             topBar = {
@@ -112,20 +100,32 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     HarmonyTopBar(
                         userName = uiState.profile.userName,
                         partnerName = uiState.profile.partnerName,
-                        onProfileClick = { viewModel.openProfileSheet() }
+                        onProfileClick = { viewModel.openProfileSheet() },
+                        onRefresh = { viewModel.refreshData() }
                     )
                 }
             },
             bottomBar = {
                 if (!isQuizActive) {
+                    val navSelectedTab = when (uiState.selectedTab) {
+                        6 -> 1 // When inside PackListScreen, highlight Spiele tab
+                        else -> uiState.selectedTab
+                    }
                     HarmonyBottomNav(
-                        selectedTab = uiState.selectedTab,
-                        onTabSelected = { tab -> viewModel.selectTab(tab) }
+                        selectedTab = navSelectedTab,
+                        onTabSelected = { tab ->
+                            if (tab == 4) {
+                                viewModel.openProfileSheet()
+                            } else {
+                                viewModel.selectTab(tab)
+                            }
+                        },
+                        appLanguage = uiState.appLanguage
                     )
                 }
             }
-                ) { innerPadding ->
-                    Box(
+        ) { innerPadding ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
@@ -136,6 +136,9 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         profile = uiState.profile,
                         answers = uiState.answers,
                         stats = uiState.stats,
+                        isRefreshing = uiState.isRefreshing,
+                        appLanguage = uiState.appLanguage,
+                        onRefresh = { viewModel.refreshData() },
                         onStartPack = { packId -> viewModel.startPack(packId) },
                         onSendWidget = { name, emoji -> viewModel.sendWidget(name, emoji) }
                     )
@@ -143,37 +146,30 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     1 -> GamesScreen(
                         answers = uiState.answers,
                         packFilter = uiState.packFilter,
+                        appLanguage = uiState.appLanguage,
                         onSetFilter = { filter -> viewModel.setPackFilter(filter) },
                         onCategoryClick = { catId -> viewModel.openCategory(catId) },
                         onTopicClick = { topicId -> viewModel.openTopic(topicId) },
                         onStartPack = { packId -> viewModel.startPack(packId) }
                     )
 
-                    2 -> PackListScreen(
-                        answers = uiState.answers,
-                        selectedTopicId = uiState.selectedTopicId,
-                        selectedCategoryId = uiState.selectedCategoryId,
-                        packFilter = uiState.packFilter,
-                        onSetFilter = { filter -> viewModel.setPackFilter(filter) },
-                        onStartPack = { packId -> viewModel.startPack(packId) },
-                        onClose = { viewModel.selectTab(1) }
-                    )
-
-                    3 -> ChatScreen(
+                    2 -> ChatScreen(
                         messages = uiState.messages,
                         partnerName = uiState.profile.partnerName,
                         gfkPanelOpen = uiState.gfkPanelOpen,
                         gfkLoading = uiState.gfkLoading,
                         gfkResult = uiState.gfkResult,
+                        appLanguage = uiState.appLanguage,
                         onSendMessage = { text -> viewModel.sendChatMessage(text) },
                         onToggleGfkPanel = { viewModel.toggleGfkPanel() },
                         onRunGfk = { draft -> viewModel.runGfk(draft) }
                     )
 
-                    4 -> MomentsScreen(
+                    3 -> MomentsScreen(
                         moments = uiState.moments,
                         profile = uiState.profile,
                         isAddMomentOpen = uiState.isAddMomentOpen,
+                        appLanguage = uiState.appLanguage,
                         onOpenAddMoment = { viewModel.openAddMomentDialog() },
                         onCloseAddMoment = { viewModel.closeAddMomentDialog() },
                         onAddMoment = { title, content -> viewModel.addMoment(title, content) }
@@ -182,6 +178,17 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     5 -> DevStudioScreen(
                         onStartPack = { packId -> viewModel.startPack(packId) },
                         onShowToast = { msg -> viewModel.showToast(msg) }
+                    )
+
+                    6 -> PackListScreen(
+                        answers = uiState.answers,
+                        selectedTopicId = uiState.selectedTopicId,
+                        selectedCategoryId = uiState.selectedCategoryId,
+                        packFilter = uiState.packFilter,
+                        appLanguage = uiState.appLanguage,
+                        onSetFilter = { filter -> viewModel.setPackFilter(filter) },
+                        onStartPack = { packId -> viewModel.startPack(packId) },
+                        onClose = { viewModel.selectTab(1) }
                     )
                 }
 
@@ -193,19 +200,18 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
 
                 // Profile Sheet
                 if (uiState.isProfileSheetOpen) {
+                    val currentLanguage = AppLanguage.fromCode(uiState.appLanguage)
                     ProfileSheet(
                         profile = uiState.profile,
-                        language = language,
-                        onLanguageChange = { next ->
-                            languageCode = next.code
-                            LanguageStore.set(context, next)
-                            viewModel.setAppLanguage(next)
-                        },
                         coachLoading = uiState.coachLoading,
                         coachResult = uiState.coachResult,
                         dateIdeasLoading = uiState.dateIdeasLoading,
                         dateIdeasResult = uiState.dateIdeasResult,
                         isEditProfileOpen = uiState.isEditProfileOpen,
+                        isDarkMode = uiState.isDarkMode,
+                        onToggleDarkMode = { enabled -> viewModel.toggleDarkMode(enabled) },
+                        language = currentLanguage,
+                        onLanguageChange = { lang -> viewModel.setLanguage(lang.code) },
                         onDismiss = { viewModel.closeProfileSheet() },
                         onToggleSimulator = { viewModel.toggleSimulator() },
                         onOpenEditProfile = { viewModel.openEditProfile() },
@@ -224,6 +230,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         profile = uiState.profile,
                         isExitConfirmOpen = uiState.isExitConfirmOpen,
                         isOwnAnswerDialogOpen = uiState.isOwnAnswerDialogOpen,
+                        appLanguage = uiState.appLanguage,
                         onPickAnswer = { optText -> viewModel.pickAnswer(optText) },
                         onPickTot = { optionText -> viewModel.pickAnswer(optionText) },
                         onNextStep = { viewModel.nextStep() },
@@ -234,8 +241,6 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onCloseOwnAnswerDialog = { viewModel.closeOwnAnswerDialog() },
                         onSaveOwnAnswer = { ansText -> viewModel.saveOwnAnswer(ansText) }
                     )
-                }
-                    }
                 }
             }
         }

@@ -54,27 +54,20 @@ data class HarmonyUiState(
     val coachResult: String? = null,
     val dateIdeasLoading: Boolean = false,
     val dateIdeasResult: String? = null,
-    val toastMessage: String? = null
+    val toastMessage: String? = null,
+    val isRefreshing: Boolean = false,
+    val isDarkMode: Boolean = true,
+    val appLanguage: String = "de"
 )
 
 class HarmonyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = HarmonyDatabase.getInstance(application)
     private val repository = HarmonyRepository(db)
-    private val _appLanguage = MutableStateFlow(LanguageStore.get(application))
 
-    private fun copy(german: String, english: String): String {
-        val language = _appLanguage.value
-        val localized = localizedContent(german, language)
-        return if (localized != german || language != AppLanguage.ENGLISH) localized else english
-    }
-
-    private fun errorDetail(error: Throwable): String =
-        localizedContent(error.localizedMessage ?: error.javaClass.simpleName, _appLanguage.value)
-
-    fun setAppLanguage(language: AppLanguage) {
-        _appLanguage.value = language
-    }
+    private val settingsPrefs = application.getSharedPreferences("harmony_settings_prefs", android.content.Context.MODE_PRIVATE)
+    private val _isDarkMode = MutableStateFlow(settingsPrefs.getBoolean("is_dark_mode", true))
+    private val _appLanguage = MutableStateFlow(settingsPrefs.getString("app_language", "de") ?: "de")
 
     private val _selectedTab = MutableStateFlow(0)
     private val _packFilter = MutableStateFlow("all")
@@ -103,6 +96,8 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     private val _toastMessage = MutableStateFlow<String?>(null)
 
+    private val _isRefreshing = MutableStateFlow(false)
+
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<HarmonyUiState> = combine(
         _selectedTab,
@@ -127,7 +122,10 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         _coachResult,
         _dateIdeasLoading,
         _dateIdeasResult,
-        _toastMessage
+        _toastMessage,
+        _isRefreshing,
+        _isDarkMode,
+        _appLanguage
     ) { arrayOfValues ->
         HarmonyUiState(
             selectedTab = arrayOfValues[0] as Int,
@@ -154,7 +152,10 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             coachResult = arrayOfValues[19] as? String,
             dateIdeasLoading = arrayOfValues[20] as Boolean,
             dateIdeasResult = arrayOfValues[21] as? String,
-            toastMessage = arrayOfValues[22] as? String
+            toastMessage = arrayOfValues[22] as? String,
+            isRefreshing = arrayOfValues[23] as Boolean,
+            isDarkMode = arrayOfValues[24] as Boolean,
+            appLanguage = arrayOfValues[25] as String
         )
     }.stateIn(
         scope = viewModelScope,
@@ -164,8 +165,16 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         DeveloperDataManager.init(application)
+        
+        // Supabase initialisieren
+        com.example.data.SupabaseClientProvider.init(
+            projectId = "rspgnonlpkxdudbjxnrl",
+            anonKey = "sb_publishable_qNtemRRaLIW0nbFb52uKLw_rWwlgUo1"
+        )
+        
         viewModelScope.launch {
             repository.ensureInitialData()
+            com.example.data.SupabaseSync.fetchAndSync()
         }
     }
 
@@ -180,13 +189,22 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     fun openTopic(topicId: String) {
         _selectedTopicId.value = topicId
         _selectedCategoryId.value = null
-        _selectedTab.value = 2 // Pack list tab
+        _selectedTab.value = 6 // Pack list screen
     }
 
     fun openCategory(catId: String) {
         _selectedCategoryId.value = catId
         _selectedTopicId.value = null
-        _selectedTab.value = 2 // Pack list tab
+        _selectedTab.value = 6 // Pack list screen
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            com.example.data.SupabaseSync.fetchAndSync()
+            _isRefreshing.value = false
+            showToast("Daten aktualisiert \ud83d\udd04")
+        }
     }
 
     fun showToast(msg: String) {
@@ -204,7 +222,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun sendWidget(name: String, emoji: String) {
-        showToast(copy("$emoji „$name\" an Alex gesendet", "$emoji “$name” sent to Alex"))
+        showToast("$emoji „$name\" an Alex gesendet")
     }
 
     // --- QUIZ RUNNER ---
@@ -303,7 +321,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     // --- CHAT ---
 
-    private val SIM_REPLIES_DE = listOf(
+    private val SIM_REPLIES = listOf(
         "Das klingt schön 🥰",
         "Ich vermiss dich gerade richtig",
         "Erzähl mir mehr davon 💕",
@@ -319,8 +337,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             val profile = uiState.value.profile
             if (profile.simulatorEnabled) {
                 delay(1200)
-                val replies = SIM_REPLIES_DE.map { localizedContent(it, _appLanguage.value) }
-                val reply = replies[Random().nextInt(replies.size)]
+                val reply = SIM_REPLIES[Random().nextInt(SIM_REPLIES.size)]
                 repository.sendChatMessage(reply, sender = "them")
             }
         }
@@ -335,11 +352,9 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         _gfkLoading.value = true
         _gfkResult.value = null
         viewModelScope.launch {
-            val result = repository.rephraseGfk(draftText, _appLanguage.value)
+            val result = repository.rephraseGfk(draftText)
             _gfkLoading.value = false
-            _gfkResult.value = result.getOrElse {
-                copy("Fehler bei der Umformulierung: ${errorDetail(it)}", "Rephrasing failed: ${errorDetail(it)}")
-            }
+            _gfkResult.value = result.getOrElse { "Fehler bei der Umformulierung: ${it.localizedMessage}" }
         }
     }
 
@@ -358,7 +373,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.addMoment(title, content)
             _isAddMomentOpen.value = false
-            showToast(copy("Moment gespeichert 💞", "Moment saved 💞"))
+            showToast("Moment gespeichert 💞")
         }
     }
 
@@ -370,6 +385,16 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
 
     fun closeProfileSheet() {
         _isProfileSheetOpen.value = false
+    }
+
+    fun toggleDarkMode(enabled: Boolean) {
+        _isDarkMode.value = enabled
+        settingsPrefs.edit().putBoolean("is_dark_mode", enabled).apply()
+    }
+
+    fun setLanguage(lang: String) {
+        _appLanguage.value = lang
+        settingsPrefs.edit().putString("app_language", lang).apply()
     }
 
     fun toggleSimulator() {
@@ -391,7 +416,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.updateProfile(userName, partnerName, startDate)
             _isEditProfileOpen.value = false
-            showToast(copy("Profil gespeichert", "Profile saved"))
+            showToast("Profil gespeichert")
         }
     }
 
@@ -406,13 +431,10 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
                 userName = profile.userName,
                 partnerName = profile.partnerName,
                 recentChats = chats,
-                answers = answers,
-                language = _appLanguage.value
+                answers = answers
             )
             _coachLoading.value = false
-            _coachResult.value = result.getOrElse {
-                copy("Fehler bei der Analyse: ${errorDetail(it)}", "Analysis failed: ${errorDetail(it)}")
-            }
+            _coachResult.value = result.getOrElse { "Fehler bei der Analyse: ${it.localizedMessage}" }
         }
     }
 
@@ -424,13 +446,10 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             val result = repository.generateDateIdeas(
                 userName = profile.userName,
                 partnerName = profile.partnerName,
-                wishes = wishes,
-                language = _appLanguage.value
+                wishes = wishes
             )
             _dateIdeasLoading.value = false
-            _dateIdeasResult.value = result.getOrElse {
-                copy("Fehler bei der Ideengenerierung: ${errorDetail(it)}", "Idea generation failed: ${errorDetail(it)}")
-            }
+            _dateIdeasResult.value = result.getOrElse { "Fehler bei der Ideengenerierung: ${it.localizedMessage}" }
         }
     }
 }

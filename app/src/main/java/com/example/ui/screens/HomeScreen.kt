@@ -23,7 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import com.example.ui.components.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +40,6 @@ import com.example.data.model.HarmonyPacksData
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.components.CategoryTag
-import com.example.ui.contentText
-import com.example.ui.tr
 import com.example.ui.components.HarmonyCard
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyBg
@@ -56,11 +54,17 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 import java.util.concurrent.TimeUnit
 
+
+import com.example.util.LanguageManager
+
 @Composable
 fun HomeScreen(
     profile: ProfileEntity,
     answers: List<AnswerEntity>,
     stats: CoupleStatsEntity,
+    isRefreshing: Boolean = false,
+    appLanguage: String = "de",
+    onRefresh: () -> Unit = {},
     onStartPack: (String) -> Unit,
     onSendWidget: (String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -69,8 +73,11 @@ fun HomeScreen(
 
     // Find daily pack (first unanswered or default to first pack)
     val answeredPackIds = answers.groupBy { it.packId }.keys
-    val dailyPack = HarmonyPacksData.PACKS.find { it.id !in answeredPackIds } ?: HarmonyPacksData.PACKS.first()
-    val recommendedPacks = HarmonyPacksData.PACKS.filter { it.id != dailyPack.id }.take(3)
+    val rawDailyPack = HarmonyPacksData.PACKS.find { it.id !in answeredPackIds } ?: HarmonyPacksData.PACKS.first()
+    val dailyPack = LanguageManager.translatePack(rawDailyPack, appLanguage)
+    val recommendedPacks = HarmonyPacksData.PACKS.filter { it.id != rawDailyPack.id }.take(3).map {
+        LanguageManager.translatePack(it, appLanguage)
+    }
 
     // Calculate days together
     val daysTogether = TimeUnit.MILLISECONDS.toDays(
@@ -79,11 +86,16 @@ fun HomeScreen(
     val totalAnswersCount = answers.size
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 112.dp)
+        // isRefreshing = isRefreshing,
+        // onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(bottom = 90.dp)
+        ) {
         // Daily Activity Header
         Row(
             modifier = Modifier
@@ -93,8 +105,8 @@ fun HomeScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = tr("🔥 Tägliche Aktivität", "🔥 Daily activity"),
-                fontSize = 18.sp,
+                text = "🔥 " + LanguageManager.tr("Tägliche Aktivität", appLanguage),
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
             )
@@ -103,16 +115,18 @@ fun HomeScreen(
 
         // Daily Question Card
         PaddingPackCard(
+            appLanguage = appLanguage,
             pack = dailyPack,
             answers = answers,
             onStartPack = onStartPack,
             modifier = Modifier.padding(horizontal = 18.dp)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         // Connect banner
         ConnectBanner(
+            appLanguage = appLanguage,
             partnerName = profile.partnerName,
             modifier = Modifier.padding(horizontal = 18.dp)
         )
@@ -121,15 +135,16 @@ fun HomeScreen(
 
         // Recommendations Section
         Text(
-            text = tr("Für dich empfohlen", "Recommended for you"),
-            fontSize = 19.sp,
+            text = LanguageManager.tr("Für dich empfohlen", appLanguage),
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
         )
 
         recommendedPacks.forEach { pack ->
             PaddingPackCard(
+                appLanguage = appLanguage,
                 pack = pack,
                 answers = answers,
                 onStartPack = onStartPack,
@@ -141,11 +156,11 @@ fun HomeScreen(
 
         // Quick Widgets Section
         Text(
-            text = tr("Widgets", "Widgets"),
-            fontSize = 19.sp,
+            text = LanguageManager.tr("Widgets", appLanguage),
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
         )
 
         Row(
@@ -155,21 +170,21 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             WidgetCard(
-                title = tr("Du fehlst mir", "I miss you"),
+                title = LanguageManager.tr("Du fehlst mir", appLanguage),
                 emoji = "🥺",
-                onClick = { onSendWidget(tr("Du fehlst mir", "I miss you"), "🥺") },
+                onClick = { onSendWidget(LanguageManager.tr("Du fehlst mir", appLanguage), "🥺") },
                 modifier = Modifier.weight(1f)
             )
             WidgetCard(
-                title = tr("Denke an dich", "Thinking of you"),
+                title = LanguageManager.tr("Denke an dich", appLanguage),
                 emoji = "💭",
-                onClick = { onSendWidget(tr("Ich denke an dich", "Thinking of you"), "💭") },
+                onClick = { onSendWidget(LanguageManager.tr("Denke an dich", appLanguage), "💭") },
                 modifier = Modifier.weight(1f)
             )
             WidgetCard(
-                title = tr("Kuss senden", "Send a kiss"),
+                title = LanguageManager.tr("Kuss senden", appLanguage),
                 emoji = "😘",
-                onClick = { onSendWidget(tr("Kuss", "Kiss"), "😘") },
+                onClick = { onSendWidget(LanguageManager.tr("Kuss senden", appLanguage), "😘") },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -178,11 +193,11 @@ fun HomeScreen(
 
         // Couple Statistics Section
         Text(
-            text = tr("Paar-Statistiken", "Couple statistics"),
-            fontSize = 19.sp,
+            text = LanguageManager.tr("Paar-Statistiken", appLanguage),
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
             color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
         )
 
         Row(
@@ -191,8 +206,8 @@ fun HomeScreen(
                 .padding(horizontal = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            StatCard(value = daysTogether.toString(), label = tr("Gemeinsame Tage", "Days together"), modifier = Modifier.weight(1f))
-            StatCard(value = totalAnswersCount.toString(), label = tr("Beantwortete Fragen", "Questions answered"), modifier = Modifier.weight(1f))
+            StatCard(value = daysTogether.toString(), label = LanguageManager.tr("Gemeinsame Tage", appLanguage), modifier = Modifier.weight(1f))
+            StatCard(value = totalAnswersCount.toString(), label = LanguageManager.tr("Beantwortete Fragen", appLanguage), modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -203,14 +218,16 @@ fun HomeScreen(
                 .padding(horizontal = 18.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            StatCard(value = stats.visitedCities.toString(), label = tr("Besuchte Städte", "Cities visited"), modifier = Modifier.weight(1f))
-            StatCard(value = stats.visitedCountries.toString(), label = tr("Besuchte Länder", "Countries visited"), modifier = Modifier.weight(1f))
+            StatCard(value = stats.visitedCities.toString(), label = LanguageManager.tr("Besuchte Städte", appLanguage), modifier = Modifier.weight(1f))
+            StatCard(value = stats.visitedCountries.toString(), label = LanguageManager.tr("Besuchte Länder", appLanguage), modifier = Modifier.weight(1f))
         }
     }
+}
 }
 
 @Composable
 fun PaddingPackCard(
+    appLanguage: String,
     pack: QuestionPack,
     answers: List<AnswerEntity>,
     onStartPack: (String) -> Unit,
@@ -226,21 +243,9 @@ fun PaddingPackCard(
         onClick = { onStartPack(pack.id) }
     ) {
         Column {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(
-                        Brush.horizontalGradient(
-                            listOf(packAccent(pack.cat), packAccent(pack.cat).copy(alpha = 0.35f))
-                        )
-                    )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
             Row {
                 pack.tags.forEach { tag ->
-                    CategoryTag(tag = contentText(tag), modifier = Modifier.padding(end = 6.dp))
+                    CategoryTag(tag = tag, modifier = Modifier.padding(end = 6.dp))
                 }
             }
 
@@ -251,8 +256,8 @@ fun PaddingPackCard(
             }
 
             Text(
-                text = "$packEmoji  ${contentText(pack.title)}",
-                fontSize = 18.5.sp,
+                text = "$packEmoji  ${pack.title}",
+                fontSize = 16.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
                 lineHeight = 22.sp
@@ -302,7 +307,7 @@ fun PaddingPackCard(
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = if (isDone) tr("ERGEBNISSE", "RESULTS") else tr("BEANTWORTE", "ANSWER"),
+                        text = if (isDone) LanguageManager.tr("ERGEBNISSE", appLanguage) else LanguageManager.tr("BEANTWORTE", appLanguage),
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = HarmonyPink,
@@ -341,11 +346,12 @@ fun PaddingPackCard(
     }
 }
 
-private fun packAccent(categoryId: String): Color =
-    HarmonyPacksData.CATEGORIES.find { it.id == categoryId }?.tagColorHex?.let { Color(it) } ?: HarmonyPink
-
 @Composable
-fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
+fun ConnectBanner(
+    appLanguage: String,
+    partnerName: String,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -356,24 +362,24 @@ fun ConnectBanner(partnerName: String, modifier: Modifier = Modifier) {
                 )
             )
             .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(18.dp))
-            .padding(18.dp),
+            .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "💞", fontSize = 24.sp)
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
-                text = tr("Verbinde dich mit $partnerName", "Connect with $partnerName"),
-                fontSize = 15.sp,
+                text = "${LanguageManager.tr("Verbinde dich mit", appLanguage)} $partnerName",
+                fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = tr("Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.", "Answer questions at the same time — answers become visible when you are both finished."),
-                fontSize = 13.5.sp,
+                text = LanguageManager.tr("Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid.", appLanguage),
+                fontSize = 12.sp,
                 color = HarmonyMuted,
-                lineHeight = 19.sp
+                lineHeight = 16.sp
             )
         }
     }
@@ -387,7 +393,7 @@ fun WidgetCard(title: String, emoji: String, onClick: () -> Unit, modifier: Modi
             .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
             .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
-            .padding(vertical = 18.dp, horizontal = 10.dp)
+            .padding(vertical = 14.dp, horizontal = 8.dp)
             .testTag("widget_$title"),
         contentAlignment = Alignment.Center
     ) {
@@ -396,7 +402,7 @@ fun WidgetCard(title: String, emoji: String, onClick: () -> Unit, modifier: Modi
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = title,
-                fontSize = 13.5.sp,
+                fontSize = 11.5.sp,
                 fontWeight = FontWeight.Bold,
                 color = HarmonyText,
                 lineHeight = 14.sp
@@ -424,7 +430,7 @@ fun StatCard(value: String, label: String, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = label,
-                fontSize = 12.5.sp,
+                fontSize = 11.sp,
                 color = HarmonyMuted,
                 fontWeight = FontWeight.SemiBold
             )

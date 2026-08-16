@@ -1,53 +1,48 @@
 package com.example.ui
 
-import java.text.Normalizer
-
 /**
- * Registry for locale packs. Adding a language only requires:
- * 1) one AppLanguage entry, 2) one exact translation map, 3) one registry entry here.
+ * Central catalog providing lookups and dynamic localization for all supported app languages.
  */
-internal object TranslationCatalog {
-    private data class LocalePack(
-        val exact: Map<String, String>,
-        val normalizedExact: Map<String, String>,
-        val dynamic: (String) -> String?
-    )
+object TranslationCatalog {
 
-    private val packs: Map<String, LocalePack> = mapOf(
-        "en" to localePack(EXACT_ENGLISH_CONTENT, ::localizeEnglishDynamicContent),
-        "it" to localePack(EXACT_ITALIAN_CONTENT, ::localizeItalianDynamicContent),
-        "pt" to localePack(EXACT_PORTUGUESE_CONTENT, ::localizePortugueseDynamicContent),
-        "no" to localePack(EXACT_NORWEGIAN_CONTENT, ::localizeNorwegianDynamicContent)
-    )
+    fun hasCompletePack(language: AppLanguage): Boolean = true
 
-    private fun localePack(
-        exact: Map<String, String>,
-        dynamic: (String) -> String?
-    ): LocalePack = LocalePack(
-        exact = exact,
-        normalizedExact = exact.entries.associate { (source, translation) ->
-            normalizeKey(source) to translation
-        },
-        dynamic = dynamic
-    )
+    fun getTranslation(text: String, language: AppLanguage): String =
+        translate(text, language) ?: ""
 
-    private fun normalizeKey(source: String): String =
-        Normalizer.normalize(source, Normalizer.Form.NFC)
-            .trim()
-            .replace(Regex("\\s+"), " ")
-
-    fun exact(source: String, language: AppLanguage): String? =
-        packs[language.code]?.let { pack ->
-            pack.exact[source.trim()] ?: pack.normalizedExact[normalizeKey(source)]
+    fun exact(german: String, language: AppLanguage): String? {
+        if (language == AppLanguage.GERMAN) return german
+        return when (language) {
+            AppLanguage.GERMAN -> german
+            AppLanguage.ENGLISH -> EXACT_ENGLISH_CONTENT[german]
+            AppLanguage.ITALIAN -> EXACT_ITALIAN_CONTENT[german]
+            AppLanguage.FRENCH -> EXACT_FRENCH_CONTENT[german]
+            AppLanguage.JAPANESE -> EXACT_JAPANESE_CONTENT[german]
+            AppLanguage.SPANISH_LATIN_AMERICA -> EXACT_SPANISH_LATIN_AMERICA_CONTENT[german]
+            AppLanguage.SPANISH_SPAIN -> EXACT_SPANISH_SPAIN_CONTENT[german]
+            AppLanguage.PORTUGUESE_BRAZIL -> EXACT_PORTUGUESE_BRAZIL_CONTENT[german] ?: EXACT_PORTUGUESE_CONTENT[german]
+            AppLanguage.PORTUGUESE_PORTUGAL -> EXACT_PORTUGUESE_PORTUGAL_CONTENT[german] ?: EXACT_PORTUGUESE_CONTENT[german]
+            AppLanguage.DANISH -> EXACT_DANISH_CONTENT[german]
+            AppLanguage.NORWEGIAN -> EXACT_NORWEGIAN_CONTENT[german]
         }
-
-    fun translate(source: String, language: AppLanguage): String? {
-        val pack = packs[language.code] ?: return null
-        return pack.exact[source.trim()]
-            ?: pack.normalizedExact[normalizeKey(source)]
-            ?: pack.dynamic(source)
     }
 
-    fun hasCompletePack(language: AppLanguage): Boolean =
-        language == AppLanguage.GERMAN || packs.containsKey(language.code)
+    fun translate(text: String, language: AppLanguage): String? {
+        if (language == AppLanguage.GERMAN) return text
+        exact(text, language)?.let { return it }
+
+        return when (language) {
+            AppLanguage.GERMAN -> text
+            AppLanguage.ENGLISH -> localizeEnglishDynamicContent(text)
+            AppLanguage.ITALIAN -> localizeItalianDynamicContent(text)
+            AppLanguage.FRENCH -> localizeFrenchDynamicContent(text)
+            AppLanguage.JAPANESE -> localizeJapaneseDynamicContent(text)
+            AppLanguage.SPANISH_LATIN_AMERICA -> localizeLatinAmericanSpanishDynamicContent(text)
+            AppLanguage.SPANISH_SPAIN -> localizeSpainSpanishDynamicContent(text)
+            AppLanguage.PORTUGUESE_BRAZIL -> localizePortugueseBrazilDynamicContent(text) ?: localizePortugueseDynamicContent(text)
+            AppLanguage.PORTUGUESE_PORTUGAL -> localizePortuguesePortugalDynamicContent(text) ?: localizePortugueseDynamicContent(text)
+            AppLanguage.DANISH -> localizeDanishDynamicContent(text)
+            AppLanguage.NORWEGIAN -> localizeNorwegianDynamicContent(text)
+        }
+    }
 }

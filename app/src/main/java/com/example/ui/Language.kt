@@ -17,13 +17,25 @@ enum class AppLanguage(
     GERMAN("de", "Deutsch", "German", "🇩🇪"),
     ENGLISH("en", "English", "English", "🇬🇧"),
     ITALIAN("it", "Italiano", "Italian", "🇮🇹"),
-    PORTUGUESE("pt", "Português", "Portuguese", "🇵🇹"),
+    FRENCH("fr", "Français", "French", "🇫🇷"),
+    JAPANESE("ja", "日本語", "Japanese", "🇯🇵"),
+    // Latin America is a region rather than one country, so it uses the regional globe.
+    SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish", "🌎"),
+    SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸"),
+    PORTUGUESE_BRAZIL("pt-BR", "Português (Brasil)", "Brazilian Portuguese", "🇧🇷"),
+    PORTUGUESE_PORTUGAL("pt-PT", "Português (Portugal)", "European Portuguese", "🇵🇹"),
+    DANISH("da", "Dansk", "Danish", "🇩🇰"),
     NORWEGIAN("no", "Norsk", "Norwegian", "🇳🇴");
 
     companion object {
-        fun fromStored(value: String?): AppLanguage = entries.firstOrNull {
-            it.code.equals(value, ignoreCase = true) || it.name.equals(value, ignoreCase = true)
-        } ?: GERMAN
+        fun fromCode(code: String): AppLanguage = fromStored(code)
+
+        fun fromStored(value: String?): AppLanguage = when (value?.lowercase()) {
+            "pt" -> PORTUGUESE_PORTUGAL
+            else -> entries.firstOrNull {
+                it.code.equals(value, ignoreCase = true) || it.name.equals(value, ignoreCase = true)
+            } ?: GERMAN
+        }
     }
 }
 
@@ -185,7 +197,6 @@ internal fun localizeEnglishDynamicContent(text: String): String? {
     }
     return null
 }
-
 
 private fun exactItalian(text: String): String =
     TranslationCatalog.exact(text, AppLanguage.ITALIAN) ?: text

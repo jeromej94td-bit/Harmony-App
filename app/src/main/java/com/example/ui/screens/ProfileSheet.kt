@@ -1,5 +1,10 @@
 package com.example.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,7 +33,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
-import com.example.ui.components.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -79,6 +85,8 @@ fun ProfileSheet(
     onRunCoach: () -> Unit,
     onRunDateIdeas: (String) -> Unit,
     onOpenDevStudio: (() -> Unit)? = null,
+    isDarkMode: Boolean = true,
+    onToggleDarkMode: ((Boolean) -> Unit)? = null,
     language: AppLanguage = AppLanguage.GERMAN,
     onLanguageChange: (AppLanguage) -> Unit = {},
     modifier: Modifier = Modifier
@@ -87,6 +95,7 @@ fun ProfileSheet(
     val scrollState = rememberScrollState()
 
     var dateWishText by remember { mutableStateOf("") }
+    var isLanguageExpanded by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -289,6 +298,27 @@ fun ProfileSheet(
                         )
                     }
 
+                    if (onToggleDarkMode != null) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = tr("Dunkles Design", "Dark mode"), fontSize = 13.5.sp, color = HarmonyText)
+                            Switch(
+                                checked = isDarkMode,
+                                onCheckedChange = { onToggleDarkMode(it) },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = Color.White,
+                                    checkedTrackColor = HarmonyPink
+                                ),
+                                modifier = Modifier.testTag("dark_mode_toggle")
+                            )
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Button(
@@ -310,41 +340,128 @@ fun ProfileSheet(
             // Language
             HarmonyCard {
                 Column {
-                    Text(
-                        text = tr("Sprache", "Language"),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HarmonyText
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Column(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        AppLanguage.entries.filter(TranslationCatalog::hasCompletePack).forEach { option ->
-                            Button(
-                                onClick = { onLanguageChange(option) },
-                                modifier = Modifier.fillMaxWidth().height(54.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (language == option) HarmonyPink else Color.White.copy(alpha = 0.06f)
-                                )
+                        Column {
+                            Text(
+                                text = tr("Sprache", "Language"),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = HarmonyText
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = tr("App-Sprache auswählen", "Select app language"),
+                                fontSize = 11.5.sp,
+                                color = HarmonyMuted
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Clickable dropdown trigger header
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White.copy(alpha = 0.08f))
+                            .border(
+                                1.dp,
+                                if (isLanguageExpanded) HarmonyPink.copy(alpha = 0.7f) else HarmonyLine,
+                                RoundedCornerShape(16.dp)
+                            )
+                            .clickable { isLanguageExpanded = !isLanguageExpanded }
+                            .padding(horizontal = 16.dp, vertical = 14.dp)
+                            .testTag("language_selector_trigger"),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = language.flagEmoji, fontSize = 22.sp)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = if (language == AppLanguage.ENGLISH) language.englishName else language.nativeName,
+                                color = Color.White,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = if (isLanguageExpanded) tr("Tippen zum Zuklappen", "Tap to collapse") else tr("Tippen zum Auswählen & Scrollen", "Tap to select & scroll"),
+                                color = HarmonyMuted,
+                                fontSize = 11.5.sp
+                            )
+                        }
+                        Text(
+                            text = if (isLanguageExpanded) "▲" else "▼",
+                            color = HarmonyPink,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    // Expanded scrollable language list
+                    AnimatedVisibility(
+                        visible = isLanguageExpanded,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.White.copy(alpha = 0.04f))
+                                .border(1.dp, HarmonyLine, RoundedCornerShape(16.dp))
+                                .padding(6.dp)
+                        ) {
+                            val availableLanguages = remember {
+                                AppLanguage.entries.filter(TranslationCatalog::hasCompletePack)
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(max = 240.dp)
+                                    .verticalScroll(rememberScrollState()),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(text = option.flagEmoji, fontSize = 22.sp)
-                                    Spacer(modifier = Modifier.width(12.dp))
-                                    Text(
-                                        text = if (language == AppLanguage.ENGLISH) option.englishName else option.nativeName,
-                                        modifier = Modifier.weight(1f),
-                                        color = Color.White,
-                                        fontSize = 15.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    if (language == option) {
-                                        Text(text = "✓", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                availableLanguages.forEach { option ->
+                                    val isSelected = (language == option)
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(12.dp))
+                                            .background(
+                                                if (isSelected) HarmonyPink.copy(alpha = 0.85f)
+                                                else Color.White.copy(alpha = 0.04f)
+                                            )
+                                            .clickable {
+                                                onLanguageChange(option)
+                                                isLanguageExpanded = false
+                                            }
+                                            .padding(horizontal = 14.dp, vertical = 12.dp)
+                                            .testTag("language_option_${option.name}"),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(text = option.flagEmoji, fontSize = 20.sp)
+                                        Spacer(modifier = Modifier.width(12.dp))
+                                        Text(
+                                            text = if (language == AppLanguage.ENGLISH) option.englishName else option.nativeName,
+                                            modifier = Modifier.weight(1f),
+                                            color = Color.White,
+                                            fontSize = 14.5.sp,
+                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                        )
+                                        if (isSelected) {
+                                            Text(
+                                                text = "✓",
+                                                color = Color.White,
+                                                fontSize = 18.sp,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
                                     }
                                 }
                             }
