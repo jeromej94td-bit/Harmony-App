@@ -54,6 +54,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -222,6 +223,10 @@ private fun GuidedIntrospection(
     var narratorPlaying by remember { mutableStateOf(false) }
     var answerPlayingPath by remember { mutableStateOf<String?>(null) }
     var recordingError by remember { mutableStateOf<String?>(null) }
+    val latestRecorder by rememberUpdatedState(recorder)
+    val latestNarrator by rememberUpdatedState(narrator)
+    val latestBackground by rememberUpdatedState(background)
+    val latestAnswerPlayer by rememberUpdatedState(answerPlayer)
 
     fun stopAnswerPlayback() {
         answerPlayer?.release()
@@ -287,10 +292,13 @@ private fun GuidedIntrospection(
             start()
         }
         onDispose {
-            if (isRecording) stopRecording(true)
-            narrator?.release()
-            background?.release()
-            stopAnswerPlayback()
+            latestRecorder?.let { current ->
+                runCatching { current.stop() }
+                current.release()
+            }
+            latestNarrator?.release()
+            latestBackground?.release()
+            latestAnswerPlayer?.release()
         }
     }
 
