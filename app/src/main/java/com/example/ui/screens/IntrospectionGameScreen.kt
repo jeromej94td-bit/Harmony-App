@@ -551,16 +551,49 @@ private fun ResultsContent(appLanguage: String, progress: IntrospectionProgress,
 @Composable
 private fun PortalAura() {
     val transition = rememberInfiniteTransition(label = "portal")
-    val pulse by transition.animateFloat(
-        initialValue = .92f,
-        targetValue = 1.08f,
-        animationSpec = infiniteRepeatable(tween(2600), RepeatMode.Reverse),
-        label = "portal-pulse"
+    val corePulse by transition.animateFloat(
+        initialValue = .94f,
+        targetValue = 1.07f,
+        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
+        label = "portal-core-pulse"
     )
-    Box(Modifier.fillMaxWidth().height(245.dp), contentAlignment = Alignment.Center) {
-        Box(Modifier.size(210.dp).scale(pulse).blur(28.dp).alpha(.55f).background(MysticPurple, CircleShape))
-        Box(Modifier.size(180.dp).border(12.dp, Brush.sweepGradient(listOf(MysticPurple, HarmonyPinkSoft, Color(0xFF5436FF), MysticPurple)), CircleShape))
-        Box(Modifier.size(146.dp).background(Brush.radialGradient(listOf(Color(0xFF301044), Color(0xFF08030E))), CircleShape), contentAlignment = Alignment.Center) {
+    val outerWave by transition.animateFloat(
+        initialValue = .78f,
+        targetValue = 1.24f,
+        animationSpec = infiniteRepeatable(tween(3000), RepeatMode.Restart),
+        label = "portal-outer-wave"
+    )
+    val innerWave by transition.animateFloat(
+        initialValue = .88f,
+        targetValue = 1.18f,
+        animationSpec = infiniteRepeatable(tween(3000, delayMillis = 1450), RepeatMode.Restart),
+        label = "portal-inner-wave"
+    )
+    val glowPulse by transition.animateFloat(
+        initialValue = .38f,
+        targetValue = .76f,
+        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
+        label = "portal-glow-pulse"
+    )
+    val outerWaveAlpha = ((1.24f - outerWave) / .46f * .48f).coerceIn(0f, .48f)
+    val innerWaveAlpha = ((1.18f - innerWave) / .30f * .36f).coerceIn(0f, .36f)
+
+    Box(Modifier.fillMaxWidth().height(270.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(224.dp).scale(outerWave).alpha(outerWaveAlpha)
+                .border(2.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
+        )
+        Box(
+            Modifier.size(192.dp).scale(innerWave).alpha(innerWaveAlpha)
+                .border(2.dp, Brush.sweepGradient(listOf(MysticPurple, Color(0xFFFF8CB8), Color(0xFF6D4CFF), MysticPurple)), CircleShape)
+        )
+        Box(Modifier.size(230.dp).scale(corePulse).blur(34.dp).alpha(glowPulse).background(MysticPurple, CircleShape))
+        Box(Modifier.size(195.dp).scale(corePulse).blur(16.dp).alpha(.58f).background(HarmonyPinkSoft, CircleShape))
+        Box(
+            Modifier.size(184.dp).scale(corePulse)
+                .border(12.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, Color(0xFFFFB1CF), MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
+        )
+        Box(Modifier.size(148.dp).scale(corePulse).background(Brush.radialGradient(listOf(Color(0xFF42145E), Color(0xFF08030E))), CircleShape), contentAlignment = Alignment.Center) {
             Text("✦", color = Color.White.copy(alpha = .85f), fontSize = 44.sp)
         }
     }
