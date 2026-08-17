@@ -15,6 +15,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,7 @@ import com.example.ui.screens.ChatScreen
 import com.example.ui.screens.DevStudioScreen
 import com.example.ui.screens.GamesScreen
 import com.example.ui.screens.HomeScreen
+import com.example.ui.screens.IntrospectionExperienceScreen
 import com.example.ui.screens.MomentsScreen
 import com.example.ui.screens.PackListScreen
 import com.example.ui.screens.ProfileSheet
@@ -58,15 +62,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HarmonyApp(viewModel: HarmonyViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var isIntrospectionOpen by remember { mutableStateOf(false) }
 
     val isQuizActive = uiState.activeRun != null
     val isSheetOrDialogActive = uiState.isProfileSheetOpen || uiState.isAddMomentOpen
     val isNotHomeTab = uiState.selectedTab != 0
 
-    val canHandleBack = isQuizActive || isSheetOrDialogActive || isNotHomeTab
+    val canHandleBack = isIntrospectionOpen || isQuizActive || isSheetOrDialogActive || isNotHomeTab
 
     BackHandler(enabled = canHandleBack) {
         when {
+            isIntrospectionOpen -> isIntrospectionOpen = false
             isQuizActive -> {
                 if (uiState.isExitConfirmOpen) {
                     viewModel.closeExitConfirm()
@@ -96,7 +102,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
             modifier = Modifier.fillMaxSize(),
             containerColor = androidx.compose.ui.graphics.Color.Transparent,
             topBar = {
-                if (!isQuizActive) {
+                if (!isQuizActive && !isIntrospectionOpen) {
                     HarmonyTopBar(
                         userName = uiState.profile.userName,
                         partnerName = uiState.profile.partnerName,
@@ -106,7 +112,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                 }
             },
             bottomBar = {
-                if (!isQuizActive) {
+                if (!isQuizActive && !isIntrospectionOpen) {
                     val navSelectedTab = when (uiState.selectedTab) {
                         6 -> 1 // When inside PackListScreen, highlight Spiele tab
                         else -> uiState.selectedTab
@@ -148,7 +154,10 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         packFilter = uiState.packFilter,
                         appLanguage = uiState.appLanguage,
                         onSetFilter = { filter -> viewModel.setPackFilter(filter) },
-                        onCategoryClick = { catId -> viewModel.openCategory(catId) },
+                        onCategoryClick = { catId ->
+                            if (catId == "unterbewusstsein") isIntrospectionOpen = true
+                            else viewModel.openCategory(catId)
+                        },
                         onTopicClick = { topicId -> viewModel.openTopic(topicId) },
                         onStartPack = { packId -> viewModel.startPack(packId) }
                     )
@@ -240,6 +249,13 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onOpenOwnAnswerDialog = { idx, mode -> viewModel.openOwnAnswerDialog(idx, mode) },
                         onCloseOwnAnswerDialog = { viewModel.closeOwnAnswerDialog() },
                         onSaveOwnAnswer = { ansText -> viewModel.saveOwnAnswer(ansText) }
+                    )
+                }
+
+                if (isIntrospectionOpen) {
+                    IntrospectionExperienceScreen(
+                        appLanguage = uiState.appLanguage,
+                        onExit = { isIntrospectionOpen = false }
                     )
                 }
             }
