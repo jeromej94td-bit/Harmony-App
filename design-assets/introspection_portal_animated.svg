@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 412 412"
+     width="100%"
+     height="100%"
+     role="img"
+     aria-labelledby="portalTitle portalDescription"
+     preserveAspectRatio="xMidYMid meet">
+  <title id="portalTitle">Mystisches Unterbewusstsein-Portal</title>
+  <desc id="portalDescription">Skalierbares violett-magentafarbenes Portal mit pulsierender Aura, rotierenden Energiebögen, schwebenden Partikeln und Lichtreflexion.</desc>
+
+  <defs>
+    <radialGradient id="atmosphere" cx="50%" cy="48%" r="53%">
+      <stop offset="0%" stop-color="#d92ed1" stop-opacity="0.04"/>
+      <stop offset="54%" stop-color="#8f33ed" stop-opacity="0.18"/>
+      <stop offset="76%" stop-color="#ff387a" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#d92ed1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="core" cx="48%" cy="43%" r="60%">
+      <stop offset="0%" stop-color="#2b073b"/>
+      <stop offset="58%" stop-color="#09020e"/>
+      <stop offset="100%" stop-color="#030006"/>
+    </radialGradient>
+    <radialGradient id="reflection" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff387a" stop-opacity="0.38"/>
+      <stop offset="53%" stop-color="#8f33ed" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#8f33ed" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ringViolet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4721c7"/>
+      <stop offset="48%" stop-color="#a23cf4"/>
+      <stop offset="100%" stop-color="#d92ed1"/>
+    </linearGradient>
+    <linearGradient id="ringPink" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff787a"/>
+      <stop offset="46%" stop-color="#ff387a"/>
+      <stop offset="100%" stop-color="#d92ed1"/>
+    </linearGradient>
+    <filter id="blurAura" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="glowViolet" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowPink" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="particleGlow" x="-500%" y="-500%" width="1000%" height="1000%">
+      <feGaussianBlur stdDeviation="2.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <path id="starShape" d="M206 172 C209 188 220 199 236 202 C220 205 209 216 206 232 C203 216 192 205 176 202 C192 199 203 188 206 172Z"/>
+  </defs>
+
+  <style>
+    :root {
+      --portal-breathe-duration: 3.2s;
+      --outer-ring-duration: 9s;
+      --inner-ring-duration: 13s;
+      --reflection-duration: 2.8s;
+    }
+    .portal-breathe {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: portalBreathe var(--portal-breathe-duration) cubic-bezier(.45,0,.55,1) infinite;
+    }
+    .aura-flicker { animation: auraFlicker 2.35s ease-in-out infinite alternate; }
+    .ring-outer {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: rotateClockwise var(--outer-ring-duration) linear infinite;
+    }
+    .ring-inner {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: rotateCounter var(--inner-ring-duration) linear infinite;
+    }
+    .core-pulse { animation: corePulse 2.6s ease-in-out infinite; }
+    .star-pulse {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: starPulse 2.1s ease-in-out infinite;
+    }
+    .reflection {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: reflectionPulse var(--reflection-duration) .18s ease-in-out infinite;
+    }
+    .particle {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: particleFloat var(--duration,5.4s) var(--delay,0s) ease-in-out infinite;
+    }
+    @keyframes portalBreathe {
+      0%,100% { transform: scale(.965); }
+      50% { transform: scale(1.035); }
+    }
+    @keyframes auraFlicker {
+      0% { opacity:.42; }
+      55% { opacity:.72; }
+      100% { opacity:.48; }
+    }
+    @keyframes rotateClockwise { to { transform:rotate(360deg); } }
+    @keyframes rotateCounter { to { transform:rotate(-360deg); } }
+    @keyframes corePulse {
+      0%,100% { opacity:.92; }
+      50% { opacity:1; }
+    }
+    @keyframes starPulse {
+      0%,100% { transform:scale(.9); opacity:.78; }
+      50% { transform:scale(1.08); opacity:1; }
+    }
+    @keyframes reflectionPulse {
+      0%,100% { transform:scaleX(.92); opacity:.18; }
+      50% { transform:scaleX(1.08); opacity:.34; }
+    }
+    @keyframes particleFloat {
+      0%,100% { transform:translate(0,8px) scale(.72); opacity:0; }
+      26% { opacity:.85; }
+      55% { transform:translate(var(--drift,3px),-14px) scale(1); opacity:1; }
+      82% { opacity:.42; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .portal-breathe { animation: reducedBreathe 4.8s ease-in-out infinite; }
+      .ring-outer,.ring-inner { animation:none; }
+      .particle { animation:reducedFade 5s ease-in-out infinite; }
+      .reflection,.aura-flicker,.core-pulse,.star-pulse { animation-duration:4.8s; }
+      @keyframes reducedBreathe { 0%,100%{transform:scale(.99)} 50%{transform:scale(1.01)} }
+      @keyframes reducedFade { 0%,100%{opacity:.25} 50%{opacity:.65} }
+    }
+  </style>
+
+  <ellipse class="reflection" cx="206" cy="344" rx="137" ry="22" fill="url(#reflection)"/>
+
+  <g class="portal-breathe">
+    <circle cx="206" cy="202" r="144" fill="url(#atmosphere)"/>
+    <circle class="aura-flicker" cx="206" cy="202" r="122" fill="none" stroke="#d92ed1" stroke-opacity=".36" stroke-width="24" filter="url(#blurAura)"/>
+    <circle cx="206" cy="202" r="110" fill="none" stroke="url(#ringViolet)" stroke-width="10" filter="url(#glowViolet)"/>
+    <circle cx="206" cy="202" r="103" fill="none" stroke="url(#ringPink)" stroke-width="5" filter="url(#glowPink)"/>
+    <circle class="core-pulse" cx="206" cy="202" r="93" fill="url(#core)"/>
+
+    <g class="ring-outer" filter="url(#glowPink)">
+      <circle cx="206" cy="202" r="114" fill="none" stroke="#d92ed1" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="168 72 118 358"/>
+    </g>
+    <g class="ring-inner" filter="url(#glowPink)">
+      <circle cx="206" cy="202" r="108.5" fill="none" stroke="#ff787a" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="122 98 178 284"/>
+    </g>
+
+    <use xlink:href="#starShape" class="star-pulse" fill="#faf6ff" filter="url(#glowPink)"/>
+  </g>
+
+  <g aria-hidden="true" filter="url(#particleGlow)">
+    <circle class="particle" style="--duration:4.7s;--delay:-.7s;--drift:4px" cx="85" cy="149" r="2.2" fill="#ff387a"/>
+    <circle class="particle" style="--duration:6.1s;--delay:-2.4s;--drift:-3px" cx="125" cy="111" r="1.5" fill="#d92ed1"/>
+    <circle class="particle" style="--duration:5.3s;--delay:-1.2s;--drift:3px" cx="281" cy="124" r="1.6" fill="#8f33ed"/>
+    <circle class="particle" style="--duration:6.8s;--delay:-3.1s;--drift:-4px" cx="324" cy="175" r="2.1" fill="#ff787a"/>
+    <circle class="particle" style="--duration:5.7s;--delay:-.2s;--drift:2px" cx="68" cy="258" r="1.6" fill="#d92ed1"/>
+    <circle class="particle" style="--duration:4.9s;--delay:-2.8s;--drift:-3px" cx="338" cy="280" r="1.5" fill="#ff387a"/>
+    <circle class="particle" style="--duration:7.1s;--delay:-4.2s;--drift:4px" cx="114" cy="350" r="2.1" fill="#ff787a"/>
+    <circle class="particle" style="--duration:5.4s;--delay:-1.9s;--drift:-2px" cx="295" cy="358" r="1.6" fill="#d92ed1"/>
+    <circle class="particle" style="--duration:6.5s;--delay:-3.7s;--drift:3px" cx="97" cy="305" r="1.2" fill="#faf6ff"/>
+    <circle class="particle" style="--duration:4.4s;--delay:-.9s;--drift:-2px" cx="315" cy="233" r="1.2" fill="#faf6ff"/>
+    <circle class="particle" style="--duration:5.9s;--delay:-2.1s;--drift:4px" cx="160" cy="130" r="1.2" fill="#ff387a"/>
+    <circle class="particle" style="--duration:6.9s;--delay:-4.8s;--drift:-4px" cx="255" cy="369" r="1.2" fill="#8f33ed"/>
+  </g>
+</svg>
