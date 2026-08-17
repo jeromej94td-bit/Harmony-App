@@ -27,13 +27,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
@@ -54,6 +53,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -157,7 +157,7 @@ private fun IntrospectionHub(appLanguage: String, hasSavedRun: Boolean, onBack: 
     MysticBackdrop {
         Column(Modifier.fillMaxSize().padding(horizontal = 22.dp, vertical = 18.dp)) {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = m(appLanguage, "Zurück", "Back", "Indietro"), tint = MysticText)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = m(appLanguage, "Zurück", "Back", "Indietro"), tint = MysticText)
             }
             Spacer(Modifier.height(40.dp))
             Text("🧙‍♂️", fontSize = 48.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -222,6 +222,10 @@ private fun GuidedIntrospection(
     var narratorPlaying by remember { mutableStateOf(false) }
     var answerPlayingPath by remember { mutableStateOf<String?>(null) }
     var recordingError by remember { mutableStateOf<String?>(null) }
+    val latestRecorder by rememberUpdatedState(recorder)
+    val latestNarrator by rememberUpdatedState(narrator)
+    val latestBackground by rememberUpdatedState(background)
+    val latestAnswerPlayer by rememberUpdatedState(answerPlayer)
 
     fun stopAnswerPlayback() {
         answerPlayer?.release()
@@ -287,10 +291,13 @@ private fun GuidedIntrospection(
             start()
         }
         onDispose {
-            if (isRecording) stopRecording(true)
-            narrator?.release()
-            background?.release()
-            stopAnswerPlayback()
+            latestRecorder?.let { current ->
+                runCatching { current.stop() }
+                current.release()
+            }
+            latestNarrator?.release()
+            latestBackground?.release()
+            latestAnswerPlayer?.release()
         }
     }
 
@@ -345,7 +352,7 @@ private fun GuidedIntrospection(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onExitRequest) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = m(appLanguage, "Reise verlassen", "Leave journey", "Esci dal viaggio"), tint = MysticText)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = m(appLanguage, "Reise verlassen", "Leave journey", "Esci dal viaggio"), tint = MysticText)
                 }
                 val step = when (progress.stage) {
                     IntrospectionStage.COLOR -> 1
@@ -543,16 +550,49 @@ private fun ResultsContent(appLanguage: String, progress: IntrospectionProgress,
 @Composable
 private fun PortalAura() {
     val transition = rememberInfiniteTransition(label = "portal")
-    val pulse by transition.animateFloat(
-        initialValue = .92f,
-        targetValue = 1.08f,
-        animationSpec = infiniteRepeatable(tween(2600), RepeatMode.Reverse),
-        label = "portal-pulse"
+    val corePulse by transition.animateFloat(
+        initialValue = .94f,
+        targetValue = 1.07f,
+        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
+        label = "portal-core-pulse"
     )
-    Box(Modifier.fillMaxWidth().height(245.dp), contentAlignment = Alignment.Center) {
-        Box(Modifier.size(210.dp).scale(pulse).blur(28.dp).alpha(.55f).background(MysticPurple, CircleShape))
-        Box(Modifier.size(180.dp).border(12.dp, Brush.sweepGradient(listOf(MysticPurple, HarmonyPinkSoft, Color(0xFF5436FF), MysticPurple)), CircleShape))
-        Box(Modifier.size(146.dp).background(Brush.radialGradient(listOf(Color(0xFF301044), Color(0xFF08030E))), CircleShape), contentAlignment = Alignment.Center) {
+    val outerWave by transition.animateFloat(
+        initialValue = .78f,
+        targetValue = 1.24f,
+        animationSpec = infiniteRepeatable(tween(3000), RepeatMode.Restart),
+        label = "portal-outer-wave"
+    )
+    val innerWave by transition.animateFloat(
+        initialValue = .88f,
+        targetValue = 1.18f,
+        animationSpec = infiniteRepeatable(tween(3000, delayMillis = 1450), RepeatMode.Restart),
+        label = "portal-inner-wave"
+    )
+    val glowPulse by transition.animateFloat(
+        initialValue = .38f,
+        targetValue = .76f,
+        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
+        label = "portal-glow-pulse"
+    )
+    val outerWaveAlpha = ((1.24f - outerWave) / .46f * .48f).coerceIn(0f, .48f)
+    val innerWaveAlpha = ((1.18f - innerWave) / .30f * .36f).coerceIn(0f, .36f)
+
+    Box(Modifier.fillMaxWidth().height(270.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(224.dp).scale(outerWave).alpha(outerWaveAlpha)
+                .border(2.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
+        )
+        Box(
+            Modifier.size(192.dp).scale(innerWave).alpha(innerWaveAlpha)
+                .border(2.dp, Brush.sweepGradient(listOf(MysticPurple, Color(0xFFFF8CB8), Color(0xFF6D4CFF), MysticPurple)), CircleShape)
+        )
+        Box(Modifier.size(230.dp).scale(corePulse).blur(34.dp).alpha(glowPulse).background(MysticPurple, CircleShape))
+        Box(Modifier.size(195.dp).scale(corePulse).blur(16.dp).alpha(.58f).background(HarmonyPinkSoft, CircleShape))
+        Box(
+            Modifier.size(184.dp).scale(corePulse)
+                .border(12.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, Color(0xFFFFB1CF), MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
+        )
+        Box(Modifier.size(148.dp).scale(corePulse).background(Brush.radialGradient(listOf(Color(0xFF42145E), Color(0xFF08030E))), CircleShape), contentAlignment = Alignment.Center) {
             Text("✦", color = Color.White.copy(alpha = .85f), fontSize = 44.sp)
         }
     }
