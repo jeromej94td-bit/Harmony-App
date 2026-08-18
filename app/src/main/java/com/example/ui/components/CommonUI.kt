@@ -32,6 +32,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.Flight
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -341,6 +348,31 @@ fun AuroraGlassSectionTitle(text: String, modifier: Modifier = Modifier) {
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
         letterSpacing = 0.2.sp
+    )
+}
+
+@Composable
+fun HarmonyTopicIcon(
+    topicId: String,
+    accent: Color,
+    modifier: Modifier = Modifier
+) {
+    val icon = when (topicId) {
+        "moral" -> Icons.Default.AccountBalance
+        "geld" -> Icons.Default.AttachMoney
+        "sex" -> Icons.Default.LocalFireDepartment
+        "reisen" -> Icons.Default.Flight
+        "essen" -> Icons.Default.Restaurant
+        "filme_serien" -> Icons.Default.Movie
+        "familie" -> Icons.Default.People
+        "beziehung", "aufwaermen" -> Icons.Default.Favorite
+        else -> Icons.Default.Psychology
+    }
+    Icon(
+        imageVector = icon,
+        contentDescription = null,
+        tint = accent,
+        modifier = modifier.size(30.dp)
     )
 }
 

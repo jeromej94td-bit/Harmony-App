@@ -68,6 +68,7 @@ import com.example.data.model.Category
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.Topic
 import com.example.ui.components.AuroraGlassSectionTitle
+import com.example.ui.components.HarmonyTopicIcon
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyGold
 import com.example.ui.theme.HarmonyLine
@@ -581,7 +582,7 @@ fun TopicProgressCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = if (topic.id == "moral") "⚖️" else topic.emoji, fontSize = 26.sp)
+            HarmonyTopicIcon(topicId = topic.id, accent = accent)
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {

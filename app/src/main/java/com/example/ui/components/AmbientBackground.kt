@@ -55,7 +55,7 @@ fun AmbientBackground(
                 size = 32f + Random.nextFloat() * 24f,
                 glyph = glyphs[i % glyphs.size],
                 phase = Random.nextFloat() * 6.28f,
-                alpha = 0.035f + Random.nextFloat() * 0.055f
+                alpha = 0.09f + Random.nextFloat() * 0.11f
             )
         }
     }

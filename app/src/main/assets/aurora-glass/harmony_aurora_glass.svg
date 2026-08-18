@@ -35,6 +35,7 @@
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <path id="arcPath" d="M128 720C292 438 516 820 956 286"/>
+    <path id="heart" d="M0 12C-20-10-56 2-56 30c0 24 24 42 56 68 32-26 56-44 56-68C56 2 20-10 0 12Z"/>
   </defs>
 
   <rect width="1080" height="1080" rx="72" fill="#05020B"/>
@@ -72,6 +73,18 @@
   <use href="#arcPath" stroke="url(#aurora)" stroke-width="6" stroke-linecap="round" opacity=".9" filter="url(#glow)">
     <animate attributeName="stroke-dasharray" values="0 1600;520 1080;0 1600" dur="5.8s" repeatCount="indefinite"/>
   </use>
+
+  <g fill="none" stroke="#FF75C8" stroke-width="3" opacity=".78" filter="url(#glow)">
+    <use href="#heart" transform="translate(118 330) scale(.42)">
+      <animateTransform attributeName="transform" type="translate" values="118 350;138 240;118 350" dur="7s" repeatCount="indefinite"/>
+    </use>
+    <use href="#heart" transform="translate(920 650) scale(.32)">
+      <animateTransform attributeName="transform" type="translate" values="920 650;900 520;920 650" dur="8.5s" repeatCount="indefinite"/>
+    </use>
+    <use href="#heart" transform="translate(172 820) scale(.22)">
+      <animateTransform attributeName="transform" type="translate" values="172 820;202 710;172 820" dur="6.4s" repeatCount="indefinite"/>
+    </use>
+  </g>
 
   <g fill="url(#aurora)" filter="url(#glow)">
     <circle cx="190" cy="310" r="4"><animate attributeName="r" values="2;7;2" dur="2.4s" repeatCount="indefinite"/></circle>
