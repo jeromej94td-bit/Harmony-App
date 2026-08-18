@@ -6,11 +6,11 @@ Verbindliche Figma-Quelle: https://www.figma.com/design/XWp4LnXSTjk3nQvoDbYD88
 
 `design-assets/introspection_portal_animated.svg`
 
-Die SVG ist frei skalierbar und enthält:
+Die SVG ist frei skalierbar und ist absichtlich so gestaltet wie die freigegebene Referenzansicht: ein großes organisches Portal mit sichtbaren Nebelschleiern und Lichtbahnen, nicht ein sauberer technischer Kreis. Sie enthält:
 
 - pulsierende Portal-Atmung;
-- gegenläufig rotierende Energiebögen;
-- flimmernde Aura;
+- gegenläufig rotierende, unregelmäßige Energiebögen;
+- breite Aura aus mehreren halbtransparenten Nebelschleiern;
 - schwebende Partikel mit individuellen Phasen;
 - pulsierende Bodenreflexion;
 - Sternpuls;
@@ -18,7 +18,9 @@ Die SVG ist frei skalierbar und enthält:
 
 ## Verbindlicher Auftrag an Google AI Studio
 
-Nutze die SVG als visuelle und geometrische Quelle für `IntrospectionPortal.kt`. Implementiere die Animation für Android nativ mit Jetpack Compose Canvas, `rememberInfiniteTransition`, `Animatable`, `drawWithCache`, `graphicsLayer`, `Brush.radialGradient` und `Brush.sweepGradient`. Rasterisiere die SVG nicht und verwende keine WebView. So bleiben Auflösung, Performance und Reduced-Motion-Unterstützung auf allen Android-Geräten erhalten.
+Nutze die SVG als visuelle und geometrische Quelle für `IntrospectionPortal.kt`. Das gewünschte Ergebnis ist die Atmosphäre der Referenz: Portalbreite etwa 90 % des verfügbaren Inhaltsbereichs, ein dunkler Kern, warme Korallakzente links oben, violett-magentafarbene Nebelschleier und eine leuchtende Bodenreflexion. Es darf nicht wieder als sauberer einfacher Doppelring umgesetzt werden.
+
+Implementiere die Animation für Android nativ mit Jetpack Compose Canvas, `rememberInfiniteTransition`, `Animatable`, `drawWithCache`, `graphicsLayer`, `Brush.radialGradient` und `Brush.sweepGradient`. Rasterisiere die SVG nicht und verwende keine WebView. So bleiben Auflösung, Performance und Reduced-Motion-Unterstützung auf allen Android-Geräten erhalten.
 
 Die SVG-CSS-Werte sind verbindlich:
 
