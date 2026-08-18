@@ -1,169 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 412 412"
-     width="100%"
-     height="100%"
-     role="img"
-     aria-labelledby="portalTitle portalDescription"
-     preserveAspectRatio="xMidYMid meet">
-  <title id="portalTitle">Mystisches Unterbewusstsein-Portal</title>
-  <desc id="portalDescription">Skalierbares violett-magentafarbenes Portal mit pulsierender Aura, rotierenden Energiebögen, schwebenden Partikeln und Lichtreflexion.</desc>
-
+<!-- Harmony / Unterbewusstsein. Master vector handoff for Google AI Studio. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 560" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title description">
+  <title id="title">Leuchtendes mystisches Portal</title>
+  <desc id="description">Großes organisches violett-magentafarbenes Portal mit Lichtnebel, schwebenden Sternen und pulsierenden Energiebahnen.</desc>
   <defs>
-    <radialGradient id="atmosphere" cx="50%" cy="48%" r="53%">
-      <stop offset="0%" stop-color="#d92ed1" stop-opacity="0.04"/>
-      <stop offset="54%" stop-color="#8f33ed" stop-opacity="0.18"/>
-      <stop offset="76%" stop-color="#ff387a" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#d92ed1" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="core" cx="48%" cy="43%" r="60%">
-      <stop offset="0%" stop-color="#2b073b"/>
-      <stop offset="58%" stop-color="#09020e"/>
-      <stop offset="100%" stop-color="#030006"/>
-    </radialGradient>
-    <radialGradient id="reflection" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff387a" stop-opacity="0.38"/>
-      <stop offset="53%" stop-color="#8f33ed" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#8f33ed" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="ringViolet" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#4721c7"/>
-      <stop offset="48%" stop-color="#a23cf4"/>
-      <stop offset="100%" stop-color="#d92ed1"/>
-    </linearGradient>
-    <linearGradient id="ringPink" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="#ff787a"/>
-      <stop offset="46%" stop-color="#ff387a"/>
-      <stop offset="100%" stop-color="#d92ed1"/>
-    </linearGradient>
-    <filter id="blurAura" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="18"/>
-    </filter>
-    <filter id="glowViolet" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="glowPink" x="-70%" y="-70%" width="240%" height="240%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="particleGlow" x="-500%" y="-500%" width="1000%" height="1000%">
-      <feGaussianBlur stdDeviation="2.8" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <path id="starShape" d="M206 172 C209 188 220 199 236 202 C220 205 209 216 206 232 C203 216 192 205 176 202 C192 199 203 188 206 172Z"/>
+    <radialGradient id="void" cx="50%" cy="47%" r="58%"><stop offset="0" stop-color="#250830"/><stop offset=".63" stop-color="#0a0311"/><stop offset="1" stop-color="#020005"/></radialGradient>
+    <radialGradient id="mist" cx="50%" cy="49%" r="55%"><stop offset="0" stop-color="#ff4d87" stop-opacity=".04"/><stop offset=".42" stop-color="#c63de8" stop-opacity=".17"/><stop offset=".7" stop-color="#8d39d8" stop-opacity=".27"/><stop offset="1" stop-color="#8d39d8" stop-opacity="0"/></radialGradient>
+    <linearGradient id="coralArc" x1=".08" y1=".85" x2=".95" y2=".1"><stop stop-color="#ff6e82"/><stop offset=".5" stop-color="#ff9b9c"/><stop offset="1" stop-color="#d84df2"/></linearGradient>
+    <linearGradient id="violetArc" x1=".1" y1=".1" x2=".95" y2=".9"><stop stop-color="#7039d8"/><stop offset=".48" stop-color="#c13feb"/><stop offset="1" stop-color="#ff5fbb"/></linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#7a32d9" stop-opacity="0"/><stop offset=".28" stop-color="#ce4ae8" stop-opacity=".25"/><stop offset=".5" stop-color="#ff75aa" stop-opacity=".52"/><stop offset=".74" stop-color="#bd46e6" stop-opacity=".22"/><stop offset="1" stop-color="#7a32d9" stop-opacity="0"/></linearGradient>
+    <filter id="blur25" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="25"/></filter>
+    <filter id="blur8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="4.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <path id="spark" d="M206 198c3 13 10 20 23 23-13 3-20 10-23 23-3-13-10-20-23-23 13-3 20-10 23-23z"/>
   </defs>
-
   <style>
-    :root {
-      --portal-breathe-duration: 3.2s;
-      --outer-ring-duration: 9s;
-      --inner-ring-duration: 13s;
-      --reflection-duration: 2.8s;
-    }
-    .portal-breathe {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: portalBreathe var(--portal-breathe-duration) cubic-bezier(.45,0,.55,1) infinite;
-    }
-    .aura-flicker { animation: auraFlicker 2.35s ease-in-out infinite alternate; }
-    .ring-outer {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: rotateClockwise var(--outer-ring-duration) linear infinite;
-    }
-    .ring-inner {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: rotateCounter var(--inner-ring-duration) linear infinite;
-    }
-    .core-pulse { animation: corePulse 2.6s ease-in-out infinite; }
-    .star-pulse {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: starPulse 2.1s ease-in-out infinite;
-    }
-    .reflection {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: reflectionPulse var(--reflection-duration) .18s ease-in-out infinite;
-    }
-    .particle {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: particleFloat var(--duration,5.4s) var(--delay,0s) ease-in-out infinite;
-    }
-    @keyframes portalBreathe {
-      0%,100% { transform: scale(.965); }
-      50% { transform: scale(1.035); }
-    }
-    @keyframes auraFlicker {
-      0% { opacity:.42; }
-      55% { opacity:.72; }
-      100% { opacity:.48; }
-    }
-    @keyframes rotateClockwise { to { transform:rotate(360deg); } }
-    @keyframes rotateCounter { to { transform:rotate(-360deg); } }
-    @keyframes corePulse {
-      0%,100% { opacity:.92; }
-      50% { opacity:1; }
-    }
-    @keyframes starPulse {
-      0%,100% { transform:scale(.9); opacity:.78; }
-      50% { transform:scale(1.08); opacity:1; }
-    }
-    @keyframes reflectionPulse {
-      0%,100% { transform:scaleX(.92); opacity:.18; }
-      50% { transform:scaleX(1.08); opacity:.34; }
-    }
-    @keyframes particleFloat {
-      0%,100% { transform:translate(0,8px) scale(.72); opacity:0; }
-      26% { opacity:.85; }
-      55% { transform:translate(var(--drift,3px),-14px) scale(1); opacity:1; }
-      82% { opacity:.42; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .portal-breathe { animation: reducedBreathe 4.8s ease-in-out infinite; }
-      .ring-outer,.ring-inner { animation:none; }
-      .particle { animation:reducedFade 5s ease-in-out infinite; }
-      .reflection,.aura-flicker,.core-pulse,.star-pulse { animation-duration:4.8s; }
-      @keyframes reducedBreathe { 0%,100%{transform:scale(.99)} 50%{transform:scale(1.01)} }
-      @keyframes reducedFade { 0%,100%{opacity:.25} 50%{opacity:.65} }
-    }
+    .portal{transform-origin:206px 245px;animation:breathe 3.2s cubic-bezier(.45,0,.55,1) infinite}.mistA{animation:flicker 2.35s ease-in-out infinite alternate}.mistB{animation:flicker 2.7s .24s ease-in-out infinite alternate-reverse}.orbitA{transform-origin:206px 245px;animation:rotate 11s linear infinite}.orbitB{transform-origin:206px 245px;animation:counter 15s linear infinite}.arcA{stroke-dasharray:625;animation:flowA 6.5s linear infinite}.arcB{stroke-dasharray:560;animation:flowB 8.5s linear infinite}.star{transform-origin:206px 221px;animation:star 2.25s ease-in-out infinite}.floor{transform-origin:206px 442px;animation:floor 2.8s .18s ease-in-out infinite}.particle{transform-box:fill-box;transform-origin:center;animation:float var(--d,5.4s) var(--l,0s) ease-in-out infinite}
+    @keyframes breathe{0%,100%{transform:scale(.965)}50%{transform:scale(1.035)}}@keyframes flicker{0%{opacity:.36}55%{opacity:.84}100%{opacity:.5}}@keyframes rotate{to{transform:rotate(360deg)}}@keyframes counter{to{transform:rotate(-360deg)}}@keyframes flowA{to{stroke-dashoffset:-625}}@keyframes flowB{to{stroke-dashoffset:560}}@keyframes star{0%,100%{transform:scale(.9);opacity:.74}50%{transform:scale(1.1);opacity:1}}@keyframes floor{0%,100%{transform:scaleX(.92);opacity:.22}50%{transform:scaleX(1.09);opacity:.52}}@keyframes float{0%,100%{transform:translate(0,9px) scale(.7);opacity:0}28%{opacity:.9}57%{transform:translate(var(--x,3px),-18px) scale(1);opacity:1}80%{opacity:.35}}
+    @media (prefers-reduced-motion:reduce){.portal{animation:calm 4.8s ease-in-out infinite}.orbitA,.orbitB,.arcA,.arcB{animation:none}.particle{animation:fade 5s ease-in-out infinite}.mistA,.mistB,.star,.floor{animation-duration:4.8s}@keyframes calm{0%,100%{transform:scale(.99)}50%{transform:scale(1.01)}}@keyframes fade{0%,100%{opacity:.25}50%{opacity:.68}}}
   </style>
-
-  <ellipse class="reflection" cx="206" cy="344" rx="137" ry="22" fill="url(#reflection)"/>
-
-  <g class="portal-breathe">
-    <circle cx="206" cy="202" r="144" fill="url(#atmosphere)"/>
-    <circle class="aura-flicker" cx="206" cy="202" r="122" fill="none" stroke="#d92ed1" stroke-opacity=".36" stroke-width="24" filter="url(#blurAura)"/>
-    <circle cx="206" cy="202" r="110" fill="none" stroke="url(#ringViolet)" stroke-width="10" filter="url(#glowViolet)"/>
-    <circle cx="206" cy="202" r="103" fill="none" stroke="url(#ringPink)" stroke-width="5" filter="url(#glowPink)"/>
-    <circle class="core-pulse" cx="206" cy="202" r="93" fill="url(#core)"/>
-
-    <g class="ring-outer" filter="url(#glowPink)">
-      <circle cx="206" cy="202" r="114" fill="none" stroke="#d92ed1" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="168 72 118 358"/>
-    </g>
-    <g class="ring-inner" filter="url(#glowPink)">
-      <circle cx="206" cy="202" r="108.5" fill="none" stroke="#ff787a" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="122 98 178 284"/>
-    </g>
-
-    <use xlink:href="#starShape" class="star-pulse" fill="#faf6ff" filter="url(#glowPink)"/>
+  <g class="floor"><ellipse cx="206" cy="443" rx="174" ry="21" fill="url(#floor)" filter="url(#blur8)"/><path d="M74 444c57-13 205-13 265 0-61 8-207 8-265 0z" fill="#ff7baa" opacity=".17"/></g>
+  <g class="portal">
+    <!-- Deep, irregular atmospheric fog, inspired by the approved reference -->
+    <ellipse class="mistA" cx="206" cy="250" rx="190" ry="190" fill="url(#mist)" filter="url(#blur25)"/>
+    <path class="mistB" d="M19 303c7-87 58-154 134-180 78-27 166 1 219 61-38-15-82-23-121-11-67 20-104 93-96 156-45-11-90-20-136-26z" fill="#8c39d8" opacity=".25" filter="url(#blur8)"/>
+    <path class="mistA" d="M45 353c31 31 76 50 125 50 84 0 157-54 183-130 18 50 5 113-30 151-55 58-156 83-232 16-28-25-43-55-46-87z" fill="#d845d7" opacity=".19" filter="url(#blur8)"/>
+    <!-- Organic ring: multiple imperfect light paths, not a simple geometric circle -->
+    <ellipse cx="206" cy="245" rx="148" ry="151" fill="url(#void)"/>
+    <ellipse cx="206" cy="245" rx="151" ry="154" fill="none" stroke="#a843da" stroke-width="20" opacity=".3" filter="url(#blur8)"/>
+    <path class="arcA" d="M72 293C49 222 87 132 162 105c81-30 167 4 194 75" fill="none" stroke="url(#coralArc)" stroke-width="3.8" stroke-linecap="round" filter="url(#glow)"/>
+    <path class="arcA" d="M63 289C38 194 105 102 193 93c96-10 170 52 169 140" fill="none" stroke="#e775ff" stroke-opacity=".6" stroke-width="1.3" stroke-linecap="round"/>
+    <path class="arcB" d="M347 205c21 80-23 163-98 187-85 28-168-13-191-85" fill="none" stroke="url(#violetArc)" stroke-width="4.4" stroke-linecap="round" filter="url(#glow)"/>
+    <path class="arcB" d="M350 207c18 69-16 149-87 178-78 32-167-3-197-77" fill="none" stroke="#ff84d2" stroke-opacity=".73" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M70 264c9 69 54 117 121 137M335 188c-30-51-77-81-130-87" fill="none" stroke="#9d48e9" stroke-width="2.1" opacity=".78" filter="url(#softGlow)"/>
+    <g class="orbitA" filter="url(#glow)"><path d="M205 91c70 0 128 47 146 111" fill="none" stroke="#ff9fae" stroke-width="4.2" stroke-linecap="round" stroke-dasharray="74 640"/><path d="M62 278c-5-49 8-92 35-124" fill="none" stroke="#ff5dba" stroke-width="3" stroke-linecap="round" stroke-dasharray="46 640"/></g>
+    <g class="orbitB" filter="url(#glow)"><path d="M330 327c-33 48-85 71-140 65" fill="none" stroke="#e353ed" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="66 620"/><path d="M133 111c30-17 69-25 104-19" fill="none" stroke="#ff8dca" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="40 640"/></g>
+    <ellipse cx="206" cy="245" rx="140" ry="144" fill="none" stroke="#d849e9" stroke-opacity=".34" stroke-width="2"/><ellipse cx="206" cy="245" rx="132" ry="136" fill="none" stroke="#ff8bb8" stroke-opacity=".28" stroke-width="1"/>
+    <use href="#spark" class="star" fill="#fff9ff" filter="url(#glow)"/>
   </g>
-
-  <g aria-hidden="true" filter="url(#particleGlow)">
-    <circle class="particle" style="--duration:4.7s;--delay:-.7s;--drift:4px" cx="85" cy="149" r="2.2" fill="#ff387a"/>
-    <circle class="particle" style="--duration:6.1s;--delay:-2.4s;--drift:-3px" cx="125" cy="111" r="1.5" fill="#d92ed1"/>
-    <circle class="particle" style="--duration:5.3s;--delay:-1.2s;--drift:3px" cx="281" cy="124" r="1.6" fill="#8f33ed"/>
-    <circle class="particle" style="--duration:6.8s;--delay:-3.1s;--drift:-4px" cx="324" cy="175" r="2.1" fill="#ff787a"/>
-    <circle class="particle" style="--duration:5.7s;--delay:-.2s;--drift:2px" cx="68" cy="258" r="1.6" fill="#d92ed1"/>
-    <circle class="particle" style="--duration:4.9s;--delay:-2.8s;--drift:-3px" cx="338" cy="280" r="1.5" fill="#ff387a"/>
-    <circle class="particle" style="--duration:7.1s;--delay:-4.2s;--drift:4px" cx="114" cy="350" r="2.1" fill="#ff787a"/>
-    <circle class="particle" style="--duration:5.4s;--delay:-1.9s;--drift:-2px" cx="295" cy="358" r="1.6" fill="#d92ed1"/>
-    <circle class="particle" style="--duration:6.5s;--delay:-3.7s;--drift:3px" cx="97" cy="305" r="1.2" fill="#faf6ff"/>
-    <circle class="particle" style="--duration:4.4s;--delay:-.9s;--drift:-2px" cx="315" cy="233" r="1.2" fill="#faf6ff"/>
-    <circle class="particle" style="--duration:5.9s;--delay:-2.1s;--drift:4px" cx="160" cy="130" r="1.2" fill="#ff387a"/>
-    <circle class="particle" style="--duration:6.9s;--delay:-4.8s;--drift:-4px" cx="255" cy="369" r="1.2" fill="#8f33ed"/>
-  </g>
+  <!-- Sparse constellation kept outside copy and controls -->
+  <g filter="url(#softGlow)"><circle class="particle" style="--d:4.8s;--l:-.7s;--x:4px" cx="47" cy="164" r="1.7" fill="#ff74b9"/><circle class="particle" style="--d:6.4s;--l:-2.5s;--x:-3px" cx="77" cy="107" r="1.2" fill="#d47aff"/><circle class="particle" style="--d:5.6s;--l:-1.4s;--x:3px" cx="329" cy="128" r="1.4" fill="#e77aff"/><circle class="particle" style="--d:6.9s;--l:-3.2s;--x:-4px" cx="373" cy="217" r="1.9" fill="#ff9a9e"/><circle class="particle" style="--d:5.2s;--l:-.4s;--x:2px" cx="38" cy="273" r="1.5" fill="#f154bd"/><circle class="particle" style="--d:4.7s;--l:-2.9s;--x:-3px" cx="366" cy="337" r="1.4" fill="#ff7fa7"/><circle class="particle" style="--d:7.2s;--l:-4.2s;--x:4px" cx="84" cy="388" r="1.8" fill="#ff9d9f"/><circle class="particle" style="--d:5.4s;--l:-1.8s;--x:-2px" cx="306" cy="407" r="1.4" fill="#e260f3"/><circle class="particle" style="--d:6.5s;--l:-3.7s;--x:3px" cx="60" cy="349" r="1" fill="#fff9ff"/><circle class="particle" style="--d:4.5s;--l:-.9s;--x:-2px" cx="357" cy="269" r="1" fill="#fff9ff"/></g>
 </svg>
