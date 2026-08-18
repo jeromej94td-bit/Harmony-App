@@ -49,5 +49,18 @@ data class IntrospectionProgress(
 
     fun restart(): IntrospectionProgress = IntrospectionProgress()
 
-    val hasStarted: Boolean get() = answers.isNotEmpty() || stage != IntrospectionStage.COLOR
+    val hasStarted: Boolean get() = answers.isNotEmpty() || stage != IntrospectionStage.COLOR || completed
+
+    companion object {
+        fun initial(): IntrospectionProgress = IntrospectionProgress()
+    }
+}
+
+object IntrospectionConstants {
+    const val MAX_RECORDING_DURATION_MS = 300_000L // 5 minutes
+    const val NORMAL_MUSIC_VOLUME = 1.0f
+    const val NARRATION_MUSIC_VOLUME = 0.68f
+    const val ANSWER_PLAYBACK_MUSIC_VOLUME = 0.25f
+    const val WIZARD_EMOJI = "🧙‍♂️"
+    const val SPARKLES_EMOJI = "✨️"
 }
