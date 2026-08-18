@@ -902,6 +902,23 @@ internal val EXACT_PORTUGUESE_CONTENT: Map<String, String> = mapOf(
     "VS" to "VS",
     "Export teilen" to "Partilhar exportação",
     "Bilder teilen" to "Partilhe fotos",
+    "Essen & Genuss" to "Comida e prazer",
+    "Marken & Alltag" to "Marcas e vida quotidiana",
+    "Welche Eigenschaft sollte unser Kind unbedingt von uns mitbekommen?" to "Que qualidade deve o nosso filho herdar de nós?",
+    "Was sollten wir als Eltern niemals aus den Augen verlieren?" to "O que nunca devemos perder de vista como pais?",
+    "Was war dein schönster Moment mit mir bisher?" to "Qual foi o teu momento mais bonito comigo até agora?",
+    "Was ist ein Essen, das du liebst, dein Partner aber nicht verstehen kann?" to "Que comida adoras mas o teu parceiro não consegue compreender?",
+    "Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?" to "O que seria pior: nunca mais comer pizza ou nunca mais comer hambúrguer?",
+    "Wer entscheidet bei euch schneller, was bestellt wird?" to "Quem decide mais depressa o que pedir?",
+    "McDonald’s" to "McDonald’s",
+    "Burger King" to "Burger King",
+    "iPhone" to "iPhone",
+    "Android" to "Android",
+    "Netflix" to "Netflix",
+    "Kino" to "Cinema",
+    "Möbelhaus" to "Loja de móveis",
+    "Lokal einkaufen" to "Comprar localmente",
+    "🍽️" to "🍽️",
 )
 
 internal fun localizePortugueseDynamicContent(text: String): String? {
@@ -932,3 +949,4 @@ internal fun localizePortugueseDynamicContent(text: String): String? {
     }
     return null
 }
+
