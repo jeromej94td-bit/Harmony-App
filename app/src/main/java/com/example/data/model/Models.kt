@@ -131,6 +131,7 @@ object HarmonyPacksData {
         Topic("kennen", "Einander kennenlernen", "🫶"),
         Topic("reisen", "Reisen", "✈️"),
         Topic("familie", "Familie", "👨‍👩‍👧"),
+        Topic("essen", "Essen & Genuss", "🍽️"),
         Topic("hobbys", "Hobbys", "🎯"),
         Topic("filme_serien", "Filme/Serien", "📺")
     )
@@ -152,7 +153,7 @@ object HarmonyPacksData {
             )
         ),
 
-        // ★ Der perfekte Heiratsantrag
+        // ★ Der perfekte Heiratsantrag (bewusst kompakt gehalten)
         QuestionPack(
             id = "antrag",
             title = "Der perfekte Heiratsantrag",
@@ -162,30 +163,7 @@ object HarmonyPacksData {
             type = "quiz",
             questions = listOf(
                 Question("Welche Umgebung würdest du dir für einen Antrag wünschen?", listOf("Zu Hause, gemütlich und privat", "Draußen mit der Natur als Kulisse", "Schickes Restaurant oder Hotel")),
-                Question("Magst du einen öffentlichen oder privaten Antrag lieber?", listOf("Nur wir beide", "Mit Familie und engen Freunden", "An einem öffentlichen Ort mit vielen Zuschauern")),
-                Question("Soll der Antrag eine Überraschung sein?", listOf("Ja, komplett überraschend", "Lieber vorher grob absprechen", "Wir entscheiden es gemeinsam")),
-                Question("Wie wichtig ist dir, dass der Moment festgehalten wird?", listOf("Sehr wichtig — Fotos und Video", "Ein paar Handyfotos reichen", "Gar nicht, der Moment gehört uns"))
-            )
-        ),
-
-        QuestionPack(
-            id = "antragvor",
-            title = "Vorlieben für den Antrag",
-            tags = listOf("hochzeit", "unterhaltung"),
-            cat = "lieber",
-            topic = "beziehung",
-            type = "quiz",
-            questions = listOf(
-                Question("Bevorzugst du einen extravaganten Antrag oder etwas Dezentes?", listOf("Übertrieben und großartig", "Mittelweg mit besonderen Details", "Einfach und intim")),
-                Question("Was hältst du von Requisiten (z.B. Schilder, Luftballons, etc.)?", listOf("Liebe sie, macht mehr Spaß", "Vielleicht ein oder zwei", "Nein, zu ablenkend")),
-                Question("Möchtest du, dass der Moment sofort in den sozialen Medien geteilt wird?", listOf("Ja, sofort teilen", "Nein, erstmal privat halten", "Erst nur enge Freunde/Familie")),
-                Question("Wie wichtig ist es dir, dass der Antrag deine Hobbys oder Interessen widerspiegelt?", listOf("Sehr wichtig, es sollte persönlich sein", "Etwas, eine kleine Note wäre schön", "Nicht nötig, lieber klassisch bleiben")),
-                Question("Würdest du einen Antrag im Urlaub bevorzugen (mit Reisen verbunden)?", listOf("Ja, in einer aufregenden Stadt oder Sehenswürdigkeit", "Vielleicht, wenn es machbar ist", "Nein, lieber vor Ort")),
-                Question("Wie lange nach dem Antrag möchtest du mit anderen feiern?", listOf("Am selben Tag mit Freunden/Familie", "Etwa eine Woche später, erst mal nur wir", "Keine Party nötig, privat halten")),
-                Question("Hättest du gerne einen geschriebenen Brief als Teil des Antrags?", listOf("Ja, etwas zum Lesen und Aufbewahren", "Vielleicht, aber mündlich reicht", "Nein, einfach halten")),
-                Question("Sollte der Antrag kulturelle oder traditionelle Elemente enthalten?", listOf("Ja, Traditionen einbinden", "Ein paar kulturelle Anklänge sind okay", "Nein, modern halten")),
-                Question("Was ist das Wichtigste beim Antrag?", listOf("Die Umgebung und Atmosphäre", "Die Worte und Emotionen", "Der Ring und die Geste")),
-                Question("Möchtest du, dass Haustiere beim Antrag dabei sind?", listOf("Ja, sie gehören zur Familie!", "Vielleicht, wenn es passt", "Nein, nur wir"))
+                Question("Magst du einen öffentlichen oder privaten Antrag lieber?", listOf("Nur wir beide", "Mit Familie und engen Freunden", "An einem öffentlichen Ort mit vielen Zuschauern"))
             )
         ),
 
@@ -202,9 +180,8 @@ object HarmonyPacksData {
                 Question("Werden wir genug Zeit für das Kind / die Kinder haben? ⏳", listOf("Ja, genug", "Müssen es planen", "Wird stressig"), defaultMine = "Ja, wir werden sicherstellen, dass die Zeit mit der Familie Vorrang hat."),
                 Question("Wie werden wir Zeit für unsere Beziehung finden, wenn das Baby da ist?", listOf("Feste Date-Nights", "Zeit, wenn das Baby schläft", "Spontan"), defaultMine = "Regelmäßige Rendezvous oder gemeinsame Zeit einplanen"),
                 Question("Wie möchtest du, dass unsere Zukunft aussieht?", listOf("Große Familie", "Zu zweit reisen", "Karriere & Erfolg"), defaultMine = "Gemeinsam die Welt bereisen, neue Kulturen und Küchen erkunden"),
-                Question("Wie würdest du sie/ihn nennen?", listOf("Traditioneller Name", "Moderner Name", "Ausgefallener Name")),
-                Question("Willst du ein Mädchen oder einen Jungen? 👶", listOf("Mädchen", "Junge", "Egal, Hauptsache gesund")),
-                Question("Was soll aus unserem Kind werden, wenn es erwachsen ist?", listOf("Erfolgreich", "Glücklich und frei", "Familienmensch"))
+                Question("Welche Eigenschaft sollte unser Kind unbedingt von uns mitbekommen?", listOf("Humor", "Mut", "Mitgefühl", "Neugier")),
+                Question("Was sollten wir als Eltern niemals aus den Augen verlieren?", listOf("Zeit füreinander", "Geduld", "Unsere eigenen Träume", "Leichtigkeit"))
             )
         ),
 
@@ -349,6 +326,41 @@ object HarmonyPacksData {
         ),
 
         QuestionPack(
+            id = "markenalltag",
+            title = "Marken & Alltag",
+            tags = listOf("dasoderdas", "unterhaltung"),
+            cat = "tot",
+            topic = "aufwaermen",
+            type = "tot",
+            pairs = listOf(
+                "McDonald’s" to "Burger King",
+                "iPhone" to "Android",
+                "Netflix" to "Kino",
+                "Nike" to "Adidas",
+                "Spotify" to "YouTube Music",
+                "PlayStation" to "Xbox",
+                "Coca-Cola" to "Pepsi",
+                "IKEA" to "Möbelhaus",
+                "Amazon" to "Lokal einkaufen",
+                "Disney" to "Studio Ghibli"
+            )
+        ),
+
+        QuestionPack(
+            id = "essenreden",
+            title = "Essen & Genuss",
+            tags = listOf("reden", "unterhaltung"),
+            cat = "reden",
+            topic = "essen",
+            type = "quiz",
+            questions = listOf(
+                Question("Was ist ein Essen, das du liebst, dein Partner aber nicht verstehen kann?", listOf("Etwas sehr Scharfes", "Ein ungewöhnliches Gericht", "Ein Kindheitsessen", "Etwas, das ich selbst gern erfinde")),
+                Question("Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?", listOf("Nie wieder Pizza", "Nie wieder Burger", "Beides wäre schlimm", "Ich finde eine Alternative")),
+                Question("Wer entscheidet bei euch schneller, was bestellt wird?", listOf("{user}", "{partner}", "Wir brauchen ewig", "Wir bestellen einfach beides"))
+            )
+        ),
+
+        QuestionPack(
             id = "ringe",
             title = "Verlobungsringe",
             tags = listOf("hochzeit", "dasoderdas"),
@@ -424,9 +436,8 @@ object HarmonyPacksData {
             topic = "beziehung",
             type = "quiz",
             questions = listOf(
-                Question("Welcher Moment war für dich der Anfang von „uns\"?", listOf("Unser erstes Gespräch", "Das erste Treffen", "Der erste Kuss", "Als es einfach klar war")),
-                Question("Welches gemeinsame Foto ist dein Lieblingsfoto?", listOf("Das erste Selfie", "Ein Urlaubsfoto", "Ein zufälliger Schnappschuss", "Eins, das nur wir kennen")),
-                Question("Woran erinnerst du dich am lebhaftesten?", listOf("An einen Geruch", "An einen Song", "An etwas, das ich gesagt habe", "An das Gefühl"))
+                Question("Was war dein schönster Moment mit mir bisher?", listOf("Unser erstes Treffen", "Ein ganz normaler Alltagstag", "Eine gemeinsame Reise", "Ein schwerer Moment, den wir geschafft haben")),
+                Question("Welches gemeinsame Foto ist dein Lieblingsfoto?", listOf("Das erste Selfie", "Ein Urlaubsfoto", "Ein zufälliger Schnappschuss", "Eins, das nur wir kennen"))
             )
         ),
 
@@ -438,7 +449,6 @@ object HarmonyPacksData {
             topic = "aufwaermen",
             type = "quiz",
             questions = listOf(
-                Question("Was war dein schönster Moment mit mir bisher?", listOf("Unser erstes Treffen", "Ein ganz normaler Alltagstag", "Eine gemeinsame Reise", "Ein schwerer Moment, den wir geschafft haben")),
                 Question("Was würdest du an einem gemeinsamen Tag am liebsten machen?", listOf("Ausschlafen und faulenzen", "Etwas Neues ausprobieren", "Rausgehen in die Natur", "Freunde treffen")),
                 Question("Wie fühlst du dich am meisten geliebt?", listOf("Durch Worte", "Durch Zeit zu zweit", "Durch Berührung", "Durch kleine Gesten")),
                 Question("Worauf freust du dich bei uns am meisten?", listOf("Unsere nächste Reise", "Zusammenziehen", "Einfach mehr Alltag", "Alles, was noch kommt"))
@@ -630,12 +640,12 @@ object HarmonyPacksData {
             questions = listOf(
                 Question("Wer ist romantischer?", listOf("{user}", "{partner}", "Beide", "Niemand")),
                 Question("Wer ist der beste Tänzer?", listOf("{user}", "{partner}", "Beide", "Niemand")),
-                Question("Wer gibt mehr Herzlichkeit?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer merkt schneller, wenn es dem anderen nicht gut geht?", listOf("{user}", "{partner}", "Beide gleich", "Kommt darauf an")),
                 Question("Wer hat den besseren Musikgeschmack?", listOf("{user}", "{partner}", "Beide", "Niemand")),
                 Question("Wer findet die besten Restaurants?", listOf("{user}", "{partner}", "Beide", "Niemand")),
                 Question("Wer hängt mehr an seinen Eltern?", listOf("{user}", "{partner}", "Beide", "Niemand")),
                 Question("Wer ist besser organisiert?", listOf("{user}", "{partner}", "Beide", "Niemand")),
-                Question("Wer ist der Beste bei der Filmauswahl?", listOf("{user}", "{partner}", "Beide", "Niemand")),
+                Question("Wer sucht am Ende wirklich den Film aus?", listOf("{user}", "{partner}", "Wir wechseln uns ab", "Wir einigen uns nie")),
                 Question("Wer kocht besser?", listOf("{user}", "{partner}", "Beide", "Niemand")),
                 Question("Wer ist der Beste bei der Planung romantischer Dates?", listOf("{user}", "{partner}", "Beide", "Niemand"))
             )
@@ -750,3 +760,4 @@ object HarmonyPacksData {
             return result
         }
 }
+
