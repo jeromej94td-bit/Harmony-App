@@ -1,7 +1,9 @@
 package com.example.ui.screens
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
@@ -84,6 +86,24 @@ private val MysticPurple = Color(0xFF9D4EDD)
 private val MysticViolet = Color(0xFF6A1B9A)
 private val MysticText = Color(0xFFF8F1FF)
 private val MysticMuted = Color(0xFFC9B6D5)
+
+private fun prepareRawPlayer(context: Context, resource: Int, looping: Boolean = false): MediaPlayer? =
+    runCatching {
+        val descriptor = context.resources.openRawResourceFd(resource)
+            ?: error("Audio resource $resource is not seekable")
+        MediaPlayer().apply {
+            setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            setDataSource(descriptor.fileDescriptor, descriptor.startOffset, descriptor.length)
+            descriptor.close()
+            isLooping = looping
+            prepare()
+        }
+    }.onFailure { it.printStackTrace() }.getOrNull()
 
 @Composable
 fun IntrospectionExperienceScreen(appLanguage: String, onExit: () -> Unit) {
@@ -285,10 +305,18 @@ private fun GuidedIntrospection(
     }
 
     DisposableEffect(Unit) {
-        background = MediaPlayer.create(context, R.raw.merlin_theme).apply {
-            isLooping = true
+        background = prepareRawPlayer(context, R.raw.merlin_theme, looping = true)?.apply {
+            setOnErrorListener { player, _, _ ->
+                player.reset()
+                background = null
+                recordingError = m(appLanguage, "Die Hintergrundmusik konnte nicht abgespielt werden.", "Background music could not be played.", "Impossibile riprodurre la musica di sottofondo.")
+                true
+            }
             setVolume(1f, 1f)
             start()
+        }
+        if (background == null) {
+            recordingError = m(appLanguage, "Die Hintergrundmusik konnte nicht geladen werden.", "Background music could not be loaded.", "Impossibile caricare la musica di sottofondo.")
         }
         onDispose {
             latestRecorder?.let { current ->
@@ -320,7 +348,7 @@ private fun GuidedIntrospection(
             IntrospectionStage.RESULTS -> return@LaunchedEffect
         }
         background?.setVolume(.68f, .68f)
-        narrator = MediaPlayer.create(context, resource).apply {
+        narrator = prepareRawPlayer(context, resource)?.apply {
             setOnCompletionListener {
                 narratorPlaying = false
                 background?.setVolume(1f, 1f)
@@ -329,9 +357,20 @@ private fun GuidedIntrospection(
                     onProgress(progress)
                 }
             }
+            setOnErrorListener { player, _, _ ->
+                player.reset()
+                narrator = null
+                narratorPlaying = false
+                background?.setVolume(1f, 1f)
+                recordingError = m(appLanguage, "Die Audioführung konnte nicht abgespielt werden.", "The audio guide could not be played.", "Impossibile riprodurre la guida audio.")
+                true
+            }
             start()
         }
-        narratorPlaying = true
+        narratorPlaying = narrator != null
+        if (narrator == null) {
+            recordingError = m(appLanguage, "Die Audioführung konnte nicht geladen werden.", "The audio guide could not be loaded.", "Impossibile caricare la guida audio.")
+        }
     }
 
     fun submitAnswer() {
