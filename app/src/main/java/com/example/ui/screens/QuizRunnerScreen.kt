@@ -61,6 +61,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.example.R
 import androidx.compose.ui.text.font.FontStyle
@@ -132,7 +133,7 @@ fun QuizRunnerScreen(
         modifier = modifier
             .fillMaxSize()
             .testTag("quiz_runner_screen"),
-        color = Color(0xFF10060E)
+        color = Color.Transparent
     ) {
         Box(
             modifier = Modifier
@@ -142,7 +143,7 @@ fun QuizRunnerScreen(
                         colors = listOf(
                             animatedCatColor.copy(alpha = 0.28f),
                             animatedCatColor.copy(alpha = 0.10f),
-                            Color(0xFF10060E)
+                            Color(0xFF10060E).copy(alpha = 0.88f)
                         )
                     )
                 )
@@ -325,6 +326,7 @@ fun QuizRunnerScreen(
                             TotCardPairView(
                                 firstText = pair.first,
                                 secondText = pair.second,
+                                packPairs = pack.pairs,
                                 selectedAns = selectedAns,
                                 onPick = { chosen ->
                                     onPickTot(chosen)
@@ -741,6 +743,7 @@ fun QuizOptionButton(
 fun TotCardPairView(
     firstText: String,
     secondText: String,
+    packPairs: List<Pair<String, String>>,
     selectedAns: String?,
     onPick: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -751,15 +754,34 @@ fun TotCardPairView(
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
 
-    val slideDistancePx = with(density) { configuration.screenWidthDp.dp.toPx() * 1.35f }
-
-    val topOffsetX = remember { Animatable(0f) }
-    val bottomOffsetX = remember { Animatable(0f) }
-    val topExtraRotation = remember { Animatable(0f) }
-    val bottomExtraRotation = remember { Animatable(0f) }
+    val windDistancePx = with(density) { configuration.screenHeightDp.dp.toPx() * 0.42f }
+    val topOffsetY = remember { Animatable(0f) }
+    val bottomOffsetY = remember { Animatable(0f) }
+    val topTilt = remember { Animatable(0f) }
+    val bottomTilt = remember { Animatable(0f) }
+    val topFlip = remember { Animatable(0f) }
+    val bottomFlip = remember { Animatable(0f) }
     val oderScale = remember { Animatable(1f) }
 
     var isAnimating by remember { mutableStateOf(false) }
+    var topShuffleKey by remember(firstText, secondText) { mutableStateOf(firstText) }
+    var bottomShuffleKey by remember(firstText, secondText) { mutableStateOf(secondText) }
+
+    LaunchedEffect(firstText, secondText) {
+        topOffsetY.snapTo(-windDistancePx)
+        bottomOffsetY.snapTo(windDistancePx)
+        topTilt.snapTo(0f)
+        bottomTilt.snapTo(0f)
+        oderScale.snapTo(1f)
+        topFlip.snapTo(-28f)
+        bottomFlip.snapTo(28f)
+        coroutineScope {
+            launch { topOffsetY.animateTo(0f, tween(760, easing = CubicBezierEasing(0.12f, 0.72f, 0.16f, 1f))) }
+            launch { bottomOffsetY.animateTo(0f, tween(820, easing = CubicBezierEasing(0.12f, 0.72f, 0.16f, 1f))) }
+            launch { topFlip.animateTo(0f, tween(760, easing = FastOutSlowInEasing)) }
+            launch { bottomFlip.animateTo(0f, tween(820, easing = FastOutSlowInEasing)) }
+        }
+    }
 
     fun handlePick(option: String) {
         if (isAnimating) return
@@ -767,56 +789,30 @@ fun TotCardPairView(
         triggerMiniVibration(context, 40L)
 
         scope.launch {
-            val exitDuration = 320
-            val exitEasing = FastOutSlowInEasing
-
-            coroutineScope {
-                launch {
-                    topOffsetX.animateTo(-slideDistancePx, animationSpec = tween(exitDuration, easing = exitEasing))
+            buildTotShuffleFrames(packPairs, firstText to secondText, 4).forEachIndexed { index, key ->
+                coroutineScope {
+                    launch { topFlip.animateTo(90f, tween(90, easing = FastOutSlowInEasing)) }
+                    launch { bottomFlip.animateTo(-90f, tween(90, easing = FastOutSlowInEasing)) }
                 }
-                launch {
-                    topExtraRotation.animateTo(-6f, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    bottomOffsetX.animateTo(slideDistancePx, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    bottomExtraRotation.animateTo(6f, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    oderScale.animateTo(0f, animationSpec = tween(exitDuration / 2, easing = exitEasing))
+                if (index % 2 == 0) topShuffleKey = key else bottomShuffleKey = key
+                topFlip.snapTo(-90f)
+                bottomFlip.snapTo(90f)
+                coroutineScope {
+                    launch { topFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
+                    launch { bottomFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
                 }
             }
-
+            coroutineScope {
+                launch { topOffsetY.animateTo(52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
+                launch { bottomOffsetY.animateTo(-52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
+                launch { topTilt.animateTo(-3.6f, tween(540, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(3.6f, tween(540, easing = FastOutSlowInEasing)) }
+                launch { oderScale.animateTo(0f, tween(260, easing = FastOutSlowInEasing)) }
+            }
+            delay(360)
             onPick(option)
-
-            topOffsetX.snapTo(-slideDistancePx)
-            topExtraRotation.snapTo(-8f)
-            bottomOffsetX.snapTo(slideDistancePx)
-            bottomExtraRotation.snapTo(8f)
-            oderScale.snapTo(0f)
-
-            val enterDuration = 440
-            val enterEasing = CubicBezierEasing(0.05f, 0.75f, 0.1f, 1.0f)
-
-            coroutineScope {
-                launch {
-                    topOffsetX.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    topExtraRotation.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    bottomOffsetX.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    bottomExtraRotation.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    oderScale.animateTo(1f, animationSpec = tween(enterDuration, easing = FastOutSlowInEasing))
-                }
-            }
-
+            topShuffleKey = firstText
+            bottomShuffleKey = secondText
             isAnimating = false
         }
     }
@@ -832,30 +828,34 @@ fun TotCardPairView(
             // Top Card (tilted -3.2f)
             TotStyledCard(
                 text = contentText(firstText),
-                assetKey = firstText,
+                assetKey = topShuffleKey,
                 tagAlignment = Alignment.TopStart,
                 isSelected = selectedAns == firstText,
-                rotationAngle = -3.2f + topExtraRotation.value,
+                rotationAngle = -3.2f + topTilt.value,
                 onClick = { handlePick(firstText) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
-                        translationX = topOffsetX.value
+                        translationY = topOffsetY.value
+                        rotationY = topFlip.value
+                        cameraDistance = 14f * density.density
                     }
             )
 
             // Bottom Card (tilted +3.2f)
             TotStyledCard(
                 text = contentText(secondText),
-                assetKey = secondText,
+                assetKey = bottomShuffleKey,
                 tagAlignment = Alignment.BottomStart,
                 isSelected = selectedAns == secondText,
-                rotationAngle = 3.2f + bottomExtraRotation.value,
+                rotationAngle = 3.2f + bottomTilt.value,
                 onClick = { handlePick(secondText) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
-                        translationX = bottomOffsetX.value
+                        translationY = bottomOffsetY.value
+                        rotationY = bottomFlip.value
+                        cameraDistance = 14f * density.density
                     }
             )
         }
