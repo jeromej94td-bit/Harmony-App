@@ -53,7 +53,7 @@ fun AmbientBackground(
                 size = 32f + Random.nextFloat() * 24f,
                 glyph = glyphs[i % glyphs.size],
                 phase = Random.nextFloat() * 6.28f,
-                alpha = 0.08f + Random.nextFloat() * 0.12f
+                alpha = 0.035f + Random.nextFloat() * 0.055f
             )
         }
     }
@@ -121,14 +121,16 @@ fun AmbientBackground(
                 val currentX = (p.xRatio + kotlin.math.sin(t * 0.05f + p.phase) * 0.04f) * width
                 val currentY = p.yRatio * height
 
-                drawIntoCanvas { canvas ->
-                    val paint = android.graphics.Paint().apply {
-                        textSize = p.size
-                        color = Color.White.toArgb()
-                        alpha = (p.alpha * 255).toInt().coerceIn(0, 255)
-                        textAlign = android.graphics.Paint.Align.CENTER
+                if (p.xRatio < 0.16f || p.xRatio > 0.84f) {
+                    drawIntoCanvas { canvas ->
+                        val paint = android.graphics.Paint().apply {
+                            textSize = p.size
+                            color = Color.White.toArgb()
+                            alpha = (p.alpha * 255).toInt().coerceIn(0, 255)
+                            textAlign = android.graphics.Paint.Align.CENTER
+                        }
+                        canvas.nativeCanvas.drawText(p.glyph, currentX, currentY, paint)
                     }
-                    canvas.nativeCanvas.drawText(p.glyph, currentX, currentY, paint)
                 }
             }
         }

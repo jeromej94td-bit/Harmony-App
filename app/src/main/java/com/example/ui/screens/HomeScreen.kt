@@ -39,6 +39,7 @@ import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
+import com.example.ui.components.AuroraGlassSectionTitle
 import com.example.ui.components.CategoryTag
 import com.example.ui.components.HarmonyCard
 import com.example.ui.components.TimerPill
@@ -134,13 +135,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         // Recommendations Section
-        Text(
-            text = LanguageManager.tr("Für dich empfohlen", appLanguage),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-        )
+        AuroraGlassSectionTitle(LanguageManager.tr("Für dich empfohlen", appLanguage), Modifier.padding(horizontal = 18.dp, vertical = 4.dp))
 
         recommendedPacks.forEach { pack ->
             PaddingPackCard(
@@ -155,13 +150,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         // Quick Widgets Section
-        Text(
-            text = LanguageManager.tr("Widgets", appLanguage),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-        )
+        AuroraGlassSectionTitle(LanguageManager.tr("Widgets", appLanguage), Modifier.padding(horizontal = 18.dp, vertical = 4.dp))
 
         Row(
             modifier = Modifier
@@ -192,13 +181,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Couple Statistics Section
-        Text(
-            text = LanguageManager.tr("Paar-Statistiken", appLanguage),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold,
-            color = HarmonyText,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-        )
+        AuroraGlassSectionTitle(LanguageManager.tr("Paar-Statistiken", appLanguage), Modifier.padding(horizontal = 18.dp, vertical = 4.dp))
 
         Row(
             modifier = Modifier
@@ -238,9 +221,17 @@ fun PaddingPackCard(
     val totalCount = if (pack.type == "tot") pack.pairs.size else pack.questions.size
     val isDone = answeredCount >= totalCount && totalCount > 0
 
+    val topicAccent = when (pack.topic) {
+        "moral" -> HarmonyGold
+        "geld" -> HarmonyTeal
+        "beziehung" -> HarmonyPink
+        else -> HarmonyPurple
+    }
+
     HarmonyCard(
         modifier = modifier.testTag("pack_card_${pack.id}"),
-        onClick = { onStartPack(pack.id) }
+        onClick = { onStartPack(pack.id) },
+        accent = topicAccent
     ) {
         Column {
             Row {

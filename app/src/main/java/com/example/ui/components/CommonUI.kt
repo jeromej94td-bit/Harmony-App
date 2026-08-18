@@ -166,7 +166,8 @@ fun HarmonyBottomNav(
         modifier = modifier
             .fillMaxWidth()
             .background(HarmonySurface.copy(alpha = 0.95f))
-            .border(1.dp, HarmonyLine, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(Brush.verticalGradient(listOf(HarmonySurface.copy(alpha = 0.96f), Color(0xFF08030F).copy(alpha = 0.98f))))
+            .border(1.dp, HarmonyPurpleLight.copy(alpha = 0.26f), RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .navigationBarsPadding()
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -186,6 +187,8 @@ fun HarmonyBottomNav(
             Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
+                    .background(if (isSelected) HarmonyNavActive.copy(alpha = 0.13f) else Color.Transparent)
+                    .border(if (isSelected) 1.dp else 0.dp, HarmonyNavActive.copy(alpha = 0.45f), RoundedCornerShape(12.dp))
                     .clickable { onTabSelected(index) }
                     .padding(horizontal = 14.dp, vertical = 6.dp)
                     .testTag("nav_item_$index"),
@@ -297,6 +300,7 @@ fun TimerPill(modifier: Modifier = Modifier) {
 fun HarmonyCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
+    accent: Color = HarmonyPurple,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -313,15 +317,31 @@ fun HarmonyCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(HarmonySurface2, HarmonySurface)
+                        colors = listOf(
+                            accent.copy(alpha = 0.20f),
+                            HarmonySurface2.copy(alpha = 0.86f),
+                            HarmonySurface.copy(alpha = 0.98f)
+                        )
                     )
                 )
-                .border(1.dp, HarmonyLine, RoundedCornerShape(24.dp))
+                .border(1.dp, accent.copy(alpha = 0.38f), RoundedCornerShape(24.dp))
                 .padding(16.dp)
         ) {
             content()
         }
     }
+}
+
+@Composable
+fun AuroraGlassSectionTitle(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        modifier = modifier,
+        color = HarmonyText,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.2.sp
+    )
 }
 
 @Composable

@@ -67,6 +67,7 @@ import com.example.data.model.AnswerEntity
 import com.example.data.model.Category
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.Topic
+import com.example.ui.components.AuroraGlassSectionTitle
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyGold
 import com.example.ui.theme.HarmonyLine
@@ -420,13 +421,7 @@ fun GamesScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             // Topics Progress Header
-            Text(
-                text = LanguageManager.tr("Themen", appLanguage),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                color = HarmonyText,
-                modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-            )
+            AuroraGlassSectionTitle(LanguageManager.tr("Themen", appLanguage), Modifier.padding(horizontal = 18.dp, vertical = 4.dp))
 
             // Topics List with progress bars
             HarmonyPacksData.TOPICS.forEach { topic ->
@@ -501,12 +496,13 @@ fun FilterChipsRow(
 
 @Composable
 fun CategoryRailCard(category: Category, onClick: () -> Unit) {
+    val accent = Color(category.tagColorHex)
     Box(
         modifier = Modifier
             .size(width = 104.dp, height = 112.dp)
             .clip(RoundedCornerShape(18.dp))
-            .background(Brush.linearGradient(listOf(HarmonySurface2, HarmonySurface)))
-            .border(1.dp, HarmonyLine, RoundedCornerShape(18.dp))
+            .background(Brush.linearGradient(listOf(accent.copy(alpha = 0.22f), HarmonySurface2)))
+            .border(1.dp, accent.copy(alpha = 0.48f), RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
             .padding(12.dp)
             .testTag("category_card_${category.id}")
@@ -515,7 +511,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = category.emoji, fontSize = 24.sp)
+            Text(text = if (category.id == "moral") "⚖️" else category.emoji, fontSize = 26.sp)
             Text(
                 text = category.name,
                 fontSize = 12.sp,
@@ -534,6 +530,13 @@ fun TopicProgressCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val accent = when (topic.id) {
+        "moral" -> HarmonyGold
+        "geld" -> HarmonyTeal
+        "beziehung" -> HarmonyPink
+        "sex" -> Color(0xFFFF5A6E)
+        else -> HarmonyPurpleLight
+    }
     val infiniteTransition = rememberInfiniteTransition(label = "aurora_topic")
     val pulseAlpha by infiniteTransition.animateFloat(
         initialValue = 0.45f,
@@ -568,8 +571,8 @@ fun TopicProgressCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
-            .background(HarmonySurface)
-            .border(1.dp, borderBrush, RoundedCornerShape(18.dp))
+            .background(Brush.linearGradient(listOf(accent.copy(alpha = 0.20f), HarmonySurface.copy(alpha = 0.96f))))
+            .border(1.dp, accent.copy(alpha = 0.48f), RoundedCornerShape(18.dp))
             .clickable(onClick = onClick)
             .padding(14.dp)
             .testTag("topic_card_${topic.id}")
@@ -578,7 +581,7 @@ fun TopicProgressCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = topic.emoji, fontSize = 22.sp)
+            Text(text = if (topic.id == "moral") "⚖️" else topic.emoji, fontSize = 26.sp)
             Spacer(modifier = Modifier.width(12.dp))
 
             Column(modifier = Modifier.weight(1f)) {
@@ -602,7 +605,7 @@ fun TopicProgressCard(
                             .fillMaxWidth(percentage.coerceIn(0, 100) / 100f)
                             .height(5.dp)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(HarmonyPink)
+                            .background(Brush.horizontalGradient(listOf(accent, accent.copy(alpha = 0.72f))))
                     )
                 }
             }
@@ -613,7 +616,7 @@ fun TopicProgressCard(
                 text = if (percentage >= 100) "✓" else "$percentage%",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = if (percentage >= 100) HarmonyTeal else HarmonyMuted
+                color = if (percentage >= 100) accent else HarmonyMuted
             )
         }
     }
