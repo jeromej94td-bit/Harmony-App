@@ -1,25 +1,29 @@
 package com.example.ui.screens
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
-import android.media.MediaRecorder
-import android.os.Build
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,592 +31,1242 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.weight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.example.R
+import com.example.ui.AppLanguage
+import com.example.ui.introspection.AudioPlaybackCard
+import com.example.ui.introspection.ContinueOrRestartDialog
+import com.example.ui.introspection.EyebrowCapsule
 import com.example.ui.introspection.IntrospectionAnswer
+import com.example.ui.introspection.IntrospectionColors
+import com.example.ui.introspection.IntrospectionConstants
+import com.example.ui.introspection.IntrospectionMediaController
+import com.example.ui.introspection.IntrospectionPortal
 import com.example.ui.introspection.IntrospectionProgress
 import com.example.ui.introspection.IntrospectionStage
 import com.example.ui.introspection.IntrospectionStore
-import com.example.ui.theme.HarmonyPink
-import com.example.ui.theme.HarmonyPinkSoft
+import com.example.ui.introspection.IntrospectionStringKey
+import com.example.ui.introspection.IntrospectionStrings
+import com.example.ui.introspection.LeaveConfirmDialog
+import com.example.ui.introspection.MysticBackdrop
+import com.example.ui.introspection.MysticButton
+import com.example.ui.introspection.MysticCard
+import com.example.ui.introspection.MysticSecondaryButton
+import com.example.ui.introspection.MysticTextField
+import com.example.ui.introspection.RecordingVisualizer
 import java.io.File
 
-private val MysticBackground = Color(0xFF08030E)
-private val MysticSurface = Color(0xC7251633)
-private val MysticPurple = Color(0xFF9D4EDD)
-private val MysticViolet = Color(0xFF6A1B9A)
-private val MysticText = Color(0xFFF8F1FF)
-private val MysticMuted = Color(0xFFC9B6D5)
+private enum class ScreenState {
+    ENTRY,
+    QUESTION,
+    REVELATION,
+    RESULTS
+}
 
 @Composable
-fun IntrospectionExperienceScreen(appLanguage: String, onExit: () -> Unit) {
+fun IntrospectionExperienceScreen(
+    appLanguage: String,
+    onExit: () -> Unit
+) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val appLang = remember(appLanguage) { AppLanguage.fromCode(appLanguage) }
+
     val store = remember { IntrospectionStore(context) }
+    val mediaController = remember { IntrospectionMediaController(context, coroutineScope) }
+
     var progress by remember { mutableStateOf(store.load()) }
-    var showGame by remember { mutableStateOf(progress.hasStarted || progress.completed) }
-    var showResumeDialog by remember { mutableStateOf(false) }
-    var showExitDialog by remember { mutableStateOf(false) }
+    var screenState by remember { mutableStateOf(ScreenState.ENTRY) }
 
+    var showContinueDialog by remember { mutableStateOf(false) }
+    var showLeaveDialog by remember { mutableStateOf(false) }
+    var showPermissionSettingsDialog by remember { mutableStateOf(false) }
+
+    // Media states
+    val isNarratorPlaying by mediaController.isNarratorPlaying.collectAsState()
+    val isRecording by mediaController.isRecording.collectAsState()
+    val recordingDurationMs by mediaController.recordingDurationMs.collectAsState()
+    val isAnswerPlaying by mediaController.isAnswerPlaying.collectAsState()
+    val answerProgress by mediaController.answerProgress.collectAsState()
+    val activeAnswerStage by mediaController.activeAnswerStage.collectAsState()
+    val mediaErrorMessage by mediaController.errorMessage.collectAsState()
+
+    // Question input local states
+    var inputMode by remember { mutableStateOf("text") } // "text" or "voice"
+    var currentTextAnswer by remember { mutableStateOf("") }
+    var currentRecordedFile by remember { mutableStateOf<File?>(null) }
+    var permissionDeniedMessage by remember { mutableStateOf<String?>(null) }
+
+    val combinedErrorMessage = permissionDeniedMessage ?: mediaErrorMessage
+
+    // Auto-stop recording on leave / exit
     BackHandler {
-        if (showGame) showExitDialog = true else onExit()
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        if (screenState != ScreenState.ENTRY && screenState != ScreenState.RESULTS) {
+            showLeaveDialog = true
+        } else {
+            mediaController.releaseAll()
+            onExit()
+        }
     }
 
-    fun beginNew() {
-        progress = store.clear()
-        showGame = true
-    }
-
-    if (!showGame) {
-        IntrospectionHub(
-            appLanguage = appLanguage,
-            hasSavedRun = progress.hasStarted || progress.completed,
-            onBack = onExit,
-            onStart = {
-                if (progress.hasStarted || progress.completed) showResumeDialog = true else beginNew()
+    // Permission Launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            permissionDeniedMessage = null
+            val targetFile = store.recordingFile(progress.stage)
+            currentRecordedFile = targetFile
+            mediaController.startRecording(targetFile) { completedFile ->
+                currentRecordedFile = completedFile
             }
-        )
-    } else {
-        GuidedIntrospection(
-            appLanguage = appLanguage,
-            initialProgress = progress,
-            store = store,
-            onProgress = {
-                progress = it
-                store.save(it)
+        } else {
+            permissionDeniedMessage = IntrospectionStrings.tr(
+                IntrospectionStringKey.PERMISSION_DENIED_ERROR,
+                appLang
+            )
+            showPermissionSettingsDialog = true
+        }
+    }
+
+    // Initialize media / cleanup
+    DisposableEffect(Unit) {
+        mediaController.startBackgroundMusic()
+        onDispose {
+            mediaController.releaseAll()
+        }
+    }
+
+    // When entering QUESTION / REVELATION / RESULTS, manage narrator
+    LaunchedEffect(progress.stage, screenState) {
+        if (screenState == ScreenState.QUESTION && progress.stage.isQuestion) {
+            // Preload existing text/audio for stage if any
+            when (val existing = progress.answers[progress.stage]) {
+                is IntrospectionAnswer.Text -> {
+                    currentTextAnswer = existing.value
+                    inputMode = "text"
+                }
+                is IntrospectionAnswer.Audio -> {
+                    val file = File(existing.filePath)
+                    if (file.exists() && file.isFile) {
+                        currentRecordedFile = file
+                        inputMode = "voice"
+                    }
+                }
+                null -> {
+                    currentTextAnswer = ""
+                    currentRecordedFile = null
+                    inputMode = "text"
+                }
+            }
+            mediaController.playNarratorForStage(progress.stage)
+        } else if (screenState == ScreenState.REVELATION) {
+            mediaController.playNarrator(com.example.R.raw.introspection_reveal) {
+                // IMPORTANT: Revelation transition MUST only trigger onCompletion callback!
+                val completedProgress = progress.finishRevelation()
+                progress = completedProgress
+                store.save(completedProgress)
+                screenState = ScreenState.RESULTS
+            }
+        }
+    }
+
+    fun beginNewRun() {
+        progress = store.clear()
+        currentTextAnswer = ""
+        currentRecordedFile = null
+        inputMode = "text"
+        screenState = ScreenState.QUESTION
+        mediaController.startBackgroundMusic()
+    }
+
+    fun continueExistingRun() {
+        screenState = if (progress.completed) ScreenState.RESULTS
+        else if (progress.stage == IntrospectionStage.REVELATION) ScreenState.REVELATION
+        else ScreenState.QUESTION
+        mediaController.startBackgroundMusic()
+    }
+
+    fun submitCurrentAnswer() {
+        val answer = if (inputMode == "voice") {
+            currentRecordedFile?.let { file ->
+                if (file.exists() && file.isFile && file.length() > 0) {
+                    IntrospectionAnswer.Audio(file.absolutePath)
+                } else null
+            }
+        } else {
+            if (currentTextAnswer.isNotBlank()) {
+                IntrospectionAnswer.Text(currentTextAnswer.trim())
+            } else null
+        } ?: return
+
+        mediaController.stopNarrator()
+        mediaController.stopAnswerAudio()
+
+        val nextProgress = progress.advanceAfterAnswer(answer)
+        progress = nextProgress
+        store.save(nextProgress)
+
+        currentTextAnswer = ""
+        currentRecordedFile = null
+        inputMode = "text"
+
+        if (nextProgress.stage == IntrospectionStage.REVELATION) {
+            screenState = ScreenState.REVELATION
+        }
+    }
+
+    MysticBackdrop {
+        AnimatedContent(
+            targetState = screenState,
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(420, easing = FastOutSlowInEasing)) +
+                        slideInVertically(
+                            animationSpec = tween(420, easing = FastOutSlowInEasing),
+                            initialOffsetY = { 40 }
+                        ))
+                    .togetherWith(fadeOut(animationSpec = tween(180)))
             },
-            onExitRequest = { showExitDialog = true }
+            label = "screenStateTransition"
+        ) { state ->
+            when (state) {
+                ScreenState.ENTRY -> {
+                    EntryScreen(
+                        appLang = appLang,
+                        onBack = {
+                            mediaController.releaseAll()
+                            onExit()
+                        },
+                        onStart = {
+                            if (store.hasSavedProgress()) {
+                                showContinueDialog = true
+                            } else {
+                                beginNewRun()
+                            }
+                        }
+                    )
+                }
+
+                ScreenState.QUESTION -> {
+                    QuestionScreen(
+                        progress = progress,
+                        appLang = appLang,
+                        inputMode = inputMode,
+                        textAnswer = currentTextAnswer,
+                        recordedFile = currentRecordedFile,
+                        isNarratorPlaying = isNarratorPlaying,
+                        isRecording = isRecording,
+                        recordingDurationMs = recordingDurationMs,
+                        isAnswerPlaying = isAnswerPlaying,
+                        answerProgress = answerProgress,
+                        errorMessage = combinedErrorMessage,
+                        onInputModeChange = {
+                            inputMode = it
+                            mediaController.clearErrorMessage()
+                        },
+                        onTextChange = {
+                            currentTextAnswer = it
+                            if (mediaErrorMessage != null) mediaController.clearErrorMessage()
+                        },
+                        onReplayNarrator = {
+                            if (isNarratorPlaying) {
+                                mediaController.stopNarrator()
+                            } else {
+                                mediaController.playNarratorForStage(progress.stage)
+                            }
+                        },
+                        onStartRecord = {
+                            if (ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.RECORD_AUDIO
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                permissionDeniedMessage = null
+                                val targetFile = store.recordingFile(progress.stage)
+                                currentRecordedFile = targetFile
+                                mediaController.startRecording(targetFile) { file ->
+                                    currentRecordedFile = file
+                                }
+                            } else {
+                                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            }
+                        },
+                        onStopRecord = {
+                            mediaController.stopRecording()
+                        },
+                        onDiscardRecord = {
+                            mediaController.discardRecording(currentRecordedFile)
+                            currentRecordedFile = null
+                        },
+                        onPlayPauseAudio = {
+                            currentRecordedFile?.let { file ->
+                                if (isAnswerPlaying) {
+                                    mediaController.stopAnswerAudio()
+                                } else {
+                                    mediaController.playAnswerAudio(file, progress.stage)
+                                }
+                            }
+                        },
+                        onConfirm = { submitCurrentAnswer() },
+                        onBackRequest = {
+                            if (isRecording) {
+                                mediaController.stopRecording()
+                            }
+                            showLeaveDialog = true
+                        }
+                    )
+                }
+
+                ScreenState.REVELATION -> {
+                    RevelationScreen(
+                        appLang = appLang,
+                        onBackRequest = {
+                            showLeaveDialog = true
+                        }
+                    )
+                }
+
+                ScreenState.RESULTS -> {
+                    ResultsScreen(
+                        progress = progress,
+                        appLang = appLang,
+                        isAnswerPlaying = isAnswerPlaying,
+                        activeStage = activeAnswerStage,
+                        onPlayAnswer = { file, stage ->
+                            if (isAnswerPlaying && activeAnswerStage == stage) {
+                                mediaController.stopAnswerAudio()
+                            } else {
+                                mediaController.playAnswerAudio(file, stage)
+                            }
+                        },
+                        onRestart = {
+                            beginNewRun()
+                        },
+                        onFinish = {
+                            mediaController.releaseAll()
+                            onExit()
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    // Frame 02: Continue or Restart Dialog
+    if (showContinueDialog) {
+        ContinueOrRestartDialog(
+            onContinue = {
+                showContinueDialog = false
+                continueExistingRun()
+            },
+            onRestart = {
+                showContinueDialog = false
+                beginNewRun()
+            },
+            onDismiss = {
+                showContinueDialog = false
+            },
+            appLanguage = appLang
         )
     }
 
-    if (showResumeDialog) {
+    // Leave Confirm Dialog
+    if (showLeaveDialog) {
+        LeaveConfirmDialog(
+            onConfirmLeave = {
+                showLeaveDialog = false
+                mediaController.releaseAll()
+                onExit()
+            },
+            onDismiss = {
+                showLeaveDialog = false
+            },
+            appLanguage = appLang
+        )
+    }
+
+    // Permission Settings Dialog
+    if (showPermissionSettingsDialog) {
         AlertDialog(
-            onDismissRequest = { showResumeDialog = false },
-            title = { Text(if (progress.completed) m(appLanguage, "Dein Ergebnis ist gespeichert", "Your result is saved", "Il tuo risultato è salvato") else m(appLanguage, "Deine Reise wartet", "Your journey is waiting", "Il tuo viaggio ti aspetta")) },
-            text = { Text(if (progress.completed) m(appLanguage, "Möchtest du dein Ergebnis wieder ansehen oder neu beginnen?", "Would you like to view your result or begin again?", "Vuoi rivedere il risultato o ricominciare?") else m(appLanguage, "Möchtest du dort weitermachen, wo du aufgehört hast?", "Would you like to continue where you left off?", "Vuoi continuare da dove hai interrotto?")) },
+            onDismissRequest = { showPermissionSettingsDialog = false },
+            containerColor = IntrospectionColors.SurfaceHighlighted,
+            title = {
+                Text(
+                    text = IntrospectionStrings.tr(
+                        IntrospectionStringKey.MIC_PERMISSION_REQUIRED_TITLE,
+                        appLang
+                    ),
+                    color = IntrospectionColors.PrimaryText,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = IntrospectionStrings.tr(
+                        IntrospectionStringKey.MIC_PERMISSION_REQUIRED_DESC,
+                        appLang
+                    ),
+                    color = IntrospectionColors.SecondaryText
+                )
+            },
             confirmButton = {
-                TextButton(onClick = { showResumeDialog = false; showGame = true }) {
-                    Text(if (progress.completed) m(appLanguage, "Ergebnis ansehen", "View result", "Vedi risultato") else m(appLanguage, "Fortsetzen", "Continue", "Continua"))
+                TextButton(
+                    onClick = {
+                        showPermissionSettingsDialog = false
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                        context.startActivity(intent)
+                    }
+                ) {
+                    Text(
+                        text = IntrospectionStrings.tr(
+                            IntrospectionStringKey.OPEN_SETTINGS_BUTTON,
+                            appLang
+                        ),
+                        color = IntrospectionColors.PrimaryPink,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showResumeDialog = false; beginNew() }) { Text(m(appLanguage, "Neu beginnen", "Start over", "Ricomincia")) }
+                TextButton(onClick = { showPermissionSettingsDialog = false }) {
+                    Text(
+                        text = IntrospectionStrings.tr(
+                            IntrospectionStringKey.CANCEL_BUTTON,
+                            appLang
+                        ),
+                        color = IntrospectionColors.SecondaryText
+                    )
+                }
             }
-        )
-    }
-
-    if (showExitDialog) {
-        AlertDialog(
-            onDismissRequest = { showExitDialog = false },
-            title = { Text(m(appLanguage, "Reise verlassen?", "Leave the journey?", "Lasciare il viaggio?")) },
-            text = { Text(m(appLanguage, "Deine bisherigen Antworten bleiben auf diesem Gerät gespeichert.", "Your answers will remain saved on this device.", "Le tue risposte resteranno salvate su questo dispositivo.")) },
-            confirmButton = { TextButton(onClick = onExit) { Text(m(appLanguage, "Verlassen", "Leave", "Esci")) } },
-            dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text(m(appLanguage, "Bleiben", "Stay", "Resta")) } }
         )
     }
 }
 
-@Composable
-private fun IntrospectionHub(appLanguage: String, hasSavedRun: Boolean, onBack: () -> Unit, onStart: () -> Unit) {
-    MysticBackdrop {
-        Column(Modifier.fillMaxSize().padding(horizontal = 22.dp, vertical = 18.dp)) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = m(appLanguage, "Zurück", "Back", "Indietro"), tint = MysticText)
-            }
-            Spacer(Modifier.height(40.dp))
-            Text("🧙‍♂️", fontSize = 48.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
-            Text(
-                m(appLanguage, "Tauche ins Unterbewusstsein", "Dive into the subconscious", "Immergiti nel subconscio"),
-                color = MysticText,
-                fontSize = 28.sp,
-                lineHeight = 34.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 10.dp)
-            )
-            Text(
-                m(appLanguage, "Drei Zeichen. Drei Antworten. Eine verborgene Bedeutung.", "Three signs. Three answers. One hidden meaning.", "Tre segni. Tre risposte. Un significato nascosto."),
-                color = MysticMuted,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(Modifier.height(38.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
-                    .background(MysticSurface)
-                    .border(1.dp, MysticPurple.copy(alpha = .55f), RoundedCornerShape(28.dp))
-                    .clickable(onClick = onStart).padding(24.dp)
-            ) {
-                Text("✨️", fontSize = 34.sp)
-                Text(m(appLanguage, "Das Verborgene in dir", "What lies hidden within you", "Ciò che è nascosto in te"), color = MysticText, fontSize = 23.sp, fontWeight = FontWeight.Bold)
-                Text(
-                    if (hasSavedRun) m(appLanguage, "Deine gespeicherte Reise öffnen", "Open your saved journey", "Apri il tuo viaggio salvato") else m(appLanguage, "Eine geführte Reise durch Farbe, Tier und Wasser", "A guided journey through color, animal, and water", "Un viaggio guidato attraverso colore, animale e acqua"),
-                    color = MysticMuted,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-                Text(
-                    if (hasSavedRun) m(appLanguage, "FORTSETZEN  →", "CONTINUE  →", "CONTINUA  →") else m(appLanguage, "BEGINNEN  →", "BEGIN  →", "INIZIA  →"),
-                    color = HarmonyPinkSoft,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.End).padding(top = 24.dp)
-                )
-            }
-        }
-    }
-}
+// --- Screen 01: Entry View ---
 
 @Composable
-private fun GuidedIntrospection(
-    appLanguage: String,
-    initialProgress: IntrospectionProgress,
-    store: IntrospectionStore,
-    onProgress: (IntrospectionProgress) -> Unit,
-    onExitRequest: () -> Unit
+private fun EntryScreen(
+    appLang: AppLanguage,
+    onBack: () -> Unit,
+    onStart: () -> Unit
 ) {
-    val context = LocalContext.current
-    var progress by remember { mutableStateOf(initialProgress) }
-    var answerMode by remember { mutableStateOf("text") }
-    var textAnswer by remember { mutableStateOf("") }
-    var recordedFile by remember { mutableStateOf<File?>(null) }
-    var isRecording by remember { mutableStateOf(false) }
-    var recorder by remember { mutableStateOf<MediaRecorder?>(null) }
-    var narrator by remember { mutableStateOf<MediaPlayer?>(null) }
-    var background by remember { mutableStateOf<MediaPlayer?>(null) }
-    var answerPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
-    var narratorPlaying by remember { mutableStateOf(false) }
-    var answerPlayingPath by remember { mutableStateOf<String?>(null) }
-    var recordingError by remember { mutableStateOf<String?>(null) }
-    val latestRecorder by rememberUpdatedState(recorder)
-    val latestNarrator by rememberUpdatedState(narrator)
-    val latestBackground by rememberUpdatedState(background)
-    val latestAnswerPlayer by rememberUpdatedState(answerPlayer)
-
-    fun stopAnswerPlayback() {
-        answerPlayer?.release()
-        answerPlayer = null
-        answerPlayingPath = null
-    }
-
-    fun stopRecording(save: Boolean) {
-        val current = recorder
-        recorder = null
-        if (current != null) {
-            runCatching { current.stop() }.onFailure { recordedFile?.delete() }
-            current.release()
-        }
-        isRecording = false
-        background?.start()
-        if (!save) {
-            recordedFile?.delete()
-            recordedFile = null
-        }
-    }
-
-    fun startRecording() {
-        stopAnswerPlayback()
-        narrator?.pause()
-        narratorPlaying = false
-        background?.pause()
-        val output = store.recordingFile(progress.stage)
-        val newRecorder = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(context) else @Suppress("DEPRECATION") MediaRecorder()
-        runCatching {
-            newRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            newRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            newRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            newRecorder.setAudioEncodingBitRate(128_000)
-            newRecorder.setAudioSamplingRate(44_100)
-            newRecorder.setMaxDuration(300_000)
-            newRecorder.setOutputFile(output.absolutePath)
-            newRecorder.setOnInfoListener { _, what, _ ->
-                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) stopRecording(true)
-            }
-            newRecorder.prepare()
-            newRecorder.start()
-            recorder = newRecorder
-            recordedFile = output
-            isRecording = true
-            recordingError = null
-        }.onFailure {
-            newRecorder.release()
-            output.delete()
-            background?.start()
-            recordingError = m(appLanguage, "Die Aufnahme konnte nicht gestartet werden.", "The recording could not be started.", "Impossibile avviare la registrazione.")
-        }
-    }
-
-    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) startRecording() else recordingError = m(appLanguage, "Für Audioantworten wird Mikrofonzugriff benötigt.", "Microphone access is required for audio answers.", "Per le risposte audio è necessario l'accesso al microfono.")
-    }
-
-    DisposableEffect(Unit) {
-        background = MediaPlayer.create(context, R.raw.merlin_theme).apply {
-            isLooping = true
-            setVolume(1f, 1f)
-            start()
-        }
-        onDispose {
-            latestRecorder?.let { current ->
-                runCatching { current.stop() }
-                current.release()
-            }
-            latestNarrator?.release()
-            latestBackground?.release()
-            latestAnswerPlayer?.release()
-        }
-    }
-
-    LaunchedEffect(progress.stage) {
-        textAnswer = ""
-        recordedFile = null
-        answerMode = "text"
-        narrator?.release()
-        narrator = null
-        narratorPlaying = false
-        if (progress.stage == IntrospectionStage.RESULTS) {
-            background?.setVolume(1f, 1f)
-            return@LaunchedEffect
-        }
-        val resource = when (progress.stage) {
-            IntrospectionStage.COLOR -> R.raw.introspection_color
-            IntrospectionStage.ANIMAL -> R.raw.introspection_animal
-            IntrospectionStage.WATER -> R.raw.introspection_water
-            IntrospectionStage.REVELATION -> R.raw.introspection_reveal
-            IntrospectionStage.RESULTS -> return@LaunchedEffect
-        }
-        background?.setVolume(.68f, .68f)
-        narrator = MediaPlayer.create(context, resource).apply {
-            setOnCompletionListener {
-                narratorPlaying = false
-                background?.setVolume(1f, 1f)
-                if (progress.stage == IntrospectionStage.REVELATION) {
-                    progress = progress.finishRevelation()
-                    onProgress(progress)
-                }
-            }
-            start()
-        }
-        narratorPlaying = true
-    }
-
-    fun submitAnswer() {
-        val answer = if (answerMode == "audio") {
-            recordedFile?.takeIf { it.isFile }?.let { IntrospectionAnswer.Audio(it.absolutePath) }
-        } else {
-            IntrospectionAnswer.Text(textAnswer.trim()).takeIf { it.isValid() }
-        } ?: return
-        val updated = progress.advanceAfterAnswer(answer)
-        progress = updated
-        onProgress(updated)
-    }
-
-    MysticBackdrop {
-        Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-                .padding(horizontal = 22.dp, vertical = 14.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onExitRequest) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = m(appLanguage, "Reise verlassen", "Leave journey", "Esci dal viaggio"), tint = MysticText)
-                }
-                val step = when (progress.stage) {
-                    IntrospectionStage.COLOR -> 1
-                    IntrospectionStage.ANIMAL -> 2
-                    IntrospectionStage.WATER -> 3
-                    else -> 4
-                }
-                Box(
-                    Modifier.weight(1f).height(5.dp).clip(CircleShape)
-                        .background(Color.White.copy(alpha = .12f))
-                ) {
-                    Box(Modifier.fillMaxWidth(step / 4f).height(5.dp).background(HarmonyPinkSoft))
-                }
-                Text("$step/4", color = MysticMuted, modifier = Modifier.padding(start = 14.dp))
-            }
-
-            when (progress.stage) {
-                IntrospectionStage.RESULTS -> ResultsContent(appLanguage, progress, ::stopAnswerPlayback) { path ->
-                    stopAnswerPlayback()
-                    answerPlayer = MediaPlayer().apply {
-                        setDataSource(path)
-                        setOnCompletionListener { stopAnswerPlayback() }
-                        prepare()
-                        start()
-                    }
-                    answerPlayingPath = path
-                }
-                else -> {
-                    PortalAura()
-                    val copy = stageCopy(progress.stage, appLanguage)
-                    Text(copy.eyebrow, color = HarmonyPinkSoft, fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 2.sp)
-                    Text(copy.title, color = MysticText, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 34.sp, modifier = Modifier.padding(top = 8.dp))
-                    Text(copy.subtitle, color = MysticMuted, fontSize = 16.sp, lineHeight = 23.sp, modifier = Modifier.padding(top = 10.dp, bottom = 22.dp))
-
-                    if (progress.stage == IntrospectionStage.REVELATION) {
-                        Text(
-                            if (narratorPlaying) m(appLanguage, "Die Zeichen fügen sich zusammen …", "The signs are coming together …", "I segni si stanno unendo …") else m(appLanguage, "Deine Enthüllung ist vollendet.", "Your revelation is complete.", "La tua rivelazione è completa."),
-                            color = MysticText,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth().padding(28.dp)
-                        )
-                    } else {
-                        AnswerComposer(
-                            mode = answerMode,
-                            appLanguage = appLanguage,
-                            text = textAnswer,
-                            recordedFile = recordedFile,
-                            isRecording = isRecording,
-                            isPlaying = recordedFile?.absolutePath == answerPlayingPath,
-                            error = recordingError,
-                            onMode = { answerMode = it },
-                            onText = { textAnswer = it },
-                            onRecord = {
-                                if (narratorPlaying) Unit
-                                else if (isRecording) stopRecording(true)
-                                else if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) startRecording()
-                                else permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                            },
-                            onDelete = { recordedFile?.delete(); recordedFile = null; stopAnswerPlayback() },
-                            onPlay = {
-                                recordedFile?.let { file ->
-                                    if (answerPlayingPath == file.absolutePath) stopAnswerPlayback() else {
-                                        stopAnswerPlayback()
-                                        answerPlayer = MediaPlayer().apply {
-                                            setDataSource(file.absolutePath)
-                                            setOnCompletionListener { stopAnswerPlayback() }
-                                            prepare(); start()
-                                        }
-                                        answerPlayingPath = file.absolutePath
-                                    }
-                                }
-                            }
-                        )
-                        Button(
-                            onClick = ::submitAnswer,
-                            enabled = !narratorPlaying && !isRecording && ((answerMode == "text" && textAnswer.isNotBlank()) || (answerMode == "audio" && recordedFile?.isFile == true)),
-                            modifier = Modifier.fillMaxWidth().height(56.dp).padding(top = 4.dp),
-                            shape = RoundedCornerShape(18.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink, disabledContainerColor = HarmonyPink.copy(alpha = .28f))
-                        ) { Text(m(appLanguage, "Antwort bestätigen", "Confirm answer", "Conferma risposta"), fontWeight = FontWeight.Bold) }
-                    }
-                }
-            }
-            Spacer(Modifier.height(28.dp))
-        }
-    }
-}
-
-private data class StageCopy(val eyebrow: String, val title: String, val subtitle: String)
-
-private fun stageCopy(stage: IntrospectionStage, language: String): StageCopy = when (stage) {
-    IntrospectionStage.COLOR -> StageCopy(m(language, "ERSTES ZEICHEN", "FIRST SIGN", "PRIMO SEGNO"), m(language, "Welche Farbe zieht dich an?", "Which color draws you in?", "Quale colore ti attrae?"), m(language, "Beschreibe nicht nur ihren Namen. Was fühlst du, wenn du sie siehst? Welche Erinnerung, welche Stimmung oder welche Kraft trägt sie für dich?", "Don't just name it. What do you feel when you see it? What memory, mood, or strength does it hold for you?", "Non limitarti a nominarlo. Cosa provi quando lo vedi? Quale ricordo, emozione o forza racchiude per te?"))
-    IntrospectionStage.ANIMAL -> StageCopy(m(language, "ZWEITES ZEICHEN", "SECOND SIGN", "SECONDO SEGNO"), m(language, "Welches Tier fasziniert dich?", "Which animal fascinates you?", "Quale animale ti affascina?"), m(language, "Sehr schön. Nun tritt ein Wesen aus dem Schatten. Welches Tier wählst du – und welche Eigenschaften bewunderst du an ihm?", "Beautiful. Now a creature steps from the shadows. Which animal do you choose—and which qualities do you admire in it?", "Bellissimo. Ora una creatura emerge dall'ombra. Quale animale scegli e quali qualità ammiri in lui?"))
-    IntrospectionStage.WATER -> StageCopy(m(language, "DRITTES ZEICHEN", "THIRD SIGN", "TERZO SEGNO"), m(language, "Wie erscheint dir das Wasser?", "How does the water appear to you?", "Come ti appare l'acqua?"), m(language, "Stell dir Wasser vor. Ist es still oder wild, klar oder geheimnisvoll, nah oder grenzenlos? Beschreibe das Bild, das vor deinem inneren Auge entsteht.", "Imagine water. Is it still or wild, clear or mysterious, near or boundless? Describe the image forming in your mind.", "Immagina l'acqua. È calma o impetuosa, limpida o misteriosa, vicina o sconfinata? Descrivi l'immagine che nasce nella tua mente."))
-    IntrospectionStage.REVELATION -> StageCopy(m(language, "DIE ENTHÜLLUNG", "THE REVELATION", "LA RIVELAZIONE"), m(language, "Höre, was deine Zeichen offenbaren", "Hear what your signs reveal", "Ascolta ciò che rivelano i tuoi segni"), m(language, "Lehne dich zurück. Deine Farbe, dein Tier und dein Wasser beginnen nun, ihre verborgene Sprache zu sprechen.", "Lean back. Your color, animal, and water are about to speak their hidden language.", "Rilassati. Il tuo colore, il tuo animale e la tua acqua stanno per parlare la loro lingua nascosta."))
-    IntrospectionStage.RESULTS -> StageCopy(m(language, "DEINE ZEICHEN", "YOUR SIGNS", "I TUOI SEGNI"), m(language, "Das Verborgene in dir", "What lies hidden within you", "Ciò che è nascosto in te"), m(language, "Bewahre deine Antworten und kehre jederzeit zu ihnen zurück.", "Keep your answers and return to them whenever you wish.", "Conserva le tue risposte e torna a esse quando vuoi."))
-}
-
-@Composable
-private fun AnswerComposer(
-    appLanguage: String,
-    mode: String,
-    text: String,
-    recordedFile: File?,
-    isRecording: Boolean,
-    isPlaying: Boolean,
-    error: String?,
-    onMode: (String) -> Unit,
-    onText: (String) -> Unit,
-    onRecord: () -> Unit,
-    onDelete: () -> Unit,
-    onPlay: () -> Unit
-) {
-    Row(Modifier.fillMaxWidth().padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        ModePill(m(appLanguage, "Text", "Text", "Testo"), mode == "text", Modifier.weight(1f)) { onMode("text") }
-        ModePill("Audio", mode == "audio", Modifier.weight(1f)) { onMode("audio") }
-    }
-    if (mode == "text") {
-        OutlinedTextField(
-            value = text,
-            onValueChange = onText,
-            placeholder = { Text(m(appLanguage, "Lass deine Gedanken fließen …", "Let your thoughts flow …", "Lascia fluire i tuoi pensieri …")) },
-            modifier = Modifier.fillMaxWidth().height(170.dp),
-            shape = RoundedCornerShape(22.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = MysticText,
-                unfocusedTextColor = MysticText,
-                focusedBorderColor = MysticPurple,
-                unfocusedBorderColor = Color.White.copy(alpha = .18f),
-                focusedContainerColor = MysticSurface,
-                unfocusedContainerColor = MysticSurface,
-                focusedPlaceholderColor = MysticMuted,
-                unfocusedPlaceholderColor = MysticMuted
-            )
-        )
-    } else {
-        Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(MysticSurface)
-                .border(1.dp, if (isRecording) HarmonyPink else MysticPurple.copy(alpha = .45f), RoundedCornerShape(22.dp))
-                .padding(18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            IconButton(onClick = onRecord, modifier = Modifier.size(66.dp).background(if (isRecording) HarmonyPink else MysticPurple, CircleShape)) {
-                Icon(if (isRecording) Icons.Default.Stop else Icons.Default.Mic, contentDescription = if (isRecording) m(appLanguage, "Aufnahme stoppen", "Stop recording", "Ferma registrazione") else m(appLanguage, "Audio aufnehmen", "Record audio", "Registra audio"), tint = Color.White, modifier = Modifier.size(30.dp))
-            }
-            Text(if (isRecording) m(appLanguage, "Aufnahme läuft · maximal 5 Minuten", "Recording · maximum 5 minutes", "Registrazione · massimo 5 minuti") else if (recordedFile != null) m(appLanguage, "Audioantwort gespeichert", "Audio answer saved", "Risposta audio salvata") else m(appLanguage, "Tippe, um deine Antwort aufzunehmen", "Tap to record your answer", "Tocca per registrare la risposta"), color = MysticText, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 10.dp))
-            if (recordedFile != null && !isRecording) {
-                Row {
-                    IconButton(onClick = onPlay) { Icon(if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow, "Audio abspielen", tint = MysticText) }
-                    IconButton(onClick = onDelete) { Icon(Icons.Default.Delete, "Audio löschen", tint = HarmonyPinkSoft) }
-                }
-            }
-            error?.let { Text(it, color = HarmonyPinkSoft, fontSize = 13.sp, textAlign = TextAlign.Center) }
-        }
-    }
-    Spacer(Modifier.height(16.dp))
-}
-
-@Composable
-private fun ModePill(label: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
-    Box(
-        modifier.clip(RoundedCornerShape(14.dp)).background(if (selected) MysticPurple else MysticSurface)
-            .border(1.dp, MysticPurple.copy(alpha = .6f), RoundedCornerShape(14.dp)).clickable(onClick = onClick)
-            .padding(vertical = 11.dp),
-        contentAlignment = Alignment.Center
-    ) { Text(label, color = MysticText, fontWeight = FontWeight.SemiBold) }
-}
-
-@Composable
-private fun ResultsContent(appLanguage: String, progress: IntrospectionProgress, stopPlayback: () -> Unit, play: (String) -> Unit) {
-    val copy = stageCopy(IntrospectionStage.RESULTS, appLanguage)
-    PortalAura()
-    Text(copy.eyebrow, color = HarmonyPinkSoft, fontWeight = FontWeight.Bold, fontSize = 12.sp, letterSpacing = 2.sp)
-    Text(copy.title, color = MysticText, fontSize = 29.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
-    Text(copy.subtitle, color = MysticMuted, modifier = Modifier.padding(top = 8.dp, bottom = 18.dp))
-    listOf(
-        IntrospectionStage.COLOR to m(appLanguage, "Deine Farbe", "Your color", "Il tuo colore"),
-        IntrospectionStage.ANIMAL to m(appLanguage, "Dein Tier", "Your animal", "Il tuo animale"),
-        IntrospectionStage.WATER to m(appLanguage, "Dein Wasser", "Your water", "La tua acqua")
-    ).forEach { (stage, title) ->
-        Column(Modifier.fillMaxWidth().padding(vertical = 7.dp).clip(RoundedCornerShape(20.dp)).background(MysticSurface).border(1.dp, MysticPurple.copy(alpha = .35f), RoundedCornerShape(20.dp)).padding(18.dp)) {
-            Text(title, color = HarmonyPinkSoft, fontWeight = FontWeight.Bold)
-            when (val answer = progress.answers[stage]) {
-                is IntrospectionAnswer.Text -> Text(answer.value, color = MysticText, fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp))
-                is IntrospectionAnswer.Audio -> Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { play(answer.filePath) }) { Icon(Icons.Default.PlayArrow, "Audioantwort abspielen", tint = MysticText) }
-                    Text(m(appLanguage, "Deine Audioantwort", "Your audio answer", "La tua risposta audio"), color = MysticText)
-                }
-                null -> Text(m(appLanguage, "Keine Antwort gespeichert", "No answer saved", "Nessuna risposta salvata"), color = MysticMuted)
-            }
-        }
-    }
-}
-
-@Composable
-private fun PortalAura() {
-    val transition = rememberInfiniteTransition(label = "portal")
-    val corePulse by transition.animateFloat(
-        initialValue = .94f,
-        targetValue = 1.07f,
-        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
-        label = "portal-core-pulse"
-    )
-    val outerWave by transition.animateFloat(
-        initialValue = .78f,
-        targetValue = 1.24f,
-        animationSpec = infiniteRepeatable(tween(3000), RepeatMode.Restart),
-        label = "portal-outer-wave"
-    )
-    val innerWave by transition.animateFloat(
-        initialValue = .88f,
-        targetValue = 1.18f,
-        animationSpec = infiniteRepeatable(tween(3000, delayMillis = 1450), RepeatMode.Restart),
-        label = "portal-inner-wave"
-    )
-    val glowPulse by transition.animateFloat(
-        initialValue = .38f,
-        targetValue = .76f,
-        animationSpec = infiniteRepeatable(tween(2400), RepeatMode.Reverse),
-        label = "portal-glow-pulse"
-    )
-    val outerWaveAlpha = ((1.24f - outerWave) / .46f * .48f).coerceIn(0f, .48f)
-    val innerWaveAlpha = ((1.18f - innerWave) / .30f * .36f).coerceIn(0f, .36f)
-
-    Box(Modifier.fillMaxWidth().height(270.dp), contentAlignment = Alignment.Center) {
-        Box(
-            Modifier.size(224.dp).scale(outerWave).alpha(outerWaveAlpha)
-                .border(2.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
-        )
-        Box(
-            Modifier.size(192.dp).scale(innerWave).alpha(innerWaveAlpha)
-                .border(2.dp, Brush.sweepGradient(listOf(MysticPurple, Color(0xFFFF8CB8), Color(0xFF6D4CFF), MysticPurple)), CircleShape)
-        )
-        Box(Modifier.size(230.dp).scale(corePulse).blur(34.dp).alpha(glowPulse).background(MysticPurple, CircleShape))
-        Box(Modifier.size(195.dp).scale(corePulse).blur(16.dp).alpha(.58f).background(HarmonyPinkSoft, CircleShape))
-        Box(
-            Modifier.size(184.dp).scale(corePulse)
-                .border(12.dp, Brush.sweepGradient(listOf(HarmonyPinkSoft, Color(0xFFFFB1CF), MysticPurple, Color(0xFF5B5CFF), HarmonyPinkSoft)), CircleShape)
-        )
-        Box(Modifier.size(148.dp).scale(corePulse).background(Brush.radialGradient(listOf(Color(0xFF42145E), Color(0xFF08030E))), CircleShape), contentAlignment = Alignment.Center) {
-            Text("✦", color = Color.White.copy(alpha = .85f), fontSize = 44.sp)
-        }
-    }
-}
-
-@Composable
-private fun MysticBackdrop(content: @Composable () -> Unit) {
-    Box(
-        Modifier.fillMaxSize().background(
-            Brush.verticalGradient(listOf(Color(0xFF1A0925), MysticBackground, Color(0xFF100315)))
-        )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(Modifier.fillMaxSize().background(Brush.radialGradient(listOf(MysticViolet.copy(alpha = .22f), Color.Transparent), radius = 900f)))
-        content()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.testTag("entry_back_button")
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = IntrospectionStrings.tr(
+                        IntrospectionStringKey.BACK_BUTTON_CD,
+                        appLang
+                    ),
+                    tint = IntrospectionColors.PrimaryText
+                )
+            }
+        }
+
+        Spacer(Modifier.height(10.dp))
+
+        // Big Atmospheric Portal
+        IntrospectionPortal(
+            isRevelation = false,
+            size = 240.dp
+        )
+
+        Spacer(Modifier.height(18.dp))
+
+        EyebrowCapsule(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.ENTRY_EYEBROW, appLang)
+        )
+
+        Spacer(Modifier.height(14.dp))
+
+        Text(
+            text = IntrospectionConstants.WIZARD_EMOJI,
+            fontSize = 38.sp
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.ENTRY_TITLE, appLang),
+            color = IntrospectionColors.PrimaryText,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            lineHeight = 36.sp
+        )
+
+        Spacer(Modifier.height(14.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.ENTRY_SUBTITLE, appLang),
+            color = IntrospectionColors.SecondaryText,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+        Spacer(Modifier.height(36.dp))
+
+        MysticButton(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.ENTRY_START_BUTTON, appLang),
+            onClick = onStart,
+            leadingEmoji = IntrospectionConstants.SPARKLES_EMOJI,
+            testTag = "entry_start_button"
+        )
+
+        Spacer(Modifier.height(24.dp))
     }
 }
 
-private fun m(language: String, german: String, english: String, italian: String): String = when {
-    language.startsWith("en", ignoreCase = true) -> english
-    language.startsWith("it", ignoreCase = true) -> italian
-    else -> german
+// --- Screen 03 / 04 / 05 / 06: Question View ---
+
+@Composable
+private fun QuestionScreen(
+    progress: IntrospectionProgress,
+    appLang: AppLanguage,
+    inputMode: String,
+    textAnswer: String,
+    recordedFile: File?,
+    isNarratorPlaying: Boolean,
+    isRecording: Boolean,
+    recordingDurationMs: Long,
+    isAnswerPlaying: Boolean,
+    answerProgress: Float,
+    errorMessage: String?,
+    onInputModeChange: (String) -> Unit,
+    onTextChange: (String) -> Unit,
+    onReplayNarrator: () -> Unit,
+    onStartRecord: () -> Unit,
+    onStopRecord: () -> Unit,
+    onDiscardRecord: () -> Unit,
+    onPlayPauseAudio: () -> Unit,
+    onConfirm: () -> Unit,
+    onBackRequest: () -> Unit
+) {
+    val step = when (progress.stage) {
+        IntrospectionStage.COLOR -> 1
+        IntrospectionStage.ANIMAL -> 2
+        IntrospectionStage.WATER -> 3
+        else -> 4
+    }
+
+    val (stageTitleKey, stageQuestionKey, stagePromptKey) = when (progress.stage) {
+        IntrospectionStage.COLOR -> Triple(
+            IntrospectionStringKey.STAGE_COLOR_TITLE,
+            IntrospectionStringKey.STAGE_COLOR_QUESTION,
+            IntrospectionStringKey.STAGE_COLOR_PROMPT
+        )
+        IntrospectionStage.ANIMAL -> Triple(
+            IntrospectionStringKey.STAGE_ANIMAL_TITLE,
+            IntrospectionStringKey.STAGE_ANIMAL_QUESTION,
+            IntrospectionStringKey.STAGE_ANIMAL_PROMPT
+        )
+        else -> Triple(
+            IntrospectionStringKey.STAGE_WATER_TITLE,
+            IntrospectionStringKey.STAGE_WATER_QUESTION,
+            IntrospectionStringKey.STAGE_WATER_PROMPT
+        )
+    }
+
+    val canConfirm = !isNarratorPlaying && !isRecording && (
+            (inputMode == "text" && textAnswer.isNotBlank()) ||
+                    (inputMode == "voice" && recordedFile?.let { it.exists() && it.isFile && it.length() > 0 } == true)
+            )
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 22.dp, vertical = 16.dp)
+    ) {
+        // Top Bar
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = onBackRequest,
+                modifier = Modifier.testTag("question_back_button")
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = IntrospectionStrings.tr(
+                        IntrospectionStringKey.LEAVE_BUTTON_CD,
+                        appLang
+                    ),
+                    tint = IntrospectionColors.PrimaryText
+                )
+            }
+
+            Spacer(Modifier.width(8.dp))
+
+            // Progress Bar
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(6.dp)
+                    .clip(CircleShape)
+                    .background(IntrospectionColors.SurfaceHighlighted)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(step / 3f)
+                        .height(6.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                listOf(
+                                    IntrospectionColors.PrimaryPink,
+                                    IntrospectionColors.Magenta
+                                )
+                            )
+                        )
+                )
+            }
+
+            Spacer(Modifier.width(12.dp))
+
+            Text(
+                text = String.format(
+                    IntrospectionStrings.tr(IntrospectionStringKey.STEP_OF_THREE, appLang),
+                    step
+                ),
+                color = IntrospectionColors.SecondaryText,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        // Centered Portal
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            IntrospectionPortal(
+                isRevelation = false,
+                size = 170.dp
+            )
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        // Title and Question
+        Text(
+            text = IntrospectionStrings.tr(stageTitleKey, appLang).uppercase(),
+            color = IntrospectionColors.PrimaryPink,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 2.sp
+        )
+
+        Spacer(Modifier.height(6.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(stageQuestionKey, appLang),
+            color = IntrospectionColors.PrimaryText,
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold,
+            lineHeight = 32.sp
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(stagePromptKey, appLang),
+            color = IntrospectionColors.SecondaryText,
+            fontSize = 15.sp,
+            lineHeight = 22.sp
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        // Narrator status badge with interactive replay / stop capability
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Surface(
+                onClick = onReplayNarrator,
+                shape = RoundedCornerShape(50),
+                color = if (isNarratorPlaying) IntrospectionColors.PrimaryPink.copy(alpha = 0.22f)
+                else IntrospectionColors.SurfaceHighlighted.copy(alpha = 0.5f),
+                border = BorderStroke(
+                    1.dp,
+                    if (isNarratorPlaying) IntrospectionColors.PrimaryPink
+                    else IntrospectionColors.PortalViolet.copy(alpha = 0.4f)
+                ),
+                modifier = Modifier.testTag("narrator_audio_badge")
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = if (isNarratorPlaying) Icons.AutoMirrored.Filled.VolumeUp else Icons.Default.PlayArrow,
+                        contentDescription = null,
+                        tint = if (isNarratorPlaying) IntrospectionColors.PeachLight else IntrospectionColors.SecondaryText,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = if (isNarratorPlaying) {
+                            IntrospectionStrings.tr(IntrospectionStringKey.NARRATOR_PLAYING_BADGE, appLang)
+                        } else {
+                            IntrospectionStrings.tr(IntrospectionStringKey.PLAY_NARRATOR_BUTTON, appLang)
+                        },
+                        color = if (isNarratorPlaying) IntrospectionColors.PeachLight else IntrospectionColors.SecondaryText,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+        }
+
+        // Mode Switcher Tabs
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 14.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            // Text Tab
+            Surface(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(44.dp),
+                shape = RoundedCornerShape(14.dp),
+                color = if (inputMode == "text") IntrospectionColors.PortalViolet
+                else IntrospectionColors.SurfaceDark,
+                border = BorderStroke(
+                    1.dp,
+                    if (inputMode == "text") IntrospectionColors.PrimaryPink.copy(alpha = 0.8f)
+                    else IntrospectionColors.PortalViolet.copy(alpha = 0.3f)
+                ),
+                onClick = { onInputModeChange("text") }
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = IntrospectionStrings.tr(IntrospectionStringKey.TAB_TEXT, appLang),
+                        color = IntrospectionColors.PrimaryText,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+
+            // Voice Tab
+            Surface(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(44.dp),
+                shape = RoundedCornerShape(14.dp),
+                color = if (inputMode == "voice") IntrospectionColors.PortalViolet
+                else IntrospectionColors.SurfaceDark,
+                border = BorderStroke(
+                    1.dp,
+                    if (inputMode == "voice") IntrospectionColors.PrimaryPink.copy(alpha = 0.8f)
+                    else IntrospectionColors.PortalViolet.copy(alpha = 0.3f)
+                ),
+                onClick = { onInputModeChange("voice") }
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = IntrospectionStrings.tr(IntrospectionStringKey.TAB_VOICE, appLang),
+                        color = IntrospectionColors.PrimaryText,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+        }
+
+        // Input Content
+        if (inputMode == "text") {
+            MysticTextField(
+                value = textAnswer,
+                onValueChange = onTextChange,
+                placeholder = IntrospectionStrings.tr(
+                    IntrospectionStringKey.TEXT_INPUT_PLACEHOLDER,
+                    appLang
+                )
+            )
+        } else {
+            // Voice Mode
+            when {
+                isRecording -> {
+                    // Frame 04: Active Recording
+                    RecordingVisualizer(
+                        durationMs = recordingDurationMs,
+                        onStop = onStopRecord,
+                        onDiscard = onDiscardRecord,
+                        appLanguage = appLang
+                    )
+                }
+
+                recordedFile != null -> {
+                    // Frame 05: Audio Recorded
+                    AudioPlaybackCard(
+                        isPlaying = isAnswerPlaying,
+                        progress = answerProgress,
+                        onPlayPause = onPlayPauseAudio,
+                        onRecordAgain = onDiscardRecord,
+                        appLanguage = appLang
+                    )
+                }
+
+                else -> {
+                    // Tap to Record Prompt
+                    MysticCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        backgroundColor = IntrospectionColors.SurfaceDark
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(68.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        brush = Brush.radialGradient(
+                                            listOf(
+                                                IntrospectionColors.PortalViolet,
+                                                IntrospectionColors.DeepViolet
+                                            )
+                                        )
+                                    )
+                                    .clickable(onClick = onStartRecord)
+                                    .testTag("start_record_button"),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Mic,
+                                    contentDescription = IntrospectionStrings.tr(
+                                        IntrospectionStringKey.RECORD_BUTTON_CD,
+                                        appLang
+                                    ),
+                                    tint = Color.White,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+
+                            Spacer(Modifier.height(12.dp))
+
+                            Text(
+                                text = IntrospectionStrings.tr(
+                                    IntrospectionStringKey.RECORD_BUTTON_CD,
+                                    appLang
+                                ),
+                                color = IntrospectionColors.PrimaryText,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        if (errorMessage != null) {
+            Spacer(Modifier.height(14.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                color = Color(0x33FF5252),
+                border = BorderStroke(1.dp, Color(0x88FF5252))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "Hinweis",
+                        tint = Color(0xFFFF6B6B),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = errorMessage,
+                        color = Color(0xFFFFD0D0),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        lineHeight = 18.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // Confirm Button
+        MysticButton(
+            text = IntrospectionStrings.tr(
+                IntrospectionStringKey.CONFIRM_ANSWER_BUTTON,
+                appLang
+            ),
+            onClick = onConfirm,
+            enabled = canConfirm,
+            testTag = "confirm_answer_button"
+        )
+
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+// --- Screen 07: Revelation View ---
+
+@Composable
+private fun RevelationScreen(
+    appLang: AppLanguage,
+    onBackRequest: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                onClick = onBackRequest,
+                modifier = Modifier.testTag("revelation_back_button")
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = IntrospectionStrings.tr(
+                        IntrospectionStringKey.LEAVE_BUTTON_CD,
+                        appLang
+                    ),
+                    tint = IntrospectionColors.PrimaryText
+                )
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // Heightened Glow Portal with faster particle motion
+        IntrospectionPortal(
+            isRevelation = true,
+            size = 260.dp
+        )
+
+        Spacer(Modifier.height(30.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.REVELATION_TITLE, appLang),
+            color = IntrospectionColors.PrimaryText,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(14.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.REVELATION_SUBTITLE, appLang),
+            color = IntrospectionColors.SecondaryText,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+// --- Screen 08: Results View ---
+
+@Composable
+private fun ResultsScreen(
+    progress: IntrospectionProgress,
+    appLang: AppLanguage,
+    isAnswerPlaying: Boolean,
+    activeStage: IntrospectionStage?,
+    onPlayAnswer: (File, IntrospectionStage) -> Unit,
+    onRestart: () -> Unit,
+    onFinish: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 22.dp, vertical = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = IntrospectionConstants.WIZARD_EMOJI,
+            fontSize = 40.sp
+        )
+
+        Spacer(Modifier.height(10.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.RESULTS_TITLE, appLang),
+            color = IntrospectionColors.PrimaryText,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(6.dp))
+
+        Text(
+            text = IntrospectionStrings.tr(IntrospectionStringKey.RESULTS_SUBTITLE, appLang),
+            color = IntrospectionColors.SecondaryText,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        // 3 Result Cards
+        listOf(
+            Triple(
+                IntrospectionStage.COLOR,
+                IntrospectionStrings.tr(IntrospectionStringKey.STAGE_COLOR_TITLE, appLang),
+                IntrospectionStrings.tr(IntrospectionStringKey.RESULTS_COLOR_MEANING, appLang)
+            ),
+            Triple(
+                IntrospectionStage.ANIMAL,
+                IntrospectionStrings.tr(IntrospectionStringKey.STAGE_ANIMAL_TITLE, appLang),
+                IntrospectionStrings.tr(IntrospectionStringKey.RESULTS_ANIMAL_MEANING, appLang)
+            ),
+            Triple(
+                IntrospectionStage.WATER,
+                IntrospectionStrings.tr(IntrospectionStringKey.STAGE_WATER_TITLE, appLang),
+                IntrospectionStrings.tr(IntrospectionStringKey.RESULTS_WATER_MEANING, appLang)
+            )
+        ).forEachIndexed { index, (stage, stageTitle, meaning) ->
+            ResultCard(
+                index = index + 1,
+                title = stageTitle,
+                meaning = meaning,
+                answer = progress.answers[stage],
+                appLang = appLang,
+                isPlaying = isAnswerPlaying && activeStage == stage,
+                onPlayAudio = { file -> onPlayAnswer(file, stage) }
+            )
+            Spacer(Modifier.height(16.dp))
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        MysticSecondaryButton(
+            text = IntrospectionStrings.tr(
+                IntrospectionStringKey.START_NEW_JOURNEY_BUTTON,
+                appLang
+            ),
+            onClick = onRestart,
+            testTag = "results_restart_button"
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        MysticButton(
+            text = IntrospectionStrings.tr(
+                IntrospectionStringKey.FINISH_JOURNEY_BUTTON,
+                appLang
+            ),
+            onClick = onFinish,
+            testTag = "results_finish_button"
+        )
+
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun ResultCard(
+    index: Int,
+    title: String,
+    meaning: String,
+    answer: IntrospectionAnswer?,
+    appLang: AppLanguage,
+    isPlaying: Boolean,
+    onPlayAudio: (File) -> Unit
+) {
+    MysticCard(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = IntrospectionColors.SurfaceDark,
+        borderColor = IntrospectionColors.PortalViolet.copy(alpha = 0.4f)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp)
+        ) {
+            Text(
+                text = "$index. $title",
+                color = IntrospectionColors.PrimaryPink,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            when (answer) {
+                is IntrospectionAnswer.Text -> {
+                    Text(
+                        text = "„${answer.value}“",
+                        color = IntrospectionColors.PrimaryText,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        lineHeight = 22.sp
+                    )
+                }
+
+                is IntrospectionAnswer.Audio -> {
+                    val file = remember(answer.filePath) { File(answer.filePath) }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = { onPlayAudio(file) },
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .background(IntrospectionColors.SurfaceHighlighted)
+                                .testTag("result_play_audio_button_$index")
+                        ) {
+                            Icon(
+                                imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                                contentDescription = if (isPlaying) {
+                                    IntrospectionStrings.tr(
+                                        IntrospectionStringKey.PAUSE_AUDIO_ANSWER_CD,
+                                        appLang
+                                    )
+                                } else {
+                                    IntrospectionStrings.tr(
+                                        IntrospectionStringKey.PLAY_AUDIO_ANSWER_CD,
+                                        appLang
+                                    )
+                                },
+                                tint = IntrospectionColors.PrimaryPink
+                            )
+                        }
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text = IntrospectionStrings.tr(
+                                IntrospectionStringKey.AUDIO_ANSWER_LABEL,
+                                appLang
+                            ),
+                            color = IntrospectionColors.PrimaryText,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                null -> {
+                    Text(
+                        text = "-",
+                        color = IntrospectionColors.SecondaryText,
+                        fontSize = 15.sp
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(IntrospectionColors.SurfaceHighlighted)
+            )
+
+            Spacer(Modifier.height(10.dp))
+
+            Text(
+                text = meaning,
+                color = IntrospectionColors.SecondaryText,
+                fontSize = 14.sp,
+                lineHeight = 20.sp
+            )
+        }
+    }
 }

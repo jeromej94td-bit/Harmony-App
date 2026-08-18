@@ -72,7 +72,9 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
 
     BackHandler(enabled = canHandleBack) {
         when {
-            isIntrospectionOpen -> isIntrospectionOpen = false
+            isIntrospectionOpen -> {
+                isIntrospectionOpen = false
+            }
             isQuizActive -> {
                 if (uiState.isExitConfirmOpen) {
                     viewModel.closeExitConfirm()
@@ -155,8 +157,11 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         appLanguage = uiState.appLanguage,
                         onSetFilter = { filter -> viewModel.setPackFilter(filter) },
                         onCategoryClick = { catId ->
-                            if (catId == "unterbewusstsein") isIntrospectionOpen = true
-                            else viewModel.openCategory(catId)
+                            if (catId == "unterbewusstsein") {
+                                isIntrospectionOpen = true
+                            } else {
+                                viewModel.openCategory(catId)
+                            }
                         },
                         onTopicClick = { topicId -> viewModel.openTopic(topicId) },
                         onStartPack = { packId -> viewModel.startPack(packId) }
