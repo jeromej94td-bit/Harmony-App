@@ -6,6 +6,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,6 +31,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Favorite
@@ -32,6 +39,18 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.Flight
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,12 +65,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.HarmonyBlue
 import com.example.ui.theme.HarmonyGold
@@ -67,6 +89,7 @@ import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
 import com.example.ui.theme.HarmonyText
+import com.example.ui.theme.topicAccentColor
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -162,11 +185,23 @@ fun HarmonyBottomNav(
     appLanguage: String = "de",
     modifier: Modifier = Modifier
 ) {
+    val glowTransition = rememberInfiniteTransition(label = "bottom_nav_glow")
+    val activeGlow by glowTransition.animateFloat(
+        initialValue = 0.28f,
+        targetValue = 0.72f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "active_nav_glow"
+    )
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(HarmonySurface.copy(alpha = 0.95f))
-            .border(1.dp, HarmonyLine, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(Brush.verticalGradient(listOf(HarmonySurface.copy(alpha = 0.96f), Color(0xFF08030F).copy(alpha = 0.98f))))
+            .border(1.dp, HarmonyPurpleLight.copy(alpha = 0.26f), RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .navigationBarsPadding()
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -186,6 +221,16 @@ fun HarmonyBottomNav(
             Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        if (isSelected) Brush.radialGradient(
+                            listOf(HarmonyNavActive.copy(alpha = 0.20f), Color.Transparent)
+                        ) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
+                    )
+                    .border(
+                        if (isSelected) 1.dp else 0.dp,
+                        HarmonyNavActive.copy(alpha = if (isSelected) activeGlow else 0f),
+                        RoundedCornerShape(12.dp)
+                    )
                     .clickable { onTabSelected(index) }
                     .padding(horizontal = 14.dp, vertical = 6.dp)
                     .testTag("nav_item_$index"),
@@ -203,6 +248,18 @@ fun HarmonyBottomNav(
                     fontSize = 10.sp,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                     color = if (isSelected) HarmonyNavActive else HarmonyNavInactive
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+                Box(
+                    modifier = Modifier
+                        .width(if (isSelected) 18.dp else 4.dp)
+                        .height(2.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (isSelected) Brush.horizontalGradient(
+                                listOf(Color.Transparent, HarmonyPinkSoft, HarmonyPurpleLight, Color.Transparent)
+                            ) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
+                        )
                 )
             }
         }
@@ -297,6 +354,7 @@ fun TimerPill(modifier: Modifier = Modifier) {
 fun HarmonyCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
+    accent: Color = HarmonyPurple,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -313,13 +371,214 @@ fun HarmonyCard(
                 .fillMaxWidth()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(HarmonySurface2, HarmonySurface)
+                        colors = listOf(
+                            accent.copy(alpha = 0.20f),
+                            HarmonySurface2.copy(alpha = 0.76f),
+                            HarmonySurface.copy(alpha = 0.92f)
+                        )
                     )
                 )
-                .border(1.dp, HarmonyLine, RoundedCornerShape(24.dp))
-                .padding(16.dp)
+                .border(1.dp, accent.copy(alpha = 0.38f), RoundedCornerShape(24.dp))
         ) {
-            content()
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth(0.78f)
+                    .height(1.dp)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(Color.Transparent, accent.copy(alpha = 0.72f), Color.White.copy(alpha = 0.28f), Color.Transparent)
+                        )
+                    )
+            )
+            Box(modifier = Modifier.padding(16.dp)) {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+fun AuroraGlassSectionTitle(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        modifier = modifier,
+        color = HarmonyText,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.2.sp
+    )
+}
+
+@Composable
+fun HarmonyTopicIcon(
+    topicId: String,
+    accent: Color,
+    modifier: Modifier = Modifier,
+    size: Dp = 44.dp
+) {
+    val glowTransition = rememberInfiniteTransition(label = "topic_icon_$topicId")
+    val glowAlpha by glowTransition.animateFloat(
+        initialValue = 0.34f,
+        targetValue = 0.74f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2300, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "topic_icon_glow_$topicId"
+    )
+    val breathe by glowTransition.animateFloat(
+        initialValue = 0.96f,
+        targetValue = 1.045f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "topic_icon_breathe_$topicId"
+    )
+    val icon = when (topicId) {
+        "moral" -> Icons.Default.AccountBalance
+        "geld" -> Icons.Default.Savings
+        "sex" -> Icons.Default.LocalFireDepartment
+        "reisen" -> Icons.Default.Flight
+        "essen" -> Icons.Default.Restaurant
+        "filme_serien" -> Icons.Default.Movie
+        "familie" -> Icons.Default.People
+        "hobbys" -> Icons.Default.Palette
+        "kennen" -> Icons.Default.People
+        "aufwaermen", "beziehung" -> Icons.Default.Favorite
+        else -> Icons.Default.Psychology
+    }
+    Box(
+        modifier = modifier
+            .size(size)
+            .graphicsLayer {
+                scaleX = breathe
+                scaleY = breathe
+            }
+            .clip(CircleShape)
+            .background(
+                Brush.radialGradient(
+                    listOf(
+                        Color.White.copy(alpha = glowAlpha * 0.18f),
+                        accent.copy(alpha = glowAlpha * 0.72f),
+                        accent.copy(alpha = 0.10f)
+                    )
+                )
+            )
+            .border(if (size > 50.dp) 2.dp else 1.dp, accent.copy(alpha = glowAlpha), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        when (topicId) {
+            "sex" -> Text(
+                text = "18+",
+                color = Color.White,
+                fontSize = if (size > 50.dp) 15.sp else 12.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.4).sp
+            )
+            "beziehung" -> Box(modifier = Modifier.size(size * 0.66f), contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = null,
+                    tint = accent.copy(alpha = 0.65f),
+                    modifier = Modifier.size(size * 0.46f).offset(x = (-6).dp, y = 3.dp)
+                )
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(size * 0.46f).offset(x = 6.dp, y = (-3).dp)
+                )
+            }
+            else -> Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(size * 0.52f)
+            )
+        }
+    }
+}
+
+@Composable
+fun HarmonyCategoryIcon(
+    categoryId: String,
+    accent: Color,
+    modifier: Modifier = Modifier
+) {
+    val icon = when (categoryId) {
+        "unterbewusstsein" -> Icons.Default.AutoAwesome
+        "wer" -> Icons.Default.People
+        "zeich" -> Icons.Default.Palette
+        "tot" -> Icons.AutoMirrored.Filled.CompareArrows
+        "zust" -> Icons.Default.CheckCircle
+        "nie" -> Icons.Default.VisibilityOff
+        "lieber" -> Icons.Default.Favorite
+        "foto" -> Icons.Default.PhotoLibrary
+        "tief" -> Icons.Default.Psychology
+        "reden" -> Icons.Default.ChatBubble
+        else -> Icons.Default.AutoAwesome
+    }
+    Box(
+        modifier = modifier
+            .size(42.dp)
+            .clip(CircleShape)
+            .background(Brush.radialGradient(listOf(accent.copy(alpha = 0.28f), Color.Transparent)))
+            .border(1.dp, accent.copy(alpha = 0.58f), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = accent,
+            modifier = Modifier.size(23.dp)
+        )
+    }
+}
+
+@Composable
+fun AuroraProgressBar(
+    progress: Float,
+    accent: Color = HarmonyPink,
+    modifier: Modifier = Modifier,
+    height: Dp = 6.dp
+) {
+    val transition = rememberInfiniteTransition(label = "aurora_progress")
+    val shimmerOffset by transition.animateFloat(
+        initialValue = -180f,
+        targetValue = 920f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "aurora_progress_shimmer"
+    )
+    Box(
+        modifier = modifier
+            .height(height)
+            .clip(CircleShape)
+            .background(Color.White.copy(alpha = 0.08f))
+            .border(0.5.dp, accent.copy(alpha = 0.22f), CircleShape)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(progress.coerceIn(0f, 1f))
+                .height(height)
+                .clip(CircleShape)
+                .background(Brush.horizontalGradient(listOf(accent.copy(alpha = 0.72f), accent)))
+        ) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.86f), Color.Transparent),
+                            startX = shimmerOffset - 150f,
+                            endX = shimmerOffset
+                        )
+                    )
+            )
         }
     }
 }

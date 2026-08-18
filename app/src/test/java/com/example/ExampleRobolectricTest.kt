@@ -24,7 +24,10 @@ class ExampleRobolectricTest {
   @Test
   fun `main activity starts without crashing`() {
     try {
-      val controller = Robolectric.buildActivity(MainActivity::class.java).setup()
+      // `setup()` drains the main looper and never becomes idle when the app intentionally
+      // contains infinite ambient animations. `create()` still executes onCreate/setContent
+      // and therefore keeps this as a useful launch smoke test without waiting for animations.
+      val controller = Robolectric.buildActivity(MainActivity::class.java).create()
       val activity = controller.get()
       assertNotNull(activity)
     } catch (e: Throwable) {
