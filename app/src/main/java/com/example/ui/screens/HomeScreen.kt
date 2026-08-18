@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,8 +42,10 @@ import com.example.data.model.HarmonyPacksData
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.ui.components.AuroraGlassSectionTitle
+import com.example.ui.components.AuroraProgressBar
 import com.example.ui.components.CategoryTag
 import com.example.ui.components.HarmonyCard
+import com.example.ui.components.HarmonyTopicIcon
 import com.example.ui.components.TimerPill
 import com.example.ui.theme.HarmonyBg
 import com.example.ui.theme.HarmonyLine
@@ -53,6 +57,7 @@ import com.example.ui.theme.HarmonyPurpleLight
 import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
+import com.example.ui.theme.topicAccentColor
 import java.util.concurrent.TimeUnit
 
 
@@ -105,12 +110,21 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "🔥 " + LanguageManager.tr("Tägliche Aktivität", appLanguage),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = HarmonyText
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.LocalFireDepartment,
+                    contentDescription = null,
+                    tint = HarmonyPinkSoft,
+                    modifier = Modifier.size(19.dp)
+                )
+                Spacer(modifier = Modifier.width(7.dp))
+                Text(
+                    text = LanguageManager.tr("Tägliche Aktivität", appLanguage),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText
+                )
+            }
             TimerPill()
         }
 
@@ -221,12 +235,7 @@ fun PaddingPackCard(
     val totalCount = if (pack.type == "tot") pack.pairs.size else pack.questions.size
     val isDone = answeredCount >= totalCount && totalCount > 0
 
-    val topicAccent = when (pack.topic) {
-        "moral" -> HarmonyGold
-        "geld" -> HarmonyTeal
-        "beziehung" -> HarmonyPink
-        else -> HarmonyPurple
-    }
+    val topicAccent = topicAccentColor(pack.topic)
 
     HarmonyCard(
         modifier = modifier.testTag("pack_card_${pack.id}"),
@@ -242,17 +251,22 @@ fun PaddingPackCard(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            val packEmoji = pack.emoji.ifBlank {
-                com.example.data.model.HarmonyPacksData.CATEGORIES.find { it.id == pack.cat }?.emoji ?: "🎯"
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                HarmonyTopicIcon(
+                    topicId = pack.topic,
+                    accent = topicAccent,
+                    modifier = Modifier.size(38.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = pack.title,
+                    fontSize = 16.5.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = HarmonyText,
+                    lineHeight = 22.sp,
+                    modifier = Modifier.weight(1f)
+                )
             }
-
-            Text(
-                text = "$packEmoji  ${pack.title}",
-                fontSize = 16.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = HarmonyText,
-                lineHeight = 22.sp
-            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -266,7 +280,7 @@ fun PaddingPackCard(
                         modifier = Modifier
                             .size(26.dp)
                             .clip(CircleShape)
-                            .background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPinkSoft))),
+                        .background(Brush.linearGradient(listOf(topicAccent, topicAccent.copy(alpha = 0.72f)))),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -301,14 +315,14 @@ fun PaddingPackCard(
                         text = if (isDone) LanguageManager.tr("ERGEBNISSE", appLanguage) else LanguageManager.tr("BEANTWORTE", appLanguage),
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = HarmonyPink,
+                        color = topicAccent,
                         letterSpacing = 0.9.sp
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = null,
-                        tint = HarmonyPink,
+                        tint = topicAccent,
                         modifier = Modifier.size(14.dp)
                     )
                 }
@@ -317,21 +331,11 @@ fun PaddingPackCard(
             if (answeredCount in 1..<totalCount) {
                 Spacer(modifier = Modifier.height(10.dp))
                 val progressFraction = answeredCount.toFloat() / totalCount
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(5.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(Color.White.copy(alpha = 0.08f))
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(progressFraction)
-                            .height(5.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .background(Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple)))
-                    )
-                }
+                AuroraProgressBar(
+                    progress = progressFraction,
+                    accent = topicAccent,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -356,7 +360,21 @@ fun ConnectBanner(
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "💞", fontSize = 24.sp)
+        Box(
+            modifier = Modifier
+                .size(42.dp)
+                .clip(CircleShape)
+                .background(Brush.radialGradient(listOf(HarmonyPink.copy(alpha = 0.32f), Color.Transparent)))
+                .border(1.dp, HarmonyPink.copy(alpha = 0.58f), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = null,
+                tint = HarmonyPinkSoft,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
