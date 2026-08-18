@@ -23,9 +23,12 @@ The Aurora Glass treatment also belongs to the “This or That?” runner:
   - `TotResultsView`
 - `app/src/main/java/com/example/ui/screens/TotShufflePolicy.kt`
 - `app/src/main/assets/aurora-glass/aurora_glass_motion.svg`
+- `app/src/main/assets/aurora-glass/harmony_aurora_glass.svg`
 - `app/src/main/assets/aurora-glass/moral_balance.svg`
 
 Use the left concept of the supplied visual reference as the target: transparent glass panels, fine luminous borders, controlled bloom, dark violet background, and one accent color per topic. For **Moralische Werte**, use the gold scale symbol `⚖️` / `moral_balance.svg`; do not use handshake imagery.
+
+`harmony_aurora_glass.svg` is the scalable visual source of truth for the portal: it contains the animated gradients, ring pulses, moving arc, bloom layers and particles. Android should mirror the same look with native Compose animation because SVG SMIL support is not guaranteed by every Android renderer.
 
 The intended behavior is: cards drift in from depth, flip around the vertical axis during a short pack-local shuffle, settle as the real pair with a soft tilt, and only then advance to the next question. Shuffle frames must use existing image keys from the active pack; never invent or borrow an image from another pack.
 

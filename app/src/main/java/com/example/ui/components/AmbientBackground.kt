@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
@@ -59,6 +61,19 @@ fun AmbientBackground(
     }
 
     val animTime = remember { Animatable(0f) }
+    val auroraTransition = rememberInfiniteTransition(label = "harmony_aurora")
+    val auroraRotation by auroraTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(tween(22000, easing = LinearEasing), RepeatMode.Restart),
+        label = "aurora_rotation"
+    )
+    val auroraPulse by auroraTransition.animateFloat(
+        initialValue = 0.72f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(4200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        label = "aurora_pulse"
+    )
 
     LaunchedEffect(Unit) {
         animTime.animateTo(
@@ -99,6 +114,32 @@ fun AmbientBackground(
                 center = Offset(width * 0.8f, -height * 0.1f),
                 radius = width * 0.9f
             )
+
+            // Native Compose counterpart of harmony_aurora_glass.svg.
+            // It keeps the same effect animated on Android even when SVG SMIL is unavailable.
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(Color(0xFFB86CFF).copy(alpha = 0.16f * auroraPulse), Color.Transparent),
+                    center = Offset(width * 0.5f, height * 0.33f),
+                    radius = width * 0.44f
+                ),
+                center = Offset(width * 0.5f, height * 0.33f),
+                radius = width * 0.44f
+            )
+            val portalCenter = Offset(width * 0.5f, height * 0.33f)
+            val portalRadius = width * 0.29f
+            listOf(0f to 0.24f, 46f to 0.14f, 92f to 0.08f).forEach { (offset, alpha) ->
+                drawArc(
+                    brush = Brush.sweepGradient(listOf(Color(0xFF66E8FF), Color(0xFFB56BFF), Color(0xFFFF5EAF), Color(0xFF66E8FF))),
+                    startAngle = auroraRotation + offset,
+                    sweepAngle = 230f,
+                    useCenter = false,
+                    topLeft = Offset(portalCenter.x - portalRadius, portalCenter.y - portalRadius),
+                    size = androidx.compose.ui.geometry.Size(portalRadius * 2f, portalRadius * 2f),
+                    alpha = alpha * auroraPulse,
+                    style = Stroke(width = if (offset == 0f) 3.5f else 1.5f, cap = StrokeCap.Round)
+                )
+            }
 
             drawCircle(
                 brush = Brush.radialGradient(
