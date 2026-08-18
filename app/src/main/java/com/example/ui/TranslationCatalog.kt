@@ -18,6 +18,7 @@ object TranslationCatalog {
             AppLanguage.ITALIAN -> EXACT_ITALIAN_CONTENT[german]
             AppLanguage.FRENCH -> EXACT_FRENCH_CONTENT[german]
             AppLanguage.JAPANESE -> EXACT_JAPANESE_CONTENT[german]
+            AppLanguage.POLISH -> EXACT_POLISH_CONTENT[german]
             AppLanguage.SPANISH_LATIN_AMERICA -> EXACT_SPANISH_LATIN_AMERICA_CONTENT[german]
             AppLanguage.SPANISH_SPAIN -> EXACT_SPANISH_SPAIN_CONTENT[german]
             AppLanguage.PORTUGUESE_BRAZIL -> EXACT_PORTUGUESE_BRAZIL_CONTENT[german] ?: EXACT_PORTUGUESE_CONTENT[german]
@@ -37,6 +38,7 @@ object TranslationCatalog {
             AppLanguage.ITALIAN -> localizeItalianDynamicContent(text)
             AppLanguage.FRENCH -> localizeFrenchDynamicContent(text)
             AppLanguage.JAPANESE -> localizeJapaneseDynamicContent(text)
+            AppLanguage.POLISH -> localizePolishDynamicContent(text)
             AppLanguage.SPANISH_LATIN_AMERICA -> localizeLatinAmericanSpanishDynamicContent(text)
             AppLanguage.SPANISH_SPAIN -> localizeSpainSpanishDynamicContent(text)
             AppLanguage.PORTUGUESE_BRAZIL -> localizePortugueseBrazilDynamicContent(text) ?: localizePortugueseDynamicContent(text)

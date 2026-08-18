@@ -19,6 +19,7 @@ enum class AppLanguage(
     ITALIAN("it", "Italiano", "Italian", "🇮🇹"),
     FRENCH("fr", "Français", "French", "🇫🇷"),
     JAPANESE("ja", "日本語", "Japanese", "🇯🇵"),
+    POLISH("pl", "Polski", "Polish", "🇵🇱"),
     // Latin America is a region rather than one country, so it uses the regional globe.
     SPANISH_LATIN_AMERICA("es-419", "Español (Latinoamérica)", "Latin American Spanish", "🌎"),
     SPANISH_SPAIN("es-ES", "Español (España)", "Spanish (Spain)", "🇪🇸"),
