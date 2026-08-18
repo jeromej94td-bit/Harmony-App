@@ -1,8 +1,8 @@
 package com.example.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -79,8 +79,8 @@ import com.example.data.model.HarmonyPacksData
 import com.example.data.model.Topic
 import com.example.ui.components.AuroraGlassSectionTitle
 import com.example.ui.components.AuroraProgressBar
-import com.example.ui.components.HarmonyCategoryIcon
 import com.example.ui.components.HarmonyTopicIcon
+import com.example.ui.components.PandaCategoryIcon
 import com.example.ui.components.TimerPill
 import com.example.ui.introspection.IntrospectionPortal
 import com.example.ui.theme.HarmonyGold
@@ -606,7 +606,11 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             } else {
-                HarmonyCategoryIcon(categoryId = category.id, accent = accent)
+                PandaCategoryIcon(
+                    categoryId = category.id,
+                    accent = accent,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
             Text(
                 text = category.name,
@@ -640,7 +644,10 @@ fun TopicProgressCard(
     val energyTravel by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(3600, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(
+            tween(4200, easing = FastOutSlowInEasing),
+            RepeatMode.Reverse
+        ),
         label = "topic_energy_${topic.id}"
     )
     val breathe by transition.animateFloat(
@@ -709,13 +716,14 @@ fun TopicProgressCard(
             )
             repeat(7) { index ->
                 val particleProgress = (energyTravel + phase + index * 0.17f) % 1f
+                val particleAlpha = sin(particleProgress * Math.PI).toFloat().coerceIn(0f, 1f)
                 val particleY = size.height * (0.18f + index * 0.105f) +
                     sin((energyTravel * 6.28f + index).toDouble()).toFloat() * 7f
                 drawCircle(
                     color = if (index % 2 == 0) Color.White else accent,
                     radius = 2.2f + (index % 3) * 1.15f,
                     center = Offset(size.width * particleProgress, particleY),
-                    alpha = 0.32f + glowPulse * 0.48f
+                    alpha = particleAlpha * (0.32f + glowPulse * 0.48f)
                 )
             }
             val arcSize = size.height * 1.12f

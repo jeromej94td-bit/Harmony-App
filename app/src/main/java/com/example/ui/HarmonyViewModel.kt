@@ -1,6 +1,7 @@
 package com.example.ui
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.DeveloperDataManager
@@ -8,10 +9,12 @@ import com.example.data.db.HarmonyDatabase
 import com.example.data.model.AnswerEntity
 import com.example.data.model.ChatMessageEntity
 import com.example.data.model.CoupleStatsEntity
+import com.example.data.model.EitherOrAnswerCodec
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
+import com.example.data.model.SharedPicEntity
 import com.example.data.repository.HarmonyRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +37,7 @@ data class HarmonyUiState(
     val profile: ProfileEntity = ProfileEntity(),
     val answers: List<AnswerEntity> = emptyList(),
     val messages: List<ChatMessageEntity> = emptyList(),
+    val sharedPics: List<SharedPicEntity> = emptyList(),
     val moments: List<MomentEntity> = emptyList(),
     val stats: CoupleStatsEntity = CoupleStatsEntity(),
     val packFilter: String = "all", // "all", "open", "done"
@@ -47,13 +51,6 @@ data class HarmonyUiState(
     val isProfileSheetOpen: Boolean = false,
     val isEditProfileOpen: Boolean = false,
     val isAddMomentOpen: Boolean = false,
-    val gfkPanelOpen: Boolean = false,
-    val gfkLoading: Boolean = false,
-    val gfkResult: String? = null,
-    val coachLoading: Boolean = false,
-    val coachResult: String? = null,
-    val dateIdeasLoading: Boolean = false,
-    val dateIdeasResult: String? = null,
     val toastMessage: String? = null,
     val isRefreshing: Boolean = false,
     val isDarkMode: Boolean = true,
@@ -63,7 +60,7 @@ data class HarmonyUiState(
 class HarmonyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = HarmonyDatabase.getInstance(application)
-    private val repository = HarmonyRepository(db)
+    private val repository = HarmonyRepository(db, application)
 
     private val settingsPrefs = application.getSharedPreferences("harmony_settings_prefs", android.content.Context.MODE_PRIVATE)
     private val _isDarkMode = MutableStateFlow(settingsPrefs.getBoolean("is_dark_mode", true))
@@ -84,16 +81,6 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     private val _isEditProfileOpen = MutableStateFlow(false)
     private val _isAddMomentOpen = MutableStateFlow(false)
 
-    private val _gfkPanelOpen = MutableStateFlow(false)
-    private val _gfkLoading = MutableStateFlow(false)
-    private val _gfkResult = MutableStateFlow<String?>(null)
-
-    private val _coachLoading = MutableStateFlow(false)
-    private val _coachResult = MutableStateFlow<String?>(null)
-
-    private val _dateIdeasLoading = MutableStateFlow(false)
-    private val _dateIdeasResult = MutableStateFlow<String?>(null)
-
     private val _toastMessage = MutableStateFlow<String?>(null)
 
     private val _isRefreshing = MutableStateFlow(false)
@@ -104,6 +91,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         repository.profileFlow,
         repository.answersFlow,
         repository.chatMessagesFlow,
+        repository.sharedPicsFlow,
         repository.momentsFlow,
         repository.statsFlow,
         _packFilter,
@@ -115,13 +103,6 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         _isProfileSheetOpen,
         _isEditProfileOpen,
         _isAddMomentOpen,
-        _gfkPanelOpen,
-        _gfkLoading,
-        _gfkResult,
-        _coachLoading,
-        _coachResult,
-        _dateIdeasLoading,
-        _dateIdeasResult,
         _toastMessage,
         _isRefreshing,
         _isDarkMode,
@@ -132,30 +113,24 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
             profile = (arrayOfValues[1] as? ProfileEntity) ?: ProfileEntity(),
             answers = (arrayOfValues[2] as? List<AnswerEntity>) ?: emptyList(),
             messages = (arrayOfValues[3] as? List<ChatMessageEntity>) ?: emptyList(),
-            moments = (arrayOfValues[4] as? List<MomentEntity>) ?: emptyList(),
-            stats = (arrayOfValues[5] as? CoupleStatsEntity) ?: CoupleStatsEntity(),
-            packFilter = arrayOfValues[6] as String,
-            selectedTopicId = arrayOfValues[7] as? String,
-            selectedCategoryId = arrayOfValues[8] as? String,
-            activeRun = arrayOfValues[9] as? ActivePackRun,
-            isExitConfirmOpen = arrayOfValues[10] as Boolean,
-            isOwnAnswerDialogOpen = arrayOfValues[11] as Boolean,
+            sharedPics = (arrayOfValues[4] as? List<SharedPicEntity>) ?: emptyList(),
+            moments = (arrayOfValues[5] as? List<MomentEntity>) ?: emptyList(),
+            stats = (arrayOfValues[6] as? CoupleStatsEntity) ?: CoupleStatsEntity(),
+            packFilter = arrayOfValues[7] as String,
+            selectedTopicId = arrayOfValues[8] as? String,
+            selectedCategoryId = arrayOfValues[9] as? String,
+            activeRun = arrayOfValues[10] as? ActivePackRun,
+            isExitConfirmOpen = arrayOfValues[11] as Boolean,
+            isOwnAnswerDialogOpen = arrayOfValues[12] as Boolean,
             ownAnswerTargetIndex = _ownAnswerTargetIndex.value,
             ownAnswerMode = _ownAnswerMode.value,
-            isProfileSheetOpen = arrayOfValues[12] as Boolean,
-            isEditProfileOpen = arrayOfValues[13] as Boolean,
-            isAddMomentOpen = arrayOfValues[14] as Boolean,
-            gfkPanelOpen = arrayOfValues[15] as Boolean,
-            gfkLoading = arrayOfValues[16] as Boolean,
-            gfkResult = arrayOfValues[17] as? String,
-            coachLoading = arrayOfValues[18] as Boolean,
-            coachResult = arrayOfValues[19] as? String,
-            dateIdeasLoading = arrayOfValues[20] as Boolean,
-            dateIdeasResult = arrayOfValues[21] as? String,
-            toastMessage = arrayOfValues[22] as? String,
-            isRefreshing = arrayOfValues[23] as Boolean,
-            isDarkMode = arrayOfValues[24] as Boolean,
-            appLanguage = arrayOfValues[25] as String
+            isProfileSheetOpen = arrayOfValues[13] as Boolean,
+            isEditProfileOpen = arrayOfValues[14] as Boolean,
+            isAddMomentOpen = arrayOfValues[15] as Boolean,
+            toastMessage = arrayOfValues[16] as? String,
+            isRefreshing = arrayOfValues[17] as Boolean,
+            isDarkMode = arrayOfValues[18] as Boolean,
+            appLanguage = arrayOfValues[19] as String
         )
     }.stateIn(
         scope = viewModelScope,
@@ -221,8 +196,14 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         _toastMessage.value = null
     }
 
-    fun sendWidget(name: String, emoji: String) {
-        showToast("$emoji „$name\" an Alex gesendet")
+    fun saveEitherOrAnswer(questionIndex: Int, userChoice: String, partnerChoice: String) {
+        viewModelScope.launch {
+            repository.saveAnswer(
+                packId = "entweder_oder_panda",
+                questionIndex = questionIndex,
+                answerText = EitherOrAnswerCodec.encode(userChoice, partnerChoice)
+            )
+        }
     }
 
     // --- QUIZ RUNNER ---
@@ -343,19 +324,15 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun toggleGfkPanel() {
-        _gfkPanelOpen.value = !_gfkPanelOpen.value
+    fun sendChatImage(uri: Uri) {
+        viewModelScope.launch {
+            repository.sendChatImage(uri)
+            showToast("Bild gesendet 📷")
+        }
     }
 
-    fun runGfk(draftText: String) {
-        if (draftText.isBlank()) return
-        _gfkLoading.value = true
-        _gfkResult.value = null
-        viewModelScope.launch {
-            val result = repository.rephraseGfk(draftText)
-            _gfkLoading.value = false
-            _gfkResult.value = result.getOrElse { "Fehler bei der Umformulierung: ${it.localizedMessage}" }
-        }
+    fun reportPartner() {
+        showToast("Meldung vorbereitet – vor dem Senden kannst du Details prüfen")
     }
 
     // --- MOMENTS ---
@@ -377,7 +354,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    // --- PROFILE & AI COACH / DATE IDEAS ---
+    // --- PROFILE ---
 
     fun openProfileSheet() {
         _isProfileSheetOpen.value = true
@@ -420,36 +397,22 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun runCoach() {
-        _coachLoading.value = true
-        _coachResult.value = null
-        val profile = uiState.value.profile
-        val chats = uiState.value.messages
-        val answers = uiState.value.answers
+    fun updateProfileAvatar(uri: Uri, isUser: Boolean) {
         viewModelScope.launch {
-            val result = repository.generateRelationshipCoachAnalysis(
-                userName = profile.userName,
-                partnerName = profile.partnerName,
-                recentChats = chats,
-                answers = answers
-            )
-            _coachLoading.value = false
-            _coachResult.value = result.getOrElse { "Fehler bei der Analyse: ${it.localizedMessage}" }
+            repository.updateProfileAvatar(uri, isUser)
+            showToast(if (isUser) "Dein Profilbild wurde aktualisiert" else "Partnerbild wurde aktualisiert")
         }
     }
 
-    fun runDateIdeas(wishes: String) {
-        _dateIdeasLoading.value = true
-        _dateIdeasResult.value = null
-        val profile = uiState.value.profile
+    fun addSharedPictures(uris: List<Uri>, addedBy: String = "me") {
+        if (uris.isEmpty()) return
         viewModelScope.launch {
-            val result = repository.generateDateIdeas(
-                userName = profile.userName,
-                partnerName = profile.partnerName,
-                wishes = wishes
-            )
-            _dateIdeasLoading.value = false
-            _dateIdeasResult.value = result.getOrElse { "Fehler bei der Ideengenerierung: ${it.localizedMessage}" }
+            repository.addSharedPictures(uris, addedBy)
+            showToast("${uris.size} Bild${if (uris.size == 1) "" else "er"} für PicShare gespeichert")
         }
+    }
+
+    fun updateSharedPicture(pic: SharedPicEntity) {
+        viewModelScope.launch { repository.updateSharedPicture(pic) }
     }
 }

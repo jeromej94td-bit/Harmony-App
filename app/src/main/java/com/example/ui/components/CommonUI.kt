@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -14,6 +15,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -68,6 +71,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -90,15 +94,19 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
 import com.example.ui.theme.HarmonyText
 import com.example.ui.theme.topicAccentColor
+import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.io.File
 
 @Composable
 fun HarmonyTopBar(
     userName: String,
     partnerName: String,
+    userAvatarPath: String? = null,
+    partnerAvatarPath: String? = null,
     onProfileClick: () -> Unit,
     onRefresh: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -150,12 +158,11 @@ fun HarmonyTopBar(
                     .background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPinkSoft))),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = userName.take(1).uppercase(),
-                    color = Color.White,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 13.sp
-                )
+                if (userAvatarPath != null) {
+                    AsyncImage(model = File(userAvatarPath), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                } else {
+                    Text(userName.take(1).uppercase(), color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 13.sp)
+                }
             }
             Box(
                 modifier = Modifier
@@ -166,12 +173,11 @@ fun HarmonyTopBar(
                     .background(Brush.linearGradient(listOf(HarmonyPurple, HarmonyPurpleLight))),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = partnerName.take(1).uppercase(),
-                    color = Color.White,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 13.sp
-                )
+                if (partnerAvatarPath != null) {
+                    AsyncImage(model = File(partnerAvatarPath), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                } else {
+                    Text(partnerName.take(1).uppercase(), color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 13.sp)
+                }
             }
         }
         }
@@ -545,11 +551,11 @@ fun AuroraProgressBar(
     height: Dp = 6.dp
 ) {
     val transition = rememberInfiniteTransition(label = "aurora_progress")
-    val shimmerOffset by transition.animateFloat(
-        initialValue = -180f,
-        targetValue = 920f,
+    val shimmerPhase by transition.animateFloat(
+        initialValue = -0.5f,
+        targetValue = 1.5f,
         animationSpec = infiniteRepeatable(
-            animation = tween(2600, easing = FastOutSlowInEasing),
+            animation = tween(2600, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "aurora_progress_shimmer"
@@ -568,17 +574,17 @@ fun AuroraProgressBar(
                 .clip(CircleShape)
                 .background(Brush.horizontalGradient(listOf(accent.copy(alpha = 0.72f), accent)))
         ) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(
-                        Brush.horizontalGradient(
-                            colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.86f), Color.Transparent),
-                            startX = shimmerOffset - 150f,
-                            endX = shimmerOffset
-                        )
+            Canvas(modifier = Modifier.matchParentSize()) {
+                val center = shimmerPhase * size.width
+                val halfWidth = size.width * 0.34f
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.86f), Color.Transparent),
+                        startX = center - halfWidth,
+                        endX = center + halfWidth
                     )
-            )
+                )
+            }
         }
     }
 }

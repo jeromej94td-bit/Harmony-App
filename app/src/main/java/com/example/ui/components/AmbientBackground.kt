@@ -70,7 +70,8 @@ fun AmbientBackground(
             FloatingHeart(
                 xRatio = if (onLeft) 0.018f + random.nextFloat() * 0.115f else 0.867f + random.nextFloat() * 0.115f,
                 yRatio = random.nextFloat() * 1.08f,
-                speed = 0.00038f + random.nextFloat() * 0.00056f,
+                // Integer lap counts keep the global animation phase perfectly closed.
+                speed = if (index % 5 == 0) 2f else 1f,
                 size = 22f + random.nextFloat() * 26f,
                 phase = random.nextFloat() * 6.28f,
                 alpha = 0.42f + random.nextFloat() * 0.34f,
@@ -85,7 +86,7 @@ fun AmbientBackground(
             Starlight(
                 xRatio = random.nextFloat(),
                 yRatio = random.nextFloat(),
-                speed = 0.00008f + random.nextFloat() * 0.00018f,
+                speed = if (it % 7 == 0) 2f else 1f,
                 radius = 0.7f + random.nextFloat() * 1.7f,
                 phase = random.nextFloat() * 6.28f
             )
@@ -93,11 +94,11 @@ fun AmbientBackground(
     }
 
     val auroraTransition = rememberInfiniteTransition(label = "harmony_aurora")
-    val animTime by auroraTransition.animateFloat(
+    val ambientPhase by auroraTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(tween(100000, easing = LinearEasing), RepeatMode.Restart),
-        label = "ambient_particle_time"
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(36000, easing = LinearEasing), RepeatMode.Restart),
+        label = "ambient_particle_phase"
     )
     val auroraRotation by auroraTransition.animateFloat(
         initialValue = 0f,
@@ -135,7 +136,7 @@ fun AmbientBackground(
         Canvas(modifier = Modifier.fillMaxSize()) {
             val width = size.width
             val height = size.height
-            val t = animTime
+            val phase = ambientPhase
 
             drawCircle(
                 brush = Brush.radialGradient(
@@ -156,7 +157,7 @@ fun AmbientBackground(
                 radius = width * 0.82f
             )
 
-            val ribbonDrift = sin(t * 0.018f) * width * 0.05f
+            val ribbonDrift = sin(phase * TWO_PI) * width * 0.05f
             val auroraRibbon = Path().apply {
                 moveTo(-width * 0.18f, height * 0.16f)
                 cubicTo(
@@ -217,18 +218,21 @@ fun AmbientBackground(
             }
 
             starlights.forEach { star ->
-                val currentYRatio = ((star.yRatio - t * star.speed) % 1.08f + 1.08f) % 1.08f
-                val twinkle = 0.28f + ((sin(t * 0.09f + star.phase) + 1f) * 0.5f) * 0.58f
+                val travel = (star.yRatio + phase * star.speed) % 1f
+                val currentYRatio = 1.04f - travel * 1.08f
+                val twinkle = 0.28f + ((sin(phase * TWO_PI + star.phase) + 1f) * 0.5f) * 0.58f
                 val center = Offset(star.xRatio * width, currentYRatio * height)
                 drawCircle(Color.White.copy(alpha = twinkle * 0.24f), radius = star.radius * 2.6f, center = center)
                 drawCircle(Color.White.copy(alpha = twinkle), radius = star.radius, center = center)
             }
 
             hearts.forEach { heart ->
-                val currentYRatio = ((heart.yRatio - t * heart.speed) % 1.12f + 1.12f) % 1.12f
-                val drift = sin(t * 0.035f + heart.phase) * width * 0.024f
+                val travel = (heart.yRatio + phase * heart.speed) % 1f
+                // Each heart completes the whole journey. Its reset happens outside the viewport.
+                val currentYRatio = 1.12f - travel * 1.24f
+                val drift = sin(travel * TWO_PI + heart.phase) * width * 0.024f
                 val center = Offset(heart.xRatio * width + drift, currentYRatio * height)
-                val rotation = sin(t * 0.045f + heart.phase) * 13f
+                val rotation = sin(travel * TWO_PI + heart.phase) * 13f
                 drawHeartParticle(
                     center = center,
                     size = heart.size,
@@ -243,6 +247,8 @@ fun AmbientBackground(
         content()
     }
 }
+
+private const val TWO_PI = 6.2831855f
 
 private fun DrawScope.drawHeartParticle(
     center: Offset,
