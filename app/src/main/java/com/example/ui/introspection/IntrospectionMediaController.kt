@@ -6,7 +6,9 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Build
+import android.util.Log
 import com.example.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,10 @@ class IntrospectionMediaController(
     private val context: Context,
     private val coroutineScope: CoroutineScope
 ) {
+    companion object {
+        private const val TAG = "IntrospectionMedia"
+    }
+
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
 
     private var musicPlayer: MediaPlayer? = null
@@ -63,11 +69,22 @@ class IntrospectionMediaController(
 
     private var audioFocusRequest: AudioFocusRequest? = null
 
-    private fun getMediaAudioAttributes(): AudioAttributes {
+    private fun getMusicAudioAttributes(): AudioAttributes {
         return AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_MEDIA)
             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .build()
+    }
+
+    private fun getSpeechAudioAttributes(): AudioAttributes {
+        return AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+            .build()
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
     }
 
     private fun requestAudioFocus(): Boolean {
@@ -75,9 +92,10 @@ class IntrospectionMediaController(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (audioFocusRequest == null) {
                     val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                        .setAudioAttributes(getMediaAudioAttributes())
+                        .setAudioAttributes(getMusicAudioAttributes())
                         .setAcceptsDelayedFocusGain(true)
                         .setOnAudioFocusChangeListener { focusChange ->
+                            Log.d(TAG, "Audio focus changed: $focusChange")
                             when (focusChange) {
                                 AudioManager.AUDIOFOCUS_LOSS,
                                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
@@ -124,54 +142,119 @@ class IntrospectionMediaController(
         }.getOrDefault(true)
     }
 
-    private fun createPlayerForRawResource(resId: Int): MediaPlayer? {
-        // Method 1: Standard MediaPlayer.create with AudioAttributes
+    private fun createPlayerForRawResource(resId: Int, isSpeech: Boolean = false): MediaPlayer? {
+        val audioAttributes = if (isSpeech) getSpeechAudioAttributes() else getMusicAudioAttributes()
+        val resName = runCatching { context.resources.getResourceEntryName(resId) }.getOrDefault("$resId")
+        Log.d(TAG, "createPlayerForRawResource starting for res=$resName (id=$resId, isSpeech=$isSpeech)")
+
+        // Method 1: openRawResourceFd (preferred for bundled raw assets)
         try {
-            val mp = MediaPlayer.create(context, resId, getMediaAudioAttributes(), 0)
-            if (mp != null) {
+            val afd = context.resources.openRawResourceFd(resId)
+            if (afd != null) {
+                Log.d(TAG, "Strategy 1 (openRawResourceFd): opened afd for $resName (length=${afd.declaredLength})")
+                val mp = MediaPlayer().apply {
+                    setAudioAttributes(audioAttributes)
+                    if (afd.declaredLength < 0) {
+                        setDataSource(afd.fileDescriptor)
+                    } else {
+                        setDataSource(afd.fileDescriptor, afd.startOffset, afd.declaredLength)
+                    }
+                    prepare()
+                }
+                afd.close()
+                Log.i(TAG, "Strategy 1 SUCCESS for $resName: duration=${mp.duration}ms")
                 return mp
             }
         } catch (e: Exception) {
-            android.util.Log.w("IntrospectionMedia", "MediaPlayer.create with AudioAttributes failed for $resId", e)
+            Log.w(TAG, "Strategy 1 (openRawResourceFd) failed for $resName: ${e.message}")
         }
 
-        // Method 2: Standard MediaPlayer.create
+        // Method 2: Standard MediaPlayer.create with AudioAttributes
+        try {
+            val mp = MediaPlayer.create(context, resId, audioAttributes, 0)
+            if (mp != null) {
+                Log.i(TAG, "Strategy 2 (MediaPlayer.create + attributes) SUCCESS for $resName: duration=${mp.duration}ms")
+                return mp
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Strategy 2 failed for $resName: ${e.message}")
+        }
+
+        // Method 3: Standard MediaPlayer.create
         try {
             val mp = MediaPlayer.create(context, resId)
             if (mp != null) {
+                Log.i(TAG, "Strategy 3 (MediaPlayer.create standard) SUCCESS for $resName: duration=${mp.duration}ms")
                 return mp
             }
         } catch (e: Exception) {
-            android.util.Log.w("IntrospectionMedia", "MediaPlayer.create standard failed for $resId", e)
+            Log.w(TAG, "Strategy 3 failed for $resName: ${e.message}")
         }
 
-        // Method 3: URI fallback
+        // Method 4: Cache File Fallback (copy raw stream to cache directory)
         try {
-            val uri = android.net.Uri.parse("android.resource://${context.packageName}/$resId")
+            val cacheFile = File(context.cacheDir, "raw_audio_${resName}.mp3")
+            if (!cacheFile.exists() || cacheFile.length() == 0L) {
+                context.resources.openRawResource(resId).use { input ->
+                    cacheFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+            }
+            if (cacheFile.exists() && cacheFile.length() > 0L) {
+                Log.d(TAG, "Strategy 4 (Cache file): file size=${cacheFile.length()} bytes at ${cacheFile.absolutePath}")
+                val mp = MediaPlayer().apply {
+                    setAudioAttributes(audioAttributes)
+                    setDataSource(cacheFile.absolutePath)
+                    prepare()
+                }
+                Log.i(TAG, "Strategy 4 (Cache file fallback) SUCCESS for $resName: duration=${mp.duration}ms")
+                return mp
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Strategy 4 (Cache file fallback) failed for $resName: ${e.message}")
+        }
+
+        // Method 5: URI fallback
+        try {
+            val uri = Uri.parse("android.resource://${context.packageName}/$resId")
             val mp = MediaPlayer().apply {
-                setAudioAttributes(getMediaAudioAttributes())
+                setAudioAttributes(audioAttributes)
                 setDataSource(context, uri)
                 prepare()
             }
+            Log.i(TAG, "Strategy 5 (URI fallback) SUCCESS for $resName: duration=${mp.duration}ms")
             return mp
         } catch (e: Exception) {
-            android.util.Log.e("IntrospectionMedia", "URI fallback failed for $resId", e)
+            Log.e(TAG, "Strategy 5 (URI fallback) failed for $resName: ${e.message}", e)
         }
 
+        val errMsg = "Audiodatei $resName konnte nicht geladen werden"
+        Log.e(TAG, "All audio loading strategies failed for $resName (id=$resId)")
+        _errorMessage.value = errMsg
         return null
     }
 
     // --- Background Music ---
 
     fun startBackgroundMusic() {
-        if (_isRecording.value) return
+        if (_isRecording.value) {
+            Log.d(TAG, "startBackgroundMusic skipped: recording in progress")
+            return
+        }
         if (musicPlayer != null) {
+            Log.d(TAG, "startBackgroundMusic: player already exists, resuming")
             resumeBackgroundMusic()
             return
         }
         runCatching {
             requestAudioFocus()
-            val player = createPlayerForRawResource(R.raw.merlin_theme) ?: return
+            val player = createPlayerForRawResource(R.raw.merlin_theme, isSpeech = false)
+            if (player == null) {
+                Log.e(TAG, "startBackgroundMusic: createPlayerForRawResource returned null for merlin_theme")
+                _errorMessage.value = "Hintergrundmusik konnte nicht geladen werden"
+                return
+            }
             player.isLooping = true
             val initialVol = if (_isNarratorPlaying.value) {
                 IntrospectionConstants.NARRATION_MUSIC_VOLUME
@@ -179,11 +262,19 @@ class IntrospectionMediaController(
                 IntrospectionConstants.NORMAL_MUSIC_VOLUME
             }
             player.setVolume(initialVol, initialVol)
+            player.setOnErrorListener { _, what, extra ->
+                Log.e(TAG, "musicPlayer error: what=$what, extra=$extra")
+                _isMusicPlaying.value = false
+                _errorMessage.value = "Hintergrundmusik-Wiedergabefehler ($what)"
+                true
+            }
             player.start()
             musicPlayer = player
             _isMusicPlaying.value = true
-        }.onFailure {
-            _errorMessage.value = it.message
+            Log.i(TAG, "Background music started successfully (looping=true, volume=$initialVol)")
+        }.onFailure { e ->
+            Log.e(TAG, "startBackgroundMusic failed: ${e.message}", e)
+            _errorMessage.value = "Fehler beim Starten der Hintergrundmusik"
         }
     }
 
@@ -194,8 +285,11 @@ class IntrospectionMediaController(
                     savedMusicPositionMs = player.currentPosition
                     player.pause()
                     _isMusicPlaying.value = false
+                    Log.d(TAG, "Background music paused at ${savedMusicPositionMs}ms")
                 }
             }
+        }.onFailure { e ->
+            Log.w(TAG, "pauseBackgroundMusic error: ${e.message}")
         }
     }
 
@@ -217,14 +311,18 @@ class IntrospectionMediaController(
                     player.setVolume(targetVol, targetVol)
                     player.start()
                     _isMusicPlaying.value = true
+                    Log.d(TAG, "Background music resumed (position=${player.currentPosition}ms, volume=$targetVol)")
                 }
             } ?: startBackgroundMusic()
+        }.onFailure { e ->
+            Log.w(TAG, "resumeBackgroundMusic error: ${e.message}")
         }
     }
 
     private fun setMusicVolume(volume: Float) {
         runCatching {
             musicPlayer?.setVolume(volume, volume)
+            Log.d(TAG, "setMusicVolume -> $volume")
         }
     }
 
@@ -238,6 +336,7 @@ class IntrospectionMediaController(
             IntrospectionStage.REVELATION -> R.raw.introspection_reveal
             IntrospectionStage.RESULTS -> return
         }
+        Log.i(TAG, "playNarratorForStage: stage=$stage, resId=$rawRes")
         playNarrator(rawRes, onComplete)
     }
 
@@ -245,40 +344,48 @@ class IntrospectionMediaController(
         stopNarrator()
         stopAnswerAudio()
 
-        // Duck background music to exactly 0.68
+        // Duck background music for clear spoken voice
         setMusicVolume(IntrospectionConstants.NARRATION_MUSIC_VOLUME)
 
         runCatching {
             requestAudioFocus()
-            val player = createPlayerForRawResource(rawResId)
+            val player = createPlayerForRawResource(rawResId, isSpeech = true)
             if (player == null) {
+                Log.e(TAG, "playNarrator: createPlayerForRawResource returned null for $rawResId")
                 _isNarratorPlaying.value = false
                 _isNarratorCompleted.value = true
                 setMusicVolume(IntrospectionConstants.NORMAL_MUSIC_VOLUME)
                 onComplete()
                 return
             }
+            player.setVolume(1.0f, 1.0f)
             narratorPlayer = player
             _isNarratorPlaying.value = true
             _isNarratorCompleted.value = false
 
             player.setOnCompletionListener {
+                Log.i(TAG, "Narrator playback completed for $rawResId")
                 _isNarratorPlaying.value = false
                 _isNarratorCompleted.value = true
                 setMusicVolume(IntrospectionConstants.NORMAL_MUSIC_VOLUME)
                 onComplete()
             }
-            player.setOnErrorListener { _, _, _ ->
+            player.setOnErrorListener { _, what, extra ->
+                Log.e(TAG, "Narrator playback error for $rawResId: what=$what, extra=$extra")
                 _isNarratorPlaying.value = false
                 _isNarratorCompleted.value = true
+                _errorMessage.value = "Erzähler-Wiedergabefehler ($what)"
                 setMusicVolume(IntrospectionConstants.NORMAL_MUSIC_VOLUME)
                 onComplete()
                 true
             }
             player.start()
-        }.onFailure {
+            Log.i(TAG, "Narrator started playing for $rawResId (duration=${player.duration}ms)")
+        }.onFailure { e ->
+            Log.e(TAG, "playNarrator exception for $rawResId: ${e.message}", e)
             _isNarratorPlaying.value = false
             _isNarratorCompleted.value = true
+            _errorMessage.value = "Fehler bei der Erzählerwiedergabe"
             setMusicVolume(IntrospectionConstants.NORMAL_MUSIC_VOLUME)
             onComplete()
         }
@@ -289,6 +396,7 @@ class IntrospectionMediaController(
             if (narratorPlayer?.isPlaying == true) {
                 narratorPlayer?.pause()
                 _isNarratorPlaying.value = false
+                Log.d(TAG, "Narrator paused")
             }
         }
     }
@@ -300,6 +408,7 @@ class IntrospectionMediaController(
                     player.stop()
                 }
                 player.release()
+                Log.d(TAG, "Narrator stopped and released")
             }
         }
         narratorPlayer = null
@@ -319,6 +428,8 @@ class IntrospectionMediaController(
         pauseBackgroundMusic()
         stopNarrator()
         stopAnswerAudio()
+
+        Log.i(TAG, "startRecording: destination=${outputFile.absolutePath}")
 
         return runCatching {
             val newRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -349,6 +460,7 @@ class IntrospectionMediaController(
                     val elapsed = System.currentTimeMillis() - startTime
                     _recordingDurationMs.value = elapsed
                     if (elapsed >= IntrospectionConstants.MAX_RECORDING_DURATION_MS) {
+                        Log.i(TAG, "Max recording duration reached (${elapsed}ms)")
                         stopRecordingInternal()
                         onMaxReached(outputFile)
                         break
@@ -356,10 +468,12 @@ class IntrospectionMediaController(
                     delay(100)
                 }
             }
+            Log.i(TAG, "Audio recording started successfully")
             true
-        }.getOrElse {
+        }.getOrElse { e ->
+            Log.e(TAG, "startRecording failed: ${e.message}", e)
             _isRecording.value = false
-            _errorMessage.value = it.message
+            _errorMessage.value = "Mikrofonaufnahme fehlgeschlagen: ${e.message}"
             resumeBackgroundMusic()
             false
         }
@@ -374,8 +488,10 @@ class IntrospectionMediaController(
             rec.release()
             recorder = null
             _isRecording.value = false
+            Log.i(TAG, "Audio recording stopped and saved")
             true
-        }.getOrElse {
+        }.getOrElse { e ->
+            Log.w(TAG, "stopRecordingInternal exception: ${e.message}")
             runCatching { rec.release() }
             recorder = null
             _isRecording.value = false
@@ -394,6 +510,7 @@ class IntrospectionMediaController(
         runCatching {
             if (file != null && file.exists()) {
                 file.delete()
+                Log.d(TAG, "Recording file discarded: ${file.absolutePath}")
             }
         }
         resumeBackgroundMusic()
@@ -403,7 +520,8 @@ class IntrospectionMediaController(
 
     fun playAnswerAudio(file: File, stage: IntrospectionStage, onComplete: () -> Unit = {}) {
         if (!file.exists() || !file.canRead() || file.length() == 0L) {
-            _errorMessage.value = "Audio file not found"
+            Log.e(TAG, "playAnswerAudio: invalid file ${file.absolutePath}")
+            _errorMessage.value = "Aufnahmedatei nicht gefunden oder leer"
             return
         }
 
@@ -413,13 +531,16 @@ class IntrospectionMediaController(
         // Duck background music for clear voice response
         setMusicVolume(IntrospectionConstants.ANSWER_PLAYBACK_MUSIC_VOLUME)
 
+        Log.i(TAG, "playAnswerAudio: stage=$stage, size=${file.length()} bytes")
+
         runCatching {
             requestAudioFocus()
             val player = MediaPlayer().apply {
-                setAudioAttributes(getMediaAudioAttributes())
+                setAudioAttributes(getSpeechAudioAttributes())
                 setDataSource(file.absolutePath)
                 prepare()
             }
+            player.setVolume(1.0f, 1.0f)
             answerPlayer = player
             _isAnswerPlaying.value = true
             _activeAnswerStage.value = stage
@@ -436,16 +557,22 @@ class IntrospectionMediaController(
             }
 
             player.setOnCompletionListener {
+                Log.i(TAG, "Answer audio playback finished for $stage")
                 stopAnswerAudio()
                 onComplete()
             }
-            player.setOnErrorListener { _, _, _ ->
+            player.setOnErrorListener { _, what, extra ->
+                Log.e(TAG, "Answer audio error for $stage: what=$what, extra=$extra")
                 stopAnswerAudio()
+                _errorMessage.value = "Audioantwort-Wiedergabefehler ($what)"
                 true
             }
             player.start()
-        }.onFailure {
+            Log.i(TAG, "Answer audio playback started (duration=${player.duration}ms)")
+        }.onFailure { e ->
+            Log.e(TAG, "playAnswerAudio exception: ${e.message}", e)
             stopAnswerAudio()
+            _errorMessage.value = "Fehler beim Abspielen der Audioantwort"
         }
     }
 
@@ -455,6 +582,7 @@ class IntrospectionMediaController(
                 if (player.isPlaying) {
                     player.pause()
                     _isAnswerPlaying.value = false
+                    Log.d(TAG, "Answer audio paused")
                 }
             }
         }
@@ -471,6 +599,7 @@ class IntrospectionMediaController(
                     player.stop()
                 }
                 player.release()
+                Log.d(TAG, "Answer audio stopped and released")
             }
         }
         answerPlayer = null
@@ -485,6 +614,7 @@ class IntrospectionMediaController(
     // --- Cleanup ---
 
     fun releaseAll() {
+        Log.i(TAG, "releaseAll: releasing all audio resources")
         recordingTimerJob?.cancel()
         answerProgressJob?.cancel()
 
@@ -511,5 +641,7 @@ class IntrospectionMediaController(
                 audioManager?.abandonAudioFocus(null)
             }
         }
+        Log.i(TAG, "releaseAll completed")
     }
 }
+

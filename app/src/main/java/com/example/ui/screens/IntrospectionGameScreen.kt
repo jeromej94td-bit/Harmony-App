@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,6 +39,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -125,12 +127,15 @@ fun IntrospectionExperienceScreen(
     val isAnswerPlaying by mediaController.isAnswerPlaying.collectAsState()
     val answerProgress by mediaController.answerProgress.collectAsState()
     val activeAnswerStage by mediaController.activeAnswerStage.collectAsState()
+    val mediaErrorMessage by mediaController.errorMessage.collectAsState()
 
     // Question input local states
     var inputMode by remember { mutableStateOf("text") } // "text" or "voice"
     var currentTextAnswer by remember { mutableStateOf("") }
     var currentRecordedFile by remember { mutableStateOf<File?>(null) }
     var permissionDeniedMessage by remember { mutableStateOf<String?>(null) }
+
+    val combinedErrorMessage = permissionDeniedMessage ?: mediaErrorMessage
 
     // Auto-stop recording on leave / exit
     BackHandler {
@@ -295,9 +300,15 @@ fun IntrospectionExperienceScreen(
                         recordingDurationMs = recordingDurationMs,
                         isAnswerPlaying = isAnswerPlaying,
                         answerProgress = answerProgress,
-                        errorMessage = permissionDeniedMessage,
-                        onInputModeChange = { inputMode = it },
-                        onTextChange = { currentTextAnswer = it },
+                        errorMessage = combinedErrorMessage,
+                        onInputModeChange = {
+                            inputMode = it
+                            mediaController.clearErrorMessage()
+                        },
+                        onTextChange = {
+                            currentTextAnswer = it
+                            if (mediaErrorMessage != null) mediaController.clearErrorMessage()
+                        },
                         onReplayNarrator = {
                             if (isNarratorPlaying) {
                                 mediaController.stopNarrator()
@@ -926,16 +937,38 @@ private fun QuestionScreen(
                     }
                 }
             }
+        }
 
-            if (errorMessage != null) {
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = errorMessage,
-                    color = Color(0xFFFF6B6B),
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
+        if (errorMessage != null) {
+            Spacer(Modifier.height(14.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                color = Color(0x33FF5252),
+                border = BorderStroke(1.dp, Color(0x88FF5252))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = "Hinweis",
+                        tint = Color(0xFFFF6B6B),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = errorMessage,
+                        color = Color(0xFFFFD0D0),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        lineHeight = 18.sp,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         }
 

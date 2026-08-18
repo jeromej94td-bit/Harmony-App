@@ -189,16 +189,11 @@ fun MysticButton(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(gradientBrush)
-            .then(
-                if (enabled) {
-                    Modifier.clickable(
-                        interactionSource = interactionSource,
-                        indication = null,
-                        onClick = onClick
-                    )
-                } else {
-                    Modifier
-                }
+            .clickable(
+                enabled = enabled,
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
             )
             .testTag(testTag),
         contentAlignment = Alignment.Center
