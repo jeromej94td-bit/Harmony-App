@@ -22,7 +22,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class LinkPreviewResolverTest {
 
     @Test
@@ -64,6 +67,15 @@ class LinkPreviewResolverTest {
         val preview = parseLinkPreviewHtml("https://example.com/x", html)
 
         assertEquals("Copyright © … 🙂 &unknown;", preview.title)
+    }
+
+    @Test
+    fun `parser decodes broad standard entities including digit names and accented letters`() {
+        val html = """<meta property="og:title" content="Caf&eacute; &ouml; &frac12; &#169; &#x1F642; &definitelyUnknown;">"""
+
+        val preview = parseLinkPreviewHtml("https://example.com/x", html)
+
+        assertEquals("Café ö ½ © 🙂 &definitelyUnknown;", preview.title)
     }
 
     @Test

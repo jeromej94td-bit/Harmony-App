@@ -1,5 +1,6 @@
 package com.example.data
 
+import androidx.core.text.HtmlCompat
 import java.io.ByteArrayOutputStream
 import java.net.URI
 import java.net.URLDecoder
@@ -185,40 +186,15 @@ private fun queryValue(query: String?, name: String): String? = query
 private fun Map<String, String>.firstOf(vararg keys: String): String? =
     keys.firstNotNullOfOrNull { this[it] }
 
-private fun decodeHtmlEntities(value: String): String = HTML_ENTITY_REGEX.replace(value) { match ->
-    val entity = match.groupValues[1]
-    if (entity.startsWith('#')) {
-        decodeNumericEntity(entity) ?: match.value
-    } else {
-        HTML_NAMED_ENTITIES[entity] ?: match.value
-    }
-}
-
-private fun decodeNumericEntity(entity: String): String? = runCatching {
-    val number = when {
-        entity.startsWith("#x", ignoreCase = true) -> entity.drop(2).toInt(16)
-        entity.startsWith('#') -> entity.drop(1).toInt(10)
-        else -> return null
-    }
-    String(Character.toChars(number))
-}.getOrNull()
+private fun decodeHtmlEntities(value: String): String = HtmlCompat
+    .fromHtml(value, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    .toString()
 
 private val ATTRIBUTE_REGEX = Regex(
     "([a-zA-Z_:][-a-zA-Z0-9_:]*)\\s*=\\s*(?:\\\"([^\\\"]*)\\\"|'([^']*)'|([^\\s\\\"'=<>`]+))",
     RegexOption.IGNORE_CASE
 )
-private val HTML_ENTITY_REGEX = Regex("&(#x[0-9a-fA-F]+|#[0-9]+|[a-zA-Z]+);")
 private val YOUTUBE_ID_REGEX = Regex("[A-Za-z0-9_-]+")
-
-private val HTML_NAMED_ENTITIES = mapOf(
-    "quot" to "\"", "amp" to "&", "apos" to "'", "lt" to "<", "gt" to ">", "nbsp" to "\u00a0",
-    "copy" to "©", "reg" to "®", "trade" to "™", "hellip" to "…", "ndash" to "–", "mdash" to "—",
-    "lsquo" to "‘", "rsquo" to "’", "ldquo" to "“", "rdquo" to "”", "bull" to "•", "middot" to "·",
-    "laquo" to "«", "raquo" to "»", "lsaquo" to "‹", "rsaquo" to "›", "euro" to "€", "pound" to "£",
-    "yen" to "¥", "cent" to "¢", "sect" to "§", "para" to "¶", "deg" to "°", "plusmn" to "±",
-    "times" to "×", "divide" to "÷", "frac14" to "¼", "frac12" to "½", "frac34" to "¾",
-    "larr" to "←", "uarr" to "↑", "rarr" to "→", "darr" to "↓", "harr" to "↔"
-)
 
 private fun metaTagsIn(html: String): Sequence<String> = sequence {
     var searchFrom = 0
