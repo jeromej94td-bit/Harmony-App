@@ -14,12 +14,16 @@ import com.example.data.model.MemoryEntryKind
 import com.example.data.model.SystemMemoryClock
 import com.example.data.repository.MemoryRepository
 import java.net.URI
+import java.util.concurrent.ConcurrentHashMap
 import java.util.UUID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +31,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MemoryViewModel(
@@ -36,6 +41,7 @@ class MemoryViewModel(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val localState = MutableStateFlow(MemoryLocalState(nowMillis = clock.nowMillis()))
+    private val entryGuards = ConcurrentHashMap<String, MemoryEntryGuard>()
     private var expiryJob: Job? = null
 
     val uiState: StateFlow<MemoryUiState> = combine(
@@ -124,33 +130,40 @@ class MemoryViewModel(
     }
 
     fun saveNote(entryId: String?, categoryId: String, title: String, body: String?) {
-        launchOperation(ERROR_SAVE_NOTE) {
-            val now = clock.nowMillis()
-            val existing = entryId?.let { repository.getEntry(it) }
-            if (entryId != null && existing == null) error("Memory entry no longer exists.")
-            val trimmedBody = body?.trim()?.takeIf { it.isNotEmpty() }
-            val entry = existing?.copy(
-                categoryId = categoryId,
-                kind = MemoryEntryKind.NOTE,
-                title = title.trim(),
-                body = trimmedBody,
-                url = null,
-                previewTitle = null,
-                previewDescription = null,
-                previewImageUrl = null,
-                previewSiteName = null,
-                previewFetchedAt = null,
-                updatedAt = now
-            ) ?: MemoryEntryEntity(
-                id = UUID.randomUUID().toString(),
-                categoryId = categoryId,
-                kind = MemoryEntryKind.NOTE,
-                title = title.trim(),
-                body = trimmedBody,
-                createdAt = now,
-                updatedAt = now
-            )
-            if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
+        val targetId = entryId ?: UUID.randomUUID().toString()
+        val request = beginEntryRequest(targetId)
+        launchEntryOperation(request, ERROR_SAVE_NOTE) {
+            request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return@withLock
+                val now = clock.nowMillis()
+                val existing = entryId?.let { repository.getEntry(it) }
+                if (!request.isLatest()) return@withLock
+                if (entryId != null && existing == null) error("Memory entry no longer exists.")
+                val trimmedBody = body?.trim()?.takeIf { it.isNotEmpty() }
+                val entry = existing?.copy(
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.NOTE,
+                    title = title.trim(),
+                    body = trimmedBody,
+                    url = null,
+                    previewTitle = null,
+                    previewDescription = null,
+                    previewImageUrl = null,
+                    previewSiteName = null,
+                    previewFetchedAt = null,
+                    updatedAt = now
+                ) ?: MemoryEntryEntity(
+                    id = targetId,
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.NOTE,
+                    title = title.trim(),
+                    body = trimmedBody,
+                    createdAt = now,
+                    updatedAt = now
+                )
+                if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
+                if (request.isLatest()) request.updateFailedState { it - targetId }
+            }
         }
     }
 
@@ -181,37 +194,45 @@ class MemoryViewModel(
             updateLocal { copy(errorKey = ERROR_INVALID_LINK) }
             return
         }
-        launchOperation(ERROR_SAVE_LINK) {
-            val now = clock.nowMillis()
-            val existing = entryId?.let { repository.getEntry(it) }
-            if (entryId != null && existing == null) error("Memory entry no longer exists.")
-            val trimmedNote = note?.trim()?.takeIf { it.isNotEmpty() }
-            val entry = existing?.copy(
-                categoryId = categoryId,
-                kind = MemoryEntryKind.LINK,
-                title = normalizedUrl,
-                body = trimmedNote,
-                url = normalizedUrl,
-                previewTitle = null,
-                previewDescription = null,
-                previewImageUrl = null,
-                previewSiteName = null,
-                previewFetchedAt = null,
-                updatedAt = now
-            ) ?: MemoryEntryEntity(
-                id = UUID.randomUUID().toString(),
-                categoryId = categoryId,
-                kind = MemoryEntryKind.LINK,
-                title = normalizedUrl,
-                body = trimmedNote,
-                url = normalizedUrl,
-                createdAt = now,
-                updatedAt = now
-            )
+        val targetId = entryId ?: UUID.randomUUID().toString()
+        val request = beginEntryRequest(targetId)
+        launchEntryOperation(request, ERROR_SAVE_LINK) {
+            val saved = request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return@withLock false
+                val now = clock.nowMillis()
+                val existing = entryId?.let { repository.getEntry(it) }
+                if (!request.isLatest()) return@withLock false
+                if (entryId != null && existing == null) error("Memory entry no longer exists.")
+                val trimmedNote = note?.trim()?.takeIf { it.isNotEmpty() }
+                val entry = existing?.copy(
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.LINK,
+                    title = normalizedUrl,
+                    body = trimmedNote,
+                    url = normalizedUrl,
+                    previewTitle = null,
+                    previewDescription = null,
+                    previewImageUrl = null,
+                    previewSiteName = null,
+                    previewFetchedAt = null,
+                    updatedAt = now
+                ) ?: MemoryEntryEntity(
+                    id = targetId,
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.LINK,
+                    title = normalizedUrl,
+                    body = trimmedNote,
+                    url = normalizedUrl,
+                    createdAt = now,
+                    updatedAt = now
+                )
 
-            if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
-            updateLocal { copy(failedPreviewIds = failedPreviewIds - entry.id) }
-            resolvePreview(entry.id, normalizedUrl)
+                if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
+                if (!request.isLatest()) return@withLock false
+                request.updateFailedState { it - targetId }
+                true
+            }
+            if (saved) resolvePreview(request, normalizedUrl)
         }
     }
 
@@ -237,24 +258,37 @@ class MemoryViewModel(
     }
 
     fun retryPreview(entryId: String) {
-        launchOperation(ERROR_PREVIEW) {
-            val entry = repository.getEntry(entryId) ?: return@launchOperation
-            val url = entry.url ?: return@launchOperation
-            updateLocal { copy(failedPreviewIds = failedPreviewIds - entryId) }
-            resolvePreview(entryId, url)
+        val request = beginEntryRequest(entryId)
+        launchEntryOperation(request, errorKey = null) {
+            val url = request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return@withLock null
+                val entry = repository.getEntry(entryId)
+                if (!request.isLatest()) return@withLock null
+                if (entry?.kind != MemoryEntryKind.LINK || entry.url == null) {
+                    request.updateFailedState { it - entryId }
+                    return@withLock null
+                }
+                request.updateFailedState { it - entryId }
+                entry.url
+            }
+            if (url != null) resolvePreview(request, url)
         }
     }
 
     fun complete(entryId: String) {
         launchOperation(ERROR_COMPLETE) {
-            val now = clock.nowMillis()
-            repository.setCompleted(entryId, completedAt = now, updatedAt = now)
+            entryGuard(entryId).rowMutex.withLock {
+                val now = clock.nowMillis()
+                repository.setCompleted(entryId, completedAt = now, updatedAt = now)
+            }
         }
     }
 
     fun restore(entryId: String) {
         launchOperation(ERROR_RESTORE) {
-            repository.setCompleted(entryId, completedAt = null, updatedAt = clock.nowMillis())
+            entryGuard(entryId).rowMutex.withLock {
+                repository.setCompleted(entryId, completedAt = null, updatedAt = clock.nowMillis())
+            }
         }
     }
 
@@ -268,10 +302,16 @@ class MemoryViewModel(
 
     fun confirmPermanentDelete() {
         val entryId = localState.value.pendingDeleteEntryId ?: return
-        launchOperation(ERROR_DELETE_ENTRY) {
-            repository.deleteEntry(entryId)
-            updateLocal {
-                if (pendingDeleteEntryId == entryId) copy(pendingDeleteEntryId = null) else this
+        val request = beginEntryRequest(entryId)
+        launchEntryOperation(request, ERROR_DELETE_ENTRY) {
+            request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return@withLock
+                repository.deleteEntry(entryId)
+                if (!request.isLatest()) return@withLock
+                request.updateFailedState { it - entryId }
+                updateLocal {
+                    if (pendingDeleteEntryId == entryId) copy(pendingDeleteEntryId = null) else this
+                }
             }
         }
     }
@@ -280,35 +320,37 @@ class MemoryViewModel(
         updateLocal { copy(nowMillis = clock.nowMillis()) }
     }
 
-    private suspend fun resolvePreview(entryId: String, requestedUrl: String) {
-        val result = try {
-            linkPreviewResolver.resolve(requestedUrl)
+    private suspend fun resolvePreview(request: MemoryEntryRequest, requestedUrl: String) {
+        try {
+            val result = linkPreviewResolver.resolve(requestedUrl)
+            request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return
+                val current = repository.getEntry(request.entryId)
+                if (!request.isLatest()) return
+                if (current?.kind != MemoryEntryKind.LINK || current.url != requestedUrl) return
+
+                when (result) {
+                    is LinkPreviewResult.Success -> {
+                        val preview = result.preview
+                        repository.updateEntry(
+                            current.copy(
+                                previewTitle = preview.title,
+                                previewDescription = preview.description,
+                                previewImageUrl = preview.imageUrl,
+                                previewSiteName = preview.siteName,
+                                previewFetchedAt = clock.nowMillis()
+                            )
+                        )
+                        if (request.isLatest()) request.updateFailedState { it - request.entryId }
+                    }
+
+                    is LinkPreviewResult.Failure -> request.markPreviewFailed()
+                }
+            }
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (_: Throwable) {
-            LinkPreviewResult.Failure(requestedUrl)
-        }
-        val current = repository.getEntry(entryId)
-        if (current?.url != requestedUrl) return
-
-        when (result) {
-            is LinkPreviewResult.Success -> {
-                val preview = result.preview
-                repository.updateEntry(
-                    current.copy(
-                        previewTitle = preview.title,
-                        previewDescription = preview.description,
-                        previewImageUrl = preview.imageUrl,
-                        previewSiteName = preview.siteName,
-                        previewFetchedAt = clock.nowMillis()
-                    )
-                )
-                updateLocal { copy(failedPreviewIds = failedPreviewIds - entryId) }
-            }
-
-            is LinkPreviewResult.Failure -> {
-                updateLocal { copy(failedPreviewIds = failedPreviewIds + entryId) }
-            }
+            request.markPreviewFailed()
         }
     }
 
@@ -316,8 +358,15 @@ class MemoryViewModel(
         expiryJob?.cancel()
         expiryJob = expiryAt?.let { target ->
             viewModelScope.launch {
-                delay((target - clock.nowMillis()).coerceAtLeast(0L))
-                refreshTime()
+                while (true) {
+                    val remaining = remainingUntil(target, clock.nowMillis())
+                    if (remaining == 0L) {
+                        refreshTime()
+                        return@launch
+                    }
+                    delay(remaining)
+                    refreshTime()
+                }
             }
         }
     }
@@ -335,8 +384,49 @@ class MemoryViewModel(
         }
     }
 
+    private fun launchEntryOperation(
+        request: MemoryEntryRequest,
+        errorKey: String?,
+        block: suspend () -> Unit
+    ) {
+        val job = viewModelScope.launch(ioDispatcher, start = CoroutineStart.LAZY) {
+            if (errorKey != null) updateLocal { copy(errorKey = null) }
+            try {
+                block()
+            } catch (cancellation: CancellationException) {
+                throw cancellation
+            } catch (_: Throwable) {
+                if (errorKey == null) {
+                    request.markPreviewFailed()
+                } else {
+                    request.ifLatest { updateLocal { copy(errorKey = errorKey) } }
+                }
+            }
+        }
+        if (request.register(job)) {
+            job.invokeOnCompletion { request.unregister(job) }
+            job.start()
+        } else {
+            job.cancel()
+        }
+    }
+
     private inline fun updateLocal(transform: MemoryLocalState.() -> MemoryLocalState) {
-        localState.value = localState.value.transform()
+        localState.update { it.transform() }
+    }
+
+    private fun entryGuard(entryId: String): MemoryEntryGuard =
+        entryGuards.computeIfAbsent(entryId) { MemoryEntryGuard() }
+
+    private fun beginEntryRequest(entryId: String): MemoryEntryRequest {
+        val guard = entryGuard(entryId)
+        val (token, previousJob) = guard.beginRequest()
+        previousJob?.cancel()
+        return MemoryEntryRequest(entryId, guard, token, ::updateFailedPreviewIds)
+    }
+
+    private fun updateFailedPreviewIds(transform: (Set<String>) -> Set<String>) {
+        updateLocal { copy(failedPreviewIds = transform(failedPreviewIds)) }
     }
 
     private companion object {
@@ -345,7 +435,6 @@ class MemoryViewModel(
         const val ERROR_SAVE_LIST = "memory_save_list_failed"
         const val ERROR_SAVE_LINK = "memory_save_link_failed"
         const val ERROR_INVALID_LINK = "memory_invalid_link"
-        const val ERROR_PREVIEW = "memory_preview_failed"
         const val ERROR_CREATE_CATEGORY = "memory_create_category_failed"
         const val ERROR_UPDATE_CATEGORY = "memory_update_category_failed"
         const val ERROR_DELETE_CATEGORY = "memory_delete_category_failed"
@@ -379,6 +468,71 @@ private data class MemoryLocalState(
     val errorKey: String? = null
 )
 
+private class MemoryEntryGuard {
+    val rowMutex = Mutex()
+    private var latestToken: Any? = null
+    private var activeJob: Job? = null
+
+    fun beginRequest(): Pair<Any, Job?> = synchronized(this) {
+        val token = Any()
+        val previousJob = activeJob
+        latestToken = token
+        activeJob = null
+        token to previousJob
+    }
+
+    fun isLatest(token: Any): Boolean = synchronized(this) {
+        latestToken === token
+    }
+
+    fun ifLatest(token: Any, block: () -> Unit) {
+        synchronized(this) {
+            if (latestToken === token) block()
+        }
+    }
+
+    fun register(token: Any, job: Job): Boolean = synchronized(this) {
+        if (latestToken !== token) false
+        else {
+            activeJob = job
+            true
+        }
+    }
+
+    fun unregister(token: Any, job: Job) {
+        synchronized(this) {
+            if (latestToken === token && activeJob === job) activeJob = null
+        }
+    }
+}
+
+private class MemoryEntryRequest(
+    val entryId: String,
+    val guard: MemoryEntryGuard,
+    private val token: Any,
+    private val updateFailedIds: ((Set<String>) -> Set<String>) -> Unit
+) {
+    fun isLatest(): Boolean = guard.isLatest(token)
+
+    fun ifLatest(block: () -> Unit) {
+        guard.ifLatest(token, block)
+    }
+
+    fun register(job: Job): Boolean = guard.register(token, job)
+
+    fun unregister(job: Job) {
+        guard.unregister(token, job)
+    }
+
+    fun updateFailedState(transform: (Set<String>) -> Set<String>) {
+        guard.ifLatest(token) { updateFailedIds(transform) }
+    }
+
+    fun markPreviewFailed() {
+        updateFailedState { it + entryId }
+    }
+}
+
 private fun MemoryEntryEntity.matches(query: String): Boolean {
     val normalized = query.trim()
     if (normalized.isEmpty()) return true
@@ -400,3 +554,11 @@ private fun normalizeMemoryUrl(rawUrl: String): String? = normalizeHttpUrl(rawUr
         normalized
     }
 }
+
+private fun remainingUntil(target: Long, now: Long): Long = when {
+    now >= target -> 0L
+    target - now > 0L -> minOf(target - now, MAX_EXPIRY_DELAY_MS)
+    else -> MAX_EXPIRY_DELAY_MS
+}
+
+private const val MAX_EXPIRY_DELAY_MS = Long.MAX_VALUE / 2L

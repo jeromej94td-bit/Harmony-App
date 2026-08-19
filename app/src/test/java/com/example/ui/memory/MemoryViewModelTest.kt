@@ -1,6 +1,7 @@
 package com.example.ui.memory
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
 import com.example.data.LinkPreview
 import com.example.data.LinkPreviewResolver
 import com.example.data.LinkPreviewResult
@@ -15,10 +16,12 @@ import com.example.data.repository.MemoryRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -32,6 +35,10 @@ import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.util.UUID
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MemoryViewModelTest {
@@ -40,6 +47,7 @@ class MemoryViewModelTest {
     private lateinit var repository: FakeMemoryRepository
     private lateinit var resolver: FakeLinkPreviewResolver
     private lateinit var clock: MutableMemoryClock
+    private lateinit var viewModelStore: ViewModelStore
 
     @Before
     fun setUp() {
@@ -47,15 +55,17 @@ class MemoryViewModelTest {
         repository = FakeMemoryRepository()
         resolver = FakeLinkPreviewResolver()
         clock = MutableMemoryClock(START)
+        viewModelStore = ViewModelStore()
     }
 
     @After
     fun tearDown() {
+        viewModelStore.clear()
         Dispatchers.resetMain()
     }
 
     @Test
-    fun `init seeds defaults once and publishes the repository categories`() = runTest(scheduler) {
+    fun `init seeds defaults once and publishes the repository categories`() = runMemoryTest {
         val viewModel = viewModel()
 
         runCurrent()
@@ -65,7 +75,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `list input creates one entry per nonblank line preserving duplicates and order`() = runTest(scheduler) {
+    fun `list input creates one entry per nonblank line preserving duplicates and order`() = runMemoryTest {
         val viewModel = viewModel()
         runCurrent()
 
@@ -77,7 +87,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `current groups open before grace and archived sorts newest completion first at exact boundary`() = runTest(scheduler) {
+    fun `current groups open before grace and archived sorts newest completion first at exact boundary`() = runMemoryTest {
         repository.seedEntries(
             entry("grace-newer", updatedAt = 900L, completedAt = START - 10L),
             entry("open-older", updatedAt = 100L),
@@ -101,7 +111,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `completion remains current until manual refresh at scheduled 24 hour boundary`() = runTest(scheduler) {
+    fun `completion remains current until manual refresh at scheduled 24 hour boundary`() = runMemoryTest {
         repository.seedEntries(entry("entry-1"))
         val viewModel = viewModel()
         runCurrent()
@@ -120,7 +130,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `nearest expiry reschedules when entries change and refreshes only at the replacement boundary`() = runTest(scheduler) {
+    fun `nearest expiry reschedules when entries change and refreshes only at the replacement boundary`() = runMemoryTest {
         val firstExpiry = START + MemoryArchivePolicy.GRACE_PERIOD_MS
         val secondExpiry = firstExpiry + 1_000L
         repository.seedEntries(
@@ -149,7 +159,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `category and query filters match searchable entry content`() = runTest(scheduler) {
+    fun `category and query filters match searchable entry content`() = runMemoryTest {
         repository.seedEntries(
             entry("film", categoryId = MemoryDefaults.FILMS_ID, title = "Arrival", body = "Language"),
             entry("series", categoryId = MemoryDefaults.SERIES_ID, title = "Dark", body = "Winden")
@@ -167,7 +177,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `editor state opens an existing mode and closes without changing filters`() = runTest(scheduler) {
+    fun `editor state opens an existing mode and closes without changing filters`() = runMemoryTest {
         val viewModel = viewModel()
         runCurrent()
         viewModel.setQuery("dark")
@@ -185,7 +195,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `editing a note preserves identity creation and completion fields`() = runTest(scheduler) {
+    fun `editing a note preserves identity creation and completion fields`() = runMemoryTest {
         repository.seedEntries(entry("note", createdAt = 17L, updatedAt = 18L, completedAt = 19L))
         val viewModel = viewModel()
         runCurrent()
@@ -204,7 +214,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `editing link clears stale preview before fetch then preserves identity on success`() = runTest(scheduler) {
+    fun `editing link clears stale preview before fetch then preserves identity on success`() = runMemoryTest {
         repository.seedEntries(
             entry(
                 id = "link",
@@ -243,7 +253,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `link row is committed before preview failure and retry updates the same row`() = runTest(scheduler) {
+    fun `link row is committed before preview failure and retry updates the same row`() = runMemoryTest {
         val first = resolver.enqueuePending()
         val viewModel = viewModel()
         runCurrent()
@@ -269,7 +279,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `late preview response cannot overwrite a newer edited url`() = runTest(scheduler) {
+    fun `late preview response cannot overwrite a newer edited url`() = runMemoryTest {
         repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://initial.example/"))
         val oldRequest = resolver.enqueuePending()
         val newRequest = resolver.enqueuePending()
@@ -292,7 +302,276 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `completion restore and permanent delete confirmation mutate only the requested entry`() = runTest(scheduler) {
+    fun `concurrent preview failures atomically retain every failed entry id`() = runMemoryTest {
+        val entryCount = 32
+        val ids = List(entryCount) { "link-$it" }
+        repository.seedEntries(*ids.map { entry(it, kind = MemoryEntryKind.LINK, url = "https://$it.example/") }.toTypedArray())
+        val started = AtomicInteger()
+        val allStarted = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val concurrentResolver = LinkPreviewResolver { url ->
+            if (started.incrementAndGet() == entryCount) allStarted.complete(Unit)
+            release.await()
+            LinkPreviewResult.Failure(url)
+        }
+        val executor = Executors.newFixedThreadPool(entryCount)
+        val concurrentDispatcher = executor.asCoroutineDispatcher()
+
+        try {
+            val viewModel = MemoryViewModel(repository, concurrentResolver, clock, concurrentDispatcher)
+                .also { viewModelStore.put("concurrent", it) }
+            runCurrent()
+            ids.forEach(viewModel::retryPreview)
+            allStarted.await()
+
+            release.complete(Unit)
+            val queuedWorkDrained = CountDownLatch(entryCount)
+            repeat(entryCount) { executor.execute(queuedWorkDrained::countDown) }
+            queuedWorkDrained.await()
+            runCurrent()
+
+            assertEquals(ids.toSet(), viewModel.uiState.value.failedPreviewIds)
+        } finally {
+            concurrentDispatcher.close()
+        }
+    }
+
+    @Test
+    fun `older blocked same url save cannot commit row or preview after newer invocation`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://same.example/"))
+        val releaseOlderWrite = CompletableDeferred<Unit>()
+        repository.beforeUpdateEntry = { candidate ->
+            if (candidate.body == "First" && candidate.previewFetchedAt == null) releaseOlderWrite.await()
+        }
+        resolver.enqueue(success("https://same.example/", title = "Latest"))
+        resolver.enqueue(success("https://same.example/", title = "Stale"))
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "same.example", "First")
+        runCurrent()
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "same.example", "Second")
+        runCurrent()
+
+        releaseOlderWrite.complete(Unit)
+        runCurrent()
+
+        assertEquals("Second", repository.requireEntry("link").body)
+        assertEquals("Latest", repository.requireEntry("link").previewTitle)
+        assertFalse("link" in viewModel.uiState.value.failedPreviewIds)
+        assertEquals(
+            listOf("Second"),
+            repository.updatedEntries.filter { it.previewFetchedAt == null }.map { it.body }
+        )
+    }
+
+    @Test
+    fun `same url preview responses only let the latest invocation publish metadata`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://same.example/"))
+        val older = resolver.enqueuePending()
+        val latest = resolver.enqueuePending()
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "same.example", "First")
+        runCurrent()
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "same.example", "Second")
+        runCurrent()
+
+        latest.complete(success("https://same.example/", title = "Latest"))
+        runCurrent()
+        older.complete(success("https://same.example/", title = "Stale"))
+        runCurrent()
+
+        assertEquals("Second", repository.requireEntry("link").body)
+        assertEquals("Latest", repository.requireEntry("link").previewTitle)
+    }
+
+    @Test
+    fun `A to B to A edits reject the first A preview response`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://initial.example/"))
+        val firstA = resolver.enqueuePending()
+        val middleB = resolver.enqueuePending()
+        val latestA = resolver.enqueuePending()
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "a.example", null)
+        runCurrent()
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "b.example", null)
+        runCurrent()
+        viewModel.saveLink("link", MemoryDefaults.FILMS_ID, "a.example", null)
+        runCurrent()
+
+        middleB.complete(success("https://b.example/", title = "Middle"))
+        latestA.complete(success("https://a.example/", title = "Latest A"))
+        runCurrent()
+        firstA.complete(success("https://a.example/", title = "Stale A"))
+        runCurrent()
+
+        assertEquals("https://a.example/", repository.requireEntry("link").url)
+        assertEquals("Latest A", repository.requireEntry("link").previewTitle)
+    }
+
+    @Test
+    fun `overlapping retries cannot let older failure replace latest success`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://retry.example/"))
+        resolver.enqueue(LinkPreviewResult.Failure("https://retry.example/"))
+        val viewModel = viewModel()
+        runCurrent()
+        viewModel.retryPreview("link")
+        runCurrent()
+        assertEquals(setOf("link"), viewModel.uiState.value.failedPreviewIds)
+
+        val older = resolver.enqueuePending()
+        val latest = resolver.enqueuePending()
+        viewModel.retryPreview("link")
+        runCurrent()
+        viewModel.retryPreview("link")
+        runCurrent()
+
+        latest.complete(success("https://retry.example/", title = "Latest"))
+        runCurrent()
+        older.complete(LinkPreviewResult.Failure("https://retry.example/"))
+        runCurrent()
+
+        assertEquals("Latest", repository.requireEntry("link").previewTitle)
+        assertFalse("link" in viewModel.uiState.value.failedPreviewIds)
+    }
+
+    @Test
+    fun `scheduled expiry recalculates delay after clock rollback`() = runMemoryTest {
+        val expiry = START + MemoryArchivePolicy.GRACE_PERIOD_MS
+        repository.seedEntries(entry("link", completedAt = START))
+        val viewModel = viewModel()
+        runCurrent()
+
+        clock.now = START - 1_000L
+        scheduler.advanceTimeBy(MemoryArchivePolicy.GRACE_PERIOD_MS)
+        runCurrent()
+        assertEquals(MemoryBucket.CURRENT_GRACE, viewModel.uiState.value.visibleEntries.single().bucket)
+
+        clock.now = expiry
+        scheduler.advanceTimeBy(MemoryArchivePolicy.GRACE_PERIOD_MS + 1_000L)
+        runCurrent()
+        viewModel.selectTab(MemoryTab.ARCHIVED)
+        runCurrent()
+
+        assertEquals("link", viewModel.uiState.value.visibleEntries.single().entity.id)
+    }
+
+    @Test
+    fun `overflow sized expiry delay remains scheduled instead of refreshing immediately`() = runMemoryTest {
+        val completedAt = Long.MAX_VALUE - MemoryArchivePolicy.GRACE_PERIOD_MS / 2L
+        clock.now = Long.MIN_VALUE + 1L
+        repository.seedEntries(entry("link", completedAt = completedAt))
+        val viewModel = viewModel()
+        runCurrent()
+        assertEquals(Long.MAX_VALUE, viewModel.uiState.value.nextExpiryAt)
+
+        clock.now = Long.MAX_VALUE
+        scheduler.advanceTimeBy(Long.MAX_VALUE)
+        runCurrent()
+        viewModel.selectTab(MemoryTab.ARCHIVED)
+        runCurrent()
+
+        assertEquals("link", viewModel.uiState.value.visibleEntries.single().entity.id)
+    }
+
+    @Test
+    fun `preview reload failure keeps saved link retryable without save error`() = runMemoryTest {
+        resolver.enqueue(success("https://saved.example/", title = "Preview"))
+        repository.failNextEntryRead = true
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.saveLink(null, MemoryDefaults.FILMS_ID, "saved.example", null)
+        runCurrent()
+
+        val saved = repository.entriesSnapshot.single()
+        assertEquals("https://saved.example/", saved.url)
+        assertNull(saved.previewTitle)
+        assertEquals(setOf(saved.id), viewModel.uiState.value.failedPreviewIds)
+        assertNull(viewModel.uiState.value.errorKey)
+    }
+
+    @Test
+    fun `preview metadata write failure keeps saved link retryable without save error`() = runMemoryTest {
+        resolver.enqueue(success("https://saved.example/", title = "Preview"))
+        repository.failNextPreviewUpdate = true
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.saveLink(null, MemoryDefaults.FILMS_ID, "saved.example", null)
+        runCurrent()
+
+        val saved = repository.entriesSnapshot.single()
+        assertEquals("https://saved.example/", saved.url)
+        assertNull(saved.previewTitle)
+        assertEquals(setOf(saved.id), viewModel.uiState.value.failedPreviewIds)
+        assertNull(viewModel.uiState.value.errorKey)
+    }
+
+    @Test
+    fun `saving failed link as note clears failed preview state`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://failed.example/"))
+        resolver.enqueue(LinkPreviewResult.Failure("https://failed.example/"))
+        val viewModel = viewModel()
+        runCurrent()
+        viewModel.retryPreview("link")
+        runCurrent()
+
+        viewModel.saveNote("link", MemoryDefaults.IDEAS_ID, "Now a note", null)
+        runCurrent()
+
+        assertEquals(MemoryEntryKind.NOTE, repository.requireEntry("link").kind)
+        assertFalse("link" in viewModel.uiState.value.failedPreviewIds)
+    }
+
+    @Test
+    fun `permanent delete clears failed preview state`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://failed.example/"))
+        resolver.enqueue(LinkPreviewResult.Failure("https://failed.example/"))
+        val viewModel = viewModel()
+        runCurrent()
+        viewModel.retryPreview("link")
+        runCurrent()
+
+        viewModel.requestPermanentDelete("link")
+        viewModel.confirmPermanentDelete()
+        runCurrent()
+
+        assertNull(repository.getEntry("link"))
+        assertFalse("link" in viewModel.uiState.value.failedPreviewIds)
+    }
+
+    @Test
+    fun `retry clears failed state for missing and non link entries`() = runMemoryTest {
+        repository.seedEntries(
+            entry("missing", kind = MemoryEntryKind.LINK, url = "https://missing.example/"),
+            entry("note", kind = MemoryEntryKind.LINK, url = "https://note.example/")
+        )
+        resolver.enqueue(LinkPreviewResult.Failure("https://missing.example/"))
+        resolver.enqueue(LinkPreviewResult.Failure("https://note.example/"))
+        val viewModel = viewModel()
+        runCurrent()
+        viewModel.retryPreview("missing")
+        viewModel.retryPreview("note")
+        runCurrent()
+        assertEquals(setOf("missing", "note"), viewModel.uiState.value.failedPreviewIds)
+
+        repository.seedEntries(entry("note", kind = MemoryEntryKind.NOTE, url = null))
+        runCurrent()
+        viewModel.retryPreview("missing")
+        viewModel.retryPreview("note")
+        runCurrent()
+
+        assertTrue(viewModel.uiState.value.failedPreviewIds.isEmpty())
+        assertEquals(2, resolver.requestedUrls.size)
+    }
+
+    @Test
+    fun `completion restore and permanent delete confirmation mutate only the requested entry`() = runMemoryTest {
         repository.seedEntries(entry("first"), entry("second"))
         val viewModel = viewModel()
         runCurrent()
@@ -322,7 +601,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `category create update and delete actions keep repository state observable`() = runTest(scheduler) {
+    fun `category create update and delete actions keep repository state observable`() = runMemoryTest {
         val viewModel = viewModel()
         runCurrent()
 
@@ -342,7 +621,7 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `failed write exposes recoverable error and the next successful action clears it`() = runTest(scheduler) {
+    fun `failed write exposes recoverable error and the next successful action clears it`() = runMemoryTest {
         val viewModel = viewModel()
         runCurrent()
         repository.failNextWrite = true
@@ -367,6 +646,16 @@ class MemoryViewModelTest {
     }
 
     private fun viewModel() = MemoryViewModel(repository, resolver, clock, dispatcher)
+        .also { viewModelStore.put(UUID.randomUUID().toString(), it) }
+
+    private fun runMemoryTest(testBody: suspend TestScope.() -> Unit) = runTest(scheduler) {
+        try {
+            testBody()
+        } finally {
+            viewModelStore.clear()
+            runCurrent()
+        }
+    }
 
     private fun entry(
         id: String,
@@ -432,8 +721,12 @@ private class FakeMemoryRepository : MemoryRepository {
     override val categories: Flow<List<MemoryCategoryEntity>> = categoryState
     override val entries: Flow<List<MemoryEntryEntity>> = entryState
     val inserted = mutableListOf<MemoryEntryEntity>()
+    val updatedEntries = mutableListOf<MemoryEntryEntity>()
     var defaultSeedCount = 0
     var failNextWrite = false
+    var failNextEntryRead = false
+    var failNextPreviewUpdate = false
+    var beforeUpdateEntry: suspend (MemoryEntryEntity) -> Unit = {}
 
     val entriesSnapshot: List<MemoryEntryEntity> get() = entryState.value
 
@@ -490,10 +783,22 @@ private class FakeMemoryRepository : MemoryRepository {
         entryState.value += entries
     }
 
-    override suspend fun getEntry(id: String): MemoryEntryEntity? = entryState.value.find { it.id == id }
+    override suspend fun getEntry(id: String): MemoryEntryEntity? {
+        if (failNextEntryRead) {
+            failNextEntryRead = false
+            error("planned entry read failure")
+        }
+        return entryState.value.find { it.id == id }
+    }
 
     override suspend fun updateEntry(entry: MemoryEntryEntity) {
+        beforeUpdateEntry(entry)
+        if (failNextPreviewUpdate && entry.previewFetchedAt != null) {
+            failNextPreviewUpdate = false
+            error("planned preview update failure")
+        }
         failIfRequested()
+        updatedEntries += entry
         entryState.value = entryState.value.map { if (it.id == entry.id) entry else it }
     }
 
