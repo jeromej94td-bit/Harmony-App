@@ -344,7 +344,10 @@ class MemoryViewModel(
                         if (request.isLatest()) request.updateFailedState { it - request.entryId }
                     }
 
-                    is LinkPreviewResult.Failure -> request.markPreviewFailed()
+                    is LinkPreviewResult.Failure -> {
+                        repository.updateEntry(current.withoutPreview())
+                        if (request.isLatest()) request.markPreviewFailed()
+                    }
                 }
             }
         } catch (cancellation: CancellationException) {
@@ -545,6 +548,14 @@ private fun MemoryEntryEntity.matches(query: String): Boolean {
         previewSiteName
     ).filterNotNull().any { it.contains(normalized, ignoreCase = true) }
 }
+
+private fun MemoryEntryEntity.withoutPreview(): MemoryEntryEntity = copy(
+    previewTitle = null,
+    previewDescription = null,
+    previewImageUrl = null,
+    previewSiteName = null,
+    previewFetchedAt = null
+)
 
 private fun normalizeMemoryUrl(rawUrl: String): String? = normalizeHttpUrl(rawUrl)?.let { normalized ->
     val uri = URI(normalized)

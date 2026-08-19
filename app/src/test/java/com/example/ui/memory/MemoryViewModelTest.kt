@@ -16,6 +16,7 @@ import com.example.data.repository.MemoryRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -437,6 +439,40 @@ class MemoryViewModelTest {
 
         assertEquals("Latest", repository.requireEntry("link").previewTitle)
         assertFalse("link" in viewModel.uiState.value.failedPreviewIds)
+    }
+
+    @Test
+    fun `latest retry failure clears metadata committed by superseded successful retry`() = runMemoryTest {
+        repository.seedEntries(entry("link", kind = MemoryEntryKind.LINK, url = "https://retry.example/"))
+        val olderCommitStarted = CompletableDeferred<Unit>()
+        val releaseOlderCommit = CompletableDeferred<Unit>()
+        repository.beforeUpdateEntry = { candidate ->
+            if (candidate.previewTitle == "Superseded") {
+                olderCommitStarted.complete(Unit)
+                withContext(NonCancellable) { releaseOlderCommit.await() }
+            }
+        }
+        resolver.enqueue(success("https://retry.example/", title = "Superseded"))
+        resolver.enqueue(LinkPreviewResult.Failure("https://retry.example/"))
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.retryPreview("link")
+        runCurrent()
+        assertTrue(olderCommitStarted.isCompleted)
+
+        viewModel.retryPreview("link")
+        runCurrent()
+        releaseOlderCommit.complete(Unit)
+        runCurrent()
+
+        val finalEntry = repository.requireEntry("link")
+        assertNull(finalEntry.previewTitle)
+        assertNull(finalEntry.previewDescription)
+        assertNull(finalEntry.previewImageUrl)
+        assertNull(finalEntry.previewSiteName)
+        assertNull(finalEntry.previewFetchedAt)
+        assertEquals(setOf("link"), viewModel.uiState.value.failedPreviewIds)
     }
 
     @Test
