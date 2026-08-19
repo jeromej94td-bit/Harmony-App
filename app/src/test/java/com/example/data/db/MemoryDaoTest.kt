@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -90,13 +89,29 @@ class MemoryDaoTest {
         )
 
         dao.setCompletedAt(firstEntry.id, completedAt = 500L, updatedAt = 500L)
-        assertEquals(500L, dao.getEntry(firstEntry.id)?.completedAt)
-        assertNull(dao.getEntry(secondEntry.id)?.completedAt)
+        assertEquals(
+            firstEntry.copy(completedAt = 500L, updatedAt = 500L),
+            dao.getEntry(firstEntry.id)
+        )
+        assertEquals(secondEntry, dao.getEntry(secondEntry.id))
 
         dao.moveEntries(defaultCategory.id, destinationCategory.id, updatedAt = 600L)
         val movedEntries = dao.observeEntries().first()
         assertEquals(2, movedEntries.size)
         assertEquals(setOf(firstEntry.id, secondEntry.id), movedEntries.map { it.id }.toSet())
         assertEquals(setOf(destinationCategory.id), movedEntries.map { it.categoryId }.toSet())
+        val movedById = movedEntries.associateBy { it.id }
+        assertEquals(
+            firstEntry.copy(
+                categoryId = destinationCategory.id,
+                updatedAt = 600L,
+                completedAt = 500L
+            ),
+            movedById[firstEntry.id]
+        )
+        assertEquals(
+            secondEntry.copy(categoryId = destinationCategory.id, updatedAt = 600L),
+            movedById[secondEntry.id]
+        )
     }
 }
