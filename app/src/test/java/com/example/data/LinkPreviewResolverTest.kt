@@ -79,6 +79,24 @@ class LinkPreviewResolverTest {
     }
 
     @Test
+    fun `parser preserves raw metadata markup as literal text`() {
+        val html = """<meta property="og:title" content="A <b>B</b> C">"""
+
+        val preview = parseLinkPreviewHtml("https://example.com/x", html)
+
+        assertEquals("A <b>B</b> C", preview.title)
+    }
+
+    @Test
+    fun `parser decodes escaped metadata markup once without reparsing it`() {
+        val html = """<meta property="og:title" content="A &lt;b&gt;B&lt;/b&gt; C">"""
+
+        val preview = parseLinkPreviewHtml("https://example.com/x", html)
+
+        assertEquals("A <b>B</b> C", preview.title)
+    }
+
+    @Test
     fun `parser keeps a greater-than sign inside quoted meta content`() {
         val preview = parseLinkPreviewHtml(
             "https://example.com/x",

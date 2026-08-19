@@ -187,7 +187,7 @@ private fun Map<String, String>.firstOf(vararg keys: String): String? =
     keys.firstNotNullOfOrNull { this[it] }
 
 private fun decodeHtmlEntities(value: String): String = HtmlCompat
-    .fromHtml(value, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    .fromHtml(value.replace("<", "&lt;").replace(">", "&gt;"), HtmlCompat.FROM_HTML_MODE_LEGACY)
     .toString()
 
 private val ATTRIBUTE_REGEX = Regex(
