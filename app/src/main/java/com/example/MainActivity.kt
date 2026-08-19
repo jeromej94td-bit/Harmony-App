@@ -1,10 +1,12 @@
 package com.example
 
 import android.os.Bundle
+import android.graphics.Color as AndroidColor
 import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.AppLanguage
@@ -36,9 +39,12 @@ import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.IntrospectionExperienceScreen
 import com.example.ui.screens.MomentsScreen
 import com.example.ui.screens.PackListScreen
+import com.example.ui.screens.PANDA_EITHER_OR_PACK_ID
+import com.example.ui.screens.PandaEitherOrScreen
 import com.example.ui.screens.ProfileSheet
 import com.example.ui.screens.QuizRunnerScreen
 import com.example.ui.theme.HarmonyTheme
+import com.example.widget.PicShareWidgetProvider
 
 class MainActivity : ComponentActivity() {
 
@@ -47,6 +53,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        window.navigationBarColor = AndroidColor.TRANSPARENT
+        window.statusBarColor = AndroidColor.TRANSPARENT
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = false
+            isAppearanceLightStatusBars = false
+        }
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val currentLanguage = AppLanguage.fromCode(uiState.appLanguage)
@@ -62,18 +74,31 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HarmonyApp(viewModel: HarmonyViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     var isIntrospectionOpen by remember { mutableStateOf(false) }
+    var isPandaEitherOrOpen by remember { mutableStateOf(false) }
+
+    fun openPack(packId: String) {
+        if (packId == PANDA_EITHER_OR_PACK_ID) {
+            isPandaEitherOrOpen = true
+        } else {
+            viewModel.startPack(packId)
+        }
+    }
 
     val isQuizActive = uiState.activeRun != null
     val isSheetOrDialogActive = uiState.isProfileSheetOpen || uiState.isAddMomentOpen
     val isNotHomeTab = uiState.selectedTab != 0
 
-    val canHandleBack = isIntrospectionOpen || isQuizActive || isSheetOrDialogActive || isNotHomeTab
+    val canHandleBack = isIntrospectionOpen || isPandaEitherOrOpen || isQuizActive || isSheetOrDialogActive || isNotHomeTab
 
     BackHandler(enabled = canHandleBack) {
         when {
             isIntrospectionOpen -> {
                 isIntrospectionOpen = false
+            }
+            isPandaEitherOrOpen -> {
+                isPandaEitherOrOpen = false
             }
             isQuizActive -> {
                 if (uiState.isExitConfirmOpen) {
@@ -104,17 +129,19 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
             modifier = Modifier.fillMaxSize(),
             containerColor = androidx.compose.ui.graphics.Color.Transparent,
             topBar = {
-                if (!isQuizActive && !isIntrospectionOpen) {
+                if (!isQuizActive && !isIntrospectionOpen && !isPandaEitherOrOpen) {
                     HarmonyTopBar(
                         userName = uiState.profile.userName,
                         partnerName = uiState.profile.partnerName,
+                        userAvatarPath = uiState.profile.userAvatarPath,
+                        partnerAvatarPath = uiState.profile.partnerAvatarPath,
                         onProfileClick = { viewModel.openProfileSheet() },
                         onRefresh = { viewModel.refreshData() }
                     )
                 }
             },
             bottomBar = {
-                if (!isQuizActive && !isIntrospectionOpen) {
+                if (!isQuizActive && !isIntrospectionOpen && !isPandaEitherOrOpen) {
                     val navSelectedTab = when (uiState.selectedTab) {
                         6 -> 1 // When inside PackListScreen, highlight Spiele tab
                         else -> uiState.selectedTab
@@ -143,12 +170,16 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     0 -> HomeScreen(
                         profile = uiState.profile,
                         answers = uiState.answers,
+                        sharedPics = uiState.sharedPics,
                         stats = uiState.stats,
-                        isRefreshing = uiState.isRefreshing,
                         appLanguage = uiState.appLanguage,
-                        onRefresh = { viewModel.refreshData() },
-                        onStartPack = { packId -> viewModel.startPack(packId) },
-                        onSendWidget = { name, emoji -> viewModel.sendWidget(name, emoji) }
+                        onStartPack = { packId -> openPack(packId) },
+                        onAddSharedPictures = { uris, addedBy -> viewModel.addSharedPictures(uris, addedBy) },
+                        onUpdateSharedPicture = { pic -> viewModel.updateSharedPicture(pic) },
+                        onPinWidget = {
+                            val requested = PicShareWidgetProvider.requestPin(context)
+                            viewModel.showToast(if (requested) "Widget-Auswahl geöffnet" else "Widget bitte über den Startbildschirm hinzufügen")
+                        }
                     )
 
                     1 -> GamesScreen(
@@ -164,19 +195,17 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                             }
                         },
                         onTopicClick = { topicId -> viewModel.openTopic(topicId) },
-                        onStartPack = { packId -> viewModel.startPack(packId) }
+                        onStartPack = { packId -> openPack(packId) }
                     )
 
                     2 -> ChatScreen(
                         messages = uiState.messages,
                         partnerName = uiState.profile.partnerName,
-                        gfkPanelOpen = uiState.gfkPanelOpen,
-                        gfkLoading = uiState.gfkLoading,
-                        gfkResult = uiState.gfkResult,
+                        partnerAvatarPath = uiState.profile.partnerAvatarPath,
                         appLanguage = uiState.appLanguage,
                         onSendMessage = { text -> viewModel.sendChatMessage(text) },
-                        onToggleGfkPanel = { viewModel.toggleGfkPanel() },
-                        onRunGfk = { draft -> viewModel.runGfk(draft) }
+                        onSendImage = { uri -> viewModel.sendChatImage(uri) },
+                        onReportUser = { viewModel.reportPartner() }
                     )
 
                     3 -> MomentsScreen(
@@ -190,7 +219,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     )
 
                     5 -> DevStudioScreen(
-                        onStartPack = { packId -> viewModel.startPack(packId) },
+                        onStartPack = { packId -> openPack(packId) },
                         onShowToast = { msg -> viewModel.showToast(msg) }
                     )
 
@@ -201,7 +230,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         packFilter = uiState.packFilter,
                         appLanguage = uiState.appLanguage,
                         onSetFilter = { filter -> viewModel.setPackFilter(filter) },
-                        onStartPack = { packId -> viewModel.startPack(packId) },
+                        onStartPack = { packId -> openPack(packId) },
                         onClose = { viewModel.selectTab(1) }
                     )
                 }
@@ -217,10 +246,6 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     val currentLanguage = AppLanguage.fromCode(uiState.appLanguage)
                     ProfileSheet(
                         profile = uiState.profile,
-                        coachLoading = uiState.coachLoading,
-                        coachResult = uiState.coachResult,
-                        dateIdeasLoading = uiState.dateIdeasLoading,
-                        dateIdeasResult = uiState.dateIdeasResult,
                         isEditProfileOpen = uiState.isEditProfileOpen,
                         isDarkMode = uiState.isDarkMode,
                         onToggleDarkMode = { enabled -> viewModel.toggleDarkMode(enabled) },
@@ -231,8 +256,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onOpenEditProfile = { viewModel.openEditProfile() },
                         onCloseEditProfile = { viewModel.closeEditProfile() },
                         onSaveEditProfile = { u, p, s -> viewModel.saveEditProfile(u, p, s) },
-                        onRunCoach = { viewModel.runCoach() },
-                        onRunDateIdeas = { wishes -> viewModel.runDateIdeas(wishes) },
+                        onUpdateAvatar = { uri, isUser -> viewModel.updateProfileAvatar(uri, isUser) },
                         onOpenDevStudio = { viewModel.selectTab(5) }
                     )
                 }
@@ -261,6 +285,17 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     IntrospectionExperienceScreen(
                         appLanguage = uiState.appLanguage,
                         onExit = { isIntrospectionOpen = false }
+                    )
+                }
+
+                if (isPandaEitherOrOpen) {
+                    PandaEitherOrScreen(
+                        profile = uiState.profile,
+                        answers = uiState.answers,
+                        onSaveAnswer = { questionIndex, userChoice, partnerChoice ->
+                            viewModel.saveEitherOrAnswer(questionIndex, userChoice, partnerChoice)
+                        },
+                        onExit = { isPandaEitherOrOpen = false }
                     )
                 }
             }

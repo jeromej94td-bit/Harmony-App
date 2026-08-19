@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" role="img" aria-label="Harmony Aurora Glass orb">
+  <title>Harmony Aurora Glass</title>
+  <desc>Scalable animated violet, cyan and pink aurora portal with glass light rings.</desc>
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientTransform="translate(540 510) rotate(90) scale(560)">
+      <stop stop-color="#4D1F7A" stop-opacity=".44"/>
+      <stop offset=".42" stop-color="#170A2C" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#05020B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientTransform="translate(540 500) rotate(90) scale(250)">
+      <stop stop-color="#FCEBFF" stop-opacity=".95"/>
+      <stop offset=".12" stop-color="#D79CFF" stop-opacity=".85"/>
+      <stop offset=".42" stop-color="#7B3DCC" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#130622" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="aurora" x1="100" y1="780" x2="950" y2="250" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#65F0FF"/>
+      <stop offset=".42" stop-color="#A968FF"/>
+      <stop offset=".72" stop-color="#F05BFF"/>
+      <stop offset="1" stop-color="#FFB0D9"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="300" y1="300" x2="800" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2B0"/>
+      <stop offset=".45" stop-color="#FFC45C"/>
+      <stop offset="1" stop-color="#D47716"/>
+    </linearGradient>
+    <filter id="blur40" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <filter id="blur16" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <path id="arcPath" d="M128 720C292 438 516 820 956 286"/>
+    <path id="heart" d="M0 12C-20-10-56 2-56 30c0 24 24 42 56 68 32-26 56-44 56-68C56 2 20-10 0 12Z"/>
+  </defs>
+
+  <rect width="1080" height="1080" rx="72" fill="#05020B"/>
+  <rect width="1080" height="1080" rx="72" fill="url(#bg)"/>
+
+  <g opacity=".28" filter="url(#blur40)">
+    <ellipse cx="210" cy="330" rx="160" ry="240" fill="#4DDBFF">
+      <animateTransform attributeName="transform" type="rotate" values="-10 210 330;12 210 330;-10 210 330" dur="9s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="840" cy="700" rx="200" ry="260" fill="#FF4FBE">
+      <animateTransform attributeName="transform" type="rotate" values="12 840 700;-10 840 700;12 840 700" dur="11s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <circle cx="540" cy="500" r="260" fill="url(#core)" opacity=".9">
+    <animate attributeName="r" values="245;270;245" dur="4.8s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".72;.98;.72" dur="4.8s" repeatCount="indefinite"/>
+  </circle>
+
+  <g transform="translate(540 500)" fill="none" stroke="url(#aurora)" filter="url(#glow)">
+    <circle r="180" stroke-width="3" opacity=".82">
+      <animateTransform attributeName="transform" type="rotate" values="0;360" dur="18s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="218" stroke-width="2" stroke-dasharray="7 18" opacity=".48">
+      <animateTransform attributeName="transform" type="rotate" values="360;0" dur="24s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="252" stroke-width="1.5" stroke-dasharray="2 26" opacity=".34">
+      <animateTransform attributeName="transform" type="rotate" values="0;360" dur="32s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <use href="#arcPath" stroke="url(#aurora)" stroke-width="26" stroke-linecap="round" opacity=".12" filter="url(#blur16)">
+    <animate attributeName="opacity" values=".06;.22;.06" dur="4s" repeatCount="indefinite"/>
+  </use>
+  <use href="#arcPath" stroke="url(#aurora)" stroke-width="6" stroke-linecap="round" opacity=".9" filter="url(#glow)">
+    <animate attributeName="stroke-dasharray" values="0 1600;520 1080;0 1600" dur="5.8s" repeatCount="indefinite"/>
+  </use>
+
+  <g fill="none" stroke="#FF75C8" stroke-width="3" opacity=".78" filter="url(#glow)">
+    <use href="#heart" transform="translate(118 330) scale(.42)">
+      <animateTransform attributeName="transform" type="translate" values="118 350;138 240;118 350" dur="7s" repeatCount="indefinite"/>
+    </use>
+    <use href="#heart" transform="translate(920 650) scale(.32)">
+      <animateTransform attributeName="transform" type="translate" values="920 650;900 520;920 650" dur="8.5s" repeatCount="indefinite"/>
+    </use>
+    <use href="#heart" transform="translate(172 820) scale(.22)">
+      <animateTransform attributeName="transform" type="translate" values="172 820;202 710;172 820" dur="6.4s" repeatCount="indefinite"/>
+    </use>
+  </g>
+
+  <g fill="url(#aurora)" filter="url(#glow)">
+    <circle cx="190" cy="310" r="4"><animate attributeName="r" values="2;7;2" dur="2.4s" repeatCount="indefinite"/></circle>
+    <circle cx="870" cy="390" r="5"><animate attributeName="r" values="3;9;3" dur="3.1s" repeatCount="indefinite"/></circle>
+    <circle cx="760" cy="820" r="3"><animate attributeName="r" values="2;6;2" dur="2.8s" repeatCount="indefinite"/></circle>
+    <circle cx="280" cy="770" r="3"><animate attributeName="r" values="2;6;2" dur="3.7s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <g transform="translate(540 500)" fill="none" stroke="url(#gold)" opacity=".62">
+    <path d="M-46 0h92M0-46v92" stroke-width="1" stroke-dasharray="3 8"/>
+    <circle r="116" stroke-width="1" stroke-dasharray="2 12"/>
+  </g>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="flow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffcb52">
+        <animate attributeName="stop-color" dur="30s" repeatCount="indefinite"
+          values="#ffcb52;#3b8dff;#3bd68a;#8b5cff;#ff4fa3;#ff4d5f;#ffcb52"/>
+      </stop>
+      <stop offset="0.52" stop-color="#3b8dff">
+        <animate attributeName="stop-color" dur="30s" repeatCount="indefinite"
+          values="#3b8dff;#3bd68a;#8b5cff;#ff4fa3;#ff4d5f;#ffcb52;#3b8dff"/>
+      </stop>
+      <stop offset="1" stop-color="#08020b"/>
+    </linearGradient>
+    <radialGradient id="orbA">
+      <stop offset="0" stop-color="#ff4fa3" stop-opacity=".58">
+        <animate attributeName="stop-color" dur="30s" repeatCount="indefinite"
+          values="#ff4fa3;#ff4d5f;#ffcb52;#3b8dff;#3bd68a;#8b5cff;#ff4fa3"/>
+      </stop>
+      <stop offset="1" stop-color="#ff4fa3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbB">
+      <stop offset="0" stop-color="#8b5cff" stop-opacity=".48">
+        <animate attributeName="stop-color" dur="30s" repeatCount="indefinite"
+          values="#8b5cff;#ff4fa3;#ff4d5f;#ffcb52;#3b8dff;#3bd68a;#8b5cff"/>
+      </stop>
+      <stop offset="1" stop-color="#8b5cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#120815" stop-opacity=".08"/>
+      <stop offset=".64" stop-color="#09030d" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#050107" stop-opacity=".72"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="#08020b"/>
+  <rect width="1080" height="1920" fill="url(#flow)" opacity=".58"/>
+  <circle cx="250" cy="410" r="510" fill="url(#orbA)">
+    <animateTransform attributeName="transform" type="translate" dur="18s" repeatCount="indefinite"
+      values="0 0;180 100;40 210;-90 80;0 0"/>
+  </circle>
+  <circle cx="820" cy="960" r="460" fill="url(#orbB)">
+    <animateTransform attributeName="transform" type="translate" dur="22s" repeatCount="indefinite"
+      values="0 0;-180 -120;-60 160;110 40;0 0"/>
+  </circle>
+  <g fill="none" stroke="#ffffff" stroke-opacity=".18">
+    <circle cx="540" cy="770" r="370" stroke-width="3">
+      <animate attributeName="r" dur="7s" repeatCount="indefinite" values="330;400;330"/>
+      <animate attributeName="stroke-opacity" dur="7s" repeatCount="indefinite" values=".08;.28;.08"/>
+    </circle>
+    <circle cx="540" cy="770" r="240" stroke="#ff4fa3" stroke-width="2">
+      <animate attributeName="r" dur="9s" repeatCount="indefinite" values="220;285;220"/>
+      <animate attributeName="stroke-opacity" dur="9s" repeatCount="indefinite" values=".12;.34;.12"/>
+    </circle>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="140" cy="260" r="4"><animate attributeName="opacity" dur="3.4s" repeatCount="indefinite" values=".15;.8;.15"/></circle>
+    <circle cx="890" cy="340" r="6"><animate attributeName="opacity" dur="4.2s" repeatCount="indefinite" values=".12;.72;.12"/></circle>
+    <circle cx="250" cy="1180" r="5"><animate attributeName="opacity" dur="3.8s" repeatCount="indefinite" values=".1;.75;.1"/></circle>
+    <circle cx="760" cy="1450" r="4"><animate attributeName="opacity" dur="4.8s" repeatCount="indefinite" values=".14;.82;.14"/></circle>
+    <circle cx="940" cy="1710" r="7"><animate attributeName="opacity" dur="5.1s" repeatCount="indefinite" values=".1;.68;.1"/></circle>
+  </g>
+  <rect width="1080" height="1920" fill="url(#shade)"/>
+</svg>

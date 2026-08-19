@@ -373,7 +373,8 @@ fun IntrospectionPortal(
 
             // Layer 9: 16 Floating Light Particles (Constrained to portal area)
             particles.forEach { p ->
-                val progress = (particleTime * p.speedFactor + p.phaseOffset) % 1f
+                // The particle is transparent at both ends, so its off-screen reset cannot pop.
+                val progress = (particleTime + p.phaseOffset) % 1f
                 val angleRad = Math.toRadians((p.initialAngle + progress * 40f).toDouble())
                 val particleDist = baseRadius * p.distanceFraction
                 val yDrift = -progress * 18.dp.toPx()

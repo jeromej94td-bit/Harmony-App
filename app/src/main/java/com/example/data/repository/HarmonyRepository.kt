@@ -1,20 +1,31 @@
 package com.example.data.repository
 
-import com.example.data.api.GeminiClient
+import android.content.Context
+import android.net.Uri
 import com.example.data.db.HarmonyDatabase
 import com.example.data.model.AnswerEntity
 import com.example.data.model.ChatMessageEntity
 import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
+import com.example.data.model.SharedPicEntity
+import com.example.widget.PicShareWidgetProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.util.UUID
 
-class HarmonyRepository(private val db: HarmonyDatabase) {
+class HarmonyRepository(
+    private val db: HarmonyDatabase,
+    private val context: Context
+) {
 
     val profileFlow: Flow<ProfileEntity?> = db.profileDao().getProfile()
     val answersFlow: Flow<List<AnswerEntity>> = db.answerDao().getAllAnswers()
     val chatMessagesFlow: Flow<List<ChatMessageEntity>> = db.chatDao().getAllMessages()
+    val sharedPicsFlow: Flow<List<SharedPicEntity>> = db.sharedPicDao().getAllPics()
     val momentsFlow: Flow<List<MomentEntity>> = db.momentDao().getAllMoments()
     val statsFlow: Flow<CoupleStatsEntity?> = db.coupleStatsDao().getStats()
 
@@ -101,6 +112,33 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         db.chatDao().insertMessage(ChatMessageEntity(sender = sender, text = text))
     }
 
+    suspend fun sendChatImage(uri: Uri, sender: String = "me") {
+        val path = copyMediaToApp(uri, "chat") ?: return
+        db.chatDao().insertMessage(ChatMessageEntity(sender = sender, text = "", imagePath = path))
+    }
+
+    suspend fun updateProfileAvatar(uri: Uri, isUser: Boolean) {
+        val path = copyMediaToApp(uri, "avatars") ?: return
+        val current = db.profileDao().getProfile().firstOrNull() ?: ProfileEntity()
+        db.profileDao().insertOrUpdateProfile(
+            if (isUser) current.copy(userAvatarPath = path)
+            else current.copy(partnerAvatarPath = path)
+        )
+    }
+
+    suspend fun addSharedPictures(uris: List<Uri>, addedBy: String = "me") {
+        uris.forEach { uri ->
+            val path = copyMediaToApp(uri, "picshare") ?: return@forEach
+            db.sharedPicDao().insertPic(SharedPicEntity(filePath = path, addedBy = addedBy))
+        }
+        PicShareWidgetProvider.refreshAll(context)
+    }
+
+    suspend fun updateSharedPicture(pic: SharedPicEntity) {
+        db.sharedPicDao().updatePic(pic)
+        PicShareWidgetProvider.refreshAll(context)
+    }
+
     suspend fun addMoment(title: String, content: String, emoji: String = "💕") {
         db.momentDao().insertMoment(MomentEntity(title = title, content = content, emoji = emoji))
     }
@@ -109,58 +147,21 @@ class HarmonyRepository(private val db: HarmonyDatabase) {
         db.coupleStatsDao().insertOrUpdateStats(CoupleStatsEntity(id = 1, visitedCities = cities, visitedCountries = countries))
     }
 
-    // --- GEMINI AI FEATURES ---
-
-    suspend fun rephraseGfk(draftText: String): Result<String> {
-        val prompt = """
-            Formuliere den folgenden Entwurf für eine Nachricht an meinen Partner nach der Gewaltfreien Kommunikation (Rosenberg) um: Beobachtung ohne Bewertung, Gefühl, Bedürfnis, Bitte. Warmherzig, natürlich, alltagstauglich, auf Deutsch. Gib NUR den umformulierten Text aus.
-
-            Entwurf: "$draftText"
-        """.trimIndent()
-
-        return GeminiClient.generateText(prompt)
-    }
-
-    suspend fun generateRelationshipCoachAnalysis(
-        userName: String,
-        partnerName: String,
-        recentChats: List<ChatMessageEntity>,
-        answers: List<AnswerEntity>
-    ): Result<String> {
-        val chatSummary = recentChats.takeLast(15).joinToString("\n") { m ->
-            val senderName = if (m.sender == "me") userName else partnerName
-            "$senderName: ${m.text}"
-        }
-
-        val answerSummary = answers.takeLast(20).joinToString("\n") { a ->
-            "Paket '${a.packId}' (Frage #${a.questionIndex + 1}): ${a.answerText}"
-        }
-
-        val prompt = """
-            Beziehungsdaten von $userName und $partnerName (Fernbeziehung):
-
-            Chats:
-            ${chatSummary.ifBlank { "(noch keine)" }}
-
-            Beantwortete Fragen:
-            ${answerSummary.ifBlank { "(noch keine)" }}
-
-            Erstelle als einfühlsamer Beziehungscoach auf Basis der Gottman-Forschung eine kurze Analyse auf Deutsch, gegliedert in:
-            1. 📈 Kommunikationsmuster
-            2. 💪 Eure Stärken
-            3. 🌱 Ein konkreter Tipp für mehr Nähe trotz Distanz
-        """.trimIndent()
-
-        return GeminiClient.generateText(prompt)
-    }
-
-    suspend fun generateDateIdeas(userName: String, partnerName: String, wishes: String): Result<String> {
-        val prompt = """
-            Generiere drei kreative, konkrete Date-Ideen für ein Paar in einer Fernbeziehung ($userName und $partnerName).
-            Wünsche: ${wishes.ifBlank { "keine besonderen" }}.
-            Die Ideen sollen per Videocall ODER beim nächsten Treffen funktionieren, Nähe schaffen und konkrete Vorbereitungsschritte enthalten. Auf Deutsch, ohne Einleitung.
-        """.trimIndent()
-
-        return GeminiClient.generateText(prompt)
+    private suspend fun copyMediaToApp(uri: Uri, folder: String): String? = withContext(Dispatchers.IO) {
+        runCatching {
+            val directory = File(context.filesDir, folder).apply { mkdirs() }
+            val mime = context.contentResolver.getType(uri).orEmpty()
+            val extension = when {
+                mime.contains("png") -> "png"
+                mime.contains("webp") -> "webp"
+                else -> "jpg"
+            }
+            val target = File(directory, "${System.currentTimeMillis()}-${UUID.randomUUID()}.$extension")
+            context.contentResolver.openInputStream(uri).use { input ->
+                requireNotNull(input) { "Bild konnte nicht geöffnet werden" }
+                target.outputStream().use { output -> input.copyTo(output) }
+            }
+            target.absolutePath
+        }.getOrNull()
     }
 }

@@ -3,6 +3,7 @@ package com.example.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +36,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.material3.Surface
@@ -53,7 +59,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -61,6 +69,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.example.R
 import androidx.compose.ui.text.font.FontStyle
@@ -90,6 +99,203 @@ import com.example.ui.theme.HarmonyPurpleLight
 import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.sin
+
+private val QUESTION_FLOW_COLORS = listOf(
+    Color(0xFFFFCB52),
+    Color(0xFF3B8DFF),
+    Color(0xFF3BD68A),
+    Color(0xFF8B5CFF),
+    Color(0xFFFF4FA3),
+    Color(0xFFFF4D5F),
+    Color(0xFFFFCB52)
+)
+
+private const val QUESTION_FLOW_TWO_PI = 6.2831855f
+
+private fun questionFlowColor(phase: Float): Color {
+    val normalized = ((phase % 1f) + 1f) % 1f
+    val scaled = normalized * (QUESTION_FLOW_COLORS.size - 1)
+    val index = floor(scaled).toInt().coerceIn(0, QUESTION_FLOW_COLORS.size - 2)
+    return lerp(
+        QUESTION_FLOW_COLORS[index],
+        QUESTION_FLOW_COLORS[index + 1],
+        scaled - index
+    )
+}
+
+@Composable
+private fun QuestionColorFlowBackdrop(
+    accent: Color,
+    modifier: Modifier = Modifier
+) {
+    val transition = rememberInfiniteTransition(label = "question_color_flow")
+    val phase by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 30_000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "question_color_phase"
+    )
+    val primary = questionFlowColor(phase)
+    val secondary = questionFlowColor((phase + 0.23f) % 1f)
+    val tertiary = questionFlowColor((phase + 0.58f) % 1f)
+    val background = HarmonyBg
+
+    Canvas(modifier = modifier) {
+        drawRect(
+            brush = Brush.verticalGradient(
+                listOf(
+                    lerp(background, primary, 0.48f),
+                    lerp(background, secondary, 0.30f),
+                    background,
+                    lerp(background, tertiary, 0.20f)
+                )
+            )
+        )
+
+        val angle = phase * QUESTION_FLOW_TWO_PI
+        val firstCenter = androidx.compose.ui.geometry.Offset(
+            x = size.width * (0.24f + cos(angle) * 0.18f),
+            y = size.height * (0.24f + sin(angle) * 0.09f)
+        )
+        val secondCenter = androidx.compose.ui.geometry.Offset(
+            x = size.width * (0.78f + cos(angle + 2.2f) * 0.16f),
+            y = size.height * (0.52f + sin(angle + 2.2f) * 0.16f)
+        )
+        val thirdCenter = androidx.compose.ui.geometry.Offset(
+            x = size.width * (0.36f + cos(angle + 4.1f) * 0.20f),
+            y = size.height * (0.82f + sin(angle + 4.1f) * 0.08f)
+        )
+
+        listOf(
+            Triple(firstCenter, primary, size.minDimension * 0.72f),
+            Triple(secondCenter, secondary, size.minDimension * 0.66f),
+            Triple(thirdCenter, tertiary, size.minDimension * 0.58f)
+        ).forEach { (center, color, radius) ->
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(color.copy(alpha = 0.34f), Color.Transparent),
+                    center = center,
+                    radius = radius
+                ),
+                radius = radius,
+                center = center
+            )
+            drawCircle(
+                color = color.copy(alpha = 0.15f),
+                radius = radius * 0.62f,
+                center = center,
+                style = Stroke(width = 2.2f)
+            )
+        }
+
+        repeat(18) { index ->
+            val particleAngle = angle * (1f + (index % 3) * 0.13f) + index * 0.91f
+            val orbitX = size.width * (0.12f + (index % 5) * 0.035f)
+            val orbitY = size.height * (0.04f + (index % 4) * 0.018f)
+            val baseX = size.width * ((index * 0.173f) % 1f)
+            val baseY = size.height * (0.12f + ((index * 0.137f) % 0.78f))
+            val pulse = (0.5f + 0.5f * sin(particleAngle * 1.7f)).coerceIn(0f, 1f)
+            drawCircle(
+                color = questionFlowColor((phase + index * 0.071f) % 1f)
+                    .copy(alpha = 0.18f + pulse * 0.48f),
+                radius = 1.8f + (index % 4) * 0.85f,
+                center = androidx.compose.ui.geometry.Offset(
+                    x = (baseX + cos(particleAngle) * orbitX).coerceIn(0f, size.width),
+                    y = (baseY + sin(particleAngle) * orbitY).coerceIn(0f, size.height)
+                )
+            )
+        }
+
+        drawRect(
+            brush = Brush.verticalGradient(
+                listOf(
+                    Color(0xFF120815).copy(alpha = 0.10f),
+                    Color(0xFF09030D).copy(alpha = 0.34f),
+                    Color(0xFF07020A).copy(alpha = 0.66f)
+                )
+            )
+        )
+        drawCircle(
+            color = accent.copy(alpha = 0.10f),
+            radius = size.width * 0.62f,
+            center = androidx.compose.ui.geometry.Offset(size.width * 0.5f, size.height * 0.42f),
+            style = Stroke(width = 3f)
+        )
+    }
+}
+
+@Composable
+private fun AnimatedQuestionCard(
+    question: String,
+    modifier: Modifier = Modifier
+) {
+    val transition = rememberInfiniteTransition(label = "question_spotlight")
+    val shimmer by transition.animateFloat(
+        initialValue = -1f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 4_800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "question_spotlight_shimmer"
+    )
+    val glow by transition.animateFloat(
+        initialValue = 0.54f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2_600, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "question_spotlight_glow"
+    )
+    val shape = RoundedCornerShape(24.dp)
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .graphicsLayer { shadowElevation = 8f + glow * 12f }
+            .clip(shape)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        HarmonyPurple.copy(alpha = 0.74f),
+                        HarmonyPink.copy(alpha = 0.40f),
+                        HarmonySurface2.copy(alpha = 0.98f),
+                        HarmonyPurple.copy(alpha = 0.58f)
+                    ),
+                    start = androidx.compose.ui.geometry.Offset(shimmer * 260f, 0f),
+                    end = androidx.compose.ui.geometry.Offset(620f + shimmer * 180f, 440f)
+                )
+            )
+            .border(
+                width = 2.dp,
+                brush = Brush.sweepGradient(
+                    listOf(
+                        HarmonyPink.copy(alpha = glow),
+                        Color.White.copy(alpha = glow * 0.90f),
+                        HarmonyPurpleLight.copy(alpha = glow),
+                        HarmonyPink.copy(alpha = glow)
+                    )
+                ),
+                shape = shape
+            )
+            .padding(horizontal = 19.dp, vertical = 21.dp)
+    ) {
+        Text(
+            text = question,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White,
+            lineHeight = 31.sp
+        )
+    }
+}
 
 @Composable
 fun QuizRunnerScreen(
@@ -132,21 +338,17 @@ fun QuizRunnerScreen(
         modifier = modifier
             .fillMaxSize()
             .testTag("quiz_runner_screen"),
-        color = Color(0xFF10060E)
+        color = HarmonyBg
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            animatedCatColor.copy(alpha = 0.28f),
-                            animatedCatColor.copy(alpha = 0.10f),
-                            Color(0xFF10060E)
-                        )
-                    )
-                )
+                .background(HarmonyBg)
         ) {
+            QuestionColorFlowBackdrop(
+                accent = animatedCatColor,
+                modifier = Modifier.fillMaxSize()
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -325,6 +527,7 @@ fun QuizRunnerScreen(
                             TotCardPairView(
                                 firstText = pair.first,
                                 secondText = pair.second,
+                                packPairs = pack.pairs,
                                 selectedAns = selectedAns,
                                 onPick = { chosen ->
                                     onPickTot(chosen)
@@ -468,13 +671,7 @@ fun QuizRunnerScreen(
                             CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "unterhaltung"))
                             Spacer(modifier = Modifier.height(14.dp))
 
-                            Text(
-                                text = contentText(q?.q ?: ""),
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color.White,
-                                lineHeight = 33.sp
-                            )
+                            AnimatedQuestionCard(question = contentText(q?.q ?: ""))
                             Spacer(modifier = Modifier.height(26.dp))
 
                             
@@ -688,22 +885,47 @@ fun QuizOptionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val optionAccent = when (number) {
+        1 -> Color(0xFF4AA8FF)
+        2 -> Color(0xFFFFC857)
+        3 -> Color(0xFF4ED69A)
+        4 -> Color(0xFFA978FF)
+        else -> Color(0xFFFF6B9D)
+    }
+    val optionLabel = ('A'.code + number - 1).toChar().toString()
+    val transition = rememberInfiniteTransition(label = "quiz_option_color_$number")
+    val glow by transition.animateFloat(
+        initialValue = 0.40f,
+        targetValue = 0.86f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1_900 + number * 230,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "quiz_option_glow_$number"
+    )
+    val shape = RoundedCornerShape(18.dp)
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
+            .graphicsLayer { shadowElevation = if (isSelected) 14f else 4f + glow * 4f }
+            .clip(shape)
             .background(
-                if (isSelected) Brush.horizontalGradient(
-                    listOf(HarmonyPink.copy(alpha = 0.35f), HarmonyPurple.copy(alpha = 0.35f))
-                )
-                else Brush.linearGradient(
-                    listOf(Color.White.copy(alpha = 0.07f), Color.White.copy(alpha = 0.07f))
+                Brush.horizontalGradient(
+                    listOf(
+                        optionAccent.copy(alpha = if (isSelected) 0.46f else 0.16f + glow * 0.10f),
+                        HarmonySurface2.copy(alpha = 0.94f),
+                        lerp(optionAccent, HarmonyPurple, 0.48f)
+                            .copy(alpha = if (isSelected) 0.42f else 0.13f + glow * 0.08f)
+                    )
                 )
             )
             .border(
-                1.5.dp,
-                if (isSelected) HarmonyPink else Color.White.copy(alpha = 0.1f),
-                RoundedCornerShape(18.dp)
+                width = if (isSelected) 2.dp else 1.3.dp,
+                color = optionAccent.copy(alpha = if (isSelected) 1f else 0.36f + glow * 0.40f),
+                shape = shape
             )
             .clickable(onClick = onClick)
             .padding(15.dp)
@@ -714,11 +936,19 @@ fun QuizOptionButton(
                 modifier = Modifier
                     .size(27.dp)
                     .clip(CircleShape)
-                    .background(if (isSelected) HarmonyPink else Color.White.copy(alpha = 0.12f)),
+                    .background(
+                        Brush.linearGradient(
+                            listOf(
+                                optionAccent,
+                                lerp(optionAccent, HarmonyPurple, 0.42f)
+                            )
+                        )
+                    )
+                    .border(1.dp, Color.White.copy(alpha = 0.50f + glow * 0.30f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = number.toString(),
+                    text = optionLabel,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = Color.White
@@ -741,6 +971,7 @@ fun QuizOptionButton(
 fun TotCardPairView(
     firstText: String,
     secondText: String,
+    packPairs: List<Pair<String, String>>,
     selectedAns: String?,
     onPick: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -751,15 +982,34 @@ fun TotCardPairView(
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
 
-    val slideDistancePx = with(density) { configuration.screenWidthDp.dp.toPx() * 1.35f }
-
-    val topOffsetX = remember { Animatable(0f) }
-    val bottomOffsetX = remember { Animatable(0f) }
-    val topExtraRotation = remember { Animatable(0f) }
-    val bottomExtraRotation = remember { Animatable(0f) }
+    val windDistancePx = with(density) { configuration.screenHeightDp.dp.toPx() * 0.42f }
+    val topOffsetY = remember { Animatable(0f) }
+    val bottomOffsetY = remember { Animatable(0f) }
+    val topTilt = remember { Animatable(0f) }
+    val bottomTilt = remember { Animatable(0f) }
+    val topFlip = remember { Animatable(0f) }
+    val bottomFlip = remember { Animatable(0f) }
     val oderScale = remember { Animatable(1f) }
 
     var isAnimating by remember { mutableStateOf(false) }
+    var topShuffleKey by remember(firstText, secondText) { mutableStateOf(firstText) }
+    var bottomShuffleKey by remember(firstText, secondText) { mutableStateOf(secondText) }
+
+    LaunchedEffect(firstText, secondText) {
+        topOffsetY.snapTo(-windDistancePx)
+        bottomOffsetY.snapTo(windDistancePx)
+        topTilt.snapTo(0f)
+        bottomTilt.snapTo(0f)
+        oderScale.snapTo(1f)
+        topFlip.snapTo(-28f)
+        bottomFlip.snapTo(28f)
+        coroutineScope {
+            launch { topOffsetY.animateTo(0f, tween(760, easing = CubicBezierEasing(0.12f, 0.72f, 0.16f, 1f))) }
+            launch { bottomOffsetY.animateTo(0f, tween(820, easing = CubicBezierEasing(0.12f, 0.72f, 0.16f, 1f))) }
+            launch { topFlip.animateTo(0f, tween(760, easing = FastOutSlowInEasing)) }
+            launch { bottomFlip.animateTo(0f, tween(820, easing = FastOutSlowInEasing)) }
+        }
+    }
 
     fun handlePick(option: String) {
         if (isAnimating) return
@@ -767,56 +1017,30 @@ fun TotCardPairView(
         triggerMiniVibration(context, 40L)
 
         scope.launch {
-            val exitDuration = 320
-            val exitEasing = FastOutSlowInEasing
-
-            coroutineScope {
-                launch {
-                    topOffsetX.animateTo(-slideDistancePx, animationSpec = tween(exitDuration, easing = exitEasing))
+            buildTotShuffleFrames(packPairs, firstText to secondText, 4).forEachIndexed { index, key ->
+                coroutineScope {
+                    launch { topFlip.animateTo(90f, tween(90, easing = FastOutSlowInEasing)) }
+                    launch { bottomFlip.animateTo(-90f, tween(90, easing = FastOutSlowInEasing)) }
                 }
-                launch {
-                    topExtraRotation.animateTo(-6f, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    bottomOffsetX.animateTo(slideDistancePx, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    bottomExtraRotation.animateTo(6f, animationSpec = tween(exitDuration, easing = exitEasing))
-                }
-                launch {
-                    oderScale.animateTo(0f, animationSpec = tween(exitDuration / 2, easing = exitEasing))
+                if (index % 2 == 0) topShuffleKey = key else bottomShuffleKey = key
+                topFlip.snapTo(-90f)
+                bottomFlip.snapTo(90f)
+                coroutineScope {
+                    launch { topFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
+                    launch { bottomFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
                 }
             }
-
+            coroutineScope {
+                launch { topOffsetY.animateTo(52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
+                launch { bottomOffsetY.animateTo(-52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
+                launch { topTilt.animateTo(-3.6f, tween(540, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(3.6f, tween(540, easing = FastOutSlowInEasing)) }
+                launch { oderScale.animateTo(0f, tween(260, easing = FastOutSlowInEasing)) }
+            }
+            delay(360)
             onPick(option)
-
-            topOffsetX.snapTo(-slideDistancePx)
-            topExtraRotation.snapTo(-8f)
-            bottomOffsetX.snapTo(slideDistancePx)
-            bottomExtraRotation.snapTo(8f)
-            oderScale.snapTo(0f)
-
-            val enterDuration = 440
-            val enterEasing = CubicBezierEasing(0.05f, 0.75f, 0.1f, 1.0f)
-
-            coroutineScope {
-                launch {
-                    topOffsetX.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    topExtraRotation.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    bottomOffsetX.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    bottomExtraRotation.animateTo(0f, animationSpec = tween(enterDuration, easing = enterEasing))
-                }
-                launch {
-                    oderScale.animateTo(1f, animationSpec = tween(enterDuration, easing = FastOutSlowInEasing))
-                }
-            }
-
+            topShuffleKey = firstText
+            bottomShuffleKey = secondText
             isAnimating = false
         }
     }
@@ -832,30 +1056,34 @@ fun TotCardPairView(
             // Top Card (tilted -3.2f)
             TotStyledCard(
                 text = contentText(firstText),
-                assetKey = firstText,
+                assetKey = topShuffleKey,
                 tagAlignment = Alignment.TopStart,
                 isSelected = selectedAns == firstText,
-                rotationAngle = -3.2f + topExtraRotation.value,
+                rotationAngle = -3.2f + topTilt.value,
                 onClick = { handlePick(firstText) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
-                        translationX = topOffsetX.value
+                        translationY = topOffsetY.value
+                        rotationY = topFlip.value
+                        cameraDistance = 14f * density.density
                     }
             )
 
             // Bottom Card (tilted +3.2f)
             TotStyledCard(
                 text = contentText(secondText),
-                assetKey = secondText,
+                assetKey = bottomShuffleKey,
                 tagAlignment = Alignment.BottomStart,
                 isSelected = selectedAns == secondText,
-                rotationAngle = 3.2f + bottomExtraRotation.value,
+                rotationAngle = 3.2f + bottomTilt.value,
                 onClick = { handlePick(secondText) },
                 modifier = Modifier
                     .weight(1f)
                     .graphicsLayer {
-                        translationX = bottomOffsetX.value
+                        translationY = bottomOffsetY.value
+                        rotationY = bottomFlip.value
+                        cameraDistance = 14f * density.density
                     }
             )
         }
