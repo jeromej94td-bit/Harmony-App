@@ -80,7 +80,7 @@ import com.example.data.model.Topic
 import com.example.ui.components.AuroraGlassSectionTitle
 import com.example.ui.components.AuroraProgressBar
 import com.example.ui.components.HarmonyTopicIcon
-import com.example.ui.components.PandaCategoryIcon
+import com.example.ui.components.GameCategoryVisual
 import com.example.ui.components.TimerPill
 import com.example.ui.introspection.IntrospectionPortal
 import com.example.ui.theme.HarmonyGold
@@ -606,7 +606,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             } else {
-                PandaCategoryIcon(
+                GameCategoryVisual(
                     categoryId = category.id,
                     accent = accent,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
