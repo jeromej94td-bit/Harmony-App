@@ -8,11 +8,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Update
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.data.model.AnswerEntity
 import com.example.data.model.ChatMessageEntity
 import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.MomentEntity
 import com.example.data.model.ProfileEntity
+import com.example.data.model.SharedPicEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -46,6 +50,21 @@ interface ChatDao {
 }
 
 @Dao
+interface SharedPicDao {
+    @Query("SELECT * FROM shared_pics ORDER BY timestamp DESC")
+    fun getAllPics(): Flow<List<SharedPicEntity>>
+
+    @Query("SELECT * FROM shared_pics WHERE selectedForWidget = 1 ORDER BY timestamp DESC")
+    suspend fun getWidgetPics(): List<SharedPicEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPic(pic: SharedPicEntity): Long
+
+    @Update
+    suspend fun updatePic(pic: SharedPicEntity)
+}
+
+@Dao
 interface MomentDao {
     @Query("SELECT * FROM moments ORDER BY timestamp DESC")
     fun getAllMoments(): Flow<List<MomentEntity>>
@@ -71,16 +90,18 @@ interface CoupleStatsDao {
         ProfileEntity::class,
         AnswerEntity::class,
         ChatMessageEntity::class,
+        SharedPicEntity::class,
         MomentEntity::class,
         CoupleStatsEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun answerDao(): AnswerDao
     abstract fun chatDao(): ChatDao
+    abstract fun sharedPicDao(): SharedPicDao
     abstract fun momentDao(): MomentDao
     abstract fun coupleStatsDao(): CoupleStatsDao
 
@@ -95,10 +116,32 @@ abstract class HarmonyDatabase : RoomDatabase() {
                     HarmonyDatabase::class.java,
                     "harmony_database"
                 )
-                    .fallbackToDestructiveMigration(true)
+                    .addMigrations(MIGRATION_1_2)
                     .build()
                 INSTANCE = instance
                 instance
+            }
+        }
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE profiles ADD COLUMN userAvatarPath TEXT")
+                db.execSQL("ALTER TABLE profiles ADD COLUMN partnerAvatarPath TEXT")
+                db.execSQL("ALTER TABLE chat_messages ADD COLUMN imagePath TEXT")
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS shared_pics (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        filePath TEXT NOT NULL,
+                        caption TEXT NOT NULL,
+                        addedBy TEXT NOT NULL,
+                        target TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        selectedForWidget INTEGER NOT NULL,
+                        timestamp INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+                )
             }
         }
     }

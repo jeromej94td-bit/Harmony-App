@@ -11,7 +11,9 @@ data class ProfileEntity(
     val userName: String = "Jerome",
     val partnerName: String = "Alex",
     val startDate: Long = System.currentTimeMillis() - (830L * 24 * 3600 * 1000), // ~2.28 years ago
-    val simulatorEnabled: Boolean = true
+    val simulatorEnabled: Boolean = true,
+    val userAvatarPath: String? = null,
+    val partnerAvatarPath: String? = null
 )
 
 @Entity(tableName = "answers", primaryKeys = ["packId", "questionIndex"])
@@ -27,6 +29,19 @@ data class ChatMessageEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val sender: String, // "me" or "them"
     val text: String,
+    val imagePath: String? = null,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+@Entity(tableName = "shared_pics")
+data class SharedPicEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val filePath: String,
+    val caption: String = "",
+    val addedBy: String = "me",
+    val target: String = "partner_home",
+    val status: String = "local_ready",
+    val selectedForWidget: Boolean = true,
     val timestamp: Long = System.currentTimeMillis()
 )
 
@@ -137,6 +152,88 @@ object HarmonyPacksData {
     )
 
     val DEFAULT_PACKS = listOf(
+        QuestionPack(
+            id = "entweder_oder_panda",
+            title = "Entweder oder",
+            tags = listOf("dasoderdas", "fürpaare"),
+            cat = "tot",
+            topic = "aufwaermen",
+            type = "tot",
+            emoji = "🐼",
+            pairs = listOf(
+                "Frühstück im Bett 🥐" to "Mitternachtssnack 🌙",
+                "Strandurlaub 🏖️" to "Bergabenteuer 🏔️",
+                "Netflix-Marathon 📺" to "Party bis 4 Uhr 🎉",
+                "Pizza 🍕" to "Sushi 🍣",
+                "Hund 🐶" to "Katze 🐱",
+                "Sommer ☀️" to "Winter ❄️",
+                "Kaffee ☕" to "Tee 🍵",
+                "Frühaufsteher 🌅" to "Nachteule 🦉",
+                "Kino 🎬" to "Couch & Decke 🛋️",
+                "Süß 🍫" to "Salzig 🍟",
+                "Roadtrip 🚗" to "Flugreise ✈️",
+                "Karaoke 🎤" to "Tanzen 💃",
+                "Camping ⛺" to "5-Sterne-Hotel 🏨",
+                "Kuscheln 🤗" to "Kitzeln 😆",
+                "Stadt 🏙️" to "Land 🌾",
+                "Textnachricht 💬" to "Sprachnachricht 🎙️",
+                "Geburtstag groß feiern 🎂" to "Nur wir zwei 🥂",
+                "Kochen 👩‍🍳" to "Bestellen 🛵",
+                "Meer 🌊" to "Pool 🏊",
+                "Achterbahn 🎢" to "Riesenrad 🎡",
+                "Spontan ⚡" to "Durchgeplant 📋",
+                "Duschen 🚿" to "Baden 🛁",
+                "Buch 📖" to "Podcast 🎧",
+                "Frühstücksdate 🍳" to "Dinnerdate 🍷",
+                "Eis 🍦" to "Kuchen 🍰",
+                "Regen am Fenster 🌧️" to "Sonne auf der Haut 🌞",
+                "Brettspiel 🎲" to "Videospiel 🎮",
+                "Blumen 💐" to "Schokolade 🍫",
+                "Tattoo 🖋️" to "Piercing 💎",
+                "Zug 🚆" to "Auto 🚗",
+                "Silvester draußen 🎆" to "Silvester drinnen 🛋️",
+                "Vergangenheit besuchen ⏪" to "Zukunft sehen ⏩",
+                "Fliegen können 🕊️" to "Gedanken lesen 🧠",
+                "Reich & gestresst 💰" to "Entspannt & genug 😌",
+                "Immer Sommer ☀️" to "Alle 4 Jahreszeiten 🍂",
+                "Handy weg für 1 Woche 📵" to "Kein Zucker für 1 Monat 🚫🍬",
+                "Konzert 🎸" to "Festival 🎪",
+                "Picknick 🧺" to "Rooftop-Bar 🍸",
+                "Neue Stadt jede Woche 🧳" to "Für immer Traumhaus 🏡",
+                "Erster Kuss nochmal 💋" to "Erstes Date nochmal 🌹",
+                "Händchen halten 🤝" to "Arm um die Schulter 💪",
+                "Lange Sprachnachricht 🎙️" to "Kurzer Anruf 📞",
+                "Gemeinsam duschen 🚿" to "Gemeinsam kochen 🍳",
+                "Frühstück ans Bett bringen 🥐" to "Frühstück ans Bett bekommen 😌",
+                "Peinlich tanzen in der Öffentlichkeit 💃" to "Peinlich singen in der Öffentlichkeit 🎤",
+                "Partner-Look tragen 👕👕" to "Niemals Partner-Look 🙅",
+                "Streit sofort klären ⚡" to "Erstmal eine Nacht schlafen 😴",
+                "Immer die Wahrheit hören 💯" to "Kleine Notlügen erlaubt 🤫",
+                "Gedanken des Partners lesen 🧠" to "Eigene Gedanken verbergen 🔒",
+                "Zusammen einschlafen 🌙" to "Zusammen aufwachen ☀️",
+                "Doppeldate 👥" to "Nur wir zwei 💑",
+                "Überraschungsparty 🎉" to "Ruhiges Dinner 🕯️",
+                "Horrorfilm 😱" to "Liebeskomödie 🥰",
+                "Wochenende ohne Pläne 🛋️" to "Wochenende voll verplant 📅",
+                "Geschenk selbst gemacht 🎨" to "Geschenk gekauft 🎁",
+                "Immer 10 Min zu früh ⏰" to "Immer 10 Min zu spät 🏃",
+                "Fenster auf beim Schlafen 🌬️" to "Fenster zu 🔒",
+                "Große Hochzeit 💒" to "Heimlich heiraten ✈️",
+                "Serie zusammen suchten 📺" to "Jeder sein eigenes Ding 🎧",
+                "Warme Decke teilen 🛏️" to "Jeder seine eigene Decke 😤",
+                "Beim Essen teilen 🍴" to "Finger weg von meinem Teller! 🚫",
+                "Karaoke-Duett 🎶" to "Tanz-Battle 🕺",
+                "Altes Foto-Album 📔" to "Neues Fotoshooting 📸",
+                "Geheimen Handshake 🤜" to "Geheimes Codewort 🗝️",
+                "Zelten im Garten ⛺" to "Matratze im Wohnzimmer 🛋️",
+                "Ohne Musik leben 🔇" to "Ohne Serien leben 📵",
+                "Immer Winter-Kuscheln ❄️" to "Immer Sommer-Abende 🌅",
+                "Zusammen Sport 🏋️" to "Zusammen faulenzen 🦥",
+                "Liebesbrief bekommen 💌" to "Playlist bekommen 🎧",
+                "Perfektes erstes Date nochmal 🌹" to "Sneak Peek auf uns in 20 Jahren 🔮"
+            )
+        ),
+
         // ★ Zuhause & Alltag
         QuestionPack(
             id = "zuhause",

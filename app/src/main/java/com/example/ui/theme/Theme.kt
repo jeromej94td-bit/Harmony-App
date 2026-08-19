@@ -22,16 +22,16 @@ data class HarmonyColors(
 )
 
 val DarkHarmonyColors = HarmonyColors(
-  bg = Color(0xFF0B050A),
-  bgGradientStart = Color(0xFF1E0E1A),
-  bgGradientMid = Color(0xFF150912),
-  bgGradientEnd = Color(0xFF0F060C),
-  surface = Color(0xFF241522),
-  surface2 = Color(0xFF2E1B2B),
-  line = Color(0x12FFFFFF),
-  text = Color(0xFFF7EAF1),
-  muted = Color(0xFFAC8A9B),
-  navInactive = Color(0xFF7C5C6C)
+  bg = Color(0xFF08030F),
+  bgGradientStart = Color(0xFF160A24),
+  bgGradientMid = Color(0xFF0D0618),
+  bgGradientEnd = Color(0xFF05020B),
+  surface = Color(0xFF171022),
+  surface2 = Color(0xFF241536),
+  line = Color(0x26E6C8FF),
+  text = Color(0xFFF9F4FF),
+  muted = Color(0xFFB7A7C8),
+  navInactive = Color(0xFF8D7D9D)
 )
 
 val LightHarmonyColors = HarmonyColors(

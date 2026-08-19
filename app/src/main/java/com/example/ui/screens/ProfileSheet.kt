@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -26,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -46,11 +48,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import coil.compose.AsyncImage
 import com.example.data.model.ProfileEntity
 import com.example.ui.AppLanguage
 import com.example.ui.TranslationCatalog
@@ -66,24 +70,20 @@ import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 import java.text.SimpleDateFormat
+import java.io.File
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileSheet(
     profile: ProfileEntity,
-    coachLoading: Boolean,
-    coachResult: String?,
-    dateIdeasLoading: Boolean,
-    dateIdeasResult: String?,
     isEditProfileOpen: Boolean,
     onDismiss: () -> Unit,
     onToggleSimulator: () -> Unit,
     onOpenEditProfile: () -> Unit,
     onCloseEditProfile: () -> Unit,
     onSaveEditProfile: (String, String, Long) -> Unit,
-    onRunCoach: () -> Unit,
-    onRunDateIdeas: (String) -> Unit,
+    onUpdateAvatar: (Uri, Boolean) -> Unit,
     onOpenDevStudio: (() -> Unit)? = null,
     isDarkMode: Boolean = true,
     onToggleDarkMode: ((Boolean) -> Unit)? = null,
@@ -94,8 +94,13 @@ fun ProfileSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scrollState = rememberScrollState()
 
-    var dateWishText by remember { mutableStateOf("") }
     var isLanguageExpanded by remember { mutableStateOf(false) }
+    val userAvatarPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { onUpdateAvatar(it, true) }
+    }
+    val partnerAvatarPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { onUpdateAvatar(it, false) }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -116,8 +121,22 @@ fun ProfileSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "💞", fontSize = 34.sp)
-                Spacer(modifier = Modifier.height(4.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    ProfileAvatar(
+                        path = profile.userAvatarPath,
+                        fallback = profile.userName.take(1),
+                        label = tr("Dein Bild", "Your photo"),
+                        onClick = { userAvatarPicker.launch("image/*") }
+                    )
+                    Text(text = "💕", fontSize = 24.sp)
+                    ProfileAvatar(
+                        path = profile.partnerAvatarPath,
+                        fallback = profile.partnerName.take(1),
+                        label = tr("Partnerbild", "Partner photo"),
+                        onClick = { partnerAvatarPicker.launch("image/*") }
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "${profile.userName} & ${profile.partnerName}",
                     fontSize = 18.sp,
@@ -133,136 +152,6 @@ fun ProfileSheet(
             }
 
             Spacer(modifier = Modifier.height(18.dp))
-
-            // AI Coach Card
-            HarmonyCard {
-                Column {
-                    Text(
-                        text = tr("✨ KI-Beziehungscoach", "✨ AI relationship coach"),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HarmonyText
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = tr("Analysiert eure Antworten & Chats nach Gottman und GFK.", "Analyzes your answers and chats using Gottman and NVC."),
-                        fontSize = 12.5.sp,
-                        color = HarmonyMuted,
-                        lineHeight = 16.sp
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Button(
-                        onClick = onRunCoach,
-                        enabled = !coachLoading,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp)
-                            .testTag("run_coach_button"),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                    ) {
-                        if (coachLoading) {
-                            CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = tr("Analysiere eure Muster...", "Analyzing your patterns..."), color = Color.White, fontSize = 13.5.sp)
-                        } else {
-                            Text(text = tr("Analyse starten", "Start analysis"), color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-
-                    if (coachResult != null) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(Color.White.copy(alpha = 0.05f))
-                                .border(1.dp, HarmonyLine, RoundedCornerShape(14.dp))
-                                .padding(14.dp)
-                        ) {
-                            Text(
-                                text = coachResult,
-                                fontSize = 13.5.sp,
-                                color = HarmonyText,
-                                lineHeight = 20.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // AI Date Ideas Card
-            HarmonyCard {
-                Column {
-                    Text(
-                        text = tr("💡 KI-Date-Ideen", "💡 AI date ideas"),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HarmonyText
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    OutlinedTextField(
-                        value = dateWishText,
-                        onValueChange = { dateWishText = it },
-                        placeholder = { Text(tr("Wünsche? z.B. günstig, draußen", "Wishes? e.g. affordable, outdoors"), color = HarmonyMuted) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("date_wishes_input"),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = HarmonyPink,
-                            unfocusedBorderColor = HarmonyLine,
-                            focusedTextColor = HarmonyText,
-                            unfocusedTextColor = HarmonyText
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Button(
-                        onClick = { onRunDateIdeas(dateWishText) },
-                        enabled = !dateIdeasLoading,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp)
-                            .testTag("run_date_ideas_button"),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                    ) {
-                        if (dateIdeasLoading) {
-                            CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = tr("Sammle Ideen...", "Collecting ideas..."), color = Color.White, fontSize = 13.5.sp)
-                        } else {
-                            Text(text = tr("Ideen generieren", "Generate ideas"), color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-
-                    if (dateIdeasResult != null) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(Color.White.copy(alpha = 0.05f))
-                                .border(1.dp, HarmonyLine, RoundedCornerShape(14.dp))
-                                .padding(14.dp)
-                        ) {
-                            Text(
-                                text = dateIdeasResult,
-                                fontSize = 13.5.sp,
-                                color = HarmonyText,
-                                lineHeight = 20.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             // Profile Details Card
             HarmonyCard {
@@ -662,5 +551,48 @@ fun ProfileRow(label: String, value: String) {
     ) {
         Text(text = label, fontSize = 13.5.sp, color = HarmonyText)
         Text(text = value, fontSize = 13.sp, color = HarmonyMuted)
+    }
+}
+
+@Composable
+private fun ProfileAvatar(
+    path: String?,
+    fallback: String,
+    label: String,
+    onClick: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier
+                .size(74.dp)
+                .clip(CircleShape)
+                .background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPurple)))
+                .border(2.dp, Color.White.copy(alpha = 0.72f), CircleShape)
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center
+        ) {
+            if (path != null) {
+                AsyncImage(
+                    model = File(path),
+                    contentDescription = label,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Text(fallback.uppercase(), color = Color.White, fontSize = 27.sp, fontWeight = FontWeight.Black)
+            }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(25.dp)
+                    .background(HarmonyPink, CircleShape)
+                    .border(1.dp, Color.White, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("＋", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Black)
+            }
+        }
+        Spacer(Modifier.height(4.dp))
+        Text(label, color = HarmonyMuted, fontSize = 10.sp)
     }
 }
