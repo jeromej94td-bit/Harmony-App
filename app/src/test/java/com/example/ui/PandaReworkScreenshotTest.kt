@@ -17,6 +17,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,9 @@ import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.EitherOrAnswerCodec
 import com.example.data.model.HarmonyPacksData
 import com.example.data.model.ProfileEntity
+import com.example.data.model.Question
+import com.example.data.model.QuestionPack
+import com.example.data.model.SharedPicEntity
 import com.example.ui.ActivePackRun
 import com.example.ui.components.AmbientBackground
 import com.example.ui.components.HarmonyBottomNav
@@ -36,6 +40,7 @@ import com.example.ui.screens.CategoryRailCard
 import com.example.ui.screens.GamesScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.PandaEitherOrScreen
+import com.example.ui.screens.PaddingPackCard
 import com.example.ui.screens.ProfileSheet
 import com.example.ui.screens.QuizRunnerScreen
 import com.example.ui.theme.HarmonyTheme
@@ -47,6 +52,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -55,6 +61,84 @@ class PandaReworkScreenshotTest {
     @get:Rule val composeTestRule = createComposeRule()
 
     private val profile = ProfileEntity(userName = "Ralf", partnerName = "J")
+    private val pandaImagePath = File("src/main/res/drawable-nodpi/panda_thinking_harmony.png").absolutePath
+
+    @Test
+    fun allowedCategoryIconsDraft() {
+        composeTestRule.mainClock.autoAdvance = false
+        val categoryIds = listOf("zeich", "zust", "lieber", "foto", "tief", "reden")
+        composeTestRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                AmbientBackground {
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 100.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        categoryIds.chunked(3).forEach { rowIds ->
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                rowIds.forEach { id ->
+                                    CategoryRailCard(HarmonyPacksData.CATEGORIES.first { it.id == id }, onClick = {})
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        composeTestRule.mainClock.advanceTimeBy(2_800)
+        composeTestRule.onRoot().captureRoboImage(filePath = "build/current-rework-preview/01-neue-spiele-icons.png")
+    }
+
+    @Test
+    fun unansweredQuestionsDraft() {
+        composeTestRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                AmbientBackground {
+                    GamesScreen(
+                        answers = listOf(AnswerEntity("zuhause", 0, "Antwort")),
+                        packFilter = "all",
+                        onSetFilter = {},
+                        onCategoryClick = {},
+                        onTopicClick = {},
+                        onStartPack = {}
+                    )
+                }
+            }
+        }
+        composeTestRule.onNodeWithText("Unbeantwortet").performClick()
+        composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/current-rework-preview/02-unbeantwortete-fragen.png")
+    }
+
+    @Test
+    fun videogamePackControllerDraft() {
+        val pack = QuestionPack(
+            id = "cj_videogame_quiz",
+            title = "Bist du ein Videospiel-Guru?",
+            tags = listOf("games", "quiz"),
+            cat = "zust",
+            topic = "hobbys",
+            type = "quiz",
+            questions = listOf(Question("Welches Spiel passt zu dir?"))
+        )
+        composeTestRule.mainClock.autoAdvance = false
+        composeTestRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                AmbientBackground {
+                    Box(Modifier.fillMaxSize().padding(horizontal = 20.dp), contentAlignment = Alignment.Center) {
+                        PaddingPackCard(
+                            appLanguage = "de",
+                            pack = pack,
+                            answers = emptyList(),
+                            onStartPack = {},
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
+        composeTestRule.mainClock.advanceTimeBy(2_100)
+        composeTestRule.onRoot().captureRoboImage(filePath = "build/current-rework-preview/05-videospiel-controller.png")
+    }
 
     @Test
     fun pandaCategoriesDraft() {
@@ -182,13 +266,14 @@ class PandaReworkScreenshotTest {
 
     @Test
     fun homeDialogsDrafts() {
+        composeTestRule.mainClock.autoAdvance = false
         composeTestRule.setContent {
             HarmonyTheme(darkTheme = true) {
                 AmbientBackground {
                     HomeScreen(
                         profile = profile,
                         answers = listOf(AnswerEntity("zuhause", 0, "Die Gemütlichkeit und Ruhe")),
-                        sharedPics = emptyList(),
+                        sharedPics = listOf(SharedPicEntity(filePath = pandaImagePath, caption = "Du bist mein Lieblingsmensch 💕")),
                         stats = CoupleStatsEntity(),
                         onStartPack = {},
                         onAddSharedPictures = { _, _ -> },
@@ -199,10 +284,8 @@ class PandaReworkScreenshotTest {
             }
         }
         composeTestRule.onNodeWithText("Status").performClick()
-        composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/panda-rework-preview/06-picshare-status.png")
-        composeTestRule.onNodeWithText("Fertig").performClick()
-        composeTestRule.onNodeWithText("Liste öffnen").performClick()
-        composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/panda-rework-preview/07-antwortliste.png")
+        composeTestRule.mainClock.advanceTimeBy(100)
+        composeTestRule.onNodeWithTag("picshare_manager_dialog").captureRoboImage(filePath = "build/current-rework-preview/03-picshare-widget-einstellungen.png")
     }
 
     @Test
@@ -225,6 +308,26 @@ class PandaReworkScreenshotTest {
             }
         }
         composeTestRule.onRoot().captureRoboImage(filePath = "build/panda-rework-preview/04-chat-bilder-melden.png")
+    }
+
+    @Test
+    fun chatImageFullscreenDraft() {
+        composeTestRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                Box(Modifier.fillMaxSize().background(Color(0xFF100519))) {
+                    ChatScreen(
+                        messages = listOf(ChatMessageEntity(91, "them", "Für dich 💕", imagePath = pandaImagePath)),
+                        partnerName = "J",
+                        partnerAvatarPath = null,
+                        onSendMessage = {},
+                        onSendImage = {},
+                        onReportUser = {}
+                    )
+                }
+            }
+        }
+        composeTestRule.onNodeWithTag("chat_image_91").performClick()
+        composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/current-rework-preview/04-chat-vollbild.png")
     }
 
     @Test

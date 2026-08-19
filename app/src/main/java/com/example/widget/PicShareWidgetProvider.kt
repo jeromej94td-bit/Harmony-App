@@ -6,8 +6,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
+import android.view.View
 import android.widget.RemoteViews
 import com.example.MainActivity
 import com.example.R
@@ -22,21 +23,38 @@ class PicShareWidgetProvider : AppWidgetProvider() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val pictures = HarmonyDatabase.getInstance(context).sharedPicDao().getWidgetPics()
-                val rotationSlot = (System.currentTimeMillis() / ROTATION_INTERVAL_MS).toInt()
-                val latest = if (pictures.isEmpty()) null else pictures[Math.floorMod(rotationSlot, pictures.size)]
+                val settings = PicShareWidgetPreferences.load(context)
                 appWidgetIds.forEach { widgetId ->
                     val views = RemoteViews(context.packageName, R.layout.widget_picshare)
-                    if (latest != null) {
-                        decodeWidgetBitmap(latest.filePath)?.let { views.setImageViewBitmap(R.id.picshare_widget_image, it) }
-                        views.setTextViewText(R.id.picshare_widget_caption, latest.caption.ifBlank { "Ein Bild nur für euch 💕" })
+                    val serviceIntent = Intent(context, PicShareRemoteViewsService::class.java).apply {
+                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                        data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+                    }
+                    views.setRemoteAdapter(R.id.picshare_widget_flipper, serviceIntent)
+                    views.setEmptyView(R.id.picshare_widget_flipper, R.id.picshare_widget_empty_view)
+                    views.setInt(R.id.picshare_widget_flipper, "setFlipInterval", ROTATION_INTERVAL_MS)
+                    views.setBoolean(R.id.picshare_widget_flipper, "setAutoStart", pictures.size > 1)
+
+                    if (pictures.isNotEmpty()) {
+                        val fallbackCaption = pictures.firstNotNullOfOrNull { it.caption.takeIf(String::isNotBlank) }
+                        views.setTextViewText(
+                            R.id.picshare_widget_caption,
+                            settings.caption.ifBlank { fallbackCaption ?: "Ein Bild nur für euch 💕" }
+                        )
                         views.setTextViewText(
                             R.id.picshare_widget_status,
-                            if (pictures.size > 1) "Harmony PicShare · ${pictures.size} Bilder rotieren" else "Harmony PicShare · bereit"
+                            if (pictures.size > 1) "Harmony PicShare · Wechsel alle 6 Sek." else "Harmony PicShare · bereit"
                         )
                     } else {
                         views.setTextViewText(R.id.picshare_widget_caption, "Öffne Harmony und füge euer erstes Bild hinzu")
                         views.setTextViewText(R.id.picshare_widget_status, "Harmony PicShare")
                     }
+                    views.setViewVisibility(R.id.picshare_widget_caption, if (settings.showCaption) View.VISIBLE else View.GONE)
+                    views.setViewVisibility(R.id.picshare_widget_status, if (settings.showStatus) View.VISIBLE else View.GONE)
+                    views.setViewVisibility(
+                        R.id.picshare_widget_text_panel,
+                        if (settings.showCaption || settings.showStatus) View.VISIBLE else View.GONE
+                    )
                     val openIntent = Intent(context, MainActivity::class.java)
                     val pendingIntent = PendingIntent.getActivity(
                         context,
@@ -46,6 +64,7 @@ class PicShareWidgetProvider : AppWidgetProvider() {
                     )
                     views.setOnClickPendingIntent(R.id.picshare_widget_root, pendingIntent)
                     manager.updateAppWidget(widgetId, views)
+                    manager.notifyAppWidgetViewDataChanged(widgetId, R.id.picshare_widget_flipper)
                 }
             } finally {
                 pendingResult.finish()
@@ -54,15 +73,7 @@ class PicShareWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        private const val ROTATION_INTERVAL_MS = 30L * 60L * 1_000L
-
-        private fun decodeWidgetBitmap(path: String): android.graphics.Bitmap? {
-            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeFile(path, bounds)
-            var sample = 1
-            while (bounds.outWidth / sample > 900 || bounds.outHeight / sample > 700) sample *= 2
-            return BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = sample })
-        }
+        private const val ROTATION_INTERVAL_MS = 6_000
 
         fun requestPin(context: Context): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false

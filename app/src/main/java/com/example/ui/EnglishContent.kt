@@ -62,6 +62,7 @@ val EXACT_ENGLISH_CONTENT: Map<String, String> = mapOf(
     "Bali, Indonesien" to "Bali, Indonesia",
     "Banane" to "Banana",
     "Beantwortet" to "Answered",
+    "Unbeantwortet" to "Unanswered",
     "Beantwortet Fragen gleichzeitig — Antworten werden erst sichtbar, wenn ihr beide fertig seid." to "Answer questions simultaneously — answers will only appear once both of you are done.",
     "Beantwortete Fragen" to "Questions answered",
     "Bearbeiten" to "Edit",

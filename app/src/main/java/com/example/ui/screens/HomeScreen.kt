@@ -38,6 +38,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,7 +70,7 @@ import com.example.ui.components.AuroraGlassSectionTitle
 import com.example.ui.components.AuroraProgressBar
 import com.example.ui.components.CategoryTag
 import com.example.ui.components.HarmonyCard
-import com.example.ui.components.HarmonyTopicIcon
+import com.example.ui.components.HarmonyPackIcon
 import com.example.ui.theme.HarmonyLine
 import com.example.ui.theme.HarmonyMuted
 import com.example.ui.theme.HarmonyPink
@@ -80,6 +82,9 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 import com.example.ui.theme.topicAccentColor
 import com.example.util.LanguageManager
+import com.example.widget.PicShareWidgetPreferences
+import com.example.widget.PicShareWidgetProvider
+import com.example.widget.PicShareWidgetSettings
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -222,6 +227,14 @@ private fun PicShareHomeCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text("PicShare für euch", color = HarmonyText, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
                     Text("${pics.size} Bilder · auf diesem Gerät bereit", color = HarmonyMuted, fontSize = 11.5.sp)
+                    pics.firstOrNull()?.caption?.takeIf { it.isNotBlank() }?.let { currentCaption ->
+                        Text(
+                            "„$currentCaption“",
+                            color = HarmonyPinkSoft,
+                            fontSize = 10.5.sp,
+                            maxLines = 1
+                        )
+                    }
                 }
                 PicPreviewStack(pics.take(3))
             }
@@ -277,61 +290,147 @@ private fun PicShareManagerDialog(
     onPinWidget: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val context = LocalContext.current
     val latest = pics.firstOrNull()
-    var caption by remember(latest?.id) { mutableStateOf(latest?.caption.orEmpty()) }
+    val savedSettings = remember { PicShareWidgetPreferences.load(context) }
+    var caption by remember(latest?.id) {
+        mutableStateOf(savedSettings.caption.ifBlank { latest?.caption.orEmpty() })
+    }
     var target by remember(latest?.id) { mutableStateOf(latest?.target ?: "partner_home") }
+    var showCaption by remember { mutableStateOf(savedSettings.showCaption) }
+    var showStatus by remember { mutableStateOf(savedSettings.showStatus) }
+    var shufflePictures by remember { mutableStateOf(savedSettings.shufflePictures) }
+    val selectedCount = pics.count { it.selectedForWidget }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("PicShare Status", fontWeight = FontWeight.ExtraBold) },
-        text = {
+        modifier = Modifier.testTag("picshare_manager_dialog"),
+        title = {
             Column {
+                Text("PicShare Widget", fontWeight = FontWeight.ExtraBold)
+                Text("Kompakt einrichten · Wechsel alle 6 Sekunden", color = HarmonyMuted, fontSize = 11.sp)
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 540.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("●", color = Color(0xFF65E8B2), fontSize = 19.sp)
                     Spacer(Modifier.width(7.dp))
                     Column {
-                        Text("Auf diesem Gerät bereit", fontWeight = FontWeight.Bold)
-                        Text("${profile.partnerName}: wartet auf Verknüpfung", color = HarmonyMuted, fontSize = 11.sp)
+                        Text("$selectedCount von ${pics.size} Bildern im Widget", fontWeight = FontWeight.Bold)
+                        Text("${profile.partnerName}: Verknüpfung folgt später", color = HarmonyMuted, fontSize = 11.sp)
                     }
                 }
                 if (pics.isNotEmpty()) {
-                    Spacer(Modifier.height(14.dp))
+                    Spacer(Modifier.height(12.dp))
+                    Text("Bilder auswählen", color = HarmonyText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text("Antippen, um ein Bild ein- oder auszublenden", color = HarmonyMuted, fontSize = 10.5.sp)
+                    Spacer(Modifier.height(7.dp))
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         pics.take(8).forEach { pic ->
-                            AsyncImage(
-                                model = File(pic.filePath),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.size(72.dp).clip(RoundedCornerShape(14.dp)).border(1.dp, HarmonyLine, RoundedCornerShape(14.dp))
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(70.dp)
+                                    .clip(RoundedCornerShape(14.dp))
+                                    .clickable { onUpdatePicture(pic.copy(selectedForWidget = !pic.selectedForWidget)) }
+                                    .border(
+                                        if (pic.selectedForWidget) 2.dp else 1.dp,
+                                        if (pic.selectedForWidget) HarmonyPink else HarmonyLine,
+                                        RoundedCornerShape(14.dp)
+                                    )
+                            ) {
+                                AsyncImage(
+                                    model = File(pic.filePath),
+                                    contentDescription = "PicShare Bild auswählen",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                                if (pic.selectedForWidget) {
+                                    Box(
+                                        Modifier
+                                            .align(Alignment.TopEnd)
+                                            .padding(5.dp)
+                                            .size(20.dp)
+                                            .background(HarmonyPink, CircleShape),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text("✓", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Black)
+                                    }
+                                }
+                            }
                         }
                     }
                     Spacer(Modifier.height(12.dp))
                     OutlinedTextField(
                         value = caption,
                         onValueChange = { caption = it },
-                        label = { Text("Bildtext") },
+                        label = { Text("Widget-Text") },
+                        supportingText = { Text("Dieser Text gilt für alle rotierenden Bilder.", fontSize = 10.sp) },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = HarmonyPink)
+                        singleLine = false,
+                        maxLines = 2,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = HarmonyPink,
+                            unfocusedBorderColor = HarmonyLine,
+                            focusedTextColor = HarmonyText,
+                            unfocusedTextColor = HarmonyText
+                        ),
+                        shape = RoundedCornerShape(15.dp)
                     )
-                    Spacer(Modifier.height(9.dp))
+                    Spacer(Modifier.height(5.dp))
+                    PicShareSettingToggle("Widget-Text anzeigen", showCaption) { showCaption = it }
+                    PicShareSettingToggle("Harmony-Statuszeile anzeigen", showStatus) { showStatus = it }
+                    PicShareSettingToggle("Bildreihenfolge mischen", shufflePictures) { shufflePictures = it }
+                    Spacer(Modifier.height(8.dp))
                     Text("Ziel nach der Verknüpfung", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                         TargetChip("Startbildschirm", target == "partner_home") { target = "partner_home" }
                         TargetChip("Sperrbildschirm", target == "partner_lock") { target = "partner_lock" }
                     }
-                    Spacer(Modifier.height(9.dp))
-                    TextButton(onClick = {
-                        latest?.let { onUpdatePicture(it.copy(caption = caption, target = target)) }
-                    }) { Text("Änderungen speichern", color = HarmonyPink, fontWeight = FontWeight.Bold) }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    TextButton(onClick = onAddPictures) { Text("Mehrere Bilder hinzufügen") }
-                    TextButton(onClick = onPinWidget) { Text("Widget hinzufügen") }
+                Spacer(Modifier.height(8.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    CompactAction("Bilder", Icons.Default.AddPhotoAlternate, onAddPictures, Modifier.weight(1f))
+                    CompactAction("Widget", Icons.Default.Widgets, onPinWidget, Modifier.weight(1f))
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Fertig", color = HarmonyPink) } }
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val settings = PicShareWidgetSettings(
+                        caption = caption,
+                        showCaption = showCaption,
+                        showStatus = showStatus,
+                        shufflePictures = shufflePictures
+                    )
+                    PicShareWidgetPreferences.save(context, settings)
+                    latest?.let { onUpdatePicture(it.copy(caption = caption.trim(), target = target)) }
+                    PicShareWidgetProvider.refreshAll(context)
+                    onDismiss()
+                },
+                modifier = Modifier.testTag("save_picshare_widget_settings")
+            ) { Text("Speichern", color = HarmonyPink, fontWeight = FontWeight.ExtraBold) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Abbrechen", color = HarmonyMuted) } }
     )
+}
+
+@Composable
+private fun PicShareSettingToggle(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 1.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, color = HarmonyText, fontSize = 11.5.sp, modifier = Modifier.weight(1f))
+        Switch(checked = checked, onCheckedChange = onCheckedChange, modifier = Modifier.size(width = 48.dp, height = 30.dp))
+    }
 }
 
 @Composable
@@ -455,7 +554,7 @@ fun PaddingPackCard(
             Row { pack.tags.forEach { tag -> CategoryTag(tag, Modifier.padding(end = 6.dp)) } }
             Spacer(Modifier.height(6.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                HarmonyTopicIcon(pack.topic, topicAccent, Modifier.size(38.dp))
+                HarmonyPackIcon(pack = pack, accent = topicAccent, size = 42.dp)
                 Spacer(Modifier.width(10.dp))
                 Text(pack.title, color = HarmonyText, fontSize = 16.5.sp, fontWeight = FontWeight.Bold, lineHeight = 22.sp, modifier = Modifier.weight(1f))
             }

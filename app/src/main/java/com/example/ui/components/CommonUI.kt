@@ -44,6 +44,12 @@ import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Castle
+import androidx.compose.material.icons.filled.Celebration
+import androidx.compose.material.icons.filled.ChildCare
+import androidx.compose.material.icons.filled.Diamond
+import androidx.compose.material.icons.filled.Icecream
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -52,7 +58,10 @@ import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -94,6 +103,7 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
 import com.example.ui.theme.HarmonyText
 import com.example.ui.theme.topicAccentColor
+import com.example.data.model.QuestionPack
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -504,6 +514,99 @@ fun HarmonyTopicIcon(
                 modifier = Modifier.size(size * 0.52f)
             )
         }
+    }
+}
+
+/**
+ * A compact icon for an individual question pack. This is intentionally separate from
+ * [HarmonyTopicIcon], because the large topic cards keep their established symbols while
+ * pack cards can communicate their actual subject (for example a controller for gaming).
+ */
+@Composable
+fun HarmonyPackIcon(
+    pack: QuestionPack,
+    accent: Color,
+    modifier: Modifier = Modifier,
+    size: Dp = 42.dp
+) {
+    val searchable = remember(pack.id, pack.title, pack.tags, pack.cat, pack.topic) {
+        listOf(pack.id, pack.title, pack.cat, pack.topic, *pack.tags.toTypedArray())
+            .joinToString(" ")
+            .lowercase(Locale.GERMAN)
+    }
+    val icon = when {
+        listOf("videospiel", "video game", "gaming", "gamer").any(searchable::contains) -> Icons.Default.SportsEsports
+        listOf("eis", "gourmet").any(searchable::contains) -> Icons.Default.Icecream
+        listOf("hogwarts", "schloss", "haus stolz").any(searchable::contains) -> Icons.Default.Castle
+        listOf("disney", "feenstaub").any(searchable::contains) -> Icons.Default.AutoAwesome
+        listOf("entertainment", "universal", "film", "serie", "kino").any(searchable::contains) -> Icons.Default.Movie
+        listOf("party", "hochzeit").any(searchable::contains) -> Icons.Default.Celebration
+        listOf("ring", "antrag", "verlob").any(searchable::contains) -> Icons.Default.Diamond
+        listOf("haustier", "tier").any(searchable::contains) -> Icons.Default.Pets
+        listOf("kind", "familie").any(searchable::contains) -> Icons.Default.ChildCare
+        listOf("reise", "urlaub", "stadt").any(searchable::contains) -> Icons.Default.Flight
+        listOf("essen", "genuss", "gericht", "restaurant").any(searchable::contains) -> Icons.Default.Restaurant
+        listOf("foto", "schnapp", "bild").any(searchable::contains) || pack.cat == "foto" -> Icons.Default.CameraAlt
+        listOf("geld", "finanz", "kauf").any(searchable::contains) -> Icons.Default.Savings
+        listOf("haus", "zuhause", "alltag").any(searchable::contains) -> Icons.Default.Home
+        pack.cat == "zeich" -> Icons.Default.Palette
+        pack.cat == "zust" -> Icons.Default.CheckCircle
+        pack.cat == "tief" || listOf("gespräch", "reden", "meinung").any(searchable::contains) -> Icons.Default.QuestionAnswer
+        listOf("liebe", "nähe", "intim", "ehepaar").any(searchable::contains) -> Icons.Default.Favorite
+        else -> when (pack.topic) {
+            "moral" -> Icons.Default.AccountBalance
+            "geld" -> Icons.Default.Savings
+            "sex" -> Icons.Default.LocalFireDepartment
+            "reisen" -> Icons.Default.Flight
+            "essen" -> Icons.Default.Restaurant
+            "filme_serien" -> Icons.Default.Movie
+            "familie" -> Icons.Default.People
+            "hobbys" -> Icons.Default.Palette
+            else -> Icons.Default.Psychology
+        }
+    }
+    val motion = rememberInfiniteTransition(label = "pack_icon_${pack.id}")
+    val glow by motion.animateFloat(
+        initialValue = 0.42f,
+        targetValue = 0.94f,
+        animationSpec = infiniteRepeatable(tween(1900, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        label = "pack_icon_glow_${pack.id}"
+    )
+    val tilt by motion.animateFloat(
+        initialValue = -2.4f,
+        targetValue = 2.4f,
+        animationSpec = infiniteRepeatable(tween(3100, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        label = "pack_icon_tilt_${pack.id}"
+    )
+    Box(
+        modifier = modifier
+            .size(size)
+            .graphicsLayer {
+                rotationZ = tilt
+                scaleX = 0.97f + glow * 0.045f
+                scaleY = 0.97f + glow * 0.045f
+            }
+            .clip(CircleShape)
+            .background(
+                Brush.radialGradient(
+                    listOf(Color.White.copy(alpha = glow * 0.18f), accent.copy(alpha = glow * 0.68f), accent.copy(alpha = 0.10f))
+                )
+            )
+            .border(
+                1.2.dp,
+                Brush.sweepGradient(listOf(accent, Color.White.copy(alpha = glow), HarmonyPink, accent)),
+                CircleShape
+            )
+            .testTag("pack_icon_${pack.id}"),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(size * 0.52f))
+        Icon(
+            Icons.Default.AutoAwesome,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = glow * 0.72f),
+            modifier = Modifier.align(Alignment.TopEnd).offset(x = (-2).dp, y = 2.dp).size(size * 0.22f)
+        )
     }
 }
 

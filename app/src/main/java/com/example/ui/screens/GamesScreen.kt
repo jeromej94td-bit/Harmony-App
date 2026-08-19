@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -44,9 +45,11 @@ import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import com.example.util.LanguageManager
 import androidx.compose.runtime.LaunchedEffect
@@ -112,6 +115,7 @@ fun GamesScreen(
 
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    var showUnansweredQuestions by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -304,7 +308,10 @@ fun GamesScreen(
         // Filter Chips
         FilterChipsRow(
             selectedFilter = packFilter,
-            onFilterSelected = onSetFilter,
+            onFilterSelected = { filter ->
+                onSetFilter(filter)
+                if (filter == "open") showUnansweredQuestions = true
+            },
             appLanguage = appLanguage,
             modifier = Modifier.padding(horizontal = 18.dp)
         )
@@ -478,6 +485,18 @@ fun GamesScreen(
             }
         }
     }
+
+    if (showUnansweredQuestions) {
+        UnansweredQuestionsDialog(
+            answers = answers,
+            appLanguage = appLanguage,
+            onStartPack = { packId ->
+                showUnansweredQuestions = false
+                onStartPack(packId)
+            },
+            onDismiss = { showUnansweredQuestions = false }
+        )
+    }
 }
 
 @Composable
@@ -493,7 +512,7 @@ fun FilterChipsRow(
     ) {
         val filters = listOf(
             Triple("all", LanguageManager.tr("Alle", appLanguage), Icons.Default.Apps),
-            Triple("open", LanguageManager.tr("Du bist dran", appLanguage), Icons.Default.RadioButtonUnchecked),
+            Triple("open", LanguageManager.tr("Unbeantwortet", appLanguage), Icons.Default.RadioButtonUnchecked),
             Triple("done", LanguageManager.tr("Beantwortet", appLanguage), Icons.Default.CheckCircle)
         )
 
@@ -533,6 +552,119 @@ fun FilterChipsRow(
             }
         }
     }
+}
+
+private data class UnansweredQuestionItem(
+    val packId: String,
+    val packTitle: String,
+    val categoryName: String,
+    val topicId: String,
+    val questionIndex: Int,
+    val question: String
+)
+
+@Composable
+private fun UnansweredQuestionsDialog(
+    answers: List<AnswerEntity>,
+    appLanguage: String,
+    onStartPack: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val unanswered = remember(answers, appLanguage) {
+        val answeredKeys = answers.mapTo(hashSetOf()) { it.packId to it.questionIndex }
+        HarmonyPacksData.PACKS.flatMap { rawPack ->
+            val pack = LanguageManager.translatePack(rawPack, appLanguage)
+            val category = HarmonyPacksData.CATEGORIES
+                .firstOrNull { it.id == rawPack.cat }
+                ?.let { LanguageManager.translateCategory(it, appLanguage).name }
+                .orEmpty()
+            val total = if (pack.type == "tot") pack.pairs.size else pack.questions.size
+            (0 until total).mapNotNull { index ->
+                if ((rawPack.id to index) in answeredKeys) return@mapNotNull null
+                val questionText = if (pack.type == "tot") {
+                    pack.pairs.getOrNull(index)?.let { "${it.first}  ↔  ${it.second}" }
+                } else {
+                    pack.questions.getOrNull(index)?.q
+                } ?: return@mapNotNull null
+                UnansweredQuestionItem(
+                    packId = rawPack.id,
+                    packTitle = pack.title,
+                    categoryName = category,
+                    topicId = rawPack.topic,
+                    questionIndex = index,
+                    question = questionText
+                )
+            }
+        }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Column {
+                Text("Unbeantwortete Fragen", fontWeight = FontWeight.ExtraBold)
+                Text("${unanswered.size} Fragen warten auf euch", color = HarmonyMuted, fontSize = 12.sp)
+            }
+        },
+        text = {
+            if (unanswered.isEmpty()) {
+                Text("Ihr habt bereits alle Fragen beantwortet.", color = HarmonyMuted)
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 520.dp)
+                        .testTag("unanswered_questions_list"),
+                    verticalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    items(
+                        items = unanswered,
+                        key = { "${it.packId}-${it.questionIndex}" }
+                    ) { item ->
+                        val accent = topicAccentColor(item.topicId)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(17.dp))
+                                .background(
+                                    Brush.linearGradient(
+                                        listOf(accent.copy(alpha = 0.18f), HarmonyPurple.copy(alpha = 0.12f), HarmonySurface2)
+                                    )
+                                )
+                                .border(1.dp, accent.copy(alpha = 0.50f), RoundedCornerShape(17.dp))
+                                .clickable { onStartPack(item.packId) }
+                                .padding(12.dp)
+                                .testTag("unanswered_question_${item.packId}_${item.questionIndex}")
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    Modifier
+                                        .size(27.dp)
+                                        .clip(CircleShape)
+                                        .background(accent.copy(alpha = 0.28f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("${item.questionIndex + 1}", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                                }
+                                Spacer(Modifier.width(8.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(item.packTitle, color = accent, fontSize = 10.5.sp, fontWeight = FontWeight.ExtraBold)
+                                    if (item.categoryName.isNotBlank()) {
+                                        Text(item.categoryName, color = HarmonyMuted, fontSize = 9.5.sp)
+                                    }
+                                }
+                            }
+                            Spacer(Modifier.height(7.dp))
+                            Text(item.question, color = HarmonyText, fontSize = 13.5.sp, fontWeight = FontWeight.Bold, lineHeight = 18.sp)
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Schließen", color = HarmonyPink) }
+        }
+    )
 }
 
 @Composable

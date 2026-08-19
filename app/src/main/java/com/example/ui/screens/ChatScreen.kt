@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.AlertDialog
@@ -48,6 +50,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.example.data.model.ChatMessageEntity
 import com.example.ui.components.formatTimeOnly
@@ -74,6 +78,7 @@ fun ChatScreen(
 ) {
     var chatInputText by remember { mutableStateOf("") }
     var showReportDialog by remember { mutableStateOf(false) }
+    var fullscreenImagePath by remember { mutableStateOf<String?>(null) }
     val listState = rememberLazyListState()
     val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let(onSendImage)
@@ -104,7 +109,9 @@ fun ChatScreen(
             modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 18.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(9.dp)
         ) {
-            items(messages, key = { it.id }) { message -> ChatMessageBubble(message) }
+            items(messages, key = { it.id }) { message ->
+                ChatMessageBubble(message, onImageClick = { fullscreenImagePath = it })
+            }
         }
 
         Row(
@@ -172,10 +179,20 @@ fun ChatScreen(
             dismissButton = { TextButton(onClick = { showReportDialog = false }) { Text("Abbrechen") } }
         )
     }
+
+    fullscreenImagePath?.let { path ->
+        ChatImageFullscreen(
+            path = path,
+            onDismiss = { fullscreenImagePath = null }
+        )
+    }
 }
 
 @Composable
-fun ChatMessageBubble(message: ChatMessageEntity) {
+fun ChatMessageBubble(
+    message: ChatMessageEntity,
+    onImageClick: (String) -> Unit = {}
+) {
     val isMe = message.sender == "me"
     val bubbleShape = RoundedCornerShape(
         topStart = 19.dp,
@@ -198,7 +215,12 @@ fun ChatMessageBubble(message: ChatMessageEntity) {
                         model = File(path),
                         contentDescription = "Geteiltes Bild",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxWidth().height(196.dp).clip(RoundedCornerShape(15.dp))
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(196.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .clickable { onImageClick(path) }
+                            .testTag("chat_image_${message.id}")
                     )
                 }
                 if (message.text.isNotBlank()) {
@@ -211,6 +233,49 @@ fun ChatMessageBubble(message: ChatMessageEntity) {
                     color = Color.White.copy(alpha = 0.65f),
                     modifier = Modifier.align(Alignment.End)
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ChatImageFullscreen(path: String, onDismiss: () -> Unit) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xF20A0610))
+                .clickable(onClick = onDismiss)
+                .testTag("chat_image_fullscreen"),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncImage(
+                model = File(path),
+                contentDescription = "Geteiltes Bild im Vollbildmodus",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp, vertical = 54.dp)
+                    .clickable(enabled = false) {}
+            )
+            IconButton(
+                onClick = onDismiss,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(18.dp)
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.56f))
+                    .border(1.dp, Color.White.copy(alpha = 0.25f), CircleShape)
+                    .testTag("close_chat_image_fullscreen")
+            ) {
+                Icon(Icons.Default.Close, contentDescription = "Vollbild schließen", tint = Color.White)
             }
         }
     }
