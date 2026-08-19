@@ -5,11 +5,14 @@ import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.CancellationException
 import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.ResponseBody
+import kotlin.coroutines.resume
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 private const val MAX_PREVIEW_HTML_BYTES = 512 * 1024
 
@@ -41,20 +44,22 @@ class OkHttpLinkPreviewResolver(
         val normalizedUrl = normalizeHttpUrl(rawUrl)
             ?: return LinkPreviewResult.Failure(rawUrl.trim())
 
-        return try {
-            val request = Request.Builder().url(normalizedUrl).get().build()
-            callFactory.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    LinkPreviewResult.Failure(normalizedUrl)
-                } else {
-                    LinkPreviewResult.Success(
-                        parseLinkPreviewHtml(normalizedUrl, response.body?.readPreviewHtml().orEmpty())
-                    )
+        val request = Request.Builder().url(normalizedUrl).get().build()
+        return suspendCancellableCoroutine { continuation ->
+            val call = callFactory.newCall(request)
+            continuation.invokeOnCancellation { call.cancel() }
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    if (continuation.isActive) {
+                        continuation.resume(LinkPreviewResult.Failure(normalizedUrl))
+                    }
                 }
-            }
-        } catch (error: Throwable) {
-            if (error is CancellationException) throw error
-            LinkPreviewResult.Failure(normalizedUrl)
+
+                override fun onResponse(call: Call, response: Response) {
+                    val result = response.toPreviewResult(normalizedUrl)
+                    if (continuation.isActive) continuation.resume(result)
+                }
+            })
         }
     }
 }
@@ -83,9 +88,9 @@ fun normalizeHttpUrl(rawUrl: String): String? {
 
 fun parseLinkPreviewHtml(normalizedUrl: String, html: String): LinkPreview {
     val metadata = linkedMapOf<String, String>()
-    META_TAG_REGEX.findAll(html).forEach { match ->
+    metaTagsIn(html).forEach { tag ->
         val attributes = linkedMapOf<String, String>()
-        ATTRIBUTE_REGEX.findAll(match.value).forEach { attribute ->
+        ATTRIBUTE_REGEX.findAll(tag).forEach { attribute ->
             val value = attribute.groups[2]?.value
                 ?: attribute.groups[3]?.value
                 ?: attribute.groups[4]?.value
@@ -108,6 +113,21 @@ fun parseLinkPreviewHtml(normalizedUrl: String, html: String): LinkPreview {
         imageUrl = image,
         siteName = metadata.firstOf("og:site_name", "twitter:site")
     )
+}
+
+private fun Response.toPreviewResult(requestedUrl: String): LinkPreviewResult = try {
+    use {
+        if (!isSuccessful) {
+            LinkPreviewResult.Failure(requestedUrl)
+        } else {
+            val finalUrl = request.url.toString()
+            LinkPreviewResult.Success(
+                parseLinkPreviewHtml(finalUrl, body?.readPreviewHtml().orEmpty())
+            )
+        }
+    }
+} catch (_: Throwable) {
+    LinkPreviewResult.Failure(requestedUrl)
 }
 
 fun youtubeThumbnail(url: String): String? {
@@ -166,14 +186,11 @@ private fun Map<String, String>.firstOf(vararg keys: String): String? =
     keys.firstNotNullOfOrNull { this[it] }
 
 private fun decodeHtmlEntities(value: String): String = HTML_ENTITY_REGEX.replace(value) { match ->
-    when (val entity = match.groupValues[1]) {
-        "amp" -> "&"
-        "quot" -> "\""
-        "apos", "#39" -> "'"
-        "lt" -> "<"
-        "gt" -> ">"
-        "nbsp" -> "\u00a0"
-        else -> decodeNumericEntity(entity) ?: match.value
+    val entity = match.groupValues[1]
+    if (entity.startsWith('#')) {
+        decodeNumericEntity(entity) ?: match.value
+    } else {
+        HTML_NAMED_ENTITIES[entity] ?: match.value
     }
 }
 
@@ -186,10 +203,47 @@ private fun decodeNumericEntity(entity: String): String? = runCatching {
     String(Character.toChars(number))
 }.getOrNull()
 
-private val META_TAG_REGEX = Regex("<meta\\b[^>]*>", RegexOption.IGNORE_CASE)
 private val ATTRIBUTE_REGEX = Regex(
     "([a-zA-Z_:][-a-zA-Z0-9_:]*)\\s*=\\s*(?:\\\"([^\\\"]*)\\\"|'([^']*)'|([^\\s\\\"'=<>`]+))",
     RegexOption.IGNORE_CASE
 )
 private val HTML_ENTITY_REGEX = Regex("&(#x[0-9a-fA-F]+|#[0-9]+|[a-zA-Z]+);")
 private val YOUTUBE_ID_REGEX = Regex("[A-Za-z0-9_-]+")
+
+private val HTML_NAMED_ENTITIES = mapOf(
+    "quot" to "\"", "amp" to "&", "apos" to "'", "lt" to "<", "gt" to ">", "nbsp" to "\u00a0",
+    "copy" to "©", "reg" to "®", "trade" to "™", "hellip" to "…", "ndash" to "–", "mdash" to "—",
+    "lsquo" to "‘", "rsquo" to "’", "ldquo" to "“", "rdquo" to "”", "bull" to "•", "middot" to "·",
+    "laquo" to "«", "raquo" to "»", "lsaquo" to "‹", "rsaquo" to "›", "euro" to "€", "pound" to "£",
+    "yen" to "¥", "cent" to "¢", "sect" to "§", "para" to "¶", "deg" to "°", "plusmn" to "±",
+    "times" to "×", "divide" to "÷", "frac14" to "¼", "frac12" to "½", "frac34" to "¾",
+    "larr" to "←", "uarr" to "↑", "rarr" to "→", "darr" to "↓", "harr" to "↔"
+)
+
+private fun metaTagsIn(html: String): Sequence<String> = sequence {
+    var searchFrom = 0
+    while (searchFrom < html.length) {
+        val start = html.indexOf("<meta", searchFrom, ignoreCase = true)
+        if (start < 0) return@sequence
+        val nameEnd = start + 5
+        if (nameEnd < html.length && !html[nameEnd].isWhitespace() && html[nameEnd] != '>' && html[nameEnd] != '/') {
+            searchFrom = nameEnd
+            continue
+        }
+
+        var quote: Char? = null
+        var end = nameEnd
+        while (end < html.length) {
+            val character = html[end]
+            when {
+                quote != null && character == quote -> quote = null
+                quote == null && (character == '\'' || character == '\"') -> quote = character
+                quote == null && character == '>' -> break
+            }
+            end++
+        }
+        if (end == html.length) return@sequence
+        yield(html.substring(start, end + 1))
+        searchFrom = end + 1
+    }
+}

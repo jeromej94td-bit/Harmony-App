@@ -1,12 +1,23 @@
 package com.example.data
 
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
+import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import okio.Timeout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -44,6 +55,25 @@ class LinkPreviewResolverTest {
         assertEquals("A & B", preview.title)
         assertEquals("Watch \"now\"", preview.description)
         assertEquals("https://img.example/a&b.jpg", preview.imageUrl)
+    }
+
+    @Test
+    fun `parser decodes standard named and numeric entities without changing unknown entities`() {
+        val html = """<meta property="og:title" content="Copyright &copy; &hellip; &#x1F642; &unknown;">"""
+
+        val preview = parseLinkPreviewHtml("https://example.com/x", html)
+
+        assertEquals("Copyright © … 🙂 &unknown;", preview.title)
+    }
+
+    @Test
+    fun `parser keeps a greater-than sign inside quoted meta content`() {
+        val preview = parseLinkPreviewHtml(
+            "https://example.com/x",
+            "<meta property=\"og:title\" content=\"2 > 1\">"
+        )
+
+        assertEquals("2 > 1", preview.title)
     }
 
     @Test
@@ -116,6 +146,57 @@ class LinkPreviewResolverTest {
     }
 
     @Test
+    fun `resolver caps HTML by UTF-8 bytes rather than character count`() = runTest {
+        val title = "<meta property=\"og:title\" content=\"Inside multibyte cap\">"
+        val bytePadding = "✨".repeat((512 * 1024 - title.toByteArray().size) / "✨".toByteArray().size)
+        val afterCap = "<meta property=\"og:description\" content=\"Outside multibyte cap\">"
+        val resolver = OkHttpLinkPreviewResolver(clientFor(title + bytePadding + afterCap))
+
+        val result = resolver.resolve("https://example.com/x")
+
+        assertTrue(result is LinkPreviewResult.Success)
+        val preview = (result as LinkPreviewResult.Success).preview
+        assertEquals("Inside multibyte cap", preview.title)
+        assertNull(preview.description)
+    }
+
+    @Test
+    fun `resolver uses final response URL for returned preview and relative image`() = runTest {
+        val resolver = OkHttpLinkPreviewResolver(
+            clientFor(
+                html = "<meta property=\"og:image\" content=\"images/arrival.jpg\">",
+                finalUrl = "https://redirected.example/films/arrival"
+            )
+        )
+
+        val result = resolver.resolve("https://example.com/start")
+
+        assertTrue(result is LinkPreviewResult.Success)
+        val preview = (result as LinkPreviewResult.Success).preview
+        assertEquals("https://redirected.example/films/arrival", preview.normalizedUrl)
+        assertEquals("https://redirected.example/films/images/arrival.jpg", preview.imageUrl)
+    }
+
+    @Test
+    fun `resolver cancels the in-flight OkHttp call with coroutine cancellation`() = runBlocking {
+        val call = BlockingCall(Request.Builder().url("https://example.com/x").build())
+        val resolver = OkHttpLinkPreviewResolver(Call.Factory { call })
+        val resolution = async(Dispatchers.Default) { resolver.resolve("https://example.com/x") }
+
+        try {
+            assertTrue(call.started.await(1, TimeUnit.SECONDS))
+            resolution.cancel()
+            withTimeout(1_000) { resolution.join() }
+
+            assertTrue(call.enqueued)
+            assertTrue(call.cancelled)
+        } finally {
+            call.release()
+            resolution.cancelAndJoin()
+        }
+    }
+
+    @Test
     fun `resolver returns failure instead of throwing when fetch fails`() = runTest {
         val resolver = OkHttpLinkPreviewResolver(
             OkHttpClient.Builder().addInterceptor { throw IOException("offline") }.build()
@@ -126,10 +207,10 @@ class LinkPreviewResolverTest {
         assertEquals(LinkPreviewResult.Failure("https://example.com"), result)
     }
 
-    private fun clientFor(html: String): OkHttpClient = OkHttpClient.Builder()
+    private fun clientFor(html: String, finalUrl: String? = null): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(Interceptor { chain ->
             Response.Builder()
-                .request(chain.request())
+                .request(finalUrl?.let { Request.Builder().url(it).build() } ?: chain.request())
                 .protocol(Protocol.HTTP_1_1)
                 .code(200)
                 .message("OK")
@@ -137,4 +218,47 @@ class LinkPreviewResolverTest {
                 .build()
         })
         .build()
+
+    private class BlockingCall(private val callRequest: Request) : Call {
+        val started = CountDownLatch(1)
+        private val released = CountDownLatch(1)
+        @Volatile var enqueued = false
+        @Volatile var cancelled = false
+        @Volatile private var executed = false
+
+        override fun request(): Request = callRequest
+
+        override fun execute(): Response {
+            executed = true
+            started.countDown()
+            released.await()
+            throw IOException("released")
+        }
+
+        override fun enqueue(responseCallback: Callback) {
+            enqueued = true
+            started.countDown()
+            Thread {
+                released.await()
+                responseCallback.onFailure(this, IOException("cancelled"))
+            }.start()
+        }
+
+        override fun cancel() {
+            cancelled = true
+            released.countDown()
+        }
+
+        override fun isExecuted(): Boolean = executed || enqueued
+
+        override fun isCanceled(): Boolean = cancelled
+
+        override fun timeout(): Timeout = Timeout.NONE
+
+        override fun clone(): Call = BlockingCall(callRequest)
+
+        fun release() {
+            released.countDown()
+        }
+    }
 }
