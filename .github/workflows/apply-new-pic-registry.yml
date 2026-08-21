@@ -20,13 +20,13 @@ jobs:
           fetch-depth: 0
 
       - name: Patch DeveloperDataManager safely
-        shell: python
+        shell: bash
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           path = Path('app/src/main/java/com/example/data/DeveloperDataManager.kt')
           text = path.read_text(encoding='utf-8')
-
           text = text.replace('GeneratedHarmonyContent.', 'GeneratedContentRegistry.')
 
           anchor = '        val p = prefs(context)\n'
@@ -45,8 +45,10 @@ jobs:
               text = text.replace(anchor, insertion + anchor, 1)
 
           path.write_text(text, encoding='utf-8')
+          PY
 
       - name: Commit patch
+        shell: bash
         run: |
           if git diff --quiet -- app/src/main/java/com/example/data/DeveloperDataManager.kt; then
             echo "No patch needed"
