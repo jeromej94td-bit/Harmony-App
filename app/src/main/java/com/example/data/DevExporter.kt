@@ -21,9 +21,9 @@ import java.util.zip.ZipOutputStream
 /**
  * Exportiert Inhalte aus dem Harmony Dev Studio reproduzierbar für Google AI Studio.
  *
- * Es gibt zwei sichere Formate:
- * 1. eine echte, direkt kompilierbare GeneratedHarmonyContent.kt als Textdatei,
- * 2. ein ZIP mit Kotlin-Datei, Manifest, Anleitung und unveränderten Originalbildern.
+ * Der bestehende Button "Für AI Studio exportieren" bekommt dadurch zwei Dateien:
+ * - eine direkt verwendbare GeneratedHarmonyContent-Kotlin-Datei,
+ * - ein ZIP mit derselben Logik, Manifest und unveränderten Originalbildern.
  */
 object DevExporter {
 
@@ -37,9 +37,7 @@ object DevExporter {
     }
 
     data class Result(
-        /** Direkt hochladbarer Kotlin-Inhalt. Kein nicht-kompilierbarer Vorspann. */
         val text: String,
-        /** Reine Quelle für ZIP/Projekt-Export. */
         val kotlinSource: String,
         val packCount: Int,
         val imageCount: Int,
@@ -54,7 +52,7 @@ object DevExporter {
     )
 
     // ---------------------------------------------------------------
-    // Standalone Kotlin Export
+    // Kotlin-Quelle bauen
     // ---------------------------------------------------------------
 
     fun build(
@@ -144,7 +142,6 @@ object DevExporter {
         sb.append("/**\n")
         sb.append(" * AUTO-GENERIERT vom Harmony Dev Studio am ").append(stamp).append(".\n")
         sb.append(" * Enthält Reihenfolge, vollständige Spieldaten und Bildzuweisungen.\n")
-        sb.append(" * Diese Datei kann direkt GeneratedHarmonyContent.kt ersetzen.\n")
         sb.append(" */\n")
         sb.append("object GeneratedHarmonyContent {\n")
         sb.append("    const val VERSION: Long = ").append(version).append("L\n\n")
@@ -303,7 +300,6 @@ object DevExporter {
         return sb.toString()
     }
 
-    /** Kotlin-String-Literal inklusive Escaping. */
     private fun str(raw: String): String = buildString {
         append('"')
         raw.forEach { c ->
@@ -340,7 +336,22 @@ object DevExporter {
             quality = quality,
             onProgress = onProgress
         )
+        return writeAiStudioBundle(
+            context = context,
+            packs = packs,
+            kotlinSource = result.kotlinSource,
+            includeImages = includeImages,
+            onProgress = onProgress
+        )
+    }
 
+    private fun writeAiStudioBundle(
+        context: Context,
+        packs: List<QuestionPack>,
+        kotlinSource: String,
+        includeImages: Boolean,
+        onProgress: ((Int, Int) -> Unit)? = null
+    ): File {
         val rememberedNames = DeveloperDataManager.getOriginalFileNames()
         val packRefs = packs.map { ExportPackRef(it.id, it.title, it.pairs) }
         val namesForExistingAssets = linkedMapOf<String, String>()
@@ -370,7 +381,7 @@ object DevExporter {
         ZipOutputStream(BufferedOutputStream(FileOutputStream(destFile))).use { zos ->
             putTextEntry(zos, "AI_STUDIO_README.txt", readme)
             putTextEntry(zos, "harmony-export-manifest.json", manifest)
-            putTextEntry(zos, TARGET_PATH, result.kotlinSource)
+            putTextEntry(zos, TARGET_PATH, kotlinSource)
 
             assignments.forEachIndexed { index, asset ->
                 onProgress?.invoke(index + 1, assignments.size)
@@ -382,8 +393,7 @@ object DevExporter {
                     else -> null
                 } ?: return@forEachIndexed
 
-                val entryName = zipPaths.getValue(asset)
-                zos.putNextEntry(ZipEntry(entryName))
+                zos.putNextEntry(ZipEntry(zipPaths.getValue(asset)))
                 source.inputStream().use { input -> input.copyTo(zos) }
                 zos.closeEntry()
             }
@@ -403,12 +413,12 @@ Inhalt:
 ANWEISUNG FÜR AI STUDIO
 1. Ersetze $TARGET_PATH vollständig durch die gleichnamige Datei aus diesem Paket.
 2. Beachte harmony-export-manifest.json als verbindliche Zuordnung und Reihenfolge.
-3. Bilddateien NICHT umbenennen. Der Manifest-Eintrag zipPath zeigt, zu welchem Spiel, Paar und welcher Seite das Bild gehört.
+3. Bilddateien NICHT umbenennen. zipPath zeigt Spiel, Paar und Seite.
 4. Bestehende Harmony-Spielmechanik, Navigation und andere Features nicht umbauen.
-5. Falls Bilder als Android-Ressourcen eingebaut werden müssen, darf nur der Ziel-Ressourcenname technisch angepasst werden; die Zuordnung muss über optionKey/packId/pairIndex/side erhalten bleiben.
-6. Nach dem Einbau Projekt kompilieren und prüfen, dass alle GenPack-/GenQuestion-/GenAssetMeta-Aufrufe zu DevGenTypes.kt passen.
+5. Falls Android-Ressourcennamen technisch angepasst werden müssen, muss die Zuordnung über optionKey/packId/pairIndex/side erhalten bleiben.
+6. Danach kompilieren und alle GenPack-/GenQuestion-/GenAssetMeta-Aufrufe gegen DevGenTypes.kt prüfen.
 
-Wichtig: Die Originaldateien bleiben im ZIP unverändert. Harmony selbst kann intern weiterhin optimierte Arbeitskopien verwenden.
+Die Originaldateien bleiben im ZIP unverändert. Harmony selbst darf intern optimierte Arbeitskopien verwenden.
 """.trimIndent()
 
     private fun putTextEntry(zos: ZipOutputStream, name: String, text: String) {
@@ -433,10 +443,56 @@ Wichtig: Die Originaldateien bleiben im ZIP unverändert. Harmony selbst kann in
         return f
     }
 
+    /**
+     * Beim bisherigen "Für AI Studio exportieren"-Flow werden Kotlin-Datei UND
+     * passendes ZIP gemeinsam geteilt. Andere Dateien werden unverändert einzeln geteilt.
+     */
     fun shareFile(context: Context, file: File, mime: String = "text/plain") {
+        val isAiStudioContent = file.name.startsWith("harmony_content_") &&
+            (file.extension.equals("kt", true) || file.extension.equals("txt", true))
+
+        if (isAiStudioContent) {
+            val source = try { file.readText() } catch (_: Exception) { "" }
+            val selectedIds = DevExportLogic.extractOrderIds(source)
+            val byId = DeveloperDataManager.getAllOwnPacks().associateBy { it.id }
+            val selectedPacks = selectedIds.mapNotNull { byId[it] }
+                .ifEmpty { DeveloperDataManager.getAllOwnPacks() }
+            val includeImages = !source.contains("val IMAGES: Map<String, String> by lazy { emptyMap() }")
+
+            val zipFile = try {
+                writeAiStudioBundle(
+                    context = context,
+                    packs = selectedPacks,
+                    kotlinSource = source,
+                    includeImages = includeImages
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+
+            if (zipFile != null && zipFile.exists()) {
+                val uris = arrayListOf(
+                    FileProvider.getUriForFile(context, "${context.packageName}.devfiles", file),
+                    FileProvider.getUriForFile(context, "${context.packageName}.devfiles", zipFile)
+                )
+                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                    type = "application/octet-stream"
+                    putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
+                    putExtra(Intent.EXTRA_SUBJECT, "Harmony Export für AI Studio")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                context.startActivity(Intent.createChooser(intent, "AI Studio Export teilen").apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
+                return
+            }
+        }
+
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.devfiles", file)
+        val effectiveMime = if (file.extension.equals("zip", true)) "application/zip" else mime
         val intent = Intent(Intent.ACTION_SEND).apply {
-            type = mime
+            type = effectiveMime
             putExtra(Intent.EXTRA_STREAM, uri)
             putExtra(Intent.EXTRA_SUBJECT, file.name)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -471,12 +527,13 @@ Wichtig: Die Originaldateien bleiben im ZIP unverändert. Harmony selbst kann in
 
     fun suggestFileName(prefix: String): String {
         val stamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.GERMAN).format(Date())
-        return "${prefix}_$stamp.txt"
+        val extension = if (prefix == "harmony_content") "kt" else "txt"
+        return "${prefix}_$stamp.$extension"
     }
 
     /**
-     * Bestehender vollständiger Projekt-Export. Wichtig: In die .kt-Datei wird
-     * jetzt ausschließlich kompilierbarer Kotlin-Quelltext geschrieben.
+     * Bestehender vollständiger Projekt-Export. In eine .kt-Datei wird nur noch
+     * kompilierbarer Kotlin-Quelltext geschrieben, nie der frühere #-Vorspann.
      */
     fun exportFullProjectZip(context: Context): File {
         val destFile = File(exportDir(context), "harmony-independent-project.zip")
