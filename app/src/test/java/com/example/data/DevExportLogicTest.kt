@@ -12,7 +12,6 @@ class DevExportLogicTest {
             storedOrder = listOf("pack_b", "pack_a", "missing"),
             availableIds = listOf("pack_a", "pack_b", "pack_c")
         )
-
         assertEquals(listOf("pack_b", "pack_a", "pack_c"), result)
     }
 
@@ -81,5 +80,19 @@ class DevExportLogicTest {
         assertTrue(manifest.contains("\"originalFileName\": \"original A.png\""))
         assertTrue(manifest.contains("\"pairIndex\": 0"))
         assertTrue(manifest.contains("\"side\": 0"))
+    }
+
+    @Test
+    fun `extractOrderIds reads exact generated order`() {
+        val source = """
+            object GeneratedHarmonyContent {
+                val ORDER: List<String> = listOf("pack_b", "pack_a", "pack_c")
+            }
+        """.trimIndent()
+
+        assertEquals(
+            listOf("pack_b", "pack_a", "pack_c"),
+            DevExportLogic.extractOrderIds(source)
+        )
     }
 }
