@@ -8,7 +8,59 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
+  materialize-assets:
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feat/devstudio-ai-export-v2' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/devstudio-ai-export-v2
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image support
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Materialize manifest image files
+        run: python scripts/materialize_new_pic_assets.py
+
+      - name: Verify all six manifest paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s images/custom_logo/pair-001/a/1000110101.png
+          test -s images/custom_logo/pair-001/b/1000110102.png
+          test -s images/custom_logo/pair-002/a/1000110103.png
+          test -s images/custom_logo/pair-002/b/1000110104.png
+          test -s images/custom_logo/pair-003/a/1000110105.png
+          test -s images/custom_logo/pair-003/b/1000110111.jpg
+          file images/custom_logo/pair-001/a/1000110101.png
+          file images/custom_logo/pair-003/b/1000110111.jpg
+
+      - name: Commit generated image files
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git status --short -- images/custom_logo | grep -q .; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add images/custom_logo
+            git commit -m 'assets: add custom_logo image files [generated-assets]'
+            git push origin HEAD:feat/devstudio-ai-export-v2
+          else
+            echo 'Assets already materialized'
+          fi
+
   unit-test:
     runs-on: ubuntu-latest
     timeout-minutes: 25
