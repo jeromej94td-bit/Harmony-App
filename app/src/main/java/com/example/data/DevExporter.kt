@@ -74,31 +74,17 @@ object DevExporter {
     }
 
     private fun bundledResourceFileName(context: Context, resId: Int): String {
-        val entryName = context.resources.getResourceEntryName(resId)
-        return "$entryName.${detectBundledExtension(context, resId)}"
-    }
-
-    private fun detectBundledExtension(context: Context, resId: Int): String = try {
-        val header = ByteArray(12)
-        val read = context.resources.openRawResource(resId).use { input -> input.read(header) }
-        when {
-            read >= 3 &&
-                header[0].toInt() and 0xFF == 0xFF &&
-                header[1].toInt() and 0xFF == 0xD8 &&
-                header[2].toInt() and 0xFF == 0xFF -> "jpg"
-            read >= 8 &&
-                header[0].toInt() and 0xFF == 0x89 &&
-                header[1].toInt() and 0xFF == 0x50 &&
-                header[2].toInt() and 0xFF == 0x4E &&
-                header[3].toInt() and 0xFF == 0x47 -> "png"
-            read >= 12 &&
-                String(header, 0, 4, Charsets.US_ASCII) == "RIFF" &&
-                String(header, 8, 4, Charsets.US_ASCII) == "WEBP" -> "webp"
-            read >= 6 && String(header, 0, 3, Charsets.US_ASCII) == "GIF" -> "gif"
-            else -> "bin"
+        val value = android.util.TypedValue()
+        return try {
+            context.resources.getValue(resId, value, true)
+            value.string
+                ?.toString()
+                ?.substringAfterLast('/')
+                ?.takeIf { it.contains('.') }
+                ?: "${context.resources.getResourceEntryName(resId)}.bin"
+        } catch (_: Exception) {
+            "${context.resources.getResourceEntryName(resId)}.bin"
         }
-    } catch (_: Exception) {
-        "bin"
     }
 
     // ---------------------------------------------------------------
