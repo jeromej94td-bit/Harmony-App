@@ -2,9 +2,7 @@ package com.example.data
 
 /**
  * Android-unabhängige Logik für den Dev-Studio-Export.
- *
- * Sie hält Reihenfolge und Asset-Zuordnung deterministisch und ist deshalb
- * separat per JVM-Test prüfbar.
+ * Sie hält Reihenfolge und Asset-Zuordnung deterministisch und ist separat prüfbar.
  */
 data class ExportPackRef(
     val id: String,
@@ -24,10 +22,6 @@ data class ExportAssetAssignment(
 
 object DevExportLogic {
 
-    /**
-     * Übernimmt eine gespeicherte Reihenfolge, entfernt nicht mehr vorhandene IDs
-     * und hängt neue IDs genau einmal in ihrer aktuellen Reihenfolge an.
-     */
     fun reconcileOrder(storedOrder: List<String>, availableIds: List<String>): List<String> {
         val available = availableIds.toSet()
         val result = LinkedHashSet<String>()
@@ -36,7 +30,6 @@ object DevExportLogic {
         return result.toList()
     }
 
-    /** Verschiebt eine ID um delta Plätze und begrenzt an den Listenrändern. */
     fun move(order: List<String>, id: String, delta: Int): List<String> {
         if (delta == 0) return order.toList()
         val current = order.indexOf(id)
@@ -49,20 +42,16 @@ object DevExportLogic {
         return copy
     }
 
-    /**
-     * Verknüpft gespeicherte Original-Dateinamen mit der konkreten Position
-     * eines Bildes im Spiel. Ein Schlüssel wird höchstens einmal ausgegeben.
-     */
     fun assignAssets(
         packs: List<ExportPackRef>,
         originalFileNames: Map<String, String>
     ): List<ExportAssetAssignment> {
         val result = mutableListOf<ExportAssetAssignment>()
         val seen = mutableSetOf<String>()
-        packs.forEach { pack ->
+        for (pack in packs) {
             pack.pairs.forEachIndexed { pairIndex, pair ->
-                listOf(pair.first to 0, pair.second to 1).forEach { (optionKey, side) ->
-                    val original = originalFileNames[optionKey] ?: return@forEach
+                for ((optionKey, side) in listOf(pair.first to 0, pair.second to 1)) {
+                    val original = originalFileNames[optionKey] ?: continue
                     if (seen.add(optionKey)) {
                         result += ExportAssetAssignment(
                             optionKey = optionKey,
@@ -79,11 +68,7 @@ object DevExportLogic {
         return result
     }
 
-    /**
-     * Jeder Asset-Pfad enthält Paar und Seite. Dadurch dürfen zwei Bilder im
-     * selben Spiel denselben Original-Dateinamen besitzen, ohne dass wir ihn
-     * verändern müssen.
-     */
+    /** Paar/Seite liegen im Pfad, der Original-Dateiname selbst bleibt unverändert. */
     fun zipPaths(assets: List<ExportAssetAssignment>): Map<ExportAssetAssignment, String> {
         val result = LinkedHashMap<ExportAssetAssignment, String>()
         assets.forEach { asset ->
