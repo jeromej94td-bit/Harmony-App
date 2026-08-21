@@ -59,6 +59,7 @@ object DevAssetStore {
     fun deleteImage(context: Context, key: String) {
         val f = fileFor(context, key)
         if (f.exists()) f.delete()
+        DevExportStateStore.removeOriginalFileName(context, key)
     }
 
     fun listAll(context: Context): List<File> =
@@ -70,10 +71,17 @@ object DevAssetStore {
     // Import
     // ---------------------------------------------------------------
 
-    /** Kopiert ein Bild aus einer beliebigen Uri in den internen Speicher. Gibt den Pfad zurück. */
+    /**
+     * Kopiert ein Bild aus einer beliebigen Uri in den internen Speicher.
+     * Der lokale Arbeitsname darf optimiert werden; der Original-Dateiname
+     * wird separat für den AI-Studio-Export gespeichert.
+     */
     fun importFromUri(context: Context, uri: Uri, key: String): String? {
+        val originalFileName = displayNameOf(context, uri)
         val bmp = decodeScaled(context, uri, STORE_MAX_DIM) ?: return null
-        return saveBitmap(context, bmp, key)
+        val path = saveBitmap(context, bmp, key)
+        DevExportStateStore.recordOriginalFileName(context, key, originalFileName)
+        return path
     }
 
     fun saveBitmap(context: Context, bmp: Bitmap, key: String): String {
