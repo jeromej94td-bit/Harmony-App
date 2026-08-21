@@ -3,6 +3,10 @@ package com.example.data
 /**
  * Vereinigt den bisherigen generierten Harmony-Content mit zusätzlichen
  * Dev-Studio-Imports, ohne GeneratedHarmonyContent.kt destruktiv zu ersetzen.
+ *
+ * Ältere GeneratedHarmonyContent-Dateien besitzen noch keine ASSETS-Metadaten.
+ * Deshalb stammen die Asset-Metadaten ausschließlich aus den neuen additiven
+ * Imports; bestehende PACKS/IMAGES bleiben vollständig erhalten.
  */
 object GeneratedContentRegistry {
     val VERSION: Long = (GeneratedHarmonyContent.VERSION * 31L) xor GeneratedHarmonyNewPicGame.VERSION
@@ -25,10 +29,7 @@ object GeneratedContentRegistry {
     }
 
     val ASSETS: List<GenAssetMeta> by lazy {
-        val byKey = LinkedHashMap<String, GenAssetMeta>()
-        GeneratedHarmonyContent.ASSETS.forEach { byKey[it.optionKey] = it }
-        GeneratedHarmonyNewPicGame.ASSETS.forEach { byKey[it.optionKey] = it }
-        byKey.values.toList()
+        GeneratedHarmonyNewPicGame.ASSETS.distinctBy { it.optionKey }
     }
 
     val IMAGES: Map<String, String> by lazy {
