@@ -1,0 +1,170 @@
+package com.example.data
+
+/**
+ * Android-unabhängige Logik für den Dev-Studio-Export.
+ *
+ * Sie hält Reihenfolge und Asset-Zuordnung deterministisch und ist deshalb
+ * separat per JVM-Test prüfbar.
+ */
+data class ExportPackRef(
+    val id: String,
+    val title: String,
+    val pairs: List<Pair<String, String>>
+)
+
+data class ExportAssetAssignment(
+    val optionKey: String,
+    val originalFileName: String,
+    val packId: String,
+    val packTitle: String,
+    val pairIndex: Int,
+    /** 0 = linke/A-Seite, 1 = rechte/B-Seite. */
+    val side: Int
+)
+
+object DevExportLogic {
+
+    /**
+     * Übernimmt eine gespeicherte Reihenfolge, entfernt nicht mehr vorhandene IDs
+     * und hängt neue IDs genau einmal in ihrer aktuellen Reihenfolge an.
+     */
+    fun reconcileOrder(storedOrder: List<String>, availableIds: List<String>): List<String> {
+        val available = availableIds.toSet()
+        val result = LinkedHashSet<String>()
+        storedOrder.forEach { if (it in available) result.add(it) }
+        availableIds.forEach { result.add(it) }
+        return result.toList()
+    }
+
+    /** Verschiebt eine ID um delta Plätze und begrenzt an den Listenrändern. */
+    fun move(order: List<String>, id: String, delta: Int): List<String> {
+        if (delta == 0) return order.toList()
+        val current = order.indexOf(id)
+        if (current < 0) return order.toList()
+        val target = (current + delta).coerceIn(0, order.lastIndex)
+        if (target == current) return order.toList()
+        val copy = order.toMutableList()
+        val item = copy.removeAt(current)
+        copy.add(target, item)
+        return copy
+    }
+
+    /**
+     * Verknüpft gespeicherte Original-Dateinamen mit der konkreten Position
+     * eines Bildes im Spiel. Ein Schlüssel wird höchstens einmal ausgegeben.
+     */
+    fun assignAssets(
+        packs: List<ExportPackRef>,
+        originalFileNames: Map<String, String>
+    ): List<ExportAssetAssignment> {
+        val result = mutableListOf<ExportAssetAssignment>()
+        val seen = mutableSetOf<String>()
+        packs.forEach { pack ->
+            pack.pairs.forEachIndexed { pairIndex, pair ->
+                listOf(pair.first to 0, pair.second to 1).forEach { (optionKey, side) ->
+                    val original = originalFileNames[optionKey] ?: return@forEach
+                    if (seen.add(optionKey)) {
+                        result += ExportAssetAssignment(
+                            optionKey = optionKey,
+                            originalFileName = safeBaseName(original),
+                            packId = pack.id,
+                            packTitle = pack.title,
+                            pairIndex = pairIndex,
+                            side = side
+                        )
+                    }
+                }
+            }
+        }
+        return result
+    }
+
+    /**
+     * Jeder Asset-Pfad enthält Paar und Seite. Dadurch dürfen zwei Bilder im
+     * selben Spiel denselben Original-Dateinamen besitzen, ohne dass wir ihn
+     * verändern müssen.
+     */
+    fun zipPaths(assets: List<ExportAssetAssignment>): Map<ExportAssetAssignment, String> {
+        val result = LinkedHashMap<ExportAssetAssignment, String>()
+        assets.forEach { asset ->
+            val pack = safeSegment(asset.packId.ifBlank { "spiel" })
+            val pair = "pair-${(asset.pairIndex + 1).toString().padStart(3, '0')}"
+            val side = if (asset.side == 0) "a" else "b"
+            result[asset] = "images/$pack/$pair/$side/${safeBaseName(asset.originalFileName)}"
+        }
+        return result
+    }
+
+    fun buildManifestJson(
+        packs: List<ExportPackRef>,
+        assets: List<ExportAssetAssignment>
+    ): String {
+        val paths = zipPaths(assets)
+        return buildString {
+            append("{\n")
+            append("  \"format\": \"harmony-ai-studio-export\",\n")
+            append("  \"version\": 2,\n")
+            append("  \"packOrder\": [")
+            packs.forEachIndexed { index, pack ->
+                if (index > 0) append(", ")
+                append(json(pack.id))
+            }
+            append("],\n")
+            append("  \"packs\": [\n")
+            packs.forEachIndexed { index, pack ->
+                append("    {\"id\": ").append(json(pack.id))
+                    .append(", \"title\": ").append(json(pack.title)).append("}")
+                if (index != packs.lastIndex) append(',')
+                append('\n')
+            }
+            append("  ],\n")
+            append("  \"assets\": [\n")
+            assets.forEachIndexed { index, asset ->
+                append("    {\"optionKey\": ").append(json(asset.optionKey))
+                    .append(", \"originalFileName\": ").append(json(asset.originalFileName))
+                    .append(", \"packId\": ").append(json(asset.packId))
+                    .append(", \"packTitle\": ").append(json(asset.packTitle))
+                    .append(", \"pairIndex\": ").append(asset.pairIndex)
+                    .append(", \"side\": ").append(asset.side)
+                    .append(", \"zipPath\": ").append(json(paths.getValue(asset)))
+                    .append('}')
+                if (index != assets.lastIndex) append(',')
+                append('\n')
+            }
+            append("  ]\n")
+            append('}')
+        }
+    }
+
+    fun safeBaseName(raw: String): String {
+        val clean = raw.replace('\\', '/').substringAfterLast('/').trim()
+        return clean.ifBlank { "image.jpg" }.replace("/", "_")
+    }
+
+    private fun safeSegment(raw: String): String {
+        val out = buildString {
+            raw.trim().forEach { c ->
+                when {
+                    c.isLetterOrDigit() || c == '-' || c == '_' -> append(c)
+                    else -> append('_')
+                }
+            }
+        }.trim('_')
+        return out.ifBlank { "spiel" }
+    }
+
+    private fun json(raw: String): String = buildString {
+        append('"')
+        raw.forEach { c ->
+            when (c) {
+                '\\' -> append("\\\\")
+                '"' -> append("\\\"")
+                '\n' -> append("\\n")
+                '\r' -> append("\\r")
+                '\t' -> append("\\t")
+                else -> append(c)
+            }
+        }
+        append('"')
+    }
+}
