@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize the six custom_logo image files already embedded in Kotlin.
-
-This keeps Google AI Studio self-contained: cloning the repository gives it
-real image files at the exact paths declared by harmony-export-manifest.json.
-"""
+"""Materialize custom_logo image files and repair the large embedded source."""
 
 from __future__ import annotations
 
@@ -16,6 +12,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "app" / "src" / "main" / "java" / "com" / "example" / "data"
+CHUNK_DIR = ROOT / "scripts" / "assets" / "custom_logo"
 
 ASSETS = [
     ("GeneratedHarmonyNewPicGameImage0.kt", "images/custom_logo/pair-001/a/1000110101.png", "PNG"),
@@ -29,14 +26,41 @@ ASSETS = [
 APPEND_RE = re.compile(r'append\("([^\"]*)"\)')
 
 
-def embedded_bytes(source_name: str) -> bytes:
+def image0_payload() -> str:
+    parts = [
+        (CHUNK_DIR / f"image0.part{i}.b64").read_text(encoding="utf-8").strip()
+        for i in range(5)
+    ]
+    payload = "".join(parts)
+    if len(payload) != 13120:
+        raise RuntimeError(f"Unexpected image0 Base64 length: {len(payload)}")
+    return payload
+
+
+def restore_image0_source() -> None:
+    payload = image0_payload()
+    source = (
+        "package com.example.data\n\n"
+        "// Optimierte App-Kopie von 1000110101.png; Originalname bleibt in GenAssetMeta erhalten.\n"
+        "internal fun newPicImage0(): String = buildString {\n"
+        f"    append(\"{payload}\")\n"
+        "}\n"
+    )
+    (DATA_DIR / "GeneratedHarmonyNewPicGameImage0.kt").write_text(source, encoding="utf-8")
+
+
+def embedded_payload(source_name: str) -> str:
+    if source_name == "GeneratedHarmonyNewPicGameImage0.kt":
+        return image0_payload()
     source = (DATA_DIR / source_name).read_text(encoding="utf-8")
     chunks = APPEND_RE.findall(source)
     if not chunks:
         raise RuntimeError(f"No Base64 append chunks found in {source_name}")
+    return re.sub(r"\s+", "", "".join(chunks))
 
-    payload = "".join(chunks)
-    payload = re.sub(r"\s+", "", payload)
+
+def embedded_bytes(source_name: str) -> bytes:
+    payload = embedded_payload(source_name)
     payload += "=" * (-len(payload) % 4)
     raw = base64.b64decode(payload, validate=False)
     if not raw:
@@ -66,6 +90,7 @@ def materialize(source_name: str, target_name: str, target_format: str) -> None:
 
 
 def main() -> None:
+    restore_image0_source()
     for source_name, target_name, target_format in ASSETS:
         materialize(source_name, target_name, target_format)
 
