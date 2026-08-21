@@ -121,6 +121,25 @@ object DevExportLogic {
         }
     }
 
+    /**
+     * Liest die ORDER-Liste aus einer von DevExporter erzeugten Kotlin-Datei.
+     * So kann der Share-Schritt exakt die vom Nutzer ausgewählten Spiele in das
+     * zusätzliche ZIP übernehmen, ohne sich auf globale App-Reihenfolge zu verlassen.
+     */
+    fun extractOrderIds(generatedSource: String): List<String> {
+        val orderStart = generatedSource.indexOf("val ORDER")
+        if (orderStart < 0) return emptyList()
+        val listStart = generatedSource.indexOf("listOf(", orderStart)
+        if (listStart < 0) return emptyList()
+        val close = generatedSource.indexOf(')', listStart)
+        if (close < 0) return emptyList()
+        val body = generatedSource.substring(listStart + "listOf(".length, close)
+        return Regex("\"((?:\\\\.|[^\"\\\\])*)\"")
+            .findAll(body)
+            .map { unescapeKotlinString(it.groupValues[1]) }
+            .toList()
+    }
+
     fun safeBaseName(raw: String): String {
         val clean = raw.replace('\\', '/').substringAfterLast('/').trim()
         return clean.ifBlank { "image.jpg" }.replace("/", "_")
@@ -136,6 +155,29 @@ object DevExportLogic {
             }
         }.trim('_')
         return out.ifBlank { "spiel" }
+    }
+
+    private fun unescapeKotlinString(raw: String): String {
+        val out = StringBuilder()
+        var i = 0
+        while (i < raw.length) {
+            if (raw[i] == '\\' && i + 1 < raw.length) {
+                when (val next = raw[i + 1]) {
+                    '\\' -> out.append('\\')
+                    '"' -> out.append('"')
+                    'n' -> out.append('\n')
+                    'r' -> out.append('\r')
+                    't' -> out.append('\t')
+                    '$' -> out.append('$')
+                    else -> out.append(next)
+                }
+                i += 2
+            } else {
+                out.append(raw[i])
+                i++
+            }
+        }
+        return out.toString()
     }
 
     private fun json(raw: String): String = buildString {
