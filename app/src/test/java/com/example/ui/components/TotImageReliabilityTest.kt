@@ -26,6 +26,25 @@ class TotImageReliabilityTest {
     }
 
     @Test
+    fun `premium local artwork packs never fall back to remote images`() {
+        val premiumPackIds = setOf("traumhaus", "aussen", "ringe")
+        val premiumPacks = HarmonyPacksData.DEFAULT_PACKS.filter { it.id in premiumPackIds }
+
+        assertEquals(premiumPackIds, premiumPacks.map { it.id }.toSet())
+
+        premiumPacks.forEach { pack ->
+            pack.pairs.forEachIndexed { pairIndex, pair ->
+                listOf(pair.first, pair.second).forEach { option ->
+                    assertNotNull(
+                        "${pack.id} pair ${pairIndex + 1} has no bundled image for '$option'",
+                        TotImageProvider.getBundledImageResId(option)
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
     fun `bundled artwork from all default this or that packs is discoverable for AI export`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val packs = HarmonyPacksData.DEFAULT_PACKS.filter { it.type == "tot" }
