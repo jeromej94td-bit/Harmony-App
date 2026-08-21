@@ -3,4 +3,7 @@
     <string name="oder_text">oder</string>
     <string name="das_oder_das_title">Das oder das?</string>
     <string name="skip_text">Überspringen</string>
+    <string name="picshare_widget_image">Geteiltes Harmony-Bild</string>
+    <string name="picshare_widget_empty">Noch kein geteiltes Bild</string>
+    <string name="picshare_widget_description">Zeigt das zuletzt über Harmony geteilte Bild.</string>
 </resources>
