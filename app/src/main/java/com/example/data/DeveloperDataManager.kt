@@ -90,10 +90,10 @@ object DeveloperDataManager {
         generatedLinkPacks.clear()
         generatedImages.clear()
 
-        GeneratedHarmonyContent.CATEGORIES.forEach { gc ->
+        GeneratedContentRegistry.CATEGORIES.forEach { gc ->
             generatedCategories.add(Category(gc.id, gc.name, gc.emoji, gc.color))
         }
-        GeneratedHarmonyContent.PACKS.forEach { gp ->
+        GeneratedContentRegistry.PACKS.forEach { gp ->
             generatedPacks.add(
                 QuestionPack(
                     id = gp.id,
@@ -110,7 +110,7 @@ object DeveloperDataManager {
                 )
             )
         }
-        GeneratedHarmonyContent.LINK_PACKS.forEach { glp ->
+        GeneratedContentRegistry.LINK_PACKS.forEach { glp ->
             generatedLinkPacks.add(
                 LinkEngine.LinkPack(
                     id = glp.id,
@@ -141,6 +141,14 @@ object DeveloperDataManager {
             )
         }
 
+        GeneratedContentRegistry.ASSETS.forEach { asset ->
+            DevExportStateStore.recordOriginalFileName(
+                context = context,
+                optionKey = asset.optionKey,
+                fileName = asset.originalFileName
+            )
+        }
+
         val p = prefs(context)
         val storedVersion = p.getLong(KEY_GEN_VERSION, -1L)
         val storedImagePaths = try {
@@ -148,14 +156,14 @@ object DeveloperDataManager {
         } catch (_: Exception) {
             JSONObject()
         }
-        val needsImageRepair = GeneratedHarmonyContent.IMAGES.keys.any { key ->
+        val needsImageRepair = GeneratedContentRegistry.IMAGES.keys.any { key ->
             val path = storedImagePaths.optString(key, "")
             path.isBlank() || !File(path).exists()
         }
 
-        if (storedVersion != GeneratedHarmonyContent.VERSION || needsImageRepair) {
+        if (storedVersion != GeneratedContentRegistry.VERSION || needsImageRepair) {
             val written = JSONObject()
-            GeneratedHarmonyContent.IMAGES.forEach { (name, base64) ->
+            GeneratedContentRegistry.IMAGES.forEach { (name, base64) ->
                 val path = DevAssetStore.writeBase64(context, "gen_${DevAssetStore.slug(name)}", base64)
                 if (path != null) {
                     generatedImages[name] = path
@@ -163,7 +171,7 @@ object DeveloperDataManager {
                 }
             }
             p.edit()
-                .putLong(KEY_GEN_VERSION, GeneratedHarmonyContent.VERSION)
+                .putLong(KEY_GEN_VERSION, GeneratedContentRegistry.VERSION)
                 .putString(KEY_GEN_IMAGES, written.toString())
                 .apply()
         } else {
