@@ -8,6 +8,8 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.example.data.model.Category
 import com.example.data.model.QuestionPack
+import com.example.ui.components.TotImageProvider
+import com.example.ui.components.getBundledImageResId
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -50,6 +52,54 @@ object DevExporter {
         val originalFileName: String,
         val base64: String? = null
     )
+
+    /**
+     * Finds drawable-backed artwork already shipped with the app. This closes the old export
+     * gap where only custom/generated absolute file paths were copied into the AI-Studio ZIP.
+     */
+    internal fun collectBundledAssetNames(
+        context: Context,
+        packs: List<QuestionPack>
+    ): LinkedHashMap<String, String> {
+        val result = linkedMapOf<String, String>()
+        packs.forEach { pack ->
+            pack.pairs.forEach { pair ->
+                listOf(pair.first, pair.second).forEach { optionKey ->
+                    val resId = TotImageProvider.getBundledImageResId(optionKey) ?: return@forEach
+                    result[optionKey] = bundledResourceFileName(context, resId)
+                }
+            }
+        }
+        return result
+    }
+
+    private fun bundledResourceFileName(context: Context, resId: Int): String {
+        val entryName = context.resources.getResourceEntryName(resId)
+        return "$entryName.${detectBundledExtension(context, resId)}"
+    }
+
+    private fun detectBundledExtension(context: Context, resId: Int): String = try {
+        val header = ByteArray(12)
+        val read = context.resources.openRawResource(resId).use { input -> input.read(header) }
+        when {
+            read >= 3 &&
+                header[0].toInt() and 0xFF == 0xFF &&
+                header[1].toInt() and 0xFF == 0xD8 &&
+                header[2].toInt() and 0xFF == 0xFF -> "jpg"
+            read >= 8 &&
+                header[0].toInt() and 0xFF == 0x89 &&
+                header[1].toInt() and 0xFF == 0x50 &&
+                header[2].toInt() and 0xFF == 0x4E &&
+                header[3].toInt() and 0xFF == 0x47 -> "png"
+            read >= 12 &&
+                String(header, 0, 4, Charsets.US_ASCII) == "RIFF" &&
+                String(header, 8, 4, Charsets.US_ASCII) == "WEBP" -> "webp"
+            read >= 6 && String(header, 0, 3, Charsets.US_ASCII) == "GIF" -> "gif"
+            else -> "bin"
+        }
+    } catch (_: Exception) {
+        "bin"
+    }
 
     // ---------------------------------------------------------------
     // Kotlin-Quelle bauen
@@ -103,11 +153,11 @@ object DevExporter {
             emptyList()
         }
 
+        val assetNames = collectBundledAssetNames(context, packs)
+        localImages.forEach { image -> assetNames[image.optionKey] = image.originalFileName }
+
         val packRefs = packs.map { ExportPackRef(it.id, it.title, it.pairs) }
-        val assignments = DevExportLogic.assignAssets(
-            packRefs,
-            localImages.associate { it.optionKey to it.originalFileName }
-        )
+        val assignments = DevExportLogic.assignAssets(packRefs, assetNames)
 
         val source = buildKotlinSource(
             version = version,
@@ -123,7 +173,7 @@ object DevExporter {
             text = source,
             kotlinSource = source,
             packCount = packs.size,
-            imageCount = localImages.size,
+            imageCount = assetNames.size,
             approxBytes = source.toByteArray(Charsets.UTF_8).size
         )
     }
@@ -354,7 +404,7 @@ object DevExporter {
     ): File {
         val rememberedNames = DeveloperDataManager.getOriginalFileNames()
         val packRefs = packs.map { ExportPackRef(it.id, it.title, it.pairs) }
-        val namesForExistingAssets = linkedMapOf<String, String>()
+        val namesForExistingAssets = collectBundledAssetNames(context, packs)
         packs.forEach { pack ->
             pack.pairs.forEach { pair ->
                 listOf(pair.first, pair.second).forEach { optionKey ->
@@ -387,14 +437,25 @@ object DevExporter {
                 onProgress?.invoke(index + 1, assignments.size)
                 val original = DevAssetStore.originalFileFor(context, asset.optionKey, asset.originalFileName)
                 val fallbackPath = DeveloperDataManager.imagePathFor(asset.optionKey)
-                val source = when {
+                val sourceFile = when {
                     original.exists() -> original
                     fallbackPath != null && fallbackPath.startsWith("/") && File(fallbackPath).exists() -> File(fallbackPath)
                     else -> null
-                } ?: return@forEachIndexed
+                }
+                val bundledResId = if (sourceFile == null) {
+                    TotImageProvider.getBundledImageResId(asset.optionKey)
+                } else {
+                    null
+                }
+
+                if (sourceFile == null && bundledResId == null) return@forEachIndexed
 
                 zos.putNextEntry(ZipEntry(zipPaths.getValue(asset)))
-                source.inputStream().use { input -> input.copyTo(zos) }
+                if (sourceFile != null) {
+                    sourceFile.inputStream().use { input -> input.copyTo(zos) }
+                } else {
+                    context.resources.openRawResource(bundledResId!!).use { input -> input.copyTo(zos) }
+                }
                 zos.closeEntry()
             }
         }
@@ -407,18 +468,19 @@ HARMONY — EXPORT FÜR GOOGLE AI STUDIO
 Inhalt:
 - $TARGET_PATH
 - harmony-export-manifest.json
-- ${if (includeImages) "$imageCount Originalbilder unter images/..." else "keine Bilddateien"}
+- ${if (includeImages) "$imageCount Original- oder App-Bilder unter images/..." else "keine Bilddateien"}
 - $packCount Spiele in verbindlicher Reihenfolge
 
 ANWEISUNG FÜR AI STUDIO
 1. Ersetze $TARGET_PATH vollständig durch die gleichnamige Datei aus diesem Paket.
 2. Beachte harmony-export-manifest.json als verbindliche Zuordnung und Reihenfolge.
 3. Bilddateien NICHT umbenennen. zipPath zeigt Spiel, Paar und Seite.
-4. Bestehende Harmony-Spielmechanik, Navigation und andere Features nicht umbauen.
-5. Falls Android-Ressourcennamen technisch angepasst werden müssen, muss die Zuordnung über optionKey/packId/pairIndex/side erhalten bleiben.
-6. Danach kompilieren und alle GenPack-/GenQuestion-/GenAssetMeta-Aufrufe gegen DevGenTypes.kt prüfen.
+4. Kopiere auch die bereits aus Harmony gebündelten Bilder aus images/... mit; sie sind absichtlich Teil des Exports.
+5. Bestehende Harmony-Spielmechanik, Navigation und andere Features nicht umbauen.
+6. Falls Android-Ressourcennamen technisch angepasst werden müssen, muss die Zuordnung über optionKey/packId/pairIndex/side erhalten bleiben.
+7. Danach kompilieren und alle GenPack-/GenQuestion-/GenAssetMeta-Aufrufe gegen DevGenTypes.kt prüfen.
 
-Die Originaldateien bleiben im ZIP unverändert. Harmony selbst darf intern optimierte Arbeitskopien verwenden.
+Eigene Originaldateien bleiben im ZIP unverändert. Bereits in Harmony gebündelte Drawables werden bytegenau aus den App-Ressourcen kopiert.
 """.trimIndent()
 
     private fun putTextEntry(zos: ZipOutputStream, name: String, text: String) {
