@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.util.zip.ZipFile
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
@@ -45,5 +46,24 @@ class TotImageReliabilityTest {
         assertTrue(exportedNames.values.all { name ->
             name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp") || name.endsWith(".gif")
         })
+    }
+
+    @Test
+    fun `AI Studio zip physically contains bundled dream house artwork`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val pack = HarmonyPacksData.DEFAULT_PACKS.first { it.id == "traumhaus" }
+
+        val zip = DevExporter.exportAiStudioBundleZip(
+            context = context,
+            packs = listOf(pack),
+            linkPacks = emptyList(),
+            includeImages = true
+        )
+
+        ZipFile(zip).use { archive ->
+            val names = archive.entries().asSequence().map { it.name }.toSet()
+            assertTrue("Missing bundled image bytes in AI Studio ZIP", names.contains("images/traumhaus/pair-001/a/traumhaus_altbau.jpg"))
+            assertTrue(names.contains("images/traumhaus/pair-001/b/traumhaus_smart_home.jpg"))
+        }
     }
 }
