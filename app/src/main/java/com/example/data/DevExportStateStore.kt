@@ -48,6 +48,8 @@ object DevExportStateStore {
     fun orderedIds(availableIds: List<String>): List<String> =
         DevExportLogic.reconcileOrder(packOrder, availableIds)
 
+    fun packOrder(): List<String> = packOrder.toList()
+
     fun reconcileAndPersist(context: Context, availableIds: List<String>): List<String> {
         init(context)
         val reconciled = orderedIds(availableIds)
@@ -110,6 +112,24 @@ object DevExportStateStore {
     fun originalFileNames(): Map<String, String> = originalFileNames.toMap()
 
     fun originalFileNameFor(optionKey: String): String? = originalFileNames[optionKey.trim()]
+
+    fun restore(
+        context: Context,
+        restoredOrder: List<String>,
+        restoredOriginalNames: Map<String, String>,
+        availableIds: List<String>
+    ) {
+        init(context)
+        packOrder.clear()
+        packOrder.addAll(DevExportLogic.reconcileOrder(restoredOrder, availableIds))
+        originalFileNames.clear()
+        restoredOriginalNames.forEach { (key, value) ->
+            if (key.isNotBlank() && value.isNotBlank()) {
+                originalFileNames[key.trim()] = DevExportLogic.safeBaseName(value)
+            }
+        }
+        persist(context)
+    }
 
     fun clear(context: Context) {
         init(context)
