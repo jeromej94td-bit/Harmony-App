@@ -44,6 +44,7 @@ jobs:
           test -s images/custom_logo/pair-002/b/1000110104.png
           test -s images/custom_logo/pair-003/a/1000110105.png
           test -s images/custom_logo/pair-003/b/1000110111.jpg
+          test $(wc -c < app/src/main/java/com/example/data/GeneratedHarmonyNewPicGameImage0.kt) -eq 13305
           file images/custom_logo/pair-001/a/1000110101.png
           file images/custom_logo/pair-003/b/1000110111.jpg
 
@@ -51,15 +52,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git status --short -- images/custom_logo | grep -q .; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add images/custom_logo
-            git commit -m 'assets: add custom_logo image files [generated-assets]'
-            git push origin HEAD:feat/devstudio-ai-export-v2
-          else
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add images/custom_logo app/src/main/java/com/example/data/GeneratedHarmonyNewPicGameImage0.kt
+          if git diff --cached --quiet; then
             echo 'Assets already materialized'
+            exit 0
           fi
+          git commit -m 'assets: add custom_logo image files [generated-assets]'
+          git push origin HEAD:feat/devstudio-ai-export-v2
 
   unit-test:
     runs-on: ubuntu-latest
