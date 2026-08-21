@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
+import com.example.data.model.Category
 import com.example.data.model.QuestionPack
 import java.io.BufferedOutputStream
 import java.io.File
@@ -18,18 +19,15 @@ import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 /**
- * Baut aus dem, was im Dev Studio angelegt wurde, eine einzige Textdatei,
- * die man in Google AI Studio hochladen kann.
+ * Exportiert Inhalte aus dem Harmony Dev Studio reproduzierbar für Google AI Studio.
  *
- * Warum Text und kein ZIP: AI Studio nimmt keine ZIP-Dateien an.
- * Bilder werden deshalb als Base64 direkt in den Kotlin-Code geschrieben.
+ * Es gibt zwei sichere Formate:
+ * 1. eine echte, direkt kompilierbare GeneratedHarmonyContent.kt als Textdatei,
+ * 2. ein ZIP mit Kotlin-Datei, Manifest, Anleitung und unveränderten Originalbildern.
  */
 object DevExporter {
 
-    /** Maximale Länge eines einzelnen String-Literals im Kotlin-Code. */
     private const val CHUNK = 24000
-
-    private const val MARK = "====="
     private const val TARGET_PATH = "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
 
     enum class Quality(val label: String, val maxDim: Int, val jpegQuality: Int) {
@@ -39,14 +37,24 @@ object DevExporter {
     }
 
     data class Result(
+        /** Direkt hochladbarer Kotlin-Inhalt. Kein nicht-kompilierbarer Vorspann. */
         val text: String,
+        /** Reine Quelle für ZIP/Projekt-Export. */
+        val kotlinSource: String,
         val packCount: Int,
         val imageCount: Int,
         val approxBytes: Int
     )
 
+    private data class LocalImage(
+        val optionKey: String,
+        val path: String,
+        val originalFileName: String,
+        val base64: String? = null
+    )
+
     // ---------------------------------------------------------------
-    // Bauen
+    // Standalone Kotlin Export
     // ---------------------------------------------------------------
 
     fun build(
@@ -59,15 +67,15 @@ object DevExporter {
     ): Result {
         val version = System.currentTimeMillis()
         val stamp = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN).format(Date())
+        val effectiveLinks = if (linkPacks.isEmpty()) DeveloperDataManager.getAllLinkPacks() else linkPacks
 
         val usedCategoryIds = packs.map { it.cat }.toSet()
-        val allCategories = LinkedHashMap<String, com.example.data.model.Category>()
+        val allCategories = LinkedHashMap<String, Category>()
         DeveloperDataManager.getGeneratedCategories().forEach { allCategories[it.id] = it }
         DeveloperDataManager.getCustomCategories().forEach { allCategories[it.id] = it }
-        val categories = allCategories.values.filter { usedCategoryIds.contains(it.id) }
+        val categories = allCategories.values.filter { it.id in usedCategoryIds }
 
-        // Alle Optionstexte einsammeln, für die es ein eigenes Bild gibt
-        val optionNames = LinkedHashSet<String>()
+        val optionNames = linkedSetOf<String>()
         packs.forEach { pack ->
             pack.pairs.forEach { (a, b) ->
                 optionNames.add(a)
@@ -75,157 +83,212 @@ object DevExporter {
             }
             pack.questions.forEach { q -> q.options.forEach { optionNames.add(it) } }
         }
-        DeveloperDataManager.getImageOverrides().keys.forEach { optionNames.add(it) }
 
-        val imageEntries = mutableListOf<Pair<String, String>>() // name -> base64
-        if (includeImages) {
-            val withImages = optionNames.mapNotNull { name ->
-                val path = DeveloperDataManager.imagePathFor(name)
-                if (path != null && path.startsWith("/") && File(path).exists()) name to path else null
-            }
-            withImages.forEachIndexed { index, (name, path) ->
-                onProgress?.invoke(index + 1, withImages.size)
-                val b64 = DevAssetStore.toBase64(path, quality.maxDim, quality.jpegQuality)
-                if (b64 != null) imageEntries.add(name to b64)
-            }
+        val rememberedNames = DeveloperDataManager.getOriginalFileNames()
+        val localImages = optionNames.mapNotNull { optionKey ->
+            val path = DeveloperDataManager.imagePathFor(optionKey)
+            if (path != null && path.startsWith("/") && File(path).exists()) {
+                LocalImage(
+                    optionKey = optionKey,
+                    path = path,
+                    originalFileName = rememberedNames[optionKey] ?: File(path).name
+                )
+            } else null
         }
 
+        val imagesWithBase64 = if (includeImages) {
+            localImages.mapIndexed { index, image ->
+                onProgress?.invoke(index + 1, localImages.size)
+                image.copy(base64 = DevAssetStore.toBase64(image.path, quality.maxDim, quality.jpegQuality))
+            }.filter { it.base64 != null }
+        } else {
+            emptyList()
+        }
+
+        val packRefs = packs.map { ExportPackRef(it.id, it.title, it.pairs) }
+        val assignments = DevExportLogic.assignAssets(
+            packRefs,
+            localImages.associate { it.optionKey to it.originalFileName }
+        )
+
+        val source = buildKotlinSource(
+            version = version,
+            stamp = stamp,
+            categories = categories,
+            packs = packs,
+            linkPacks = effectiveLinks,
+            assignments = assignments,
+            imageEntries = imagesWithBase64
+        )
+
+        return Result(
+            text = source,
+            kotlinSource = source,
+            packCount = packs.size,
+            imageCount = localImages.size,
+            approxBytes = source.toByteArray(Charsets.UTF_8).size
+        )
+    }
+
+    private fun buildKotlinSource(
+        version: Long,
+        stamp: String,
+        categories: List<Category>,
+        packs: List<QuestionPack>,
+        linkPacks: List<LinkEngine.LinkPack>,
+        assignments: List<ExportAssetAssignment>,
+        imageEntries: List<LocalImage>
+    ): String {
         val sb = StringBuilder()
-
-        sb.append("##################################################################\n")
-        sb.append("#  HARMONY — CONTENT-EXPORT AUS DEM DEV STUDIO\n")
-        sb.append("#  Erstellt: ").append(stamp).append("\n")
-        sb.append("#  Pakete: ").append(packs.size)
-            .append("  ·  Bilder: ").append(imageEntries.size).append("\n")
-        sb.append("#\n")
-        sb.append("#  SO GEHT'S IN GOOGLE AI STUDIO:\n")
-        sb.append("#  Diese Datei hochladen und schreiben:\n")
-        sb.append("#  \"Ersetze die Datei app/src/main/java/com/example/data/GeneratedHarmonyContent.kt\n")
-        sb.append("#   komplett durch den Inhalt aus der hochgeladenen Datei. Sonst nichts ändern.\"\n")
-        sb.append("#\n")
-        sb.append("#  Die Bilder stecken als Base64 im Code — kein ZIP, keine Extra-Uploads.\n")
-        sb.append("#  Beim ersten Start nach dem Build schreibt die App sie einmalig auf die Platte.\n")
-        sb.append("##################################################################\n\n")
-
-        // Marker aus Teilen zusammensetzen, damit diese Quelldatei selbst
-        // nicht wie ein Dateitrenner aussieht, wenn sie exportiert wird.
-        sb.append(MARK).append(" FILE: ").append(TARGET_PATH).append(" ").append(MARK).append("\n")
         sb.append("package com.example.data\n\n")
         sb.append("/**\n")
-        sb.append(" * AUTO-GENERIERT vom Harmony Dev Studio am ").append(stamp).append("\n")
-        sb.append(" * Nicht von Hand bearbeiten — der nächste Export überschreibt alles.\n")
+        sb.append(" * AUTO-GENERIERT vom Harmony Dev Studio am ").append(stamp).append(".\n")
+        sb.append(" * Enthält Reihenfolge, vollständige Spieldaten und Bildzuweisungen.\n")
+        sb.append(" * Diese Datei kann direkt GeneratedHarmonyContent.kt ersetzen.\n")
         sb.append(" */\n")
-        sb.append("object GeneratedHarmonyContent {\n\n")
+        sb.append("object GeneratedHarmonyContent {\n")
         sb.append("    const val VERSION: Long = ").append(version).append("L\n\n")
 
-        // --- Kategorien ---
-        sb.append("    val CATEGORIES: List<GenCategory> = listOf(\n")
-        categories.forEachIndexed { i, c ->
-            sb.append("        GenCategory(")
-                .append(str(c.id)).append(", ")
-                .append(str(c.name)).append(", ")
-                .append(str(c.emoji)).append(", ")
-                .append("0x").append(java.lang.Long.toHexString(c.tagColorHex).uppercase()).append("L)")
-            sb.append(if (i == categories.lastIndex) "\n" else ",\n")
-        }
-        sb.append("    )\n\n")
+        sb.append("    val ORDER: List<String> = listOf(")
+        sb.append(packs.joinToString(", ") { str(it.id) })
+        sb.append(")\n\n")
 
-        // --- Pakete ---
-        sb.append("    val PACKS: List<GenPack> = listOf(\n")
-        packs.forEachIndexed { i, p ->
-            sb.append("        GenPack(\n")
-            sb.append("            id = ").append(str(p.id)).append(",\n")
-            sb.append("            title = ").append(str(p.title)).append(",\n")
-            sb.append("            cat = ").append(str(p.cat)).append(",\n")
-            sb.append("            topic = ").append(str(p.topic)).append(",\n")
-            sb.append("            type = ").append(str(p.type)).append(",\n")
-            sb.append("            tags = listOf(").append(p.tags.joinToString(", ") { str(it) }).append("),\n")
-
-            sb.append("            pairs = listOf(")
-            if (p.pairs.isEmpty()) {
-                sb.append("),\n")
-            } else {
-                sb.append("\n")
-                p.pairs.forEachIndexed { pi, pair ->
-                    sb.append("                ").append(str(pair.first))
-                        .append(" to ").append(str(pair.second))
-                    sb.append(if (pi == p.pairs.lastIndex) "\n" else ",\n")
-                }
-                sb.append("            ),\n")
+        sb.append("    val ASSETS: List<GenAssetMeta> = listOf(")
+        if (assignments.isEmpty()) {
+            sb.append(")\n\n")
+        } else {
+            sb.append('\n')
+            assignments.forEachIndexed { index, asset ->
+                sb.append("        GenAssetMeta(")
+                    .append("optionKey = ").append(str(asset.optionKey)).append(", ")
+                    .append("originalFileName = ").append(str(asset.originalFileName)).append(", ")
+                    .append("packId = ").append(str(asset.packId)).append(", ")
+                    .append("pairIndex = ").append(asset.pairIndex).append(", ")
+                    .append("side = ").append(asset.side).append(")")
+                sb.append(if (index == assignments.lastIndex) "\n" else ",\n")
             }
+            sb.append("    )\n\n")
+        }
 
-            sb.append("            questions = listOf(")
-            if (p.questions.isEmpty()) {
-                sb.append(")\n")
-            } else {
-                sb.append("\n")
-                p.questions.forEachIndexed { qi, q ->
-                    sb.append("                GenQuestion(").append(str(q.q))
-                    if (q.options.isNotEmpty()) {
-                        sb.append(", listOf(")
-                            .append(q.options.joinToString(", ") { str(it) })
-                            .append(")")
+        sb.append("    val CATEGORIES: List<GenCategory> = listOf(")
+        if (categories.isEmpty()) {
+            sb.append(")\n\n")
+        } else {
+            sb.append('\n')
+            categories.forEachIndexed { index, c ->
+                sb.append("        GenCategory(")
+                    .append(str(c.id)).append(", ")
+                    .append(str(c.name)).append(", ")
+                    .append(str(c.emoji)).append(", ")
+                    .append("0x").append(java.lang.Long.toHexString(c.tagColorHex).uppercase()).append("L)")
+                sb.append(if (index == categories.lastIndex) "\n" else ",\n")
+            }
+            sb.append("    )\n\n")
+        }
+
+        sb.append("    val PACKS: List<GenPack> = listOf(")
+        if (packs.isEmpty()) {
+            sb.append(")\n\n")
+        } else {
+            sb.append('\n')
+            packs.forEachIndexed { index, p ->
+                sb.append("        GenPack(\n")
+                sb.append("            id = ").append(str(p.id)).append(",\n")
+                sb.append("            title = ").append(str(p.title)).append(",\n")
+                sb.append("            cat = ").append(str(p.cat)).append(",\n")
+                sb.append("            topic = ").append(str(p.topic)).append(",\n")
+                sb.append("            type = ").append(str(p.type)).append(",\n")
+                sb.append("            tags = listOf(").append(p.tags.joinToString(", ") { str(it) }).append("),\n")
+                sb.append("            emoji = ").append(str(p.emoji)).append(",\n")
+
+                sb.append("            pairs = listOf(")
+                if (p.pairs.isEmpty()) {
+                    sb.append("),\n")
+                } else {
+                    sb.append('\n')
+                    p.pairs.forEachIndexed { pairIndex, pair ->
+                        sb.append("                ").append(str(pair.first)).append(" to ").append(str(pair.second))
+                        sb.append(if (pairIndex == p.pairs.lastIndex) "\n" else ",\n")
                     }
-                    sb.append(")")
-                    sb.append(if (qi == p.questions.lastIndex) "\n" else ",\n")
+                    sb.append("            ),\n")
+                }
+
+                sb.append("            questions = listOf(")
+                if (p.questions.isEmpty()) {
+                    sb.append(")\n")
+                } else {
+                    sb.append('\n')
+                    p.questions.forEachIndexed { questionIndex, q ->
+                        sb.append("                GenQuestion(")
+                            .append("q = ").append(str(q.q)).append(", ")
+                            .append("options = listOf(")
+                            .append(q.options.joinToString(", ") { str(it) })
+                            .append("), defaultMine = ")
+                            .append(q.defaultMine?.let { str(it) } ?: "null")
+                            .append(")")
+                        sb.append(if (questionIndex == p.questions.lastIndex) "\n" else ",\n")
+                    }
+                    sb.append("            )\n")
+                }
+
+                sb.append("        )")
+                sb.append(if (index == packs.lastIndex) "\n" else ",\n")
+            }
+            sb.append("    )\n\n")
+        }
+
+        sb.append("    val LINK_PACKS: List<GenLinkPack> = listOf(")
+        if (linkPacks.isEmpty()) {
+            sb.append(")\n\n")
+        } else {
+            sb.append('\n')
+            linkPacks.forEachIndexed { index, lp ->
+                sb.append("        GenLinkPack(\n")
+                sb.append("            id = ").append(str(lp.id)).append(",\n")
+                sb.append("            title = ").append(str(lp.title)).append(",\n")
+                sb.append("            cat = ").append(str(lp.cat)).append(",\n")
+                sb.append("            steps = listOf(\n")
+                lp.steps.forEachIndexed { stepIndex, step ->
+                    sb.append("                GenLinkStep(\n")
+                    sb.append("                    templateA = ").append(str(step.templateA)).append(",\n")
+                    sb.append("                    slotA = GenLinkSlot(source = ").append(str(step.slotA.source))
+                        .append(", packId = ").append(str(step.slotA.packId))
+                        .append(", pairIndex = ").append(step.slotA.pairIndex)
+                        .append(", side = ").append(step.slotA.side)
+                        .append(", text = ").append(str(step.slotA.text)).append("),\n")
+                    sb.append("                    templateB = ").append(str(step.templateB)).append(",\n")
+                    sb.append("                    slotB = GenLinkSlot(source = ").append(str(step.slotB.source))
+                        .append(", packId = ").append(str(step.slotB.packId))
+                        .append(", pairIndex = ").append(step.slotB.pairIndex)
+                        .append(", side = ").append(step.slotB.side)
+                        .append(", text = ").append(str(step.slotB.text)).append("),\n")
+                    sb.append("                    caption = ").append(str(step.caption)).append("\n")
+                    sb.append("                )")
+                    sb.append(if (stepIndex == lp.steps.lastIndex) "\n" else ",\n")
                 }
                 sb.append("            )\n")
+                sb.append("        )")
+                sb.append(if (index == linkPacks.lastIndex) "\n" else ",\n")
             }
-
-            sb.append("        )")
-            sb.append(if (i == packs.lastIndex) "\n" else ",\n")
+            sb.append("    )\n\n")
         }
-        sb.append("    )\n\n")
 
-        // --- Ketten-Pakete ---
-        sb.append("    val LINK_PACKS: List<GenLinkPack> = listOf(\n")
-        linkPacks.forEachIndexed { i, lp ->
-            sb.append("        GenLinkPack(\n")
-            sb.append("            id = ").append(str(lp.id)).append(",\n")
-            sb.append("            title = ").append(str(lp.title)).append(",\n")
-            sb.append("            cat = ").append(str(lp.cat)).append(",\n")
-            sb.append("            steps = listOf(\n")
-            lp.steps.forEachIndexed { si, step ->
-                sb.append("                GenLinkStep(\n")
-                sb.append("                    templateA = ").append(str(step.templateA)).append(",\n")
-                sb.append("                    slotA = GenLinkSlot(source = ").append(str(step.slotA.source))
-                    .append(", packId = ").append(str(step.slotA.packId))
-                    .append(", pairIndex = ").append(step.slotA.pairIndex)
-                    .append(", side = ").append(step.slotA.side)
-                    .append(", text = ").append(str(step.slotA.text)).append("),\n")
-                sb.append("                    templateB = ").append(str(step.templateB)).append(",\n")
-                sb.append("                    slotB = GenLinkSlot(source = ").append(str(step.slotB.source))
-                    .append(", packId = ").append(str(step.slotB.packId))
-                    .append(", pairIndex = ").append(step.slotB.pairIndex)
-                    .append(", side = ").append(step.slotB.side)
-                    .append(", text = ").append(str(step.slotB.text)).append("),\n")
-                sb.append("                    caption = ").append(str(step.caption)).append("\n")
-                sb.append("                )")
-                sb.append(if (si == lp.steps.lastIndex) "\n" else ",\n")
-            }
-            sb.append("            )\n")
-            sb.append("        )")
-            sb.append(if (i == linkPacks.lastIndex) "\n" else ",\n")
-        }
-        sb.append("    )\n\n")
-
-        // --- Bilder ---
         if (imageEntries.isEmpty()) {
             sb.append("    val IMAGES: Map<String, String> by lazy { emptyMap() }\n")
         } else {
             sb.append("    val IMAGES: Map<String, String> by lazy {\n")
             sb.append("        mapOf(\n")
-            imageEntries.forEachIndexed { i, (name, _) ->
-                sb.append("            ").append(str(name)).append(" to i").append(i).append("()")
-                sb.append(if (i == imageEntries.lastIndex) "\n" else ",\n")
+            imageEntries.forEachIndexed { index, image ->
+                sb.append("            ").append(str(image.optionKey)).append(" to i").append(index).append("()")
+                sb.append(if (index == imageEntries.lastIndex) "\n" else ",\n")
             }
             sb.append("        )\n")
             sb.append("    }\n\n")
 
-            imageEntries.forEachIndexed { i, (name, b64) ->
-                sb.append("    // ").append(name.replace("\n", " ")).append("  (")
-                    .append(b64.length / 1024).append(" kB Base64)\n")
-                sb.append("    private fun i").append(i).append("(): String = buildString {\n")
+            imageEntries.forEachIndexed { index, image ->
+                val b64 = image.base64 ?: return@forEachIndexed
+                sb.append("    // ").append(image.originalFileName.replace("\n", " ")).append("\n")
+                sb.append("    private fun i").append(index).append("(): String = buildString {\n")
                 var pos = 0
                 while (pos < b64.length) {
                     val end = minOf(pos + CHUNK, b64.length)
@@ -237,36 +300,125 @@ object DevExporter {
         }
 
         sb.append("}\n")
-
-        val text = sb.toString()
-        return Result(
-            text = text,
-            packCount = packs.size,
-            imageCount = imageEntries.size,
-            approxBytes = text.length
-        )
-    }
-
-    /** Kotlin-String-Literal inklusive Escaping. */
-    private fun str(raw: String): String {
-        val sb = StringBuilder("\"")
-        for (c in raw) {
-            when (c) {
-                '\\' -> sb.append("\\\\")
-                '"' -> sb.append("\\\"")
-                '$' -> sb.append("\\$")
-                '\n' -> sb.append("\\n")
-                '\r' -> sb.append("\\r")
-                '\t' -> sb.append("\\t")
-                else -> sb.append(c)
-            }
-        }
-        sb.append("\"")
         return sb.toString()
     }
 
+    /** Kotlin-String-Literal inklusive Escaping. */
+    private fun str(raw: String): String = buildString {
+        append('"')
+        raw.forEach { c ->
+            when (c) {
+                '\\' -> append("\\\\")
+                '"' -> append("\\\"")
+                '$' -> append("\\$")
+                '\n' -> append("\\n")
+                '\r' -> append("\\r")
+                '\t' -> append("\\t")
+                else -> append(c)
+            }
+        }
+        append('"')
+    }
+
     // ---------------------------------------------------------------
-    // Teilen
+    // AI Studio ZIP
+    // ---------------------------------------------------------------
+
+    fun exportAiStudioBundleZip(
+        context: Context,
+        packs: List<QuestionPack> = DeveloperDataManager.getAllOwnPacks(),
+        linkPacks: List<LinkEngine.LinkPack> = DeveloperDataManager.getAllLinkPacks(),
+        includeImages: Boolean = true,
+        quality: Quality = Quality.MITTEL,
+        onProgress: ((Int, Int) -> Unit)? = null
+    ): File {
+        val result = build(
+            context = context,
+            packs = packs,
+            linkPacks = linkPacks,
+            includeImages = includeImages,
+            quality = quality,
+            onProgress = onProgress
+        )
+
+        val rememberedNames = DeveloperDataManager.getOriginalFileNames()
+        val packRefs = packs.map { ExportPackRef(it.id, it.title, it.pairs) }
+        val namesForExistingAssets = linkedMapOf<String, String>()
+        packs.forEach { pack ->
+            pack.pairs.forEach { pair ->
+                listOf(pair.first, pair.second).forEach { optionKey ->
+                    val path = DeveloperDataManager.imagePathFor(optionKey)
+                    if (path != null && path.startsWith("/") && File(path).exists()) {
+                        namesForExistingAssets[optionKey] = rememberedNames[optionKey] ?: File(path).name
+                    }
+                }
+            }
+        }
+
+        val assignments = if (includeImages) {
+            DevExportLogic.assignAssets(packRefs, namesForExistingAssets)
+        } else {
+            emptyList()
+        }
+        val zipPaths = DevExportLogic.zipPaths(assignments)
+        val manifest = DevExportLogic.buildManifestJson(packRefs, assignments)
+        val readme = buildAiStudioReadme(packs.size, assignments.size, includeImages)
+
+        val stamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.GERMAN).format(Date())
+        val destFile = File(exportDir(context), "harmony-ai-studio_$stamp.zip")
+
+        ZipOutputStream(BufferedOutputStream(FileOutputStream(destFile))).use { zos ->
+            putTextEntry(zos, "AI_STUDIO_README.txt", readme)
+            putTextEntry(zos, "harmony-export-manifest.json", manifest)
+            putTextEntry(zos, TARGET_PATH, result.kotlinSource)
+
+            assignments.forEachIndexed { index, asset ->
+                onProgress?.invoke(index + 1, assignments.size)
+                val original = DevAssetStore.originalFileFor(context, asset.optionKey, asset.originalFileName)
+                val fallbackPath = DeveloperDataManager.imagePathFor(asset.optionKey)
+                val source = when {
+                    original.exists() -> original
+                    fallbackPath != null && fallbackPath.startsWith("/") && File(fallbackPath).exists() -> File(fallbackPath)
+                    else -> null
+                } ?: return@forEachIndexed
+
+                val entryName = zipPaths.getValue(asset)
+                zos.putNextEntry(ZipEntry(entryName))
+                source.inputStream().use { input -> input.copyTo(zos) }
+                zos.closeEntry()
+            }
+        }
+        return destFile
+    }
+
+    private fun buildAiStudioReadme(packCount: Int, imageCount: Int, includeImages: Boolean): String = """
+HARMONY — EXPORT FÜR GOOGLE AI STUDIO
+
+Inhalt:
+- $TARGET_PATH
+- harmony-export-manifest.json
+- ${if (includeImages) "$imageCount Originalbilder unter images/..." else "keine Bilddateien"}
+- $packCount Spiele in verbindlicher Reihenfolge
+
+ANWEISUNG FÜR AI STUDIO
+1. Ersetze $TARGET_PATH vollständig durch die gleichnamige Datei aus diesem Paket.
+2. Beachte harmony-export-manifest.json als verbindliche Zuordnung und Reihenfolge.
+3. Bilddateien NICHT umbenennen. Der Manifest-Eintrag zipPath zeigt, zu welchem Spiel, Paar und welcher Seite das Bild gehört.
+4. Bestehende Harmony-Spielmechanik, Navigation und andere Features nicht umbauen.
+5. Falls Bilder als Android-Ressourcen eingebaut werden müssen, darf nur der Ziel-Ressourcenname technisch angepasst werden; die Zuordnung muss über optionKey/packId/pairIndex/side erhalten bleiben.
+6. Nach dem Einbau Projekt kompilieren und prüfen, dass alle GenPack-/GenQuestion-/GenAssetMeta-Aufrufe zu DevGenTypes.kt passen.
+
+Wichtig: Die Originaldateien bleiben im ZIP unverändert. Harmony selbst kann intern weiterhin optimierte Arbeitskopien verwenden.
+""".trimIndent()
+
+    private fun putTextEntry(zos: ZipOutputStream, name: String, text: String) {
+        zos.putNextEntry(ZipEntry(name))
+        zos.write(text.toByteArray(Charsets.UTF_8))
+        zos.closeEntry()
+    }
+
+    // ---------------------------------------------------------------
+    // Teilen / Hilfen
     // ---------------------------------------------------------------
 
     private fun exportDir(context: Context): File {
@@ -294,19 +446,16 @@ object DevExporter {
         })
     }
 
-    /** Teilt die Bilddateien einzeln — falls du sie lieber direkt in AI Studio hochlädst. */
     fun shareImages(context: Context, paths: List<String>) {
         val uris = ArrayList<Uri>()
         paths.take(60).forEach { p ->
             val f = File(p)
-            if (f.exists()) {
-                uris.add(FileProvider.getUriForFile(context, "${context.packageName}.devfiles", f))
-            }
+            if (f.exists()) uris.add(FileProvider.getUriForFile(context, "${context.packageName}.devfiles", f))
         }
         if (uris.isEmpty()) return
 
         val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-            type = "image/jpeg"
+            type = "image/*"
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
@@ -326,9 +475,8 @@ object DevExporter {
     }
 
     /**
-     * Exportiert das vollständige, unabhängige Android-Studio-Projekt als ZIP-Datei.
-     * Übernimmt alle Quellcodes, Ressourcen, Supabase-Codes, Dokumente und
-     * den vollständigen Gradle-Wrapper.
+     * Bestehender vollständiger Projekt-Export. Wichtig: In die .kt-Datei wird
+     * jetzt ausschließlich kompilierbarer Kotlin-Quelltext geschrieben.
      */
     fun exportFullProjectZip(context: Context): File {
         val destFile = File(exportDir(context), "harmony-independent-project.zip")
@@ -337,21 +485,21 @@ object DevExporter {
             build(
                 context = context,
                 packs = ownPacks,
+                linkPacks = DeveloperDataManager.getAllLinkPacks(),
                 includeImages = true,
                 quality = Quality.MITTEL
-            ).text
+            ).kotlinSource
         } else null
 
         val assetStream = try {
             context.assets.open("harmony_project.zip")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
 
         if (assetStream == null) {
             val fallbackFile = File(exportDir(context), "harmony_backup.json")
-            val json = DeveloperDataManager.exportProjectJson(context, includeImages = true)
-            fallbackFile.writeText(json)
+            fallbackFile.writeText(DeveloperDataManager.exportProjectJson(context, includeImages = true))
             return fallbackFile
         }
 
@@ -360,24 +508,25 @@ object DevExporter {
                 ZipOutputStream(BufferedOutputStream(FileOutputStream(destFile))).use { zos ->
                     var entry: ZipEntry? = zis.nextEntry
                     val buffer = ByteArray(8192)
-                    val targetContentPath = "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
+                    var replacedGeneratedContent = false
 
                     while (entry != null) {
                         val entryName = entry.name
-                        val newEntry = ZipEntry(entryName)
-                        zos.putNextEntry(newEntry)
-
-                        if (entryName == targetContentPath && contentResult != null) {
-                            val bytes = contentResult.toByteArray(Charsets.UTF_8)
-                            zos.write(bytes, 0, bytes.size)
+                        zos.putNextEntry(ZipEntry(entryName))
+                        if (entryName == TARGET_PATH && contentResult != null) {
+                            zos.write(contentResult.toByteArray(Charsets.UTF_8))
+                            replacedGeneratedContent = true
                         } else {
                             var len: Int
-                            while (zis.read(buffer).also { len = it } > 0) {
-                                zos.write(buffer, 0, len)
-                            }
+                            while (zis.read(buffer).also { len = it } > 0) zos.write(buffer, 0, len)
                         }
                         zos.closeEntry()
+                        zis.closeEntry()
                         entry = zis.nextEntry
+                    }
+
+                    if (!replacedGeneratedContent && contentResult != null) {
+                        putTextEntry(zos, TARGET_PATH, contentResult)
                     }
                 }
             }
