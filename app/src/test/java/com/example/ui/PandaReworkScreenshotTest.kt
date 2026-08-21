@@ -200,7 +200,7 @@ class PandaReworkScreenshotTest {
         }
         composeTestRule.onNodeWithText("Status").performClick()
         composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/panda-rework-preview/06-picshare-status.png")
-        composeTestRule.onNodeWithText("Fertig").performClick()
+        composeTestRule.onNodeWithText("Abbrechen").performClick()
         composeTestRule.onNodeWithText("Liste öffnen").performClick()
         composeTestRule.onAllNodes(isRoot()).onLast().captureRoboImage(filePath = "build/panda-rework-preview/07-antwortliste.png")
     }

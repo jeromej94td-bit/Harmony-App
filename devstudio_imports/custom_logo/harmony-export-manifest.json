@@ -1,0 +1,16 @@
+{
+  "format": "harmony-ai-studio-export",
+  "version": 2,
+  "packOrder": ["custom_logo"],
+  "packs": [
+    {"id": "custom_logo", "title": "Logo "}
+  ],
+  "assets": [
+    {"optionKey": "img_pack_1787325043190_0", "originalFileName": "1000110101.png", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 0, "side": 0, "zipPath": "images/custom_logo/pair-001/a/1000110101.png"},
+    {"optionKey": "img_pack_1787325043190_1", "originalFileName": "1000110102.png", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 0, "side": 1, "zipPath": "images/custom_logo/pair-001/b/1000110102.png"},
+    {"optionKey": "img_pack_1787325043190_2", "originalFileName": "1000110103.png", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 1, "side": 0, "zipPath": "images/custom_logo/pair-002/a/1000110103.png"},
+    {"optionKey": "img_pack_1787325043190_3", "originalFileName": "1000110104.png", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 1, "side": 1, "zipPath": "images/custom_logo/pair-002/b/1000110104.png"},
+    {"optionKey": "img_1787325068077_a", "originalFileName": "1000110105.png", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 2, "side": 0, "zipPath": "images/custom_logo/pair-003/a/1000110105.png"},
+    {"optionKey": "img_pack_1787325043190_5", "originalFileName": "1000110111.jpg", "packId": "custom_logo", "packTitle": "Logo ", "pairIndex": 2, "side": 1, "zipPath": "images/custom_logo/pair-003/b/1000110111.jpg"}
+  ]
+}
