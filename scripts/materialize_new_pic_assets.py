@@ -34,7 +34,14 @@ def embedded_bytes(source_name: str) -> bytes:
     chunks = APPEND_RE.findall(source)
     if not chunks:
         raise RuntimeError(f"No Base64 append chunks found in {source_name}")
-    return base64.b64decode("".join(chunks), validate=True)
+
+    payload = "".join(chunks)
+    payload = re.sub(r"\s+", "", payload)
+    payload += "=" * (-len(payload) % 4)
+    raw = base64.b64decode(payload, validate=False)
+    if not raw:
+        raise RuntimeError(f"Decoded image is empty: {source_name}")
+    return raw
 
 
 def materialize(source_name: str, target_name: str, target_format: str) -> None:
@@ -45,14 +52,13 @@ def materialize(source_name: str, target_name: str, target_format: str) -> None:
     with Image.open(io.BytesIO(raw)) as image:
         image.load()
         if target_format == "JPEG" and image.format == "JPEG":
-            # Keep the embedded JPEG bytes untouched when the target is JPG.
             target.write_bytes(raw)
         else:
-            # The Dev Studio embeds optimized JPEG working copies. For original
-            # .png filenames, materialize valid PNG files without changing the
-            # manifest filename/path mapping.
             converted = image.convert("RGBA") if image.mode in {"RGBA", "LA"} else image.convert("RGB")
             converted.save(target, format=target_format, optimize=True)
+
+    with Image.open(target) as verification_image:
+        verification_image.verify()
 
     if not target.exists() or target.stat().st_size == 0:
         raise RuntimeError(f"Failed to materialize {target_name}")
