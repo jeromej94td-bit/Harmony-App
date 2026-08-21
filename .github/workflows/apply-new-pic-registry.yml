@@ -1,0 +1,59 @@
+name: Apply New Pic Registry Patch
+
+on:
+  push:
+    branches:
+      - feat/devstudio-ai-export-v2
+
+permissions:
+  contents: write
+
+jobs:
+  patch-manager:
+    if: ${{ !contains(github.event.head_commit.message, '[auto-registry]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/devstudio-ai-export-v2
+          fetch-depth: 0
+
+      - name: Patch DeveloperDataManager safely
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('app/src/main/java/com/example/data/DeveloperDataManager.kt')
+          text = path.read_text(encoding='utf-8')
+
+          text = text.replace('GeneratedHarmonyContent.', 'GeneratedContentRegistry.')
+
+          anchor = '        val p = prefs(context)\n'
+          insertion = '''        GeneratedContentRegistry.ASSETS.forEach { asset ->
+              DevExportStateStore.recordOriginalFileName(
+                  context = context,
+                  optionKey = asset.optionKey,
+                  fileName = asset.originalFileName
+              )
+          }
+
+'''
+          if insertion not in text:
+              if anchor not in text:
+                  raise SystemExit('Expected installGenerated anchor not found')
+              text = text.replace(anchor, insertion + anchor, 1)
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Commit patch
+        run: |
+          if git diff --quiet -- app/src/main/java/com/example/data/DeveloperDataManager.kt; then
+            echo "No patch needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/java/com/example/data/DeveloperDataManager.kt
+          git commit -m "feat: load additive generated content [auto-registry]"
+          git push origin HEAD:feat/devstudio-ai-export-v2
