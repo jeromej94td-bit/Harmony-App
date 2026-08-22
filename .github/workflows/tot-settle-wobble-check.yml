@@ -4,11 +4,45 @@ on:
   push:
     branches:
       - fix/tot-settle-wobble
+    paths:
+      - 'scripts/verify_tot_settle_wobble.py'
+      - 'app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt'
+      - '.github/workflows/tot-settle-wobble-check.yml'
+
+permissions:
+  contents: write
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify settle wobble contract
-        run: python3 scripts/verify_tot_settle_wobble.py
+        with:
+          ref: fix/tot-settle-wobble
+      - name: Run settle wobble contract
+        id: contract
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/verify_tot_settle_wobble.py
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Persist RED/GREEN evidence
+        shell: bash
+        run: |
+          if [ "${{ steps.contract.outputs.exit_code }}" = "0" ]; then
+            printf 'GREEN\n' > scripts/.tot_settle_wobble_status
+          else
+            printf 'RED\n' > scripts/.tot_settle_wobble_status
+          fi
+          git config user.name "harmony-animation-test-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/.tot_settle_wobble_status
+          if ! git diff --cached --quiet; then
+            git commit -m "test: record Tot settle wobble contract status"
+            git push origin HEAD:fix/tot-settle-wobble
+          fi
+      - name: Fail when contract is red
+        if: steps.contract.outputs.exit_code != '0'
+        run: exit 1
