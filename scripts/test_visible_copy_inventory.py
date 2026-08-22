@@ -8,6 +8,10 @@ from visible_copy_inventory import (
     normalize_visible_text,
     write_report,
 )
+from visible_copy_validation import (
+    validate_asset_registry,
+    validate_route_manifest,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,9 +40,47 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         locations = [occ["path"] for occ in report.occurrences]
         self.assertTrue(any(path.endswith("GeneratedHarmonyContent.kt") for path in locations))
 
+    def test_repository_discovers_introspection_german_source(self):
+        report = discover_repository(ROOT)
+        texts = {unit["german"] for unit in report.units}
+        self.assertIn("Tauche ins Unterbewusstsein", texts)
+        self.assertIn("Reise beginnen", texts)
+
+    def test_locale_catalogs_are_not_inventory_sources(self):
+        report = discover_repository(ROOT)
+        self.assertFalse(any(occ["path"].endswith("JapaneseContent.kt") for occ in report.occurrences))
+        self.assertFalse(any(occ["path"].endswith("EnglishContent.kt") for occ in report.occurrences))
+
     def test_dev_studio_is_explicitly_excluded(self):
         report = discover_repository(ROOT)
         self.assertFalse(any("DevStudioScreen.kt" in occ["path"] for occ in report.occurrences))
+
+    def test_unregistered_bitmap_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            image = root / "app/src/main/res/drawable-nodpi/sample.png"
+            image.parent.mkdir(parents=True)
+            image.write_bytes(b"not-an-image")
+            errors = validate_asset_registry(
+                root,
+                {
+                    "text_bearing_assets": [],
+                    "brand_only_assets": [],
+                    "reviewed_text_free_assets": [],
+                },
+            )
+            self.assertIn(
+                "unclassified visual asset: app/src/main/res/drawable-nodpi/sample.png",
+                errors,
+            )
+
+    def test_required_route_source_must_exist(self):
+        errors = validate_route_manifest(
+            ROOT,
+            {"routes": [{"id": "broken", "source_paths": ["missing.kt"]}]},
+            [],
+        )
+        self.assertIn("route source missing: broken: missing.kt", errors)
 
     def test_report_is_deterministic(self):
         report = discover_repository(ROOT)
