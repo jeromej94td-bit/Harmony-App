@@ -34,15 +34,15 @@ jobs:
       - name: Apply Japanese render routing migration
         run: python3 scripts/apply_japanese_render_routing.py --root .
 
+      - name: Generate canonical German inventory
+        run: python3 scripts/visible_copy_canonical.py --root . --write
+
       - name: Run inventory tests
         working-directory: scripts
         run: python3 -m unittest -v test_visible_copy_inventory.py test_japanese_render_occurrences.py
 
       - name: Validate assets and product routes
         run: python3 scripts/visible_copy_validation.py --root .
-
-      - name: Generate canonical German inventory
-        run: python3 scripts/visible_copy_canonical.py --root . --write
 
       - name: Verify deterministic inventory
         run: python3 scripts/visible_copy_canonical.py --root . --check
