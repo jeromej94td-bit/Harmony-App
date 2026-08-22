@@ -8,11 +8,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Apply micro-sand particle implementation
         run: python3 scripts/apply_naehe_sand_particles.py
@@ -40,3 +45,25 @@ jobs:
           name: naehe-sand-quizrunner
           path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           if-no-files-found: error
+
+      - name: Persist verified QuizRunner
+        if: github.event_name == 'push'
+        run: |
+          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
+            echo "Verified QuizRunner already persisted"
+            exit 0
+          fi
+          git config user.name "harmony-sand-particle-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          git commit -m "feat: materialize Nähe UI from micro sand particles"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin feat/naehe-sand-particles-v3
+            git rebase origin/feat/naehe-sand-particles-v3
+            if git push origin HEAD:feat/naehe-sand-particles-v3; then
+              exit 0
+            fi
+            echo "Push race on attempt $attempt; retrying"
+            sleep 3
+          done
+          exit 1
