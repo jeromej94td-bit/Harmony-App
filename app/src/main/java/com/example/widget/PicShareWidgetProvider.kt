@@ -12,6 +12,8 @@ import android.widget.RemoteViews
 import com.example.MainActivity
 import com.example.R
 import com.example.data.db.HarmonyDatabase
+import com.example.ui.LanguageStore
+import com.example.ui.localizedContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +23,9 @@ class PicShareWidgetProvider : AppWidgetProvider() {
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val language = LanguageStore.get(context)
+                fun appText(german: String): String = localizedContent(german, language)
+
                 val pictures = HarmonyDatabase.getInstance(context).sharedPicDao().getWidgetPics()
                 val rotationSlot = (System.currentTimeMillis() / ROTATION_INTERVAL_MS).toInt()
                 val latest = if (pictures.isEmpty()) null else pictures[Math.floorMod(rotationSlot, pictures.size)]
@@ -28,14 +33,26 @@ class PicShareWidgetProvider : AppWidgetProvider() {
                     val views = RemoteViews(context.packageName, R.layout.widget_picshare)
                     if (latest != null) {
                         decodeWidgetBitmap(latest.filePath)?.let { views.setImageViewBitmap(R.id.picshare_widget_image, it) }
-                        views.setTextViewText(R.id.picshare_widget_caption, latest.caption.ifBlank { "Ein Bild nur für euch 💕" })
+                        views.setTextViewText(
+                            R.id.picshare_widget_caption,
+                            latest.caption.ifBlank { appText("Ein Bild nur für euch 💕") }
+                        )
                         views.setTextViewText(
                             R.id.picshare_widget_status,
-                            if (pictures.size > 1) "Harmony PicShare · ${pictures.size} Bilder rotieren" else "Harmony PicShare · bereit"
+                            appText(
+                                if (pictures.size > 1) {
+                                    "Harmony PicShare · ${pictures.size} Bilder rotieren"
+                                } else {
+                                    "Harmony PicShare · bereit"
+                                }
+                            )
                         )
                     } else {
-                        views.setTextViewText(R.id.picshare_widget_caption, "Öffne Harmony und füge euer erstes Bild hinzu")
-                        views.setTextViewText(R.id.picshare_widget_status, "Harmony PicShare")
+                        views.setTextViewText(
+                            R.id.picshare_widget_caption,
+                            appText("Öffne Harmony und füge euer erstes Bild hinzu")
+                        )
+                        views.setTextViewText(R.id.picshare_widget_status, appText("Harmony PicShare"))
                     }
                     val openIntent = Intent(context, MainActivity::class.java)
                     val pendingIntent = PendingIntent.getActivity(
