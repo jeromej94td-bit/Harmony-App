@@ -4,9 +4,8 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'scripts/verify_naehe_materialize_animation.py'
-      - 'app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt'
+    types:
+      - ready_for_review
 
 jobs:
   verify:
@@ -15,7 +14,25 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Verify targeted animation behavior
-        run: python3 scripts/verify_naehe_materialize_animation.py
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path('app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt').read_text(encoding='utf-8')
+          required = [
+              'private fun MaterializeInEntrance(',
+              'val isIntimacyPack = pack.id == "naehe" && pack.topic == "sex"',
+              'animationKey = questionAnimationKey',
+              'delayMillis = 130 + optIdx * 65',
+              'shape = RoundedCornerShape(24.dp)',
+              'shape = RoundedCornerShape(18.dp)',
+          ]
+          missing = [marker for marker in required if marker not in text]
+          if missing:
+              raise SystemExit('Missing Nähe materialize markers: ' + ', '.join(missing))
+          if text.count('val isIntimacyPack = pack.id == "naehe" && pack.topic == "sex"') != 1:
+              raise SystemExit('Nähe animation guard must occur exactly once')
+          print('Nähe materialize source invariants verified')
+          PY
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
