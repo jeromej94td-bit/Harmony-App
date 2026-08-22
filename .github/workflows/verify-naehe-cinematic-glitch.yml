@@ -8,9 +8,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -40,16 +37,9 @@ jobs:
       - name: Compile debug Kotlin
         run: gradle :app:compileDebugKotlin --no-daemon
 
-      - name: Commit implementation to feature branch
-        if: github.event_name == 'push'
-        run: |
-          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
-            echo "No implementation changes to commit"
-            exit 0
-          fi
-          git config user.name "harmony-cinematic-glitch-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
-          git commit -m "feat: add cinematic glitch materialization to Nähe"
-          git pull --rebase origin feat/naehe-cinematic-glitch-v2
-          git push origin HEAD:feat/naehe-cinematic-glitch-v2
+      - name: Upload verified QuizRunner
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinematic-quizrunner
+          path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          if-no-files-found: error
