@@ -9,20 +9,39 @@ internal data class TotShufflePlan(
     val finalPair: Pair<String, String>
 )
 
-private fun availableTotShuffleKeys(
+private fun nextTotPair(
     allPairs: List<Pair<String, String>>,
     visiblePair: Pair<String, String>
+): Pair<String, String> {
+    val currentIndex = allPairs.indexOfFirst { it == visiblePair }
+    return if (currentIndex >= 0 && currentIndex < allPairs.lastIndex) {
+        allPairs[currentIndex + 1]
+    } else {
+        visiblePair
+    }
+}
+
+private fun availableTotShuffleKeys(
+    allPairs: List<Pair<String, String>>,
+    visiblePair: Pair<String, String>,
+    finalPair: Pair<String, String>
 ): List<String> = allPairs
     .flatMap { listOf(it.first, it.second) }
-    .filterNot { it == visiblePair.first || it == visiblePair.second }
+    .filterNot {
+        it == visiblePair.first ||
+            it == visiblePair.second ||
+            it == finalPair.first ||
+            it == finalPair.second
+    }
     .distinct()
 
 /**
- * Builds the frame keys consumed by the card-flip loop.
+ * Builds the frame keys consumed by the existing card-flip loop.
  *
- * The first frames are quick decoys from the active pack. The final two frames always
- * restore the real visible pair (top first, bottom second). This prevents the last
- * random image pair from looking like the final result during the closing movement.
+ * The outgoing pair may briefly shuffle through other options from the same pack, but
+ * the last two frames are always the NEXT real pair. Therefore the pair visible during
+ * the closing movement is already the same pair that Compose receives after onPick()
+ * advances the index. There is no second "finished pair -> different pair" visual jump.
  */
 internal fun buildTotShuffleFrames(
     allPairs: List<Pair<String, String>>,
@@ -30,35 +49,42 @@ internal fun buildTotShuffleFrames(
     count: Int,
     random: Random = Random()
 ): List<String> {
-    val allowed = availableTotShuffleKeys(allPairs, visiblePair)
-    if (allowed.isEmpty() || count <= 0) return emptyList()
+    if (count <= 0 || allPairs.size <= 1) return emptyList()
 
-    if (count == 1) {
-        return listOf(visiblePair.first)
+    val finalPair = nextTotPair(allPairs, visiblePair)
+    if (count == 1) return listOf(finalPair.first)
+
+    val allowed = availableTotShuffleKeys(allPairs, visiblePair, finalPair)
+    val decoyCount = (count - 2).coerceAtLeast(0)
+    val decoys = if (allowed.isEmpty()) {
+        emptyList()
+    } else {
+        List(decoyCount) { allowed[random.nextInt(allowed.size)] }
     }
 
-    val decoyCount = (count - 2).coerceAtLeast(0)
-    val decoys = List(decoyCount) { allowed[random.nextInt(allowed.size)] }
-    return decoys + visiblePair.first + visiblePair.second
+    return decoys + finalPair.first + finalPair.second
 }
 
 /**
- * Describes the intended transition independently from Compose animation timing:
- * a short random phase, then one deterministic final pair.
+ * Pure description of the visual transition: a short random phase followed by exactly
+ * one deterministic incoming pair. On the last question there is no incoming pair, so
+ * the current pair remains the final state before the results screen.
  */
 internal fun buildTotShufflePlan(
     allPairs: List<Pair<String, String>>,
     visiblePair: Pair<String, String>,
     random: Random = Random()
 ): TotShufflePlan {
-    val allowed = availableTotShuffleKeys(allPairs, visiblePair)
+    val finalPair = nextTotPair(allPairs, visiblePair)
+    val allowed = availableTotShuffleKeys(allPairs, visiblePair, finalPair)
     val decoys = if (allowed.isEmpty()) {
         emptyList()
     } else {
         List(TOT_SHUFFLE_DECOY_COUNT) { allowed[random.nextInt(allowed.size)] }
     }
+
     return TotShufflePlan(
         shuffleKeys = decoys,
-        finalPair = visiblePair
+        finalPair = finalPair
     )
 }
