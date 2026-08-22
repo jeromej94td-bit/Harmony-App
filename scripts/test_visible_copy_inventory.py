@@ -25,8 +25,8 @@ class VisibleCopyInventoryTests(unittest.TestCase):
 
     def test_placeholder_signature_is_stable(self):
         self.assertEqual(
-            extract_placeholders("${profile.partnerName}, noch {count} Fragen"),
-            ("${profile.partnerName}", "{count}"),
+            extract_placeholders("${profile.partnerName}, noch {count} Fragen für $partnerName"),
+            ("${profile.partnerName}", "{count}", "$partnerName"),
         )
 
     def test_repository_discovers_android_strings(self):
@@ -75,6 +75,26 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         self.assertEqual(len(coca), 1)
         self.assertEqual(coca[0]["presentation"], "bundled-image-option")
         self.assertEqual(coca[0]["exemption"], "brand")
+
+    def test_technical_literals_are_not_customer_copy(self):
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
+        for technical in (
+            "floorAlpha",
+            "animated_palette",
+            "category_glow_${category.id}",
+            "edit_start_date_input",
+            "image/*",
+            "🛠️ Developer mode",
+            "Open Developer Studio",
+            "Edit games and destinations, import folders, adjust images",
+        ):
+            self.assertNotIn(technical, texts)
+
+    def test_base64_and_placeholder_only_literals_are_not_customer_copy(self):
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
+        self.assertFalse(any(len(text) > 1000 and " " not in text[:200] for text in texts))
+        for technical in ("{total}", "${index + 1}", "$percentage%", "${searchResults.size}"):
+            self.assertNotIn(technical, texts)
 
     def test_locale_catalogs_are_not_inventory_sources(self):
         report = discover_repository(ROOT)
