@@ -69,7 +69,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.example.R
 import androidx.compose.ui.text.font.FontStyle
@@ -355,7 +354,6 @@ fun QuizRunnerScreen(
                     .statusBarsPadding()
                     .navigationBarsPadding()
             ) {
-                // Runner Top Bar
                 if (pack.type == "tot" && !activeRun.isFinished) {
                     Row(
                         modifier = Modifier
@@ -379,369 +377,135 @@ fun QuizRunnerScreen(
                                 modifier = Modifier.size(18.dp)
                             )
                         }
-
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = tr("Das oder das?", "This or That?"),
-                                fontSize = 21.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
+                            Text(text = tr("Das oder das?", "This or That?"), fontSize = 21.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             Spacer(modifier = Modifier.height(4.dp))
-                            Box(
-                                modifier = Modifier
-                                    .width(130.dp)
-                                    .height(4.dp)
-                                    .clip(RoundedCornerShape(2.dp))
-                                    .background(Color.White.copy(alpha = 0.35f))
-                            )
+                            Box(modifier = Modifier.width(130.dp).height(4.dp).clip(RoundedCornerShape(2.dp)).background(Color.White.copy(alpha = 0.35f)))
                         }
-
                         Box(modifier = Modifier.size(36.dp))
                     }
                 } else {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
                             onClick = onAskExit,
-                            modifier = Modifier
-                                .size(34.dp)
-                                .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.08f))
-                                .testTag("runner_back_button")
+                            modifier = Modifier.size(34.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.08f)).testTag("runner_back_button")
                         ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = tr("Zurück", "Back"),
-                                tint = Color.White,
-                                modifier = Modifier.size(18.dp)
-                            )
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Zurück", "Back"), tint = Color.White, modifier = Modifier.size(18.dp))
                         }
-
                         Spacer(modifier = Modifier.width(12.dp))
-
-                        // Progress Track
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(5.dp)
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(Color.White.copy(alpha = 0.12f))
-                        ) {
+                        Box(modifier = Modifier.weight(1f).height(5.dp).clip(RoundedCornerShape(5.dp)).background(Color.White.copy(alpha = 0.12f))) {
                             val fraction = if (activeRun.isFinished) 1f else ((activeRun.currentIndex + 1).toFloat() / totalLen).coerceIn(0f, 1f)
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth(fraction)
-                                    .fillMaxHeight()
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .background(Brush.horizontalGradient(listOf(animatedCatColor, animatedCatColor.copy(alpha = 0.75f))))
-                            )
+                            Box(modifier = Modifier.fillMaxWidth(fraction).fillMaxHeight().clip(RoundedCornerShape(5.dp)).background(Brush.horizontalGradient(listOf(animatedCatColor, animatedCatColor.copy(alpha = 0.75f)))))
                         }
-
                         Spacer(modifier = Modifier.width(12.dp))
-
-                        Text(
-                            text = if (activeRun.isFinished) "$totalLen/$totalLen" else "${activeRun.currentIndex + 1}/$totalLen",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White.copy(alpha = 0.75f)
-                        )
+                        Text(text = if (activeRun.isFinished) "$totalLen/$totalLen" else "${activeRun.currentIndex + 1}/$totalLen", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White.copy(alpha = 0.75f))
                     }
                 }
 
-                // Runner Body
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .padding(
-                            start = if (pack.type == "tot") 8.dp else 22.dp,
-                            end = if (pack.type == "tot") 8.dp else 22.dp,
-                            bottom = if (pack.type == "tot") 12.dp else 0.dp
-                        )
+                    modifier = Modifier.weight(1f).fillMaxWidth().padding(
+                        start = if (pack.type == "tot") 8.dp else 22.dp,
+                        end = if (pack.type == "tot") 8.dp else 22.dp,
+                        bottom = if (pack.type == "tot") 12.dp else 0.dp
+                    )
                 ) {
                     if (activeRun.isFinished) {
                         if (pack.type == "tot") {
-                            TotResultsView(
-                                pack = pack,
-                                activeRun = activeRun,
-                                profile = profile,
-                                onClose = onAskExit
-                            )
+                            TotResultsView(pack = pack, activeRun = activeRun, profile = profile, onClose = onAskExit)
                         } else {
-                            // Standard Finished Screen
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
+                            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(text = "💞", fontSize = 56.sp)
                                 Spacer(modifier = Modifier.height(14.dp))
-                                Text(
-                                    text = tr("Fertig!", "Done!"),
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White
-                                )
+                                Text(text = tr("Fertig!", "Done!"), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
                                 Spacer(modifier = Modifier.height(10.dp))
-                                Text(
-                                    text = tr("Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.", "Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together."),
-                                    fontSize = 14.sp,
-                                    color = Color.White.copy(alpha = 0.7f),
-                                    textAlign = TextAlign.Center,
-                                    lineHeight = 20.sp
-                                )
+                                Text(text = tr("Deine Antworten sind gespeichert. Sobald ${profile.partnerName} das Paket beendet, werden beide Antworten gemeinsam sichtbar.", "Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together."), fontSize = 14.sp, color = Color.White.copy(alpha = 0.7f), textAlign = TextAlign.Center, lineHeight = 20.sp)
                             }
                         }
                     } else if (pack.type == "tot") {
-                        // This or That Mode
                         val pair = pack.pairs.getOrNull(activeRun.currentIndex) ?: ("" to "")
                         val selectedAns = activeRun.currentAnswers[activeRun.currentIndex]
                         val caption = LinkEngine.captionFor(pack.id, activeRun.currentIndex)
-
                         Column(modifier = Modifier.fillMaxSize()) {
                             if (!caption.isNullOrBlank()) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 8.dp)
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .background(Color.White.copy(alpha = 0.12f))
-                                        .padding(horizontal = 14.dp, vertical = 8.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = contentText(caption),
-                                        fontSize = 13.5.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
+                                Box(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp).clip(RoundedCornerShape(16.dp)).background(Color.White.copy(alpha = 0.12f)).padding(horizontal = 14.dp, vertical = 8.dp), contentAlignment = Alignment.Center) {
+                                    Text(text = contentText(caption), fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = Color.White, textAlign = TextAlign.Center)
                                 }
                             }
-
-                            TotCardPairView(
-                                firstText = pair.first,
-                                secondText = pair.second,
-                                packPairs = pack.pairs,
-                                selectedAns = selectedAns,
-                                onPick = { chosen ->
-                                    onPickTot(chosen)
-                                },
-                                modifier = Modifier.weight(1f)
-                            )
+                            TotCardPairView(firstText = pair.first, secondText = pair.second, packPairs = pack.pairs, selectedAns = selectedAns, onPick = { chosen -> onPickTot(chosen) }, modifier = Modifier.weight(1f))
                         }
                     } else if (pack.type == "disc") {
-                        // Discussion Mode
                         val scrollState = rememberScrollState()
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(scrollState)
-                                .padding(vertical = 12.dp)
-                        ) {
+                        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(vertical = 12.dp)) {
                             CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "reden"))
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text(
-                                text = contentText(pack.title),
-                                fontSize = 21.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
+                            Text(text = contentText(pack.title), fontSize = 21.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             Spacer(modifier = Modifier.height(20.dp))
-
                             pack.questions.forEachIndexed { qIdx, question ->
                                 val mineAns = activeRun.currentAnswers[qIdx] ?: question.defaultMine
-
                                 Column(modifier = Modifier.padding(bottom = 18.dp)) {
-                                    Text(
-                                        text = "${qIdx + 1}. ${contentText(question.q)}",
-                                        fontSize = 14.5.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.White,
-                                        lineHeight = 20.sp
-                                    )
+                                    Text(text = "${qIdx + 1}. ${contentText(question.q)}", fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White, lineHeight = 20.sp)
                                     Spacer(modifier = Modifier.height(10.dp))
-
                                     if (mineAns != null) {
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clip(RoundedCornerShape(12.dp))
-                                                .background(
-                                                    Brush.horizontalGradient(
-                                                        listOf(HarmonyPink.copy(alpha = 0.16f), HarmonyPurple.copy(alpha = 0.14f))
-                                                    )
-                                                )
-                                                .border(1.dp, HarmonyPink.copy(alpha = 0.2f), RoundedCornerShape(12.dp))
-                                                .padding(11.dp),
-                                            verticalAlignment = Alignment.Top
-                                        ) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(22.dp)
-                                                    .clip(CircleShape)
-                                                    .background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPinkSoft))),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text(
-                                                    text = profile.userName.take(1),
-                                                    fontSize = 10.sp,
-                                                    fontWeight = FontWeight.Bold,
-                                                    color = Color.White
-                                                )
+                                        Row(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Brush.horizontalGradient(listOf(HarmonyPink.copy(alpha = 0.16f), HarmonyPurple.copy(alpha = 0.14f)))).border(1.dp, HarmonyPink.copy(alpha = 0.2f), RoundedCornerShape(12.dp)).padding(11.dp), verticalAlignment = Alignment.Top) {
+                                            Box(modifier = Modifier.size(22.dp).clip(CircleShape).background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPinkSoft))), contentAlignment = Alignment.Center) {
+                                                Text(text = profile.userName.take(1), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.White)
                                             }
                                             Spacer(modifier = Modifier.width(9.dp))
-                                            Text(
-                                                text = contentText(mineAns),
-                                                fontSize = 13.sp,
-                                                color = Color.White,
-                                                lineHeight = 18.sp
-                                            )
+                                            Text(text = contentText(mineAns), fontSize = 13.sp, color = Color.White, lineHeight = 18.sp)
                                         }
                                     } else {
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clip(RoundedCornerShape(12.dp))
-                                                .background(Color.White.copy(alpha = 0.03f))
-                                                .border(1.dp, Color.White.copy(alpha = 0.13f), RoundedCornerShape(12.dp))
-                                                .clickable { onOpenOwnAnswerDialog(qIdx, "disc") }
-                                                .padding(11.dp)
-                                        ) {
-                                            Text(
-                                                text = tr("✎ Tippe, um zu antworten", "✎ Tap to answer"),
-                                                fontSize = 12.5.sp,
-                                                color = HarmonyMuted
-                                            )
+                                        Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White.copy(alpha = 0.03f)).border(1.dp, Color.White.copy(alpha = 0.13f), RoundedCornerShape(12.dp)).clickable { onOpenOwnAnswerDialog(qIdx, "disc") }.padding(11.dp)) {
+                                            Text(text = tr("✎ Tippe, um zu antworten", "✎ Tap to answer"), fontSize = 12.5.sp, color = HarmonyMuted)
                                         }
                                     }
-
                                     Spacer(modifier = Modifier.height(7.dp))
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clip(RoundedCornerShape(12.dp))
-                                            .background(Color.White.copy(alpha = 0.05f))
-                                            .border(1.dp, HarmonyLine, RoundedCornerShape(12.dp))
-                                            .padding(11.dp),
-                                        verticalAlignment = Alignment.Top
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(22.dp)
-                                                .clip(CircleShape)
-                                                .background(Brush.linearGradient(listOf(HarmonyPurple, HarmonyPurpleLight))),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = profile.partnerName.take(1),
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.White
-                                            )
+                                    Row(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color.White.copy(alpha = 0.05f)).border(1.dp, HarmonyLine, RoundedCornerShape(12.dp)).padding(11.dp), verticalAlignment = Alignment.Top) {
+                                        Box(modifier = Modifier.size(22.dp).clip(CircleShape).background(Brush.linearGradient(listOf(HarmonyPurple, HarmonyPurpleLight))), contentAlignment = Alignment.Center) {
+                                            Text(text = profile.partnerName.take(1), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.White)
                                         }
                                         Spacer(modifier = Modifier.width(9.dp))
-                                        Text(
-                                            text = tr("Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen", "Connect with ${profile.partnerName} to see the answer"),
-                                            fontSize = 13.sp,
-                                            color = HarmonyMuted
-                                        )
+                                        Text(text = tr("Verbinde dich mit ${profile.partnerName}, um die Antwort zu sehen", "Connect with ${profile.partnerName} to see the answer"), fontSize = 13.sp, color = HarmonyMuted)
                                     }
                                 }
                             }
                         }
                     } else {
-                        // Standard Quiz Mode
                         val q = pack.questions.getOrNull(activeRun.currentIndex)
                         val selectedAns = activeRun.currentAnswers[activeRun.currentIndex]
                         val scrollState = rememberScrollState()
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(scrollState),
-                            verticalArrangement = Arrangement.Center
-                        ) {
+                        Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState), verticalArrangement = Arrangement.Center) {
                             CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "unterhaltung"))
                             Spacer(modifier = Modifier.height(14.dp))
-
                             AnimatedQuestionCard(question = contentText(q?.q ?: ""))
                             Spacer(modifier = Modifier.height(26.dp))
-
-                            
                             val rawOptions = q?.options ?: emptyList()
-                            val processedOptions = rawOptions.map { 
-                                it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
-                            }
+                            val processedOptions = rawOptions.map { it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName) }
                             val isNie = pack.cat == "nie"
                             val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
                             val options = processedOptions + fallbackText
-
-
                             options.forEachIndexed { optIdx, optText ->
                                 val isOwn = optIdx == options.size - 1
-                                val isSelected = if (isOwn) {
-                                    selectedAns != null && selectedAns !in (q?.options ?: emptyList())
-                                } else {
-                                    selectedAns == optText
-                                }
-
-                                QuizOptionButton(
-                                    number = optIdx + 1,
-                                    text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
-                                    isSelected = isSelected,
-                                    isOwn = isOwn,
-                                    onClick = {
-                                        triggerMiniVibration(context, 40L)
-                                        if (isOwn) {
-                                            onOpenOwnAnswerDialog(activeRun.currentIndex, null)
-                                        } else {
-                                            onPickAnswer(optText)
-                                        }
-                                    },
-                                    modifier = Modifier.padding(bottom = 11.dp)
-                                )
+                                val isSelected = if (isOwn) selectedAns != null && selectedAns !in (q?.options ?: emptyList()) else selectedAns == optText
+                                QuizOptionButton(number = optIdx + 1, text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText), isSelected = isSelected, isOwn = isOwn, onClick = {
+                                    triggerMiniVibration(context, 40L)
+                                    if (isOwn) onOpenOwnAnswerDialog(activeRun.currentIndex, null) else onPickAnswer(optText)
+                                }, modifier = Modifier.padding(bottom = 11.dp))
                             }
                         }
                     }
                 }
 
-                // Runner Footer
                 if (activeRun.isFinished || pack.type == "disc") {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 22.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (activeRun.isFinished) {
-                            Button(
-                                onClick = onCloseRunner,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(52.dp)
-                                    .testTag("finish_runner_button"),
-                                shape = CircleShape,
-                                colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                            ) {
+                            Button(onClick = onCloseRunner, modifier = Modifier.fillMaxWidth().height(52.dp).testTag("finish_runner_button"), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)) {
                                 Text(text = tr("Zurück", "Back"), fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         } else if (pack.type == "disc") {
-                            Button(
-                                onClick = onCloseRunner,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(52.dp)
-                                    .testTag("finish_disc_button"),
-                                shape = CircleShape,
-                                colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                            ) {
+                            Button(onClick = onCloseRunner, modifier = Modifier.fillMaxWidth().height(52.dp).testTag("finish_disc_button"), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)) {
                                 Text(text = tr("Fertig", "Done"), fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
@@ -749,124 +513,37 @@ fun QuizRunnerScreen(
                 }
             }
 
-            // Exit Confirm Dialog
             if (isExitConfirmOpen) {
                 Dialog(onDismissRequest = onCloseExitConfirm) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Brush.verticalGradient(listOf(HarmonySurface2, HarmonySurface)))
-                            .border(1.dp, HarmonyLine, RoundedCornerShape(24.dp))
-                            .padding(22.dp)
-                    ) {
+                    Box(modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(Brush.verticalGradient(listOf(HarmonySurface2, HarmonySurface))).border(1.dp, HarmonyLine, RoundedCornerShape(24.dp)).padding(22.dp)) {
                         Column {
-                            Text(
-                                text = tr("Quiz verlassen?", "Leave quiz?"),
-                                fontSize = 17.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = HarmonyText
-                            )
+                            Text(text = tr("Quiz verlassen?", "Leave quiz?"), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = tr("Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.", "Are you sure you want to leave? Your progress will be saved."),
-                                fontSize = 13.sp,
-                                color = HarmonyMuted,
-                                lineHeight = 18.sp
-                            )
+                            Text(text = tr("Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.", "Are you sure you want to leave? Your progress will be saved."), fontSize = 13.sp, color = HarmonyMuted, lineHeight = 18.sp)
                             Spacer(modifier = Modifier.height(18.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                Button(
-                                    onClick = onCloseExitConfirm,
-                                    modifier = Modifier.weight(1f),
-                                    shape = CircleShape,
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
-                                ) {
-                                    Text(text = tr("Weiter spielen", "Keep playing"), color = HarmonyText)
-                                }
-                                Button(
-                                    onClick = onCloseRunner,
-                                    modifier = Modifier.weight(1f),
-                                    shape = CircleShape,
-                                    colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                                ) {
-                                    Text(text = tr("Quiz verlassen", "Leave quiz"), color = Color.White)
-                                }
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Button(onClick = onCloseExitConfirm, modifier = Modifier.weight(1f), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))) { Text(text = tr("Weiter spielen", "Keep playing"), color = HarmonyText) }
+                                Button(onClick = onCloseRunner, modifier = Modifier.weight(1f), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)) { Text(text = tr("Quiz verlassen", "Leave quiz"), color = Color.White) }
                             }
                         }
                     }
                 }
             }
 
-            // Own Answer Dialog
             if (isOwnAnswerDialogOpen) {
                 var textInput by remember { mutableStateOf("") }
                 Dialog(onDismissRequest = onCloseOwnAnswerDialog) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Brush.verticalGradient(listOf(HarmonySurface2, HarmonySurface)))
-                            .border(1.dp, HarmonyLine, RoundedCornerShape(24.dp))
-                            .padding(22.dp)
-                    ) {
+                    Box(modifier = Modifier.clip(RoundedCornerShape(24.dp)).background(Brush.verticalGradient(listOf(HarmonySurface2, HarmonySurface))).border(1.dp, HarmonyLine, RoundedCornerShape(24.dp)).padding(22.dp)) {
                         Column {
-                            Text(
-                                text = tr("Deine eigene Antwort", "Your own answer"),
-                                fontSize = 17.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = HarmonyText
-                            )
+                            Text(text = tr("Deine eigene Antwort", "Your own answer"), fontSize = 17.sp, fontWeight = FontWeight.Bold, color = HarmonyText)
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = tr("Schreib frei, was dir wirklich dazu einfällt.", "Write what truly comes to mind."),
-                                fontSize = 13.sp,
-                                color = HarmonyMuted
-                            )
+                            Text(text = tr("Schreib frei, was dir wirklich dazu einfällt.", "Write what truly comes to mind."), fontSize = 13.sp, color = HarmonyMuted)
                             Spacer(modifier = Modifier.height(14.dp))
-
-                            OutlinedTextField(
-                                value = textInput,
-                                onValueChange = { textInput = it },
-                                placeholder = { Text(tr("Deine Antwort...", "Your answer..."), color = HarmonyMuted) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .testTag("own_answer_input"),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = HarmonyPink,
-                                    unfocusedBorderColor = HarmonyLine,
-                                    focusedTextColor = HarmonyText,
-                                    unfocusedTextColor = HarmonyText
-                                )
-                            )
-
+                            OutlinedTextField(value = textInput, onValueChange = { textInput = it }, placeholder = { Text(text = tr("Deine Antwort...", "Your answer..."), color = HarmonyMuted) }, modifier = Modifier.fillMaxWidth().testTag("own_answer_input"), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = HarmonyPink, unfocusedBorderColor = HarmonyLine, focusedTextColor = HarmonyText, unfocusedTextColor = HarmonyText))
                             Spacer(modifier = Modifier.height(18.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
-                            ) {
-                                Button(
-                                    onClick = onCloseOwnAnswerDialog,
-                                    modifier = Modifier.weight(1f),
-                                    shape = CircleShape,
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))
-                                ) {
-                                    Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText)
-                                }
-                                Button(
-                                    onClick = {
-                                        triggerMiniVibration(context, 40L)
-                                        onSaveOwnAnswer(textInput)
-                                    },
-                                    enabled = textInput.isNotBlank(),
-                                    modifier = Modifier.weight(1f),
-                                    shape = CircleShape,
-                                    colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)
-                                ) {
-                                    Text(text = tr("Übernehmen", "Save"), color = Color.White)
-                                }
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Button(onClick = onCloseOwnAnswerDialog, modifier = Modifier.weight(1f), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.08f))) { Text(text = tr("Abbrechen", "Cancel"), color = HarmonyText) }
+                                Button(onClick = { triggerMiniVibration(context, 40L); onSaveOwnAnswer(textInput) }, enabled = textInput.isNotBlank(), modifier = Modifier.weight(1f), shape = CircleShape, colors = ButtonDefaults.buttonColors(containerColor = HarmonyPink)) { Text(text = tr("Übernehmen", "Save"), color = Color.White) }
                             }
                         }
                     }
@@ -894,75 +571,15 @@ fun QuizOptionButton(
     }
     val optionLabel = ('A'.code + number - 1).toChar().toString()
     val transition = rememberInfiniteTransition(label = "quiz_option_color_$number")
-    val glow by transition.animateFloat(
-        initialValue = 0.40f,
-        targetValue = 0.86f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1_900 + number * 230,
-                easing = FastOutSlowInEasing
-            ),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "quiz_option_glow_$number"
-    )
+    val glow by transition.animateFloat(initialValue = 0.40f, targetValue = 0.86f, animationSpec = infiniteRepeatable(animation = tween(durationMillis = 1_900 + number * 230, easing = FastOutSlowInEasing), repeatMode = RepeatMode.Reverse), label = "quiz_option_glow_$number")
     val shape = RoundedCornerShape(18.dp)
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .graphicsLayer { shadowElevation = if (isSelected) 14f else 4f + glow * 4f }
-            .clip(shape)
-            .background(
-                Brush.horizontalGradient(
-                    listOf(
-                        optionAccent.copy(alpha = if (isSelected) 0.46f else 0.16f + glow * 0.10f),
-                        HarmonySurface2.copy(alpha = 0.94f),
-                        lerp(optionAccent, HarmonyPurple, 0.48f)
-                            .copy(alpha = if (isSelected) 0.42f else 0.13f + glow * 0.08f)
-                    )
-                )
-            )
-            .border(
-                width = if (isSelected) 2.dp else 1.3.dp,
-                color = optionAccent.copy(alpha = if (isSelected) 1f else 0.36f + glow * 0.40f),
-                shape = shape
-            )
-            .clickable(onClick = onClick)
-            .padding(15.dp)
-            .testTag("quiz_option_$number")
-    ) {
+    Box(modifier = modifier.fillMaxWidth().graphicsLayer { shadowElevation = if (isSelected) 14f else 4f + glow * 4f }.clip(shape).background(Brush.horizontalGradient(listOf(optionAccent.copy(alpha = if (isSelected) 0.46f else 0.16f + glow * 0.10f), HarmonySurface2.copy(alpha = 0.94f), lerp(optionAccent, HarmonyPurple, 0.48f).copy(alpha = if (isSelected) 0.42f else 0.13f + glow * 0.08f)))).border(width = if (isSelected) 2.dp else 1.3.dp, color = optionAccent.copy(alpha = if (isSelected) 1f else 0.36f + glow * 0.40f), shape = shape).clickable(onClick = onClick).padding(15.dp).testTag("quiz_option_$number")) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(27.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            listOf(
-                                optionAccent,
-                                lerp(optionAccent, HarmonyPurple, 0.42f)
-                            )
-                        )
-                    )
-                    .border(1.dp, Color.White.copy(alpha = 0.50f + glow * 0.30f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = optionLabel,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
-                )
+            Box(modifier = Modifier.size(27.dp).clip(CircleShape).background(Brush.linearGradient(listOf(optionAccent, lerp(optionAccent, HarmonyPurple, 0.42f)))).border(1.dp, Color.White.copy(alpha = 0.50f + glow * 0.30f), CircleShape), contentAlignment = Alignment.Center) {
+                Text(text = optionLabel, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Color.White)
             }
             Spacer(modifier = Modifier.width(13.dp))
-            Text(
-                text = text,
-                fontSize = 14.5.sp,
-                fontWeight = FontWeight.Medium,
-                color = if (isOwn && !isSelected) Color.White.copy(alpha = 0.72f) else Color.White,
-                fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal,
-                lineHeight = 19.sp
-            )
+            Text(text = text, fontSize = 14.5.sp, fontWeight = FontWeight.Medium, color = if (isOwn && !isSelected) Color.White.copy(alpha = 0.72f) else Color.White, fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal, lineHeight = 19.sp)
         }
     }
 }
@@ -992,10 +609,23 @@ fun TotCardPairView(
     val oderScale = remember { Animatable(1f) }
 
     var isAnimating by remember { mutableStateOf(false) }
+    var skipNextTotEntrance by remember { mutableStateOf(false) }
     var topShuffleKey by remember(firstText, secondText) { mutableStateOf(firstText) }
     var bottomShuffleKey by remember(firstText, secondText) { mutableStateOf(secondText) }
 
     LaunchedEffect(firstText, secondText) {
+        if (skipNextTotEntrance) {
+            topOffsetY.snapTo(0f)
+            bottomOffsetY.snapTo(0f)
+            topTilt.snapTo(0f)
+            bottomTilt.snapTo(0f)
+            oderScale.snapTo(1f)
+            topFlip.snapTo(0f)
+            bottomFlip.snapTo(0f)
+            skipNextTotEntrance = false
+            return@LaunchedEffect
+        }
+
         topOffsetY.snapTo(-windDistancePx)
         bottomOffsetY.snapTo(windDistancePx)
         topTilt.snapTo(0f)
@@ -1030,83 +660,22 @@ fun TotCardPairView(
                     launch { bottomFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
                 }
             }
-            coroutineScope {
-                launch { topOffsetY.animateTo(52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { bottomOffsetY.animateTo(-52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { topTilt.animateTo(-3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { oderScale.animateTo(0f, tween(260, easing = FastOutSlowInEasing)) }
-            }
-            delay(360)
+
+            // The shuffle already ends on the incoming real pair. Keep it exactly where it is.
+            // Do not converge the cards, shrink "oder", pause, or replay the wind entrance.
+            skipNextTotEntrance = true
             onPick(option)
-            topShuffleKey = firstText
-            bottomShuffleKey = secondText
             isAnimating = false
         }
     }
 
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Top Card (tilted -3.2f)
-            TotStyledCard(
-                text = contentText(firstText),
-                assetKey = topShuffleKey,
-                tagAlignment = Alignment.TopStart,
-                isSelected = selectedAns == firstText,
-                rotationAngle = -3.2f + topTilt.value,
-                onClick = { handlePick(firstText) },
-                modifier = Modifier
-                    .weight(1f)
-                    .graphicsLayer {
-                        translationY = topOffsetY.value
-                        rotationY = topFlip.value
-                        cameraDistance = 14f * density.density
-                    }
-            )
-
-            // Bottom Card (tilted +3.2f)
-            TotStyledCard(
-                text = contentText(secondText),
-                assetKey = bottomShuffleKey,
-                tagAlignment = Alignment.BottomStart,
-                isSelected = selectedAns == secondText,
-                rotationAngle = 3.2f + bottomTilt.value,
-                onClick = { handlePick(secondText) },
-                modifier = Modifier
-                    .weight(1f)
-                    .graphicsLayer {
-                        translationY = bottomOffsetY.value
-                        rotationY = bottomFlip.value
-                        cameraDistance = 14f * density.density
-                    }
-            )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            TotStyledCard(text = contentText(firstText), assetKey = topShuffleKey, tagAlignment = Alignment.TopStart, isSelected = selectedAns == firstText, rotationAngle = -3.2f + topTilt.value, onClick = { handlePick(firstText) }, modifier = Modifier.weight(1f).graphicsLayer { translationY = topOffsetY.value; rotationY = topFlip.value; cameraDistance = 14f * density.density })
+            TotStyledCard(text = contentText(secondText), assetKey = bottomShuffleKey, tagAlignment = Alignment.BottomStart, isSelected = selectedAns == secondText, rotationAngle = 3.2f + bottomTilt.value, onClick = { handlePick(secondText) }, modifier = Modifier.weight(1f).graphicsLayer { translationY = bottomOffsetY.value; rotationY = bottomFlip.value; cameraDistance = 14f * density.density })
         }
-
-        // Central "oder" badge
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .graphicsLayer {
-                    scaleX = oderScale.value
-                    scaleY = oderScale.value
-                }
-                .clip(CircleShape)
-                .background(Color.White)
-                .border(1.5.dp, Color.White, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = contentText(oderText),
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF231127)
-            )
+        Box(modifier = Modifier.size(50.dp).graphicsLayer { scaleX = oderScale.value; scaleY = oderScale.value }.clip(CircleShape).background(Color.White).border(1.5.dp, Color.White, CircleShape), contentAlignment = Alignment.Center) {
+            Text(text = contentText(oderText), fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color(0xFF231127))
         }
     }
 }
@@ -1122,67 +691,14 @@ fun TotStyledCard(
     assetKey: String = text
 ) {
     val context = LocalContext.current
-    val imageUrl = remember(text, assetKey, TotImageProvider.version) {
-        TotImageProvider.getImageUrl(assetKey = assetKey, legacyAssetKey = text)
-    }
-    val imageRequest = remember(imageUrl) {
-        ImageRequest.Builder(context)
-            .data(imageUrl)
-            .crossfade(true)
-            .build()
-    }
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .graphicsLayer { rotationZ = rotationAngle }
-            .clip(RoundedCornerShape(26.dp))
-            .border(
-                width = 3.dp,
-                color = Color.White,
-                shape = RoundedCornerShape(26.dp)
-            )
-            .clickable(onClick = onClick)
-    ) {
-        AsyncImage(
-            model = imageRequest,
-            contentDescription = text,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colorStops = arrayOf(
-                            0.0f to Color.Black.copy(alpha = 0.15f),
-                            0.5f to Color.Transparent,
-                            1.0f to Color.Black.copy(alpha = 0.25f)
-                        )
-                    )
-                )
-        )
-
-        // Destination Tag Pill
+    val imageUrl = remember(text, assetKey, TotImageProvider.version) { TotImageProvider.getImageUrl(assetKey = assetKey, legacyAssetKey = text) }
+    val imageRequest = remember(imageUrl) { ImageRequest.Builder(context).data(imageUrl).crossfade(true).build() }
+    Box(modifier = modifier.fillMaxWidth().graphicsLayer { rotationZ = rotationAngle }.clip(RoundedCornerShape(26.dp)).border(width = 3.dp, color = Color.White, shape = RoundedCornerShape(26.dp)).clickable(onClick = onClick)) {
+        AsyncImage(model = imageRequest, contentDescription = text, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(colorStops = arrayOf(0.0f to Color.Black.copy(alpha = 0.15f), 0.5f to Color.Transparent, 1.0f to Color.Black.copy(alpha = 0.25f)))))
         if (com.example.data.DevAssetStore.isUserFacingLabel(text)) {
-            Box(
-                modifier = Modifier
-                    .align(tagAlignment)
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(
-                    text = contentText(text),
-                    fontSize = 14.5.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E1E1E),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+            Box(modifier = Modifier.align(tagAlignment).padding(16.dp).clip(RoundedCornerShape(20.dp)).background(Color.White).padding(horizontal = 16.dp, vertical = 8.dp)) {
+                Text(text = contentText(text), fontSize = 14.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1E1E1E), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
@@ -1198,203 +714,50 @@ fun TotResultsView(
 ) {
     val scrollState = rememberScrollState()
     var selectedTab by remember { mutableStateOf(0) }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 24.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onClose,
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.08f))
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = tr("Zurück", "Back"),
-                    tint = Color.White,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-
-            Text(
-                text = pack.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.White
-            )
-
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.08f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "•••",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp
-                )
-            }
+    Column(modifier = modifier.fillMaxSize().verticalScroll(scrollState).padding(bottom = 24.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 12.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onClose, modifier = Modifier.size(36.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.08f))) { Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = tr("Zurück", "Back"), tint = Color.White, modifier = Modifier.size(18.dp)) }
+            Text(text = pack.title, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold, color = Color.White)
+            Box(modifier = Modifier.size(36.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.08f)), contentAlignment = Alignment.Center) { Text(text = "•••", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp) }
         }
-
         Spacer(modifier = Modifier.height(10.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(
-                        if (selectedTab == 0) Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple))
-                        else Brush.horizontalGradient(listOf(Color.White.copy(alpha = 0.08f), Color.White.copy(alpha = 0.08f)))
-                    )
-                    .clickable { selectedTab = 0 }
-                    .padding(horizontal = 18.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "✓", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = tr("Ergebnisse", "Results"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp), horizontalArrangement = Arrangement.Center) {
+            Row(modifier = Modifier.clip(CircleShape).background(if (selectedTab == 0) Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple)) else Brush.horizontalGradient(listOf(Color.White.copy(alpha = 0.08f), Color.White.copy(alpha = 0.08f)))).clickable { selectedTab = 0 }.padding(horizontal = 18.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "✓", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp); Spacer(modifier = Modifier.width(6.dp)); Text(text = tr("Ergebnisse", "Results"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
             }
-
             Spacer(modifier = Modifier.width(12.dp))
-
-            Row(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(
-                        if (selectedTab == 1) Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple))
-                        else Brush.horizontalGradient(listOf(Color.White.copy(alpha = 0.08f), Color.White.copy(alpha = 0.08f)))
-                    )
-                    .clickable { selectedTab = 1 }
-                    .padding(horizontal = 18.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "💬", fontSize = 13.sp)
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = tr("Diskussion", "Discussion"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+            Row(modifier = Modifier.clip(CircleShape).background(if (selectedTab == 1) Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple)) else Brush.horizontalGradient(listOf(Color.White.copy(alpha = 0.08f), Color.White.copy(alpha = 0.08f)))).clickable { selectedTab = 1 }.padding(horizontal = 18.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "💬", fontSize = 13.sp); Spacer(modifier = Modifier.width(6.dp)); Text(text = tr("Diskussion", "Discussion"), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
             }
         }
-
         Spacer(modifier = Modifier.height(20.dp))
-
         if (selectedTab == 0) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "85%",
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = HarmonyPinkSoft
-                    )
+                    Text(text = "85%", fontSize = 36.sp, fontWeight = FontWeight.ExtraBold, color = HarmonyPinkSoft)
                     Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = tr("Antwortähnlichkeit", "Answer similarity"),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = HarmonyPink
-                    )
+                    Text(text = tr("Antwortähnlichkeit", "Answer similarity"), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = HarmonyPink)
                 }
             }
-
             Spacer(modifier = Modifier.height(24.dp))
-
             pack.pairs.forEachIndexed { index, pair ->
                 val myAns = activeRun.currentAnswers[index]
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 18.dp, vertical = 8.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Color.White.copy(alpha = 0.04f))
-                        .border(1.dp, HarmonyLine, RoundedCornerShape(20.dp))
-                        .padding(14.dp)
-                ) {
+                Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 8.dp).clip(RoundedCornerShape(20.dp)).background(Color.White.copy(alpha = 0.04f)).border(1.dp, HarmonyLine, RoundedCornerShape(20.dp)).padding(14.dp)) {
                     Column {
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.12f)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "${index + 1}",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                        }
-
+                        Box(modifier = Modifier.size(24.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) { Text(text = "${index + 1}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White) }
                         Spacer(modifier = Modifier.height(10.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            SideBySideTotCard(
-                                text = contentText(pair.first),
-                                assetKey = pair.first,
-                                isSelected = myAns == pair.first,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(210.dp)
-                            )
-
-                            SideBySideTotCard(
-                                text = contentText(pair.second),
-                                assetKey = pair.second,
-                                isSelected = myAns == pair.second,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(210.dp)
-                            )
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            SideBySideTotCard(text = contentText(pair.first), assetKey = pair.first, isSelected = myAns == pair.first, modifier = Modifier.weight(1f).height(210.dp))
+                            SideBySideTotCard(text = contentText(pair.second), assetKey = pair.second, isSelected = myAns == pair.second, modifier = Modifier.weight(1f).height(210.dp))
                         }
                     }
                 }
             }
         } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 18.dp, vertical = 20.dp)
-            ) {
-                Text(
-                    text = tr("Diskutiert eure Antworten", "Discuss your answers"),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 20.dp)) {
+                Text(text = tr("Diskutiert eure Antworten", "Discuss your answers"), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = tr("Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!", "Did you discover surprising differences? Talk about why you prefer certain options!"),
-                    fontSize = 13.5.sp,
-                    color = HarmonyMuted,
-                    lineHeight = 20.sp
-                )
+                Text(text = tr("Habt ihr überraschende Unterschiede entdeckt? Sprecht darüber, warum euch bestimmte Optionen besser gefallen!", "Did you discover surprising differences? Talk about why you prefer certain options!"), fontSize = 13.5.sp, color = HarmonyMuted, lineHeight = 20.sp)
             }
         }
     }
@@ -1408,76 +771,16 @@ fun SideBySideTotCard(
     assetKey: String = text
 ) {
     val context = LocalContext.current
-    val imageUrl = remember(text, assetKey, TotImageProvider.version) {
-        TotImageProvider.getImageUrl(assetKey = assetKey, legacyAssetKey = text)
-    }
-    val imageRequest = remember(imageUrl) {
-        ImageRequest.Builder(context)
-            .data(imageUrl)
-            .crossfade(true)
-            .build()
-    }
-
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .border(
-                width = if (isSelected) 2.5.dp else 1.dp,
-                color = if (isSelected) HarmonyPink else Color.White.copy(alpha = 0.1f),
-                shape = RoundedCornerShape(16.dp)
-            )
-    ) {
-        AsyncImage(
-            model = imageRequest,
-            contentDescription = text,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colorStops = arrayOf(
-                            0.0f to Color.Transparent,
-                            0.35f to Color.Black.copy(alpha = 0.15f),
-                            1.0f to Color.Black.copy(alpha = 0.88f)
-                        )
-                    )
-                )
-        )
-
+    val imageUrl = remember(text, assetKey, TotImageProvider.version) { TotImageProvider.getImageUrl(assetKey = assetKey, legacyAssetKey = text) }
+    val imageRequest = remember(imageUrl) { ImageRequest.Builder(context).data(imageUrl).crossfade(true).build() }
+    Box(modifier = modifier.clip(RoundedCornerShape(16.dp)).border(width = if (isSelected) 2.5.dp else 1.dp, color = if (isSelected) HarmonyPink else Color.White.copy(alpha = 0.1f), shape = RoundedCornerShape(16.dp))) {
+        AsyncImage(model = imageRequest, contentDescription = text, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(colorStops = arrayOf(0.0f to Color.Transparent, 0.35f to Color.Black.copy(alpha = 0.15f), 1.0f to Color.Black.copy(alpha = 0.88f)))))
         if (isSelected) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .size(22.dp)
-                    .clip(CircleShape)
-                    .background(HarmonyPink),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "✓",
-                    color = Color.White,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 11.sp
-                )
-            }
+            Box(modifier = Modifier.align(Alignment.TopEnd).padding(8.dp).size(22.dp).clip(CircleShape).background(HarmonyPink), contentAlignment = Alignment.Center) { Text(text = "✓", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 11.sp) }
         }
-
         if (com.example.data.DevAssetStore.isUserFacingLabel(text)) {
-            Text(
-                text = contentText(text),
-                fontSize = 12.5.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                lineHeight = 16.sp,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(10.dp)
-            )
+            Text(text = contentText(text), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = Color.White, lineHeight = 16.sp, modifier = Modifier.align(Alignment.BottomStart).padding(10.dp))
         }
     }
 }
