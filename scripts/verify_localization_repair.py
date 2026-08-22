@@ -112,7 +112,7 @@ def main() -> int:
             error(f"Could not parse repair map {map_name}")
             failed = True
 
-    for code, (filename, base_map_name) in audit.LOCALES.items():
+    for code, (filename, base_map_name, _repair_map_name) in audit.LOCALES.items():
         base = audit.extract_map(UI / filename, base_map_name)
         effective = dict(base)
         effective.update(repair_maps.get(code, {}))
