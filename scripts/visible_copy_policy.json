@@ -8,7 +8,8 @@
     "app/src/main/java/com/example/ui/LocalizationUpdates.kt",
     "app/src/main/java/com/example/ui/TranslationCatalog.kt",
     "app/src/main/java/com/example/ui/Language.kt",
-    "app/src/main/java/com/example/ui/GeneratedLocaleSupport.kt"
+    "app/src/main/java/com/example/ui/GeneratedLocaleSupport.kt",
+    "app/src/main/res/values-*/**"
   ],
   "excluded_exact_visible_text": [
     "Entwickler Studio Öffnen",
@@ -32,6 +33,7 @@
     "foto"
   ],
   "brand_literals": [
+    "Harmony",
     "Coca-Cola",
     "Pepsi",
     "Netflix",
