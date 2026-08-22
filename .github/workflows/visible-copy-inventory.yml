@@ -9,6 +9,8 @@ on:
       - 'app/src/main/assets/**'
       - 'scripts/visible_copy_*.py'
       - 'scripts/audit_japanese_visible_copy.py'
+      - 'scripts/audit_japanese_render_occurrences.py'
+      - 'scripts/test_japanese_render_occurrences.py'
       - 'scripts/validate_visible_copy_complete.py'
       - 'scripts/visible_copy_*.json'
       - 'localization/**'
@@ -30,7 +32,7 @@ jobs:
 
       - name: Run inventory tests
         working-directory: scripts
-        run: python3 -m unittest -v test_visible_copy_inventory.py
+        run: python3 -m unittest -v test_visible_copy_inventory.py test_japanese_render_occurrences.py
 
       - name: Validate assets and product routes
         run: python3 scripts/visible_copy_validation.py --root .
@@ -56,6 +58,9 @@ jobs:
 
       - name: Audit Japanese against canonical visible copy
         run: python3 scripts/audit_japanese_visible_copy.py
+
+      - name: Audit all Japanese render occurrences
+        run: python3 scripts/audit_japanese_render_occurrences.py --root . --write
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
