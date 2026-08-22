@@ -27,3 +27,4 @@ if text.count('val isIntimacyPack = pack.id == "naehe" && pack.topic == "sex"') 
     raise SystemExit("Cinematic animation must remain scoped exactly once to Nähe & Intimität")
 
 print("Cinematic Nähe source invariants verified")
+# trigger-main-apply
