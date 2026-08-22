@@ -47,6 +47,9 @@ jobs:
       - name: Generate six complete locale catalogs
         run: python3 scripts/generate_six_new_locale_catalogs.py
 
+      - name: Repair generated Kotlin locale sources
+        run: python3 scripts/repair_build_blockers.py
+
       - name: Persist generated locale catalogs
         run: |
           git config user.name "harmony-localization-bot"
