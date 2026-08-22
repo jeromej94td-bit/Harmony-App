@@ -7,6 +7,9 @@ on:
       - 'app/src/main/java/com/example/ui/**'
       - 'app/src/main/java/com/example/widget/**'
       - 'app/src/main/java/com/example/MainActivity.kt'
+      - 'app/src/main/res/**'
+      - 'app/src/main/assets/**'
+      - 'localization/**'
       - 'scripts/**'
       - 'docs/superpowers/specs/**'
       - 'docs/superpowers/plans/**'
@@ -26,6 +29,8 @@ jobs:
       - name: Run visible-copy inventory contract tests
         working-directory: scripts
         run: python3 -m unittest -v test_visible_copy_inventory.py
+      - name: Validate visible-copy assets and routes
+        run: python3 scripts/visible_copy_validation.py --root .
       - name: Verify generic generator regression
         run: python3 scripts/verify_production_locale_generator.py
       - name: Apply 41-locale scaffolding
