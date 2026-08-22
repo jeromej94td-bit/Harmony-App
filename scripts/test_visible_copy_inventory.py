@@ -2,8 +2,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from visible_copy_complete import discover_repository
 from visible_copy_inventory import (
-    discover_repository,
     extract_placeholders,
     normalize_visible_text,
     write_report,
@@ -45,6 +45,13 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         texts = {unit["german"] for unit in report.units}
         self.assertIn("Tauche ins Unterbewusstsein", texts)
         self.assertIn("Reise beginnen", texts)
+
+    def test_repository_discovers_widget_copy(self):
+        report = discover_repository(ROOT)
+        texts = {unit["german"] for unit in report.units}
+        self.assertIn("Ein Bild nur für euch 💕", texts)
+        self.assertIn("Öffne Harmony und füge euer erstes Bild hinzu", texts)
+        self.assertIn("Harmony PicShare · ${pictures.size} Bilder rotieren", texts)
 
     def test_locale_catalogs_are_not_inventory_sources(self):
         report = discover_repository(ROOT)
