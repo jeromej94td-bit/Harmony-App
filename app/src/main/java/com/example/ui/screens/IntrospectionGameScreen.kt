@@ -955,7 +955,7 @@ private fun QuestionScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "Hinweis",
+                        contentDescription = com.example.ui.contentText("Hinweis"),
                         tint = Color(0xFFFF6B6B),
                         modifier = Modifier.size(20.dp)
                     )

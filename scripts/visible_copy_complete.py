@@ -54,11 +54,14 @@ def _scan_non_compose_render_calls(root: Path) -> list[VisibleCopyOccurrence]:
             continue
         source = path.read_text(encoding="utf-8", errors="replace")
         for value, start, end in _iter_kotlin_strings(source):
-            before = source[max(0, start - 360):start]
+            is_picshare_widget = rel.endswith("/widget/PicShareWidgetProvider.kt")
+            lookback = 760 if is_picshare_widget else 360
+            max_distance = 700 if is_picshare_widget else 300
+            before = source[max(0, start - lookback):start]
             if not any(call in before for call in NON_COMPOSE_RENDER_CALLS):
                 continue
             nearest = max((before.rfind(call) for call in NON_COMPOSE_RENDER_CALLS), default=-1)
-            if nearest < 0 or len(before) - nearest > 300:
+            if nearest < 0 or len(before) - nearest > max_distance:
                 continue
             text = normalize_visible_text(value)
             if not text or text in excluded or text in internal:
