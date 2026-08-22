@@ -19,20 +19,6 @@ jobs:
         id: localization
         continue-on-error: true
         run: python3 scripts/audit_localization.py
-      - name: Generate missing translation updates
-        run: python3 scripts/generate_localization_updates.py
-      - name: Upload missing-key report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: localization-missing
-          path: localization_missing.json
-      - name: Upload generated translation updates
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: localization-generated
-          path: generated-localization-updates.kt
       - name: Upload source snapshot
         if: always()
         uses: actions/upload-artifact@v4
@@ -48,6 +34,20 @@ jobs:
             app/src/main/java/com/example/ui/screens/PandaEitherOrScreen.kt
             app/src/main/java/com/example/ui/screens/MomentsScreen.kt
             app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt
+      - name: Generate missing translation updates
+        run: python3 scripts/generate_localization_updates.py
+      - name: Upload missing-key report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-missing
+          path: localization_missing.json
+      - name: Upload generated translation updates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-generated
+          path: generated-localization-updates.kt
       - name: Fail when localization is incomplete
         if: steps.localization.outcome == 'failure'
         run: exit 1
