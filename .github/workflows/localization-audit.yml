@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'app/src/main/java/com/example/ui/**'
+      - 'app/src/main/java/com/example/MainActivity.kt'
       - 'scripts/audit_localization.py'
       - 'scripts/generate_localization_updates.py'
       - '.github/workflows/localization-audit.yml'
@@ -32,6 +33,21 @@ jobs:
         with:
           name: localization-generated
           path: generated-localization-updates.kt
+      - name: Upload source snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-source-snapshot
+          path: |
+            app/src/main/java/com/example/MainActivity.kt
+            app/src/main/java/com/example/ui/TranslationCatalog.kt
+            app/src/main/java/com/example/ui/Language.kt
+            app/src/main/java/com/example/ui/components/CommonUI.kt
+            app/src/main/java/com/example/ui/screens/ChatScreen.kt
+            app/src/main/java/com/example/ui/screens/GamesScreen.kt
+            app/src/main/java/com/example/ui/screens/PandaEitherOrScreen.kt
+            app/src/main/java/com/example/ui/screens/MomentsScreen.kt
+            app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt
       - name: Fail when localization is incomplete
         if: steps.localization.outcome == 'failure'
         run: exit 1
