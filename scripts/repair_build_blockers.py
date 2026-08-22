@@ -2,7 +2,7 @@
 """Repair concrete Kotlin build blockers exposed by localization CI.
 
 This is intentionally narrow and idempotent: it normalizes malformed Kotlin dollar escaping
-in both Portuguese catalogs and retains the already established build repairs for panda visuals
+in generated locale catalogs and retains the already established build repairs for panda visuals
 and PicShare widget preferences.
 """
 from pathlib import Path
@@ -16,11 +16,22 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-# Two legacy Portuguese catalogs contain two literal backslashes before Kotlin '$'.
+# Some generated catalogs contain two literal backslashes before Kotlin '$'.
 # In a Kotlin string that escapes the backslash and accidentally activates interpolation.
 # Collapse exactly two backslashes before '$' to the single Kotlin escape '\$'.
-for name in ("PortugueseBrazilContent.kt", "PortuguesePortugalContent.kt"):
+for name in (
+    "PortugueseBrazilContent.kt",
+    "PortuguesePortugalContent.kt",
+    "DutchContent.kt",
+    "SwedishContent.kt",
+    "IcelandicContent.kt",
+    "KoreanContent.kt",
+    "ChineseSimplifiedContent.kt",
+    "ChineseTraditionalContent.kt",
+):
     path = UI / name
+    if not path.exists():
+        continue
     text = path.read_text(encoding="utf-8")
     text = text.replace(r"\\$", r"\$")
     # Preserve stable Kotlin variable identifiers in localized literals.
