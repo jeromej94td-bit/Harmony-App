@@ -5,11 +5,13 @@ on:
     branches: [ main ]
     paths:
       - 'app/src/main/java/com/example/ui/**'
+      - 'app/src/main/java/com/example/widget/**'
       - 'app/src/main/java/com/example/MainActivity.kt'
       - 'scripts/audit_localization.py'
       - 'scripts/generate_localization_updates.py'
       - 'scripts/apply_localization_repairs.py'
       - 'scripts/finalize_localization_repair.py'
+      - 'scripts/repair_build_blockers.py'
       - 'scripts/verify_localization_repair.py'
       - '.github/workflows/localization-audit.yml'
 
@@ -45,6 +47,9 @@ jobs:
           python3 scripts/apply_localization_repairs.py
           python3 scripts/finalize_localization_repair.py
 
+      - name: Repair concrete Kotlin build blockers
+        run: python3 scripts/repair_build_blockers.py
+
       - name: Verify repaired localization
         run: python3 scripts/verify_localization_repair.py
 
@@ -67,7 +72,7 @@ jobs:
         run: |
           git config user.name "harmony-localization-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add app/src/main/java/com/example/MainActivity.kt app/src/main/java/com/example/ui
+          git add app/src/main/java/com/example/MainActivity.kt app/src/main/java/com/example/ui app/src/main/java/com/example/widget
           if ! git diff --cached --quiet; then
             git commit -m "Complete customer-facing localizations"
             git push origin HEAD:${{ github.head_ref }}
