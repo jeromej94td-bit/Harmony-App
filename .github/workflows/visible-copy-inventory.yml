@@ -1,0 +1,68 @@
+name: Complete Visible Copy Inventory
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/src/main/java/**'
+      - 'app/src/main/res/**'
+      - 'app/src/main/assets/**'
+      - 'scripts/visible_copy_*.py'
+      - 'scripts/validate_visible_copy_complete.py'
+      - 'scripts/visible_copy_*.json'
+      - 'localization/**'
+      - 'docs/superpowers/specs/2026-08-22-complete-visible-copy-inventory-japanese-design.md'
+      - 'docs/superpowers/plans/2026-08-22-german-visible-copy-inventory.md'
+      - '.github/workflows/visible-copy-inventory.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Run inventory tests
+        working-directory: scripts
+        run: python3 -m unittest -v test_visible_copy_inventory.py
+
+      - name: Validate assets and product routes
+        run: python3 scripts/visible_copy_validation.py --root .
+
+      - name: Generate canonical German inventory
+        run: python3 scripts/visible_copy_complete.py --root . --write
+
+      - name: Verify deterministic inventory
+        run: python3 scripts/visible_copy_complete.py --root . --check
+
+      - name: Show canonical metrics
+        run: cat localization/visible-copy-inventory-summary.md
+
+      - name: Persist canonical inventory
+        run: |
+          git config user.name "harmony-visible-copy-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add localization/visible-copy-inventory.de.json localization/visible-copy-inventory-summary.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Generate canonical German visible-copy inventory"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon
