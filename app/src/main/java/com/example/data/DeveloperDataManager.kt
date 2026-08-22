@@ -530,6 +530,60 @@ object DeveloperDataManager {
         return path
     }
 
+    /** Ändert nur den sichtbaren Namen; die Bildzuordnung bleibt erhalten. */
+    fun renameOptionKeepingImage(context: Context, oldKey: String, newLabel: String): String {
+        val sourceKey = oldKey.trim()
+        val typedLabel = newLabel.trim()
+        if (sourceKey.isEmpty()) return typedLabel
+        if (typedLabel == sourceKey) return sourceKey
+        if (typedLabel.isEmpty() && !DevAssetStore.isUserFacingLabel(sourceKey)) return sourceKey
+
+        val targetKey = if (typedLabel.isNotEmpty()) {
+            typedLabel
+        } else {
+            "img_hidden_${System.currentTimeMillis()}_${DevAssetStore.slug(sourceKey).take(24)}"
+        }
+
+        val path = imagePathFor(sourceKey)
+        if (!path.isNullOrBlank()) {
+            imageOverrides[targetKey] = path
+            TotImageProvider.setCustomImage(targetKey, path)
+        } else {
+            TotImageProvider.setAlias(targetKey, sourceKey)
+        }
+        return targetKey
+    }
+
+    /** Tauscht nur die Bildbelegung zweier Karten; Texte und Paarpositionen bleiben unverändert. */
+    fun swapOptionImages(context: Context, firstKey: String, secondKey: String) {
+        val first = firstKey.trim()
+        val second = secondKey.trim()
+        if (first.isEmpty() || second.isEmpty() || first == second) return
+
+        val firstPath = imagePathFor(first)
+        val secondPath = imagePathFor(second)
+
+        if (secondPath != null) {
+            imageOverrides[first] = secondPath
+            TotImageProvider.setCustomImage(first, secondPath)
+        } else {
+            imageOverrides.remove(first)
+            TotImageProvider.removeCustomImage(first)
+            TotImageProvider.setAlias(first, second)
+        }
+
+        if (firstPath != null) {
+            imageOverrides[second] = firstPath
+            TotImageProvider.setCustomImage(second, firstPath)
+        } else {
+            imageOverrides.remove(second)
+            TotImageProvider.removeCustomImage(second)
+            TotImageProvider.setAlias(second, first)
+        }
+
+        saveData(context)
+    }
+
     // ===============================================================
     // Ordner-Import: Bilder rein -> Paket raus
     // ===============================================================
