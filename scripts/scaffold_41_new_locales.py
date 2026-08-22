@@ -72,6 +72,31 @@ def patch_introspection() -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def patch_main_activity_rtl() -> None:
+    path = ROOT / "app/src/main/java/com/example/MainActivity.kt"
+    text = path.read_text(encoding="utf-8")
+    if "import androidx.compose.ui.platform.LocalLayoutDirection" not in text:
+        marker = "import androidx.compose.ui.platform.LocalContext\n"
+        if marker not in text:
+            raise RuntimeError("Could not find LocalContext import for RTL patch")
+        text = text.replace(marker, marker + "import androidx.compose.ui.platform.LocalLayoutDirection\n", 1)
+    if "import androidx.compose.ui.unit.LayoutDirection" not in text:
+        marker = "import androidx.compose.ui.unit.dp\n"
+        if marker not in text:
+            raise RuntimeError("Could not find dp import for RTL patch")
+        text = text.replace(marker, "import androidx.compose.ui.unit.LayoutDirection\n" + marker, 1)
+    old = "            CompositionLocalProvider(LocalAppLanguage provides currentLanguage) {"
+    if "currentLanguage.isRtl" not in text:
+        new = """            CompositionLocalProvider(
+                LocalAppLanguage provides currentLanguage,
+                LocalLayoutDirection provides if (currentLanguage.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+            ) {"""
+        if old not in text:
+            raise RuntimeError("Could not find root CompositionLocalProvider for RTL patch")
+        text = text.replace(old, new, 1)
+    path.write_text(text, encoding="utf-8")
+
+
 def write_stubs() -> None:
     for item in NEW_LOCALES:
         path = UI / item["filename"]
@@ -91,6 +116,7 @@ def main() -> None:
     patch_language()
     patch_catalog()
     patch_introspection()
+    patch_main_activity_rtl()
     write_stubs()
     print("41-locale scaffolding applied")
 
