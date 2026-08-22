@@ -56,11 +56,11 @@ jobs:
             git push origin HEAD:${{ github.head_ref }}
           fi
 
-      - name: Audit Japanese against canonical visible copy
-        run: python3 scripts/audit_japanese_visible_copy.py
-
       - name: Audit all Japanese render occurrences
         run: python3 scripts/audit_japanese_render_occurrences.py --root . --write
+
+      - name: Audit Japanese against canonical visible copy
+        run: python3 scripts/audit_japanese_visible_copy.py
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
