@@ -5,6 +5,9 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 UI = ROOT / "app/src/main/java/com/example/ui"
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from generate_six_new_locale_catalogs import kotlin_escape  # noqa: E402
 
 language = (UI / "Language.kt").read_text(encoding="utf-8")
 catalog = (UI / "TranslationCatalog.kt").read_text(encoding="utf-8")
@@ -24,6 +27,12 @@ def fail(message: str) -> None:
     global failed
     failed = True
     print(f"::error::{message}")
+
+# The audit parser treats the canonical Kotlin \n escape as part of the stable key.
+# Re-escaping it to \\n changes the generated key and drops multiline strings from coverage.
+newline_key = r"first\nsecond"
+if kotlin_escape(newline_key) != newline_key:
+    fail("locale generator double-escapes stable Kotlin newline sequences")
 
 for enum_name, (code, filename, exact_name, dynamic_name) in LOCALES.items():
     if f'{enum_name}("{code}"' not in language:
