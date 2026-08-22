@@ -3,7 +3,9 @@ name: Panda Category Artwork
 on:
   push:
     branches:
+      - main
       - fix/restore-premium-panda-category-artwork
+      - fix/lock-original-panda-artwork
   pull_request:
     branches:
       - main
@@ -16,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify premium panda category artwork
+      - name: Verify original premium panda category artwork
         run: python3 scripts/verify_panda_category_artwork.py
       - name: Set up Java 21
         uses: actions/setup-java@v5
