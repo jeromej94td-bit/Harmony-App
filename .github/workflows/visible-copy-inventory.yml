@@ -55,6 +55,7 @@ jobs:
           git config user.name "harmony-visible-copy-bot"
           git config user.email "actions@users.noreply.github.com"
           git add \
+            scripts/visible_copy_complete.py \
             app/src/main/java/com/example/ui/screens/HomeScreen.kt \
             app/src/main/java/com/example/ui/screens/GamesScreen.kt \
             app/src/main/java/com/example/ui/screens/ChatScreen.kt \
