@@ -5,69 +5,21 @@
     "bundled-image-option": 73,
     "compose-ui": 1130,
     "introspection-string": 58,
-    "product-content": 712,
+    "product-content": 697,
     "widget-notification": 5
   },
   "metrics": {
     "exempt_visible_units": 17,
-    "german_word_count": 5107,
-    "unique_translatable_units": 1269,
-    "unique_visible_units_total": 1286,
-    "visible_render_occurrences": 1983
+    "german_word_count": 5068,
+    "unique_translatable_units": 1256,
+    "unique_visible_units_total": 1273,
+    "visible_render_occurrences": 1968
   },
   "occurrences": [
     {
       "exemption": null,
-      "german": "harmony_settings_prefs",
-      "line": 19,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "app_language",
-      "line": 20,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "tot_italian_cuisine_mixed",
-      "line": 21,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
       "german": "🍝 Cucina italiana — scelte regionali",
       "line": 30,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "cucina",
-      "line": 31,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "italia",
-      "line": 31,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "essen",
-      "line": 33,
       "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
       "placeholders": [],
       "presentation": "product-content"
@@ -562,30 +514,6 @@
     },
     {
       "exemption": null,
-      "german": "kuchnia",
-      "line": 73,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "polska",
-      "line": 73,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "essen",
-      "line": 75,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
       "german": "Bigos",
       "line": 79,
       "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
@@ -804,54 +732,6 @@
       "exemption": null,
       "german": "Szarlotka",
       "line": 92,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "tot:$ITALIAN_PACK_ID:$index:a",
-      "line": 174,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "tot:$ITALIAN_PACK_ID:$index:b",
-      "line": 175,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "tot:$POLISH_PACK_ID:$index:a",
-      "line": 180,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "tot:$POLISH_PACK_ID:$index:b",
-      "line": 181,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "it",
-      "line": 192,
-      "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
-      "placeholders": [],
-      "presentation": "product-content"
-    },
-    {
-      "exemption": null,
-      "german": "pl",
-      "line": 193,
       "path": "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
       "placeholders": [],
       "presentation": "product-content"
@@ -16880,19 +16760,6 @@
     },
     {
       "exemption": null,
-      "german": "italia",
-      "id": "de_0b7398a97af6b54d",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "ERGEBNISSE",
       "id": "de_0bbb597da1938d03",
       "occurrence_count": 1,
@@ -17982,19 +17849,6 @@
     },
     {
       "exemption": null,
-      "german": "harmony_settings_prefs",
-      "id": "de_1e674acdef4e0488",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Vintage Art déco",
       "id": "de_1e8f0dc83a38658e",
       "occurrence_count": 1,
@@ -18101,14 +17955,13 @@
       "exemption": null,
       "german": "essen",
       "id": "de_20074a429e4bcc47",
-      "occurrence_count": 6,
+      "occurrence_count": 4,
       "placeholders": [],
       "presentations": [
         "compose-ui",
         "product-content"
       ],
       "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt",
         "app/src/main/java/com/example/data/model/Models.kt"
       ]
@@ -20445,19 +20298,6 @@
     },
     {
       "exemption": null,
-      "german": "tot:$ITALIAN_PACK_ID:$index:a",
-      "id": "de_40ed744846de586a",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Lokal einkaufen",
       "id": "de_40f4020f51f637eb",
       "occurrence_count": 1,
@@ -21238,19 +21078,6 @@
     },
     {
       "exemption": null,
-      "german": "kuchnia",
-      "id": "de_4be306b2f5cdaeed",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ich habe noch nie einen Online-Test gemacht, um mein Hogwarts-Haus herauszufinden.",
       "id": "de_4be52c33a08ad86c",
       "occurrence_count": 1,
@@ -21513,19 +21340,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "tot:$POLISH_PACK_ID:$index:a",
-      "id": "de_508e99c2489a978b",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
       ]
     },
     {
@@ -22811,19 +22625,6 @@
     },
     {
       "exemption": null,
-      "german": "tot:$ITALIAN_PACK_ID:$index:b",
-      "id": "de_66e399dba88f04bd",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ein Herz",
       "id": "de_672cfacc0b33938a",
       "occurrence_count": 1,
@@ -23991,19 +23792,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/ui/screens/HomeScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "app_language",
-      "id": "de_7a27e9d1fddca82a",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
       ]
     },
     {
@@ -25582,19 +25370,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "tot_italian_cuisine_mixed",
-      "id": "de_907d3551b411411f",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
       ]
     },
     {
@@ -30102,19 +29877,6 @@
     },
     {
       "exemption": null,
-      "german": "pl",
-      "id": "de_cc82b2d35efdeefd",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Noch keine Momente.\\nHaltet euer erstes Erlebnis fest 💞",
       "id": "de_ccd4a8a15242d6a2",
       "occurrence_count": 1,
@@ -30313,19 +30075,6 @@
     },
     {
       "exemption": null,
-      "german": "it",
-      "id": "de_cf9b172b1984f2e8",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Sonnige Dachterrasse",
       "id": "de_d0291eb5af13dec3",
       "occurrence_count": 1,
@@ -30387,19 +30136,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "polska",
-      "id": "de_d0d10eeaf79b2a32",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
       ]
     },
     {
@@ -31924,19 +31660,6 @@
     },
     {
       "exemption": null,
-      "german": "tot:$POLISH_PACK_ID:$index:b",
-      "id": "de_ea275cb8c6055f7f",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Etwas Neues ausprobieren",
       "id": "de_ea822a7ef12f0657",
       "occurrence_count": 1,
@@ -32716,19 +32439,6 @@
       "exemption": null,
       "german": "Ryba po grecku",
       "id": "de_f7a033f6ea0ea2d7",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "product-content"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "cucina",
-      "id": "de_f7a271d88fae12cf",
       "occurrence_count": 1,
       "placeholders": [],
       "presentations": [
