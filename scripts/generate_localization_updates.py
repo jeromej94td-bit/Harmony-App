@@ -179,10 +179,12 @@ def request_batch(items: list[str], target: str) -> dict[str, str]:
 
 
 def kotlin_escape(value: str) -> str:
+    # `$` must be escaped as `\$` in Kotlin source. Using `${'$'}` here changes the
+    # literal key shape and makes dynamic `${profile.partnerName}` catalog lookups miss.
     return (value.replace("\\", "\\\\")
                  .replace('"', '\\"')
                  .replace("\n", "\\n")
-                 .replace("$", "${'$'}"))
+                 .replace("$", "\\$"))
 
 
 def main() -> None:
