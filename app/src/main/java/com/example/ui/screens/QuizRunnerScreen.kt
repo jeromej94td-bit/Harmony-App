@@ -354,10 +354,13 @@ private fun AnimatedQuestionCard(
 }
 
 @Composable
-private fun CinematicGlitchMaterialize(
+private fun CinematicSandMaterialize(
     animationKey: Any,
     delayMillis: Int,
     totalDurationMillis: Int,
+    particleCount: Int,
+    accentColor: Color,
+    flowDirection: Float,
     shape: RoundedCornerShape,
     modifier: Modifier = Modifier,
     content: @Composable (Float) -> Unit
@@ -374,147 +377,170 @@ private fun CinematicGlitchMaterialize(
     }
 
     val p = progress.value.coerceIn(0f, 1f)
-    val build = (p / 0.70f).coerceIn(0f, 1f)
-    val reveal = ((p - 0.02f) / 0.24f).coerceIn(0f, 1f)
-    val settle = ((p - 0.62f) / 0.38f).coerceIn(0f, 1f)
-    val buildEase = CubicBezierEasing(0.12f, 0.86f, 0.20f, 1f).transform(build)
-    val settleEase = FastOutSlowInEasing.transform(settle)
-    val glitchAmount = ((1f - settleEase) * (0.78f + (1f - build) * 0.22f)).coerceIn(0f, 1f)
-
-    val scale = if (p < 0.62f) {
-        cinematicLerp(0.54f, 1.085f, buildEase)
-    } else {
-        cinematicLerp(1.085f, 1f, settleEase)
-    }
-    val rotationX = if (p < 0.62f) {
-        cinematicLerp(29f, -4.5f, buildEase)
-    } else {
-        cinematicLerp(-4.5f, 0f, settleEase)
-    }
-    val rotationY = if (p < 0.62f) {
-        cinematicLerp(-24f, 6f, buildEase)
-    } else {
-        cinematicLerp(6f, 0f, settleEase)
-    }
-    val rotationZ = sin(p * 31f) * 1.6f * glitchAmount
-    val xJitter = sin(p * 69f) * 9f * glitchAmount
-    val yLift = cinematicLerp(62f, 0f, reveal)
+    val contentAlpha = ((p - 0.72f) / 0.28f).coerceIn(0f, 1f)
+    val settle = FastOutSlowInEasing.transform(contentAlpha)
+    val glitchPulse = (0.5f + 0.5f * sin(p * 83f)).coerceIn(0f, 1f)
+    val glitchAmount = ((1f - settle) * (0.28f + glitchPulse * 0.34f)).coerceIn(0f, 0.62f)
 
     Box(
-        modifier = modifier
-            .graphicsLayer {
-                alpha = reveal
-                scaleX = scale
-                scaleY = scale
-                this.rotationX = rotationX
-                this.rotationY = rotationY
-                this.rotationZ = rotationZ
-                translationX = xJitter
-                translationY = yLift
-                cameraDistance = 28f * density
-                shadowElevation = 14f * glitchAmount
-            }
+        modifier = modifier.graphicsLayer {
+            rotationY = flowDirection * 2.8f * (1f - settle)
+            rotationX = -1.8f * (1f - settle)
+            scaleX = 0.992f + settle * 0.008f
+            scaleY = 0.992f + settle * 0.008f
+            cameraDistance = 34f * density
+        }
     ) {
-        content(glitchAmount)
-
-        Canvas(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(shape)
+                .graphicsLayer {
+                    alpha = contentAlpha
+                    translationX = sin(p * 69f) * 1.8f * (1f - settle)
+                }
         ) {
-            val fragmentFade = (1f - settleEase).coerceIn(0f, 1f)
-            val columns = 9
-            val rows = 6
-            val cellW = size.width / columns
-            val cellH = size.height / rows
+            content(glitchAmount)
+        }
 
-            for (row in 0 until rows) {
-                for (col in 0 until columns) {
-                    val seed = ((row * 31 + col * 17) % 100) / 100f
-                    val local = ((p - seed * 0.38f) / 0.34f).coerceIn(0f, 1f)
-                    if (local < 0.995f) {
-                        val directionX = ((col % 3) - 1).toFloat()
-                        val directionY = ((row % 3) - 1).toFloat()
-                        val driftX = directionX * size.width * 0.17f * (1f - local) +
-                            sin((row * 11 + col * 7).toFloat() + p * 42f) * 18f * (1f - local)
-                        val driftY = directionY * size.height * 0.28f * (1f - local)
-                        val alpha = (1f - local) * fragmentFade * (0.28f + seed * 0.34f)
-                        val fragmentColor = when ((row + col) % 4) {
-                            0 -> Color(0xFF7CF7FF)
-                            1 -> Color(0xFFFF63D6)
-                            2 -> Color.White
-                            else -> HarmonyPink
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            if (p >= 0.995f) return@Canvas
+
+            fun hash01(index: Int, salt: Int): Float {
+                var x = index * 0x45D9F3B + salt * 0x119DE1F3
+                x = x xor (x ushr 16)
+                x *= 0x45D9F3B
+                x = x xor (x ushr 16)
+                return (x and 0x7FFFFFFF) / 2147483647f
+            }
+
+            fun smoothstep(value: Float): Float {
+                val t = value.coerceIn(0f, 1f)
+                return t * t * (3f - 2f * t)
+            }
+
+            val fadeToSurface = (1f - contentAlpha * 0.94f).coerceIn(0f, 1f)
+            val width = size.width.coerceAtLeast(1f)
+            val height = size.height.coerceAtLeast(1f)
+            val direction = if (flowDirection >= 0f) 1f else -1f
+
+            repeat(particleCount) { index ->
+                val h1 = hash01(index, 1)
+                val h2 = hash01(index, 2)
+                val h3 = hash01(index, 3)
+                val h4 = hash01(index, 4)
+                val h5 = hash01(index, 5)
+                val h6 = hash01(index, 6)
+                val h7 = hash01(index, 7)
+                val h8 = hash01(index, 8)
+
+                val borderParticle = h8 > 0.86f
+                val targetX: Float
+                val targetY: Float
+                if (borderParticle) {
+                    when ((h7 * 4f).toInt().coerceIn(0, 3)) {
+                        0 -> {
+                            targetX = h1 * width
+                            targetY = 1.1f + h2 * 1.8f
                         }
-                        drawRect(
-                            color = fragmentColor.copy(alpha = alpha),
-                            topLeft = androidx.compose.ui.geometry.Offset(
-                                x = col * cellW + driftX,
-                                y = row * cellH + driftY
-                            ),
-                            size = androidx.compose.ui.geometry.Size(
-                                width = cellW * (0.72f + 0.22f * local),
-                                height = cellH * (0.58f + 0.34f * local)
-                            )
-                        )
+                        1 -> {
+                            targetX = h1 * width
+                            targetY = height - 1.1f - h2 * 1.8f
+                        }
+                        2 -> {
+                            targetX = 1.1f + h1 * 1.8f
+                            targetY = h2 * height
+                        }
+                        else -> {
+                            targetX = width - 1.1f - h1 * 1.8f
+                            targetY = h2 * height
+                        }
                     }
+                } else {
+                    targetX = h1 * width
+                    targetY = h2 * height
+                }
+
+                val localDelay = h3 * 0.43f
+                val localRaw = ((p - localDelay) / (0.79f - localDelay).coerceAtLeast(0.14f)).coerceIn(0f, 1f)
+                val local = smoothstep(localRaw)
+                if (local <= 0f) return@repeat
+
+                val mostlyMainSide = if (h4 > 0.91f) -direction else direction
+                val startX = if (mostlyMainSide > 0f) {
+                    -width * (0.16f + h5 * 0.78f)
+                } else {
+                    width * (1.16f + h5 * 0.78f)
+                }
+                val startY = targetY + (h6 - 0.5f) * height * 1.45f
+
+                val inv = 1f - local
+                val turbulence = sin(index * 0.173f + p * 37f + h4 * 6.2831855f)
+                val crossTurbulence = cos(index * 0.117f + p * 29f + h5 * 6.2831855f)
+                val streamArc = sin(local * 3.1415927f + h6 * 6.2831855f)
+
+                var x = cinematicLerp(startX, targetX, local)
+                var y = cinematicLerp(startY, targetY, local)
+                x += turbulence * width * (0.035f + h7 * 0.055f) * inv
+                y += crossTurbulence * height * (0.045f + h8 * 0.075f) * inv
+                y += streamArc * height * 0.13f * inv * direction
+
+                val microGlitchGate = hash01(index, 10)
+                if (microGlitchGate > 0.965f && p in 0.34f..0.84f) {
+                    x += sin(p * 151f + index) * (4f + h5 * 12f)
+                }
+
+                val gradientMix = (targetX / width).coerceIn(0f, 1f)
+                val baseColor = lerp(accentColor, HarmonyPurple, 0.22f + gradientMix * 0.48f)
+                val particleColor = when {
+                    h7 > 0.975f -> Color.White
+                    h7 > 0.942f -> Color(0xFF7CF7FF)
+                    h7 > 0.915f -> Color(0xFFFF63D6)
+                    else -> baseColor
+                }
+
+                val arrivalBrightness = 0.30f + local * 0.70f
+                val alpha = (fadeToSurface * arrivalBrightness * (0.30f + h4 * 0.68f)).coerceIn(0f, 1f)
+                val particleRadius = 0.65f + hash01(index, 5) * 1.35f
+
+                if (local < 0.985f && index % 5 == 0) {
+                    val trailX = x - (targetX - startX) * 0.010f * inv
+                    val trailY = y - (targetY - startY) * 0.010f * inv
+                    drawCircle(
+                        color = particleColor.copy(alpha = alpha * 0.18f),
+                        radius = particleRadius * 0.72f,
+                        center = androidx.compose.ui.geometry.Offset(trailX, trailY)
+                    )
+                }
+
+                drawCircle(
+                    color = particleColor.copy(alpha = alpha),
+                    radius = particleRadius,
+                    center = androidx.compose.ui.geometry.Offset(x, y)
+                )
+
+                if (index % 149 == 0 && p in 0.38f..0.88f) {
+                    val streak = 3f + h6 * 8f
+                    drawLine(
+                        color = particleColor.copy(alpha = alpha * 0.38f),
+                        start = androidx.compose.ui.geometry.Offset(x - streak * direction, y),
+                        end = androidx.compose.ui.geometry.Offset(x + streak * 0.35f * direction, y),
+                        strokeWidth = 0.8f
+                    )
                 }
             }
 
-            val sliceAlpha = glitchAmount * 0.22f
-            repeat(12) { index ->
-                val bandHeight = size.height / 17f
-                val y = ((index * 1.47f + p * 7.5f) % 13f) / 13f * size.height
-                val xShift = sin(index * 2.3f + p * 57f) * 44f * glitchAmount
-                drawRect(
-                    color = when (index % 3) {
-                        0 -> Color(0xFF7CF7FF).copy(alpha = sliceAlpha)
-                        1 -> Color(0xFFFF63D6).copy(alpha = sliceAlpha * 0.88f)
-                        else -> Color.White.copy(alpha = sliceAlpha * 0.72f)
-                    },
-                    topLeft = androidx.compose.ui.geometry.Offset(xShift, y),
-                    size = androidx.compose.ui.geometry.Size(size.width, bandHeight)
-                )
-            }
-
-            var scanY = 0f
-            while (scanY < size.height) {
+            if (p in 0.48f..0.90f) {
+                val wave = ((p - 0.48f) / 0.42f).coerceIn(0f, 1f)
+                val waveX = if (direction > 0f) {
+                    cinematicLerp(-width * 0.12f, width * 1.08f, wave)
+                } else {
+                    cinematicLerp(width * 1.12f, -width * 0.08f, wave)
+                }
                 drawLine(
-                    color = Color.White.copy(alpha = 0.055f * glitchAmount),
-                    start = androidx.compose.ui.geometry.Offset(0f, scanY),
-                    end = androidx.compose.ui.geometry.Offset(size.width, scanY),
-                    strokeWidth = 1f
-                )
-                scanY += 7f
-            }
-
-            val sweepX = cinematicLerp(-size.width * 0.45f, size.width * 1.22f, build)
-            drawRect(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        Color(0xFF7CF7FF).copy(alpha = 0.10f * glitchAmount),
-                        Color.White.copy(alpha = 0.24f * glitchAmount),
-                        Color(0xFFFF63D6).copy(alpha = 0.11f * glitchAmount),
-                        Color.Transparent
-                    ),
-                    start = androidx.compose.ui.geometry.Offset(sweepX - 170f, 0f),
-                    end = androidx.compose.ui.geometry.Offset(sweepX + 190f, size.height)
-                )
-            )
-
-            repeat(18) { index ->
-                val sparkPhase = ((p * 2.2f + index * 0.071f) % 1f)
-                val sparkAlpha = (1f - settleEase) * (1f - sparkPhase) * 0.70f
-                val edgeX = if (index % 2 == 0) sparkPhase * size.width else size.width - sparkPhase * size.width
-                val edgeY = ((index * 0.173f) % 1f) * size.height
-                drawRect(
-                    color = if (index % 3 == 0) {
-                        Color(0xFF7CF7FF).copy(alpha = sparkAlpha)
-                    } else {
-                        Color.White.copy(alpha = sparkAlpha * 0.82f)
-                    },
-                    topLeft = androidx.compose.ui.geometry.Offset(edgeX, edgeY),
-                    size = androidx.compose.ui.geometry.Size(3f + (index % 3) * 2f, 2f + (index % 2) * 2f)
+                    color = Color.White.copy(alpha = (1f - contentAlpha) * 0.10f),
+                    start = androidx.compose.ui.geometry.Offset(waveX, 0f),
+                    end = androidx.compose.ui.geometry.Offset(waveX, height),
+                    strokeWidth = 0.7f
                 )
             }
         }
@@ -898,10 +924,13 @@ fun QuizRunnerScreen(
                             Spacer(modifier = Modifier.height(14.dp))
 
                             if (isIntimacyPack) {
-                                CinematicGlitchMaterialize(
+                                CinematicSandMaterialize(
                                     animationKey = questionAnimationKey,
                                     delayMillis = 0,
-                                    totalDurationMillis = 2_800,
+                                    totalDurationMillis = 3_200,
+                                    particleCount = 3_000,
+                                    accentColor = HarmonyPink,
+                                    flowDirection = 1f,
                                     shape = RoundedCornerShape(24.dp),
                                     modifier = Modifier.fillMaxWidth()
                                 ) { glitchAmount ->
@@ -952,10 +981,13 @@ fun QuizRunnerScreen(
                                 }
 
                                 if (isIntimacyPack) {
-                                    CinematicGlitchMaterialize(
+                                    CinematicSandMaterialize(
                                         animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
-                                        delayMillis = 650 + optIdx * 170,
-                                        totalDurationMillis = 2_100,
+                                        delayMillis = 760 + optIdx * 210,
+                                        totalDurationMillis = 2_400,
+                                        particleCount = 1_000,
+                                        accentColor = optionAccentColor(optIdx + 1),
+                                        flowDirection = if (optIdx % 2 == 0) 1f else -1f,
                                         shape = RoundedCornerShape(18.dp),
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -1149,6 +1181,14 @@ fun QuizRunnerScreen(
     }
 }
 
+private fun optionAccentColor(number: Int): Color = when (number) {
+    1 -> Color(0xFF4AA8FF)
+    2 -> Color(0xFFFFC857)
+    3 -> Color(0xFF4ED69A)
+    4 -> Color(0xFFA978FF)
+    else -> Color(0xFFFF6B9D)
+}
+
 @Composable
 fun QuizOptionButton(
     number: Int,
@@ -1159,13 +1199,7 @@ fun QuizOptionButton(
     modifier: Modifier = Modifier,
     glitchAmount: Float = 0f
 ) {
-    val optionAccent = when (number) {
-        1 -> Color(0xFF4AA8FF)
-        2 -> Color(0xFFFFC857)
-        3 -> Color(0xFF4ED69A)
-        4 -> Color(0xFFA978FF)
-        else -> Color(0xFFFF6B9D)
-    }
+    val optionAccent = optionAccentColor(number)
     val optionLabel = ('A'.code + number - 1).toChar().toString()
     val transition = rememberInfiniteTransition(label = "quiz_option_color_$number")
     val glow by transition.animateFloat(
