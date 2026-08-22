@@ -11,6 +11,7 @@ on:
       - 'scripts/repair_build_blockers.py'
       - 'scripts/verify_localization_repair.py'
       - 'scripts/verify_ptbr_ready.py'
+      - 'scripts/verify_six_new_locales.py'
       - '.github/workflows/localization-audit.yml'
 
 permissions:
@@ -27,6 +28,9 @@ jobs:
 
       - name: Verify pt-BR readiness
         run: python3 scripts/verify_ptbr_ready.py
+
+      - name: Verify six new locales readiness
+        run: python3 scripts/verify_six_new_locales.py
 
       - name: Repair concrete Kotlin build blockers
         run: python3 scripts/repair_build_blockers.py
@@ -57,6 +61,6 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add app/src/main/java/com/example/ui app/src/main/java/com/example/widget
           if ! git diff --cached --quiet; then
-            git commit -m "Fix Brazilian Portuguese Kotlin placeholders"
+            git commit -m "Fix localization source issues"
             git push origin HEAD:${{ github.head_ref }}
           fi
