@@ -18,8 +18,6 @@ object TranslationCatalog {
 
     fun hasCompletePack(language: AppLanguage): Boolean {
         if (language == AppLanguage.GERMAN) return true
-        // Brazilian Portuguese is intentionally kept on its pre-repair implementation for now.
-        if (language == AppLanguage.PORTUGUESE_BRAZIL) return true
         return EXACT_ENGLISH_CONTENT.keys
             .asSequence()
             .filterNot { it in nonCustomerKeys || "Entwickler" in it }
@@ -45,12 +43,20 @@ object TranslationCatalog {
 
     fun exact(german: String, language: AppLanguage): String? {
         if (language == AppLanguage.GERMAN) return german
-        // Keep Brazilian Portuguese exactly on the pre-repair catalog until its own pass is ready.
-        if (language == AppLanguage.PORTUGUESE_BRAZIL) return baseExact(german, language)
+
+        // Reviewed high-visibility corrections always win for Brazilian Portuguese.
+        if (language == AppLanguage.PORTUGUESE_BRAZIL) {
+            PT_BR_REVIEWED_OVERRIDES[german]?.let { return it }
+            // pt-BR was generated from the current canonical catalog, so prefer it over
+            // the older generic Portuguese compatibility map when both contain a key.
+            LOCALIZATION_UPDATES_PORTUGUESE_BRAZIL[german]?.let { return it }
+        }
+
         // Reviewed Japanese video fixes must override stale legacy machine translations.
         if (language == AppLanguage.JAPANESE) {
             LOCALIZATION_UPDATES_JAPANESE[german]?.let { return it }
         }
+
         baseExact(german, language)?.let { return it }
         return LOCALIZATION_UPDATES[language]?.get(german)
     }
