@@ -46,17 +46,19 @@ jobs:
           path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           if-no-files-found: error
 
-      - name: Persist verified QuizRunner
+      - name: Persist verified source and drop unrelated locale drift
         if: github.event_name == 'push'
         run: |
-          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
-            echo "Verified QuizRunner already persisted"
+          git fetch origin main feat/naehe-sand-particles-v3
+          git checkout origin/main -- app/src/main/java/com/example/ui/SerbianContent.kt
+          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt app/src/main/java/com/example/ui/SerbianContent.kt; then
+            echo "Verified source already persisted and locale file matches main"
             exit 0
           fi
           git config user.name "harmony-sand-particle-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
-          git commit -m "feat: materialize Nähe UI from micro sand particles"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt app/src/main/java/com/example/ui/SerbianContent.kt
+          git commit -m "feat: finalize Nähe micro sand particle materialization"
           for attempt in 1 2 3 4 5; do
             git fetch origin feat/naehe-sand-particles-v3
             git rebase origin/feat/naehe-sand-particles-v3
