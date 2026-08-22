@@ -14,4 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check complete customer localization
+        id: localization
+        continue-on-error: true
         run: python3 scripts/audit_localization.py
+      - name: Upload missing-key report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-missing
+          path: localization_missing.json
+      - name: Fail when localization is incomplete
+        if: steps.localization.outcome == 'failure'
+        run: exit 1
