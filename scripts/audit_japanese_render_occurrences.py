@@ -12,6 +12,7 @@ import argparse
 from collections import Counter
 import json
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 from audit_japanese_visible_copy import load_japanese_catalog
 
@@ -34,6 +35,12 @@ LOCALIZATION_TOKENS = (
 INDIRECT_CONTENT_SOURCES = {
     "app/src/main/java/com/example/data/model/Models.kt",
 }
+
+HOME_HELPER_ROUTES = (
+    "CompactAction(",
+    "TargetChip(",
+    "PicShareSettingToggle(",
+)
 
 
 def _line_window(source: str, line: int, radius: int = 5) -> str:
@@ -61,15 +68,86 @@ def _source_text(root: Path, rel: str, cache: dict[str, str]) -> str:
     return cache[rel]
 
 
+def _repository_seed_is_localized(root: Path, cache: dict[str, str]) -> bool:
+    chat = _source_text(root, "app/src/main/java/com/example/ui/screens/ChatScreen.kt", cache)
+    moments = _source_text(root, "app/src/main/java/com/example/ui/screens/MomentsScreen.kt", cache)
+    return (
+        "LanguageManager.tr(message.text, appLanguage)" in chat
+        and "LanguageManager.tr(moment.title, appLanguage)" in moments
+        and "LanguageManager.tr(moment.content, appLanguage)" in moments
+    )
+
+
+def _link_engine_output_is_localized(root: Path, cache: dict[str, str]) -> bool:
+    """LinkEngine's production outputs are captions/packs; builder labels are Dev Studio only."""
+    runner = _source_text(root, "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt", cache)
+    pack_list = _source_text(root, "app/src/main/java/com/example/ui/screens/PackListScreen.kt", cache)
+    return (
+        "text = contentText(caption)" in runner
+        and "LanguageManager.translatePack(rawPack, appLanguage)" in pack_list
+    )
+
+
+def _home_helper_occurrence_is_localized(source: str, line: int, german: str) -> bool:
+    window = _line_window(source, line, radius=8)
+    if german not in window or not any(token in window for token in HOME_HELPER_ROUTES):
+        return False
+    return "contentText(label)" in source
+
+
+def _android_string_has_japanese_variant(root: Path, german: str) -> bool:
+    base_path = root / "app/src/main/res/values/strings.xml"
+    ja_path = root / "app/src/main/res/values-ja/strings.xml"
+    if not base_path.exists() or not ja_path.exists():
+        return False
+    try:
+        base_root = ET.parse(base_path).getroot()
+        ja_root = ET.parse(ja_path).getroot()
+    except ET.ParseError:
+        return False
+    base_names = {
+        elem.attrib.get("name")
+        for elem in base_root.findall("string")
+        if "".join(elem.itertext()).strip() == german
+    }
+    if not base_names:
+        return False
+    for elem in ja_root.findall("string"):
+        if elem.attrib.get("name") in base_names and "".join(elem.itertext()).strip():
+            return True
+    return False
+
+
+def _widget_layout_is_overridden_at_runtime(root: Path, german: str, cache: dict[str, str]) -> bool:
+    if german != "Harmony PicShare":
+        return False
+    provider = _source_text(root, "app/src/main/java/com/example/widget/PicShareWidgetProvider.kt", cache)
+    return (
+        "R.id.picshare_widget_status" in provider
+        and "appText(" in provider
+        and "setTextViewText" in provider
+    )
+
+
 def _occurrence_route_ok(root: Path, occ: dict, cache: dict[str, str]) -> tuple[bool, str]:
     if occ.get("exemption") == "brand":
         return True, "brand-exemption"
 
     presentation = occ.get("presentation")
     rel = occ.get("path", "")
+    german = occ.get("german", "")
+    line = int(occ.get("line", 0))
 
     if presentation in {"product-content", "bundled-image-option"} or rel in INDIRECT_CONTENT_SOURCES:
         return True, "content-catalog"
+
+    if rel == "app/src/main/java/com/example/data/repository/HarmonyRepository.kt":
+        routed = _repository_seed_is_localized(root, cache)
+        return routed, "localized-seed-consumer" if routed else "unrouted-seed-content"
+
+    if rel == "app/src/main/java/com/example/data/LinkEngine.kt":
+        routed = _link_engine_output_is_localized(root, cache)
+        return routed, "localized-link-output" if routed else "unrouted-link-output"
 
     if presentation == "introspection-string":
         source = _source_text(root, rel, cache)
@@ -78,17 +156,29 @@ def _occurrence_route_ok(root: Path, occ: dict, cache: dict[str, str]) -> tuple[
 
     if presentation == "compose-ui":
         source = _source_text(root, rel, cache)
-        routed = compose_occurrence_is_localized(source, int(occ.get("line", 0)), occ.get("german", ""))
+        routed = compose_occurrence_is_localized(source, line, german)
+        if not routed and rel == "app/src/main/java/com/example/ui/screens/HomeScreen.kt":
+            routed = _home_helper_occurrence_is_localized(source, line, german)
+            if routed:
+                return True, "compose-helper-localization"
         return routed, "compose-localization" if routed else "raw-compose"
 
     if presentation == "widget-notification":
         source = _source_text(root, rel, cache)
-        window = _line_window(source, int(occ.get("line", 0)), radius=10)
-        routed = any(token in window for token in ("localizedContent(", "TranslationCatalog.", "LanguageStore.get("))
+        window = _line_window(source, line, radius=12)
+        routed = any(
+            token in window
+            for token in ("localizedContent(", "TranslationCatalog.", "LanguageStore.get(", "appText(")
+        )
         return routed, "widget-localization" if routed else "raw-widget"
 
-    if presentation in {"android-string", "android-xml"}:
-        return False, "raw-android-resource"
+    if presentation == "android-string":
+        routed = _android_string_has_japanese_variant(root, german)
+        return routed, "android-ja-resource" if routed else "raw-android-resource"
+
+    if presentation == "android-xml":
+        routed = _widget_layout_is_overridden_at_runtime(root, german, cache)
+        return routed, "widget-runtime-override" if routed else "raw-android-resource"
 
     if presentation in {"bitmap-text", "svg-text"}:
         return False, "localized-asset-required"
