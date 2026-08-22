@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'scripts/apply_naehe_materialize_animation.py'
+      - 'scripts/trigger_naehe_materialize.txt'
 
 permissions:
   contents: write
