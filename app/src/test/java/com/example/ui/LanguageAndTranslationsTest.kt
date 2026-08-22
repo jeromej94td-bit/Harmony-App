@@ -33,7 +33,7 @@ class LanguageAndTranslationsTest {
         val essenTopic = TranslationCatalog.exact("Essen & Genuss", AppLanguage.JAPANESE)
         assertNotNull(essenTopic)
         assertNotEquals("Essen & Genuss", essenTopic)
-        assertEquals("食事と楽しさ", essenTopic)
+        assertEquals("食と楽しみ", essenTopic)
 
         // Pack translations
         val markenPack = TranslationCatalog.exact("Marken & Alltag", AppLanguage.JAPANESE)
