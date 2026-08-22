@@ -16,9 +16,8 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-# Some generated catalogs contain two literal backslashes before Kotlin '$'.
-# In a Kotlin string that escapes the backslash and accidentally activates interpolation.
-# Collapse exactly two backslashes before '$' to the single Kotlin escape '\$'.
+# Generated catalogs can contain multiple literal backslashes before Kotlin '$'.
+# Repeatedly collapse them until exactly the single valid Kotlin escape '\$' remains.
 for name in (
     "PortugueseBrazilContent.kt",
     "PortuguesePortugalContent.kt",
@@ -33,7 +32,8 @@ for name in (
     if not path.exists():
         continue
     text = path.read_text(encoding="utf-8")
-    text = text.replace(r"\\$", r"\$")
+    while r"\\$" in text:
+        text = text.replace(r"\\$", r"\$")
     # Preserve stable Kotlin variable identifiers in localized literals.
     text = text.replace("parceiroName", "partnerName")
     write(path, text)
