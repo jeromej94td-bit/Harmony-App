@@ -8,9 +8,12 @@ UI = ROOT / "app/src/main/java/com/example/ui"
 
 catalog = (UI / "TranslationCatalog.kt").read_text(encoding="utf-8")
 updates = (UI / "LocalizationUpdates.kt").read_text(encoding="utf-8")
+ptbr_source = (UI / "PortugueseBrazilContent.kt").read_text(encoding="utf-8")
+
 
 def fail(message: str) -> None:
     print(f"::error::{message}")
+
 
 failed = False
 
@@ -29,6 +32,17 @@ if "AppLanguage.PORTUGUESE_BRAZIL to LOCALIZATION_UPDATES_PORTUGUESE_BRAZIL" not
     failed = True
 if "LOCALIZATION_UPDATES[language]?.get(german)" not in catalog:
     fail("central localization overrides are not used by TranslationCatalog")
+    failed = True
+
+# The native Brazilian catalog must remain valid Kotlin and preserve stable placeholders.
+if r"\\$" in ptbr_source:
+    fail("pt-BR still contains a double-escaped Kotlin dollar placeholder")
+    failed = True
+if "parceiroName" in ptbr_source:
+    fail("pt-BR translated the stable partnerName placeholder identifier")
+    failed = True
+if "localizeBrazilianPortugueseDynamicContent" not in ptbr_source:
+    fail("native Brazilian Portuguese dynamic localization helper is missing")
     failed = True
 
 # Reviewed high-visibility corrections must win over machine/legacy translations.
