@@ -3,14 +3,8 @@ import tempfile
 import unittest
 
 from visible_copy_canonical import discover_repository, extract_placeholders
-from visible_copy_inventory import (
-    normalize_visible_text,
-    write_report,
-)
-from visible_copy_validation import (
-    validate_asset_registry,
-    validate_route_manifest,
-)
+from visible_copy_inventory import normalize_visible_text, write_report
+from visible_copy_validation import validate_asset_registry, validate_route_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -79,6 +73,9 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         texts = {unit["german"] for unit in discover_repository(ROOT).units}
         for technical in (
             "floorAlpha",
+            "nebula1Alpha",
+            "nebula2Alpha",
+            "nebula3Alpha",
             "animated_palette",
             "category_glow_${category.id}",
             "edit_start_date_input",
