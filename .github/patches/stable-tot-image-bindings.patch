@@ -1,0 +1,325 @@
+diff --git a/app/src/main/java/com/example/data/DeveloperDataManager.kt b/app/src/main/java/com/example/data/DeveloperDataManager.kt
+index 479b59d..0000000 100644
+--- a/app/src/main/java/com/example/data/DeveloperDataManager.kt
++++ b/app/src/main/java/com/example/data/DeveloperDataManager.kt
+@@ -49,6 +49,7 @@ object DeveloperDataManager {
+ 
+     fun init(context: Context) {
+         loadData(context)
++        StableTotImageBindings.install(context)
+         migrateRefreshedChoicePacks()
+         installGenerated(context)
+         syncWithHarmonyData()
+diff --git a/app/src/main/java/com/example/data/StableTotImageBindings.kt b/app/src/main/java/com/example/data/StableTotImageBindings.kt
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/app/src/main/java/com/example/data/StableTotImageBindings.kt
+@@ -0,0 +1,107 @@
++package com.example.data
++
++import android.content.Context
++import com.example.data.model.QuestionPack
++import com.example.ui.components.TotImageProvider
++import java.util.UUID
++
++/**
++ * Keeps the image identity of a "Das oder Das" option independent from its
++ * user-facing label.
++ *
++ * Historically the option text itself was the image key. Renaming that text in
++ * Dev Studio therefore made the image disappear. This store records lightweight
++ * aliases from the editable/display key to the original image key and restores
++ * them on app startup.
++ */
++object StableTotImageBindings {
++    private const val PREFS_NAME = "stable_tot_image_aliases"
++    private const val ALIAS_PREFIX = "alias::"
++
++    private fun prefs(context: Context) =
++        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
++
++    /** Restore persisted aliases before packs are exposed to the UI. */
++    fun install(context: Context) {
++        prefs(context).all.forEach { (rawKey, value) ->
++            if (!rawKey.startsWith(ALIAS_PREFIX) || value !is String) return@forEach
++            val alias = rawKey.removePrefix(ALIAS_PREFIX).trim()
++            val source = value.trim()
++            if (alias.isNotEmpty() && source.isNotEmpty() && !alias.equals(source, ignoreCase = true)) {
++                TotImageProvider.setAlias(alias, source)
++            }
++        }
++    }
++
++    /**
++     * Resolve an editable label/internal key to the original image key.
++     * Alias chains are flattened and bounded so corrupt preferences cannot loop.
++     */
++    fun resolveSource(context: Context, displayOrKey: String): String {
++        var current = displayOrKey.trim()
++        if (current.isEmpty()) return ""
++
++        val seen = LinkedHashSet<String>()
++        repeat(12) {
++            if (!seen.add(current.lowercase())) return current
++            val next = prefs(context).getString(ALIAS_PREFIX + current, null)?.trim().orEmpty()
++            if (next.isEmpty() || next.equals(current, ignoreCase = true)) return current
++            current = next
++        }
++        return current
++    }
++
++    /** Persist a rename without moving, renaming or re-importing the image file. */
++    fun bindAlias(context: Context, aliasKey: String, sourceKey: String) {
++        val alias = aliasKey.trim()
++        val source = resolveSource(context, sourceKey).ifBlank { sourceKey.trim() }
++        if (alias.isEmpty() || source.isEmpty() || alias.equals(source, ignoreCase = true)) return
++
++        prefs(context).edit()
++            .putString(ALIAS_PREFIX + alias, source)
++            .apply()
++        TotImageProvider.setAlias(alias, source)
++    }
++
++    /** Internal image id for a brand-new slot that has no label yet. */
++    fun newAssetKey(): String =
++        "img_asset_" + UUID.randomUUID().toString().replace("-", "")
++
++    /**
++     * Convert what the developer typed into the value stored in the pair.
++     * Empty display names get a hidden stable key, so even two image-only choices
++     * remain distinguishable as answers while no label is rendered on the card.
++     */
++    fun storedKeyForInput(context: Context, input: String, sourceKey: String): String {
++        val typed = input.trim()
++        if (typed.isNotEmpty()) {
++            if (sourceKey.isNotBlank()) bindAlias(context, typed, sourceKey)
++            return typed
++        }
++
++        val source = sourceKey.trim().ifEmpty { newAssetKey() }
++        val hidden = if (source.startsWith("img_", ignoreCase = true)) {
++            source
++        } else {
++            val suffix = Integer.toHexString(source.hashCode())
++            "img_choice_${DevAssetStore.slug(source).take(32)}_$suffix"
++        }
++        bindAlias(context, hidden, source)
++        return hidden
++    }
++
++    /**
++     * Make the final label aliases export-safe. For local/generated file images we
++     * additionally mirror the final key to the same path. The canonical image file
++     * stays unchanged; only its lookup key is projected for legacy/export code.
++     */
++    fun materializeAliasesForPack(context: Context, pack: QuestionPack) {
++        val keys = buildList {
++            pack.pairs.forEach { (first, second) ->
++                if (first.isNotBlank()) add(first.trim())
++                if (second.isNotBlank()) add(second.trim())
++            }
++        }.distinct()
++
++        keys.forEach { key ->
++            val source = resolveSource(context, key)
++            if (source.isBlank() || source.equals(key, ignoreCase = true)) return@forEach
++
++            TotImageProvider.setAlias(key, source)
++            val path = DeveloperDataManager.imagePathFor(source)
++            if (!path.isNullOrBlank()) {
++                DeveloperDataManager.setImageOverride(context, key, path)
++            }
++        }
++    }
++}
+diff --git a/app/src/main/java/com/example/ui/components/TotImageProvider.kt b/app/src/main/java/com/example/ui/components/TotImageProvider.kt
+index b9a52c1..0000000 100644
+--- a/app/src/main/java/com/example/ui/components/TotImageProvider.kt
++++ b/app/src/main/java/com/example/ui/components/TotImageProvider.kt
+@@ -526,6 +526,24 @@ object TotImageProvider {
+         }
+     }
+ 
++    /**
++     * Stable-key overload used by the card runner. The asset key is deliberately
++     * separate from the displayed/legacy text, so a renamed label cannot detach
++     * its image. Legacy text remains a fallback for older packs.
++     */
++    fun getImageUrl(assetKey: String, legacyAssetKey: String): Any {
++        val asset = assetKey.trim()
++        if (asset.isNotEmpty()) {
++            getExplicitImageOrNull(asset)?.let { return it }
++        }
++
++        val legacy = legacyAssetKey.trim()
++        if (legacy.isNotEmpty() && !legacy.equals(asset, ignoreCase = true)) {
++            getExplicitImageOrNull(legacy)?.let { return it }
++        }
++
++        return getImageUrl(asset.ifEmpty { legacy })
++    }
++
+     fun getImageUrl(text: String): Any {
+         val trimmed = text.trim()
+         if (trimmed.isEmpty()) {
+diff --git a/app/src/main/java/com/example/ui/screens/DevStudioScreen.kt b/app/src/main/java/com/example/ui/screens/DevStudioScreen.kt
+index c7432c9..0000000 100644
+--- a/app/src/main/java/com/example/ui/screens/DevStudioScreen.kt
++++ b/app/src/main/java/com/example/ui/screens/DevStudioScreen.kt
+@@ -82,6 +82,7 @@ import com.example.data.DevExporter
+ import com.example.data.DeveloperDataManager
+ import com.example.data.LinkEngine
++import com.example.data.StableTotImageBindings
+ import com.example.data.model.Category
+ import com.example.data.model.HarmonyPacksData
+ import com.example.data.model.Question
+@@ -650,6 +651,7 @@ private fun DevPacksTab(
+             onDismiss = { creatingNew = false },
+             onSave = { updated ->
++                StableTotImageBindings.materializeAliasesForPack(context, updated)
+                 DeveloperDataManager.savePack(context, updated)
+                 creatingNew = false
+                 onChanged("'${updated.title}' gespeichert.")
+@@ -668,6 +670,7 @@ private fun DevPacksTab(
+             isNew = false,
+             onDismiss = { editingPack = null },
+             onSave = { updated ->
++                StableTotImageBindings.materializeAliasesForPack(context, updated)
+                 DeveloperDataManager.savePack(context, updated)
+                 editingPack = null
+                 onChanged("'${updated.title}' gespeichert.")
+@@ -970,23 +973,13 @@ private fun PairEditor(
+                 text = pair.first,
+                 imageVersion = imageVersion,
+                 onTextChange = { onChange(it to pair.second) },
+-                onPickImage = {
+-                    val key = if (pair.first.isBlank()) "img_${System.currentTimeMillis()}_a" else pair.first
+-                    if (key != pair.first) onChange(key to pair.second)
+-                    onPickImage(key)
+-                },
++                onPickImage = onPickImage,
+                 modifier = Modifier.weight(1f)
+             )
+             OptionSlot(
+                 text = pair.second,
+                 imageVersion = imageVersion,
+                 onTextChange = { onChange(pair.first to it) },
+-                onPickImage = {
+-                    val key = if (pair.second.isBlank()) "img_${System.currentTimeMillis()}_b" else pair.second
+-                    if (key != pair.second) onChange(pair.first to key)
+-                    onPickImage(key)
+-                },
++                onPickImage = onPickImage,
+                 modifier = Modifier.weight(1f)
+             )
+         }
+@@ -998,30 +991,43 @@ private fun OptionSlot(
+     text: String,
+     imageVersion: Int,
+     onTextChange: (String) -> Unit,
+-    onPickImage: () -> Unit,
++    onPickImage: (String) -> Unit,
+     modifier: Modifier = Modifier
+ ) {
++    val context = LocalContext.current
+     val isUserFacing = DevAssetStore.isUserFacingLabel(text)
+     val displayValue = if (isUserFacing) text else ""
++    val sourceAssetKey = remember(text) {
++        StableTotImageBindings.resolveSource(context, text)
++    }
+ 
+     Column(modifier = modifier) {
+         Box(
+@@ -1033,17 +1039,26 @@ private fun OptionSlot(
+                 .height(92.dp)
+                 .clip(RoundedCornerShape(10.dp))
+                 .background(Color.Black)
+                 .border(1.dp, HarmonyLine, RoundedCornerShape(10.dp))
+-                .clickable { onPickImage() }
++                .clickable {
++                    val key = sourceAssetKey.ifBlank { StableTotImageBindings.newAssetKey() }
++                    if (text.isBlank()) {
++                        onTextChange(StableTotImageBindings.storedKeyForInput(context, "", key))
++                    }
++                    onPickImage(key)
++                }
+         ) {
+-            if (text.isNotBlank()) {
++            if (sourceAssetKey.isNotBlank()) {
+                 AsyncImage(
+-                    model = remember(text, imageVersion, TotImageProvider.version) {
+-                        TotImageProvider.getImageUrl(text)
++                    model = remember(sourceAssetKey, imageVersion, TotImageProvider.version) {
++                        TotImageProvider.getImageUrl(sourceAssetKey)
+                     },
+                     contentDescription = text,
+                     contentScale = ContentScale.Crop,
+@@ -1064,7 +1079,11 @@ private fun OptionSlot(
+         Spacer(Modifier.height(4.dp))
+         OutlinedTextField(
+             value = displayValue,
+-            onValueChange = onTextChange,
++            onValueChange = { newValue ->
++                onTextChange(
++                    StableTotImageBindings.storedKeyForInput(context, newValue, sourceAssetKey)
++                )
++            },
+             placeholder = { Text("Name (optional)", fontSize = 11.5.sp, color = HarmonyMuted) },
+             singleLine = false,
+             maxLines = 3,
+diff --git a/app/src/test/java/com/example/data/StableTotImageBindingsTest.kt b/app/src/test/java/com/example/data/StableTotImageBindingsTest.kt
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/app/src/test/java/com/example/data/StableTotImageBindingsTest.kt
+@@ -0,0 +1,46 @@
++package com.example.data
++
++import android.content.Context
++import androidx.test.core.app.ApplicationProvider
++import com.example.ui.components.TotImageProvider
++import org.junit.Assert.assertEquals
++import org.junit.Assert.assertFalse
++import org.junit.Test
++import org.junit.runner.RunWith
++import org.robolectric.RobolectricTestRunner
++import org.robolectric.annotation.Config
++
++@RunWith(RobolectricTestRunner::class)
++@Config(sdk = [36])
++class StableTotImageBindingsTest {
++
++    @Test
++    fun renamedAndHiddenLabelsKeepOriginalImage() {
++        val context = ApplicationProvider.getApplicationContext<Context>()
++        context.getSharedPreferences("stable_tot_image_aliases", Context.MODE_PRIVATE)
++            .edit()
++            .clear()
++            .commit()
++
++        val source = "stable-test-original"
++        val renamed = "Mein neuer frei gewählter Name"
++        val image = "https://example.com/stable-test-image.jpg"
++
++        TotImageProvider.setCustomImage(source, image)
++
++        StableTotImageBindings.bindAlias(context, renamed, source)
++        assertEquals(image, TotImageProvider.getImageUrl(renamed))
++
++        val hidden = StableTotImageBindings.storedKeyForInput(
++            context = context,
++            input = "",
++            sourceKey = source
++        )
++        assertFalse(DevAssetStore.isUserFacingLabel(hidden))
++        assertEquals(image, TotImageProvider.getImageUrl(hidden))
++
++        // Simulate a process restart restoring aliases from SharedPreferences.
++        StableTotImageBindings.install(context)
++        assertEquals(image, TotImageProvider.getImageUrl(renamed))
++        assertEquals(image, TotImageProvider.getImageUrl(hidden))
++
++        TotImageProvider.removeCustomImage(source)
++    }
++}
