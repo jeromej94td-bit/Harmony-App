@@ -26,7 +26,13 @@ enum class AppLanguage(
     PORTUGUESE_BRAZIL("pt-BR", "Português (Brasil)", "Brazilian Portuguese", "🇧🇷"),
     PORTUGUESE_PORTUGAL("pt-PT", "Português (Portugal)", "European Portuguese", "🇵🇹"),
     DANISH("da", "Dansk", "Danish", "🇩🇰"),
-    NORWEGIAN("no", "Norsk", "Norwegian", "🇳🇴");
+    NORWEGIAN("no", "Norsk", "Norwegian", "🇳🇴"),
+    DUTCH("nl", "Nederlands", "Dutch", "🇳🇱"),
+    SWEDISH("sv", "Svenska", "Swedish", "🇸🇪"),
+    ICELANDIC("is", "Íslenska", "Icelandic", "🇮🇸"),
+    KOREAN("ko", "한국어", "Korean", "🇰🇷"),
+    CHINESE_SIMPLIFIED("zh-CN", "简体中文", "Chinese (Simplified)", "🇨🇳"),
+    CHINESE_TRADITIONAL("zh-TW", "繁體中文", "Chinese (Traditional)", "🇹🇼");
 
     companion object {
         fun fromCode(code: String): AppLanguage = fromStored(code)

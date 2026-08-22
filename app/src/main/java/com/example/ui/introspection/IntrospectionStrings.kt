@@ -80,7 +80,13 @@ object IntrospectionStrings {
             AppLanguage.PORTUGUESE_BRAZIL,
             AppLanguage.PORTUGUESE_PORTUGAL,
             AppLanguage.DANISH,
-            AppLanguage.NORWEGIAN -> TranslationCatalog.translate(german, lang)
+            AppLanguage.NORWEGIAN,
+            AppLanguage.DUTCH,
+            AppLanguage.SWEDISH,
+            AppLanguage.ICELANDIC,
+            AppLanguage.KOREAN,
+            AppLanguage.CHINESE_SIMPLIFIED,
+            AppLanguage.CHINESE_TRADITIONAL -> TranslationCatalog.translate(german, lang)
                 ?: englishStrings[key]
                 ?: german
         }
@@ -103,7 +109,13 @@ object IntrospectionStrings {
             AppLanguage.PORTUGUESE_BRAZIL,
             AppLanguage.PORTUGUESE_PORTUGAL,
             AppLanguage.DANISH,
-            AppLanguage.NORWEGIAN -> TranslationCatalog.translate(de, lang) ?: en
+            AppLanguage.NORWEGIAN,
+            AppLanguage.DUTCH,
+            AppLanguage.SWEDISH,
+            AppLanguage.ICELANDIC,
+            AppLanguage.KOREAN,
+            AppLanguage.CHINESE_SIMPLIFIED,
+            AppLanguage.CHINESE_TRADITIONAL -> TranslationCatalog.translate(de, lang) ?: en
         }
     }
 

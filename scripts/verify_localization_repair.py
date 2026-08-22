@@ -141,6 +141,8 @@ def main() -> int:
         "AppLanguage.SPANISH_LATIN_AMERICA", "AppLanguage.SPANISH_SPAIN",
         "AppLanguage.PORTUGUESE_BRAZIL", "AppLanguage.PORTUGUESE_PORTUGAL",
         "AppLanguage.DANISH", "AppLanguage.NORWEGIAN",
+        "AppLanguage.DUTCH", "AppLanguage.SWEDISH", "AppLanguage.ICELANDIC",
+        "AppLanguage.KOREAN", "AppLanguage.CHINESE_SIMPLIFIED", "AppLanguage.CHINESE_TRADITIONAL",
     ]:
         if token not in introspection:
             error(f"IntrospectionStrings has no explicit {token} path")

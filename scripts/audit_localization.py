@@ -31,6 +31,12 @@ LOCALES = {
     "pt-PT": ("PortuguesePortugalContent.kt", "EXACT_PORTUGUESE_PORTUGAL_CONTENT", "LOCALIZATION_UPDATES_PORTUGUESE_PORTUGAL"),
     "da": ("DanishContent.kt", "EXACT_DANISH_CONTENT", "LOCALIZATION_UPDATES_DANISH"),
     "no": ("NorwegianContent.kt", "EXACT_NORWEGIAN_CONTENT", "LOCALIZATION_UPDATES_NORWEGIAN"),
+    "nl": ("DutchContent.kt", "EXACT_DUTCH_CONTENT", None),
+    "sv": ("SwedishContent.kt", "EXACT_SWEDISH_CONTENT", None),
+    "is": ("IcelandicContent.kt", "EXACT_ICELANDIC_CONTENT", None),
+    "ko": ("KoreanContent.kt", "EXACT_KOREAN_CONTENT", None),
+    "zh-CN": ("ChineseSimplifiedContent.kt", "EXACT_CHINESE_SIMPLIFIED_CONTENT", None),
+    "zh-TW": ("ChineseTraditionalContent.kt", "EXACT_CHINESE_TRADITIONAL_CONTENT", None),
 }
 
 COMPRESSED_DATA_NAMES = {
@@ -198,6 +204,8 @@ def main() -> int:
         "AppLanguage.SPANISH_LATIN_AMERICA", "AppLanguage.SPANISH_SPAIN",
         "AppLanguage.PORTUGUESE_BRAZIL", "AppLanguage.PORTUGUESE_PORTUGAL",
         "AppLanguage.DANISH", "AppLanguage.NORWEGIAN",
+        "AppLanguage.DUTCH", "AppLanguage.SWEDISH", "AppLanguage.ICELANDIC",
+        "AppLanguage.KOREAN", "AppLanguage.CHINESE_SIMPLIFIED", "AppLanguage.CHINESE_TRADITIONAL",
     ]
     for token in required_locale_tokens:
         if token not in introspection:

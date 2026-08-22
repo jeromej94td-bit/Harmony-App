@@ -39,6 +39,12 @@ object TranslationCatalog {
         AppLanguage.PORTUGUESE_PORTUGAL -> EXACT_PORTUGUESE_PORTUGAL_CONTENT[german] ?: EXACT_PORTUGUESE_CONTENT[german]
         AppLanguage.DANISH -> EXACT_DANISH_CONTENT[german]
         AppLanguage.NORWEGIAN -> EXACT_NORWEGIAN_CONTENT[german]
+        AppLanguage.DUTCH -> EXACT_DUTCH_CONTENT[german]
+        AppLanguage.SWEDISH -> EXACT_SWEDISH_CONTENT[german]
+        AppLanguage.ICELANDIC -> EXACT_ICELANDIC_CONTENT[german]
+        AppLanguage.KOREAN -> EXACT_KOREAN_CONTENT[german]
+        AppLanguage.CHINESE_SIMPLIFIED -> EXACT_CHINESE_SIMPLIFIED_CONTENT[german]
+        AppLanguage.CHINESE_TRADITIONAL -> EXACT_CHINESE_TRADITIONAL_CONTENT[german]
     }
 
     fun exact(german: String, language: AppLanguage): String? {
@@ -73,6 +79,12 @@ object TranslationCatalog {
             AppLanguage.PORTUGUESE_PORTUGAL -> localizePortuguesePortugalDynamicContent(text) ?: localizePortugueseDynamicContent(text)
             AppLanguage.DANISH -> localizeDanishDynamicContent(text)
             AppLanguage.NORWEGIAN -> localizeNorwegianDynamicContent(text)
+            AppLanguage.DUTCH -> localizeDutchDynamicContent(text)
+            AppLanguage.SWEDISH -> localizeSwedishDynamicContent(text)
+            AppLanguage.ICELANDIC -> localizeIcelandicDynamicContent(text)
+            AppLanguage.KOREAN -> localizeKoreanDynamicContent(text)
+            AppLanguage.CHINESE_SIMPLIFIED -> localizeChineseSimplifiedDynamicContent(text)
+            AppLanguage.CHINESE_TRADITIONAL -> localizeChineseTraditionalDynamicContent(text)
         }
     }
 }
