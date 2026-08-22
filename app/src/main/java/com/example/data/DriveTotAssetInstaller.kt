@@ -2,6 +2,7 @@ package com.example.data
 
 import android.content.Context
 import android.util.Base64
+import com.example.data.model.HarmonyPacksData
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
@@ -14,6 +15,8 @@ import java.util.zip.ZipInputStream
  * "Marken & Alltag" images are stored as a split Base64 bundle so they can live
  * in the repository as normal text assets. Both bundles are extracted to
  * app-private storage and registered as generated images by HarmonyViewModel.
+ *
+ * The additional Marken & Alltag pairs are intentionally text-only here.
  */
 object DriveTotAssetInstaller {
     private const val DRIVE_ASSET_ZIP = "drive_tot_assets.zip"
@@ -113,6 +116,42 @@ object DriveTotAssetInstaller {
         "Studio Ghibli" to "brand_studio_ghibli.webp"
     )
 
+    private val extraBrandPairs = listOf(
+        "Starbucks" to "Dunkin’",
+        "Red Bull" to "Monster Energy",
+        "Nutella" to "Lotus Biscoff",
+        "Haribo" to "Trolli",
+        "Pringles" to "Doritos",
+        "KFC" to "Subway",
+        "Domino’s" to "Pizza Hut",
+        "Nespresso" to "Senseo",
+        "Nintendo Switch" to "Steam Deck",
+        "TikTok" to "Instagram",
+        "Booking.com" to "Airbnb",
+        "Aldi" to "Lidl",
+        "REWE" to "EDEKA",
+        "dm" to "Rossmann",
+        "Zalando" to "ABOUT YOU",
+        "H&M" to "Zara",
+        "BMW" to "Mercedes-Benz",
+        "LEGO" to "Playmobil",
+        "Converse" to "Vans",
+        "Dyson" to "Miele"
+    )
+
+    private fun pairKey(pair: Pair<String, String>): String =
+        listOf(pair.first.trim().lowercase(), pair.second.trim().lowercase()).sorted().joinToString("||")
+
+    private fun applyExtraBrandPairs() {
+        val current = HarmonyPacksData.PACKS
+        val pack = current.firstOrNull { it.id == "markenalltag" } ?: return
+        val seen = pack.pairs.map(::pairKey).toMutableSet()
+        val additions = extraBrandPairs.filter { seen.add(pairKey(it)) }
+        if (additions.isEmpty()) return
+        val updated = pack.copy(pairs = pack.pairs + additions)
+        HarmonyPacksData.setDynamicPacks(current.map { if (it.id == "markenalltag") updated else it })
+    }
+
     private fun extractZip(
         input: InputStream,
         outputDir: File,
@@ -139,6 +178,7 @@ object DriveTotAssetInstaller {
         // The installer also observes language changes, so the Italian/Polish
         // cuisine deck switches without replacing newer dynamic content.
         CuisinePackInstaller.install(context)
+        applyExtraBrandPairs()
 
         val outputDir = File(context.filesDir, OUTPUT_DIR).apply { mkdirs() }
         val expectedFiles = (driveOptionToFile.values + brandOptionToFile.values).toSet()
