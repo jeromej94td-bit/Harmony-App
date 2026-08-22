@@ -18,3 +18,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify premium panda category artwork
         run: python3 scripts/verify_panda_category_artwork.py
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon
