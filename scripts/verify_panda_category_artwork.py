@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Regression check for the original premium panda category artwork and animation.
 
-The two panda PNGs and their established Compose motion are approved Harmony assets.
-This guard intentionally fails if an automated repair/export/AI edit replaces the artwork,
-changes the wiring, or alters the original tilt/breathe/glow behavior.
+The panda PNGs are approved Harmony assets. Runtime copies intentionally live in the
+standard Android drawable directory because external project/export tooling such as
+Google AI Studio can omit drawable-nodpi binary resources while still retaining the
+Compose container, which results in the black empty tile seen in the app.
 """
 from pathlib import Path
 import subprocess
@@ -12,9 +13,11 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 VISUALS = ROOT / "app/src/main/java/com/example/ui/components/GameCategoryVisuals.kt"
 REPAIR = ROOT / "scripts/repair_build_blockers.py"
-DRAWABLES = ROOT / "app/src/main/res/drawable-nodpi"
+DRAWABLE = ROOT / "app/src/main/res/drawable"
+LEGACY_NODPI = ROOT / "app/src/main/res/drawable-nodpi"
 
-# Git blob IDs of the approved original panda artwork restored in PR #39.
+# Git blob IDs of the approved original panda artwork. Moving the files must never
+# change their bytes or appearance.
 APPROVED_PANDA_BLOBS = {
     "panda_thinking_harmony.png": "4989d7b9b76d34a2204bfb8e3d91e4c46207e198",
     "panda_never_harmony.png": "f39cf088d38a88db17bf5f724a3752795bc9cb6d",
@@ -44,9 +47,10 @@ def git_blob_sha(path: Path) -> str | None:
 visuals = VISUALS.read_text(encoding="utf-8")
 repair = REPAIR.read_text(encoding="utf-8")
 
+# The approved original PNG bytes must be available as ordinary Android drawables.
 for filename, expected_blob in APPROVED_PANDA_BLOBS.items():
-    asset = DRAWABLES / filename
-    require(asset.exists(), f"missing approved panda artwork: {filename}")
+    asset = DRAWABLE / filename
+    require(asset.exists(), f"missing approved panda runtime artwork: {filename}")
     if asset.exists():
         actual_blob = git_blob_sha(asset)
         require(actual_blob is not None, f"could not verify Git blob for {filename}")
@@ -55,7 +59,14 @@ for filename, expected_blob in APPROVED_PANDA_BLOBS.items():
             f"approved panda artwork changed: {filename} (expected {expected_blob}, got {actual_blob})",
         )
 
-# Keep the exact original artwork wiring.
+    # Do not move runtime rendering back to nodpi-only resources. That path caused the
+    # exported/AI-Studio build to retain the dark frame while losing the actual panda.
+    require(
+        not (LEGACY_NODPI / filename).exists(),
+        f"legacy drawable-nodpi panda resource restored: {filename}; keep runtime asset in drawable",
+    )
+
+# Keep the exact original artwork wiring/resource names.
 require('"wer" -> PandaArtworkIcon(' in visuals, 'wer category no longer uses PandaArtworkIcon')
 require('drawableRes = R.drawable.panda_thinking_harmony' in visuals, 'wer category is not wired to panda_thinking_harmony')
 require('animationLabel = "thinking_panda"' in visuals, 'thinking panda animation label changed')
@@ -96,4 +107,4 @@ if errors:
     print(f"panda category artwork verification FAILED ({len(errors)} errors)")
     sys.exit(1)
 
-print("panda category artwork verification PASSED: original assets and animations are locked")
+print("panda category artwork verification PASSED: original drawable assets and animations are locked")
