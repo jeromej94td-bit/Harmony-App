@@ -1,0 +1,110 @@
+name: Complete Visible Copy Inventory
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/src/main/java/**'
+      - 'app/src/main/res/**'
+      - 'app/src/main/assets/**'
+      - 'scripts/visible_copy_*.py'
+      - 'scripts/audit_japanese_visible_copy.py'
+      - 'scripts/audit_japanese_render_occurrences.py'
+      - 'scripts/test_japanese_render_occurrences.py'
+      - 'scripts/apply_japanese_render_routing.py'
+      - 'scripts/validate_visible_copy_complete.py'
+      - 'scripts/visible_copy_*.json'
+      - 'localization/**'
+      - 'docs/superpowers/specs/2026-08-22-complete-visible-copy-inventory-japanese-design.md'
+      - 'docs/superpowers/plans/2026-08-22-german-visible-copy-inventory.md'
+      - '.github/workflows/visible-copy-inventory.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Apply Japanese render routing migration
+        run: python3 scripts/apply_japanese_render_routing.py --root .
+
+      - name: Generate canonical German inventory
+        run: python3 scripts/visible_copy_canonical.py --root . --write
+
+      - name: Diagnose occurrence delta against locked 1367 baseline
+        run: |
+          git show 0d81111072e1e52485c3874c93d800963f3fe443:localization/visible-copy-inventory.de.json > /tmp/visible-copy-baseline.json
+          python3 - <<'PY'
+          from collections import Counter
+          import json
+          def load(path):
+              with open(path, encoding='utf-8') as f:
+                  return json.load(f)['occurrences']
+          old = load('/tmp/visible-copy-baseline.json')
+          new = load('localization/visible-copy-inventory.de.json')
+          def key(o):
+              return (o.get('path'), o.get('presentation'), o.get('german'), o.get('exemption'))
+          a, b = Counter(map(key, old)), Counter(map(key, new))
+          print(f'BASELINE={len(old)} CURRENT={len(new)}')
+          for k, n in sorted((a-b).items()):
+              print('REMOVED', n, k)
+          for k, n in sorted((b-a).items()):
+              print('ADDED', n, k)
+          PY
+
+      - name: Run inventory tests
+        working-directory: scripts
+        run: python3 -m unittest -v test_visible_copy_inventory.py test_japanese_render_occurrences.py
+
+      - name: Validate assets and product routes
+        run: python3 scripts/visible_copy_validation.py --root .
+
+      - name: Verify deterministic inventory
+        run: python3 scripts/visible_copy_canonical.py --root . --check
+
+      - name: Show canonical metrics
+        run: cat localization/visible-copy-inventory-summary.md
+
+      - name: Persist routing fixes and canonical inventory
+        run: |
+          git config user.name "harmony-visible-copy-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add \
+            scripts/visible_copy_complete.py \
+            app/src/main/java/com/example/ui/screens/HomeScreen.kt \
+            app/src/main/java/com/example/ui/screens/GamesScreen.kt \
+            app/src/main/java/com/example/ui/screens/ChatScreen.kt \
+            app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt \
+            app/src/main/java/com/example/ui/components/CommonUI.kt \
+            localization/visible-copy-inventory.de.json \
+            localization/visible-copy-inventory-summary.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Route every visible Japanese UI occurrence through localization"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
+      - name: Audit all Japanese render occurrences
+        run: python3 scripts/audit_japanese_render_occurrences.py --root . --write
+
+      - name: Audit Japanese against canonical visible copy
+        run: python3 scripts/audit_japanese_visible_copy.py
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon

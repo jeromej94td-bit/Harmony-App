@@ -233,7 +233,7 @@ fun ChatMessageBubble(
                     )
                 }
                 if (message.text.isNotBlank()) {
-                    Text(message.text, fontSize = 14.sp, color = Color.White, lineHeight = 19.sp)
+                    Text(LanguageManager.tr(message.text, appLanguage), fontSize = 14.sp, color = Color.White, lineHeight = 19.sp)
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
@@ -284,7 +284,7 @@ private fun ChatImageFullscreen(path: String, appLanguage: String, onDismiss: ()
                     .border(1.dp, Color.White.copy(alpha = 0.25f), CircleShape)
                     .testTag("close_chat_image_fullscreen")
             ) {
-                Icon(Icons.Default.Close, contentDescription = "Vollbild schließen", tint = Color.White)
+                Icon(Icons.Default.Close, contentDescription = LanguageManager.tr("Vollbild schließen", appLanguage), tint = Color.White)
             }
         }
     }
