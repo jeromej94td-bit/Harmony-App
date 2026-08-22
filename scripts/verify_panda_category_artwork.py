@@ -3,7 +3,8 @@
 
 The two panda PNGs and their established Compose motion are approved Harmony assets.
 This guard intentionally fails if an automated repair/export/AI edit replaces the artwork,
-changes the wiring, or alters the original tilt/breathe/glow behavior.
+changes the wiring, alters the original tilt/breathe/glow behavior, or moves runtime rendering
+back to the drawable-nodpi-only path that Google AI Studio can omit from generated projects.
 """
 from pathlib import Path
 import subprocess
@@ -12,12 +13,20 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 VISUALS = ROOT / "app/src/main/java/com/example/ui/components/GameCategoryVisuals.kt"
 REPAIR = ROOT / "scripts/repair_build_blockers.py"
-DRAWABLES = ROOT / "app/src/main/res/drawable-nodpi"
+DRAWABLE_NODPI = ROOT / "app/src/main/res/drawable-nodpi"
+DRAWABLE = ROOT / "app/src/main/res/drawable"
 
 # Git blob IDs of the approved original panda artwork restored in PR #39.
 APPROVED_PANDA_BLOBS = {
     "panda_thinking_harmony.png": "4989d7b9b76d34a2204bfb8e3d91e4c46207e198",
     "panda_never_harmony.png": "f39cf088d38a88db17bf5f724a3752795bc9cb6d",
+}
+
+# Runtime aliases use the exact same Git blobs, but live in the standard drawable folder.
+# This avoids Google AI Studio/export pipelines silently dropping drawable-nodpi binary assets.
+STUDIO_PANDA_ALIASES = {
+    "panda_thinking_harmony_studio.png": APPROVED_PANDA_BLOBS["panda_thinking_harmony.png"],
+    "panda_never_harmony_studio.png": APPROVED_PANDA_BLOBS["panda_never_harmony.png"],
 }
 
 errors: list[str] = []
@@ -41,26 +50,40 @@ def git_blob_sha(path: Path) -> str | None:
         return None
 
 
+def verify_blob(asset: Path, expected_blob: str, label: str) -> None:
+    require(asset.exists(), f"missing {label}: {asset.name}")
+    if asset.exists():
+        actual_blob = git_blob_sha(asset)
+        require(actual_blob is not None, f"could not verify Git blob for {asset.name}")
+        require(
+            actual_blob == expected_blob,
+            f"{label} changed: {asset.name} (expected {expected_blob}, got {actual_blob})",
+        )
+
+
 visuals = VISUALS.read_text(encoding="utf-8")
 repair = REPAIR.read_text(encoding="utf-8")
 
+# Keep the archival/restored originals untouched.
 for filename, expected_blob in APPROVED_PANDA_BLOBS.items():
-    asset = DRAWABLES / filename
-    require(asset.exists(), f"missing approved panda artwork: {filename}")
-    if asset.exists():
-        actual_blob = git_blob_sha(asset)
-        require(actual_blob is not None, f"could not verify Git blob for {filename}")
-        require(
-            actual_blob == expected_blob,
-            f"approved panda artwork changed: {filename} (expected {expected_blob}, got {actual_blob})",
-        )
+    verify_blob(DRAWABLE_NODPI / filename, expected_blob, "approved panda artwork")
 
-# Keep the exact original artwork wiring.
+# The standard-drawable runtime copies must be byte-for-byte identical to the approved originals.
+for filename, expected_blob in STUDIO_PANDA_ALIASES.items():
+    verify_blob(DRAWABLE / filename, expected_blob, "AI Studio-safe panda runtime artwork")
+
+# Keep the original artwork wiring, but render from the AI-Studio-safe standard drawable aliases.
 require('"wer" -> PandaArtworkIcon(' in visuals, 'wer category no longer uses PandaArtworkIcon')
-require('drawableRes = R.drawable.panda_thinking_harmony' in visuals, 'wer category is not wired to panda_thinking_harmony')
+require(
+    'drawableRes = R.drawable.panda_thinking_harmony_studio' in visuals,
+    'wer category is not wired to the AI Studio-safe original thinking panda',
+)
 require('animationLabel = "thinking_panda"' in visuals, 'thinking panda animation label changed')
 require('"nie" -> PandaArtworkIcon(' in visuals, 'nie category no longer uses PandaArtworkIcon')
-require('drawableRes = R.drawable.panda_never_harmony' in visuals, 'nie category is not wired to panda_never_harmony')
+require(
+    'drawableRes = R.drawable.panda_never_harmony_studio' in visuals,
+    'nie category is not wired to the AI Studio-safe original never panda',
+)
 require('animationLabel = "never_panda"' in visuals, 'never panda animation label changed')
 
 # Preserve the approved slow tilt + breathing + glow motion exactly.
@@ -96,4 +119,4 @@ if errors:
     print(f"panda category artwork verification FAILED ({len(errors)} errors)")
     sys.exit(1)
 
-print("panda category artwork verification PASSED: original assets and animations are locked")
+print("panda category artwork verification PASSED: original assets, AI Studio-safe runtime copies and animations are locked")
