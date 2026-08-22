@@ -69,7 +69,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.example.R
 import androidx.compose.ui.text.font.FontStyle
@@ -992,10 +991,23 @@ fun TotCardPairView(
     val oderScale = remember { Animatable(1f) }
 
     var isAnimating by remember { mutableStateOf(false) }
+    var skipNextTotEntrance by remember { mutableStateOf(false) }
     var topShuffleKey by remember(firstText, secondText) { mutableStateOf(firstText) }
     var bottomShuffleKey by remember(firstText, secondText) { mutableStateOf(secondText) }
 
     LaunchedEffect(firstText, secondText) {
+        if (skipNextTotEntrance) {
+            topOffsetY.snapTo(0f)
+            bottomOffsetY.snapTo(0f)
+            topTilt.snapTo(0f)
+            bottomTilt.snapTo(0f)
+            oderScale.snapTo(1f)
+            topFlip.snapTo(0f)
+            bottomFlip.snapTo(0f)
+            skipNextTotEntrance = false
+            return@LaunchedEffect
+        }
+
         topOffsetY.snapTo(-windDistancePx)
         bottomOffsetY.snapTo(windDistancePx)
         topTilt.snapTo(0f)
@@ -1030,17 +1042,10 @@ fun TotCardPairView(
                     launch { bottomFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
                 }
             }
-            coroutineScope {
-                launch { topOffsetY.animateTo(52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { bottomOffsetY.animateTo(-52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { topTilt.animateTo(-3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { oderScale.animateTo(0f, tween(260, easing = FastOutSlowInEasing)) }
-            }
-            delay(360)
+            // The shuffle already ends on the incoming pair. Keep it in place.
+            // Do not converge the cards or replay the wind entrance after the index update.
+            skipNextTotEntrance = true
             onPick(option)
-            topShuffleKey = firstText
-            bottomShuffleKey = secondText
             isAnimating = false
         }
     }
