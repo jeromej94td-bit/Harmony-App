@@ -47,6 +47,16 @@ jobs:
       - name: Generate six complete locale catalogs
         run: python3 scripts/generate_six_new_locale_catalogs.py
 
+      - name: Persist generated locale catalogs
+        run: |
+          git config user.name "harmony-localization-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui app/src/main/java/com/example/widget scripts/audit_localization.py scripts/verify_localization_repair.py
+          if ! git diff --cached --quiet; then
+            git commit -m "Generate six complete production locale catalogs"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+
       - name: Audit all source catalogs
         run: python3 scripts/audit_localization.py
 
@@ -73,6 +83,6 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add app/src/main/java/com/example/ui app/src/main/java/com/example/widget scripts/audit_localization.py scripts/verify_localization_repair.py
           if ! git diff --cached --quiet; then
-            git commit -m "Generate six complete production locale catalogs"
+            git commit -m "Fix generated localization source issues"
             git push origin HEAD:${{ github.head_ref }}
           fi

@@ -150,6 +150,10 @@ def request_batch(items: list[str], target: str) -> dict[str, str]:
 
 
 def kotlin_escape(value: str) -> str:
+    # audit_localization keeps canonical Kotlin \n escapes as stable key text.
+    # Normalize them through a real newline so we write exactly one Kotlin \n escape,
+    # rather than doubling the backslash and changing the catalog key.
+    value = value.replace(r"\n", "\n")
     return (value.replace("\\", "\\\\")
                  .replace('"', '\\"')
                  .replace("\n", "\\n")
