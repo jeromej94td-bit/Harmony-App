@@ -96,9 +96,12 @@ def main() -> int:
         failed = True
 
     canonical_all = audit.extract_map(UI / "EnglishContent.kt", "EXACT_ENGLISH_CONTENT")
+    internal_only = getattr(audit, "INTERNAL_ONLY_KEYS", set())
     canonical = {
         key: value for key, value in canonical_all.items()
-        if key not in audit.DEV_ONLY_KEYS and "Entwickler" not in key
+        if key not in audit.DEV_ONLY_KEYS
+        and key not in internal_only
+        and "Entwickler" not in key
     }
     if not canonical:
         error("Could not parse canonical English catalog")
