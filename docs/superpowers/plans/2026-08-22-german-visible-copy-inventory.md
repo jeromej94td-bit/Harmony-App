@@ -4,7 +4,7 @@
 
 **Goal:** Build a deterministic, reviewable German source-of-truth inventory for every Harmony-owned production-visible text outside Developer Studio, publish the real current counts, and make CI fail when new visible copy bypasses that inventory.
 
-**Architecture:** A Python inventory pipeline scans production Kotlin/Compose, product-content sources, Android XML/resources, SVG assets, and a reviewed bitmap/route manifest. Every discovered render occurrence is normalized into a stable `VisibleCopyOccurrence`, deduplicated into canonical German `VisibleCopyUnit` records, and written to a committed JSON report with three headline metrics. Developer Studio is excluded by explicit policy; brands remain visible inventory entries but are marked exempt from translation. This plan intentionally stops after the German baseline is complete and locked; Japanese is implemented in a separate follow-up plan against this generated baseline.
+**Architecture:** A Python inventory pipeline scans production Kotlin/Compose, product-content sources, Android XML/resources, SVG assets, and a reviewed bitmap/route manifest. Every discovered render occurrence is normalized into a stable `VisibleCopyOccurrence`, deduplicated into canonical German units, and written to a committed JSON report with exact metrics. Developer Studio is excluded by explicit policy; brands remain visible inventory entries but are marked exempt from translation. This plan intentionally stops after the German baseline is complete and locked; Japanese is implemented in a separate follow-up plan against this generated baseline.
 
 **Tech Stack:** Python 3 standard library, Kotlin/Jetpack Compose source scanning, Android XML, SVG/XML parsing, JSON, existing GitHub Actions localization workflow, Gradle/Kotlin compile gate.
 
@@ -19,8 +19,8 @@
 - Keep internal IDs/debug/test-only metadata separate from customer copy.
 - Brand names and brand-logo text stay unchanged and are recorded as `brand` exemptions, not translated.
 - Preserve placeholder signatures exactly in inventory units.
-- No OCR dependency is introduced; bitmap text is handled through an explicit reviewed asset registry because bitmap OCR cannot be a deterministic CI source of truth.
-- The persisted report must publish unique visible translation units, visible render occurrences, and German word count deterministically.
+- No OCR dependency is introduced; bitmap text is handled through an explicit reviewed asset registry because OCR cannot be a deterministic CI source of truth.
+- The persisted report must publish unique visible units, unique translatable German units, exempt visible units, visible render occurrences, and German word count deterministically.
 - Do not modify Japanese or other locale content in this plan.
 
 ---
@@ -28,30 +28,30 @@
 ## File Structure
 
 **Create**
-- `scripts/visible_copy_inventory.py` — inventory engine and CLI; scans all source types and emits deterministic records/metrics.
-- `scripts/visible_copy_policy.json` — explicit path exclusions, internal-ID exemptions, brand exemptions, known rendering APIs and ignored technical literals.
-- `scripts/visible_copy_asset_registry.json` — reviewed text-bearing bitmap/SVG exceptions and brand-only asset declarations.
-- `scripts/visible_copy_routes.json` — normal-user route/feature coverage manifest used to prove all product areas were considered.
-- `scripts/test_visible_copy_inventory.py` — unit/regression tests for discovery, normalization, placeholders, exclusions and determinism.
-- `localization/visible-copy-inventory.de.json` — generated canonical German inventory and headline metrics committed to the repository.
-- `localization/visible-copy-inventory-summary.md` — human-readable counts and breakdown by source/presentation type.
+- `scripts/visible_copy_inventory.py` — inventory engine and CLI.
+- `scripts/visible_copy_policy.json` — explicit Dev/internal/brand policy.
+- `scripts/visible_copy_asset_registry.json` — reviewed bitmap/SVG classification.
+- `scripts/visible_copy_routes.json` — normal-user route coverage manifest.
+- `scripts/test_visible_copy_inventory.py` — TDD/regression tests.
+- `localization/visible-copy-inventory.de.json` — generated canonical German inventory.
+- `localization/visible-copy-inventory-summary.md` — human-readable exact metrics and source breakdown.
 
 **Modify**
-- `scripts/audit_localization.py` — stop treating the English map as the canonical completeness definition; for now read the German inventory for baseline reporting while preserving existing locale checks until the Japanese follow-up plan replaces them.
-- `.github/workflows/localization-audit.yml` — generate inventory, verify clean deterministic diff, run inventory tests, then run existing localization/build checks.
+- `scripts/audit_localization.py` — stop deriving the canonical baseline from English.
+- `.github/workflows/localization-audit.yml` — regenerate and verify the German inventory in CI.
 
-**Read-only source coverage during implementation**
+**Production source coverage**
 - `app/src/main/java/com/example/MainActivity.kt`
-- `app/src/main/java/com/example/ui/**/*.kt` excluding explicit Developer Studio paths
-- `app/src/main/java/com/example/data/**/*.kt` including `GeneratedHarmonyContent.kt`, excluding explicit Developer Studio-only files
+- `app/src/main/java/com/example/ui/**/*.kt`, excluding Dev Studio by policy
+- `app/src/main/java/com/example/data/**/*.kt`, including `GeneratedHarmonyContent.kt`, excluding Dev-only files by policy
 - `app/src/main/java/com/example/widget/**/*.kt`
 - `app/src/main/res/values/**/*.xml`, `layout/**/*.xml`, `xml/**/*.xml`, `drawable/**/*.xml`
 - `app/src/main/assets/**/*.svg`
-- `app/src/main/res/drawable-nodpi/**/*.{png,jpg,jpeg,webp}` through the reviewed asset registry
+- production raster assets under `app/src/main/res` and `app/src/main/assets` through the reviewed asset registry
 
 ---
 
-### Task 1: Define the inventory data contract and RED tests
+### Task 1: Define the inventory contract and RED tests
 
 **Files:**
 - Create: `scripts/test_visible_copy_inventory.py`
@@ -61,15 +61,18 @@
 
 **Interfaces:**
 - Consumes: repository-relative source paths and literal/template text.
-- Produces: tests expecting `discover_repository(root: Path) -> InventoryReport`, `normalize_visible_text(text: str) -> str`, `extract_placeholders(text: str) -> tuple[str, ...]`, and `write_report(report: InventoryReport, path: Path) -> None` from Task 2.
+- Produces tests expecting:
+  - `discover_repository(root: Path) -> InventoryReport`
+  - `normalize_visible_text(text: str) -> str`
+  - `extract_placeholders(text: str) -> tuple[str, ...]`
+  - `write_report(report: InventoryReport, path: Path) -> None`
 
-- [ ] **Step 1: Write failing contract tests**
+- [ ] **Step 1: Write the failing contract test**
 
-Create `scripts/test_visible_copy_inventory.py` with `unittest` tests that import the future inventory module and assert the exact contract below:
+Create `scripts/test_visible_copy_inventory.py`:
 
 ```python
 from pathlib import Path
-import json
 import tempfile
 import unittest
 
@@ -123,9 +126,9 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Add explicit policy files**
+- [ ] **Step 2: Add the exact initial policy**
 
-Create `scripts/visible_copy_policy.json` with this initial structure:
+Create `scripts/visible_copy_policy.json`:
 
 ```json
 {
@@ -133,6 +136,12 @@ Create `scripts/visible_copy_policy.json` with this initial structure:
     "app/src/main/java/com/example/ui/screens/DevStudioScreen.kt",
     "app/src/main/java/com/example/data/Dev*.kt",
     "app/src/main/java/com/example/data/DeveloperDataManager.kt"
+  ],
+  "excluded_exact_visible_text": [
+    "Entwickler Studio Öffnen",
+    "Entwickler-Modus",
+    "🛠️ Entwickler-Modus",
+    "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen"
   ],
   "internal_exact_literals": [
     "aufwaermen", "dasoderdas", "ichhabenochnie", "werwuerde",
@@ -151,13 +160,44 @@ Create `scripts/visible_copy_policy.json` with this initial structure:
 }
 ```
 
-Create `scripts/visible_copy_routes.json` listing these required product areas exactly as route IDs: `home`, `games`, `pack-list`, `quiz-runner`, `panda-either-or`, `introspection`, `chat`, `moments`, `profile`, `navigation`, `dialogs`, `widgets-notifications`. Each route entry contains `source_paths` pointing at the concrete screen/component files currently present on `main`.
+- [ ] **Step 3: Add the exact route manifest**
 
-Create `scripts/visible_copy_asset_registry.json` with arrays `text_bearing_assets`, `brand_only_assets`, and `reviewed_text_free_assets`. Begin with the known Aurora SVG paths and brand-game image assets; every bitmap in `drawable-nodpi` must eventually appear in exactly one of these three buckets before Task 4 can pass.
+Create `scripts/visible_copy_routes.json`:
 
-- [ ] **Step 3: Run tests to verify RED**
+```json
+{
+  "routes": [
+    {"id": "home", "source_paths": ["app/src/main/java/com/example/ui/screens/HomeScreen.kt"]},
+    {"id": "games", "source_paths": ["app/src/main/java/com/example/ui/screens/GamesScreen.kt"]},
+    {"id": "pack-list", "source_paths": ["app/src/main/java/com/example/ui/screens/PackListScreen.kt"]},
+    {"id": "quiz-runner", "source_paths": ["app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"]},
+    {"id": "panda-either-or", "source_paths": ["app/src/main/java/com/example/ui/screens/PandaEitherOrScreen.kt"]},
+    {"id": "introspection", "source_paths": ["app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt", "app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt"]},
+    {"id": "chat", "source_paths": ["app/src/main/java/com/example/ui/screens/ChatScreen.kt"]},
+    {"id": "moments", "source_paths": ["app/src/main/java/com/example/ui/screens/MomentsScreen.kt"]},
+    {"id": "profile", "source_paths": ["app/src/main/java/com/example/ui/screens/ProfileSheet.kt"]},
+    {"id": "navigation", "source_paths": ["app/src/main/java/com/example/MainActivity.kt", "app/src/main/java/com/example/ui/components/CommonUI.kt"]},
+    {"id": "dialogs", "source_paths": ["app/src/main/java/com/example/ui/components/CommonUI.kt", "app/src/main/java/com/example/ui/screens/GamesScreen.kt", "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"]},
+    {"id": "widgets-notifications", "source_paths": ["app/src/main/java/com/example/widget/PicShareWidgetProvider.kt", "app/src/main/java/com/example/widget/PicShareWidgetPreferences.kt"]}
+  ]
+}
+```
 
-Run:
+- [ ] **Step 4: Add the exact initial asset-registry schema**
+
+Create `scripts/visible_copy_asset_registry.json`:
+
+```json
+{
+  "text_bearing_assets": [],
+  "brand_only_assets": [],
+  "reviewed_text_free_assets": []
+}
+```
+
+The empty registry is intentional at RED stage. Task 3 classifies every shipped raster asset and every SVG that contains readable text.
+
+- [ ] **Step 5: Run RED**
 
 ```bash
 cd scripts
@@ -166,7 +206,7 @@ python3 -m unittest -v test_visible_copy_inventory.py
 
 Expected: FAIL with `ModuleNotFoundError: No module named 'visible_copy_inventory'`.
 
-- [ ] **Step 4: Commit the RED contract**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add scripts/test_visible_copy_inventory.py scripts/visible_copy_policy.json scripts/visible_copy_routes.json scripts/visible_copy_asset_registry.json
@@ -179,10 +219,10 @@ git commit -m "test: define complete visible-copy inventory contract"
 
 **Files:**
 - Create: `scripts/visible_copy_inventory.py`
-- Test: `scripts/test_visible_copy_inventory.py`
+- Modify: `scripts/test_visible_copy_inventory.py`
 
 **Interfaces:**
-- Consumes: policy/route/asset JSON from Task 1 and repository root.
+- Consumes: Task 1 policy/route/asset JSON and repository root.
 - Produces:
   - `normalize_visible_text(text: str) -> str`
   - `extract_placeholders(text: str) -> tuple[str, ...]`
@@ -192,11 +232,11 @@ git commit -m "test: define complete visible-copy inventory contract"
   - `InventoryReport.occurrences: list[dict]`
   - `InventoryReport.metrics: dict[str, int]`
 
-- [ ] **Step 1: Implement core dataclasses and normalization**
-
-Use this concrete model in `scripts/visible_copy_inventory.py`:
+- [ ] **Step 1: Implement the core data model**
 
 ```python
+from dataclasses import dataclass
+
 @dataclass(frozen=True)
 class VisibleCopyOccurrence:
     path: str
@@ -213,28 +253,21 @@ class InventoryReport:
     metrics: dict[str, int]
 ```
 
-`normalize_visible_text` strips surrounding whitespace, converts CRLF to LF, collapses horizontal whitespace outside explicit newlines, and never splits a sentence into individual words. `extract_placeholders` recognizes Kotlin `${...}`, `{name}`, `%s`, `%d`, `%1$s`, `%1$d` and returns them in source order.
+`normalize_visible_text` strips surrounding whitespace, converts CRLF to LF, collapses horizontal whitespace outside explicit newlines, and never splits a sentence into individual words. `extract_placeholders` recognizes Kotlin `${...}`, `{name}`, `%s`, `%d`, `%1$s`, `%1$d` in source order.
 
-- [ ] **Step 2: Implement Kotlin/Compose literal and product-content scanning**
+- [ ] **Step 2: Implement Kotlin/Compose and product-content scanning**
 
-Walk all `*.kt` under `app/src/main/java`, applying `exclude_path_globs`. Extract quoted and triple-quoted literals only when they are associated with customer-visible contexts. The scanner must recognize at minimum these call/property contexts: `Text`, `BasicText`, `label`, `title`, `subtitle`, `description`, `placeholder`, `contentDescription`, `Snackbar`, `Toast`, `AlertDialog`, `Question`, `question`, `prompt`, `answer`, `option`, `options`, `Pack`, `Game`, `Moment`, `Result`, `instruction`, `message`.
+Walk all production `*.kt` under `app/src/main/java`, applying the policy. Detect literal or template text used in at least these visible contexts: `Text`, `BasicText`, `label`, `title`, `subtitle`, `description`, `placeholder`, `contentDescription`, `Snackbar`, `Toast`, `AlertDialog`, `Question`, `question`, `prompt`, `answer`, `option`, `options`, `Pack`, `Game`, `Moment`, `Result`, `instruction`, `message`.
 
-For generated/product data such as `GeneratedHarmonyContent.kt`, collect human-language values passed to model constructors/fields while rejecting technical IDs via the policy patterns. Record each occurrence with exact file and 1-based line number.
+For data-heavy sources such as `GeneratedHarmonyContent.kt`, collect human-language constructor/property values and reject technical IDs only when policy proves them internal. Record exact repository path and 1-based line number.
 
 - [ ] **Step 3: Implement Android XML and SVG scanning**
 
-Parse XML using `xml.etree.ElementTree`:
-
-```python
-for string in root.findall(".//string"):
-    add_occurrence(path, line=0, presentation="android-string", german="".join(string.itertext()))
-```
-
-Also capture literal `android:text`, `android:hint`, `android:contentDescription` values that do not reference `@string/...`. For SVGs, capture `<text>` and `<tspan>` content as `presentation="svg-text"`; brand-logo strings are retained with `exemption="brand"`.
+Use `xml.etree.ElementTree` to collect `<string>` values and literal `android:text`, `android:hint`, `android:contentDescription` attributes that are not resource references. For SVG, collect `<text>` and `<tspan>` values; brand values remain occurrences with `exemption="brand"`.
 
 - [ ] **Step 4: Deduplicate into stable German units**
 
-Group occurrences by `(normalized_german, placeholder_signature, exemption)`. Compute a stable ID:
+Group by `(normalized_german, placeholder_signature, exemption)` and compute:
 
 ```python
 stable_id = "de_" + hashlib.sha256(
@@ -244,9 +277,7 @@ stable_id = "de_" + hashlib.sha256(
 
 Sort units by `stable_id` and occurrences by `(path, line, german)` before serialization.
 
-- [ ] **Step 5: Compute the required metrics**
-
-Produce at least these deterministic metrics:
+- [ ] **Step 5: Compute exact metrics**
 
 ```python
 metrics = {
@@ -258,20 +289,18 @@ metrics = {
 }
 ```
 
-`word_count` removes placeholders first and counts Unicode letter/number word tokens; punctuation and emoji are not words.
+`word_count` removes placeholders and counts Unicode letter/number tokens; punctuation and emoji do not count as words.
 
-- [ ] **Step 6: Run the contract tests**
-
-Run:
+- [ ] **Step 6: Run GREEN tests**
 
 ```bash
 cd scripts
 python3 -m unittest -v test_visible_copy_inventory.py
 ```
 
-Expected: all Task 1 tests PASS.
+Expected: Task 1 tests PASS.
 
-- [ ] **Step 7: Commit the inventory engine**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add scripts/visible_copy_inventory.py scripts/test_visible_copy_inventory.py
@@ -280,59 +309,61 @@ git commit -m "feat: discover complete German visible copy"
 
 ---
 
-### Task 3: Add asset completeness and route coverage gates
+### Task 3: Add asset-completeness and route-coverage gates
 
 **Files:**
 - Modify: `scripts/visible_copy_inventory.py`
 - Modify: `scripts/test_visible_copy_inventory.py`
 - Modify: `scripts/visible_copy_asset_registry.json`
-- Modify: `scripts/visible_copy_routes.json`
+- Verify: `scripts/visible_copy_routes.json`
 
 **Interfaces:**
-- Consumes: `discover_repository()` output from Task 2.
-- Produces: `validate_asset_registry(root: Path, registry: dict) -> list[str]` and `validate_route_manifest(root: Path, manifest: dict, occurrences: list[dict]) -> list[str]`.
+- Consumes: `discover_repository()` output.
+- Produces:
+  - `validate_asset_registry(root: Path, registry: dict) -> list[str]`
+  - `validate_route_manifest(root: Path, manifest: dict, occurrences: list[dict]) -> list[str]`
 
-- [ ] **Step 1: Add RED tests for unreviewed assets and missing product areas**
+- [ ] **Step 1: Extend imports and write RED tests**
 
-Add tests using temporary fixture directories so failures are deterministic:
+Extend the test import with `validate_asset_registry` and `validate_route_manifest`. Add fixture-based tests where an unregistered `sample.png` produces an error and a route referencing `missing.kt` produces an error.
 
 ```python
-def test_unregistered_bitmap_is_rejected(self):
-    # fixture contains drawable-nodpi/sample.png but registry lists nothing
-    self.assertIn("sample.png", "\n".join(validate_asset_registry(root, registry)))
-
 def test_required_route_source_must_exist(self):
-    errors = validate_route_manifest(ROOT, {"routes": [{"id": "broken", "source_paths": ["missing.kt"]}]}, [])
+    errors = validate_route_manifest(
+        ROOT,
+        {"routes": [{"id": "broken", "source_paths": ["missing.kt"]}]},
+        [],
+    )
     self.assertTrue(errors)
 ```
 
-- [ ] **Step 2: Implement registry validation**
+Run the tests; expected FAIL because the validation functions do not exist yet.
 
-Enumerate every production `.png`, `.jpg`, `.jpeg`, `.webp` and `.svg` under app resources/assets. Require every raster asset to be explicitly classified in exactly one registry bucket. For SVGs with `<text>/<tspan>`, require a `text_bearing_assets` or `brand_only_assets` entry. Duplicate classification is an error.
+- [ ] **Step 2: Implement asset-registry validation**
 
-- [ ] **Step 3: Review all current image assets without OCR**
+Enumerate every production `.png`, `.jpg`, `.jpeg`, `.webp`, and `.svg` under `app/src/main/res` and `app/src/main/assets`. Require every raster asset to be classified in exactly one registry bucket. For SVGs containing `<text>` or `<tspan>`, require classification in `text_bearing_assets` or `brand_only_assets`. Duplicate classification is an error.
 
-Use repository image inspection for each currently shipped bitmap. Classify it as:
-- `text_bearing_assets`: Harmony-owned readable words that must become localization inventory units;
-- `brand_only_assets`: visible text is only protected/recognized branding and remains unchanged;
+- [ ] **Step 3: Review every currently shipped raster asset without OCR**
+
+Visually inspect each asset and classify it as exactly one of:
+- `text_bearing_assets`: Harmony-owned readable text, stored with explicit `german_text` array;
+- `brand_only_assets`: only brand/logo wording, stored with `exemption: "brand"`;
 - `reviewed_text_free_assets`: no readable text.
 
-For `text_bearing_assets`, record an explicit `german_text` array and `presentation="bitmap-text"`; these strings are injected into the canonical inventory. Do not infer text from filenames.
+`text_bearing_assets` are injected as `presentation="bitmap-text"` occurrences. Never infer embedded text from filenames.
 
-- [ ] **Step 4: Complete route manifest**
+- [ ] **Step 4: Implement route validation**
 
-Every normal-user feature in the spec must have at least one concrete source path. Validate that each path exists and that each non-container route contributes at least one occurrence or is explicitly marked `visual_only: true` with a reason.
+Require every `source_paths` entry in `visible_copy_routes.json` to exist. Require each route to contribute at least one discovered occurrence unless it has an explicit `visual_only: true` and non-empty `reason` field. The committed current route manifest should need no `visual_only` exemptions unless source review proves one.
 
-- [ ] **Step 5: Run tests**
+- [ ] **Step 5: Run tests and commit**
 
 ```bash
 cd scripts
 python3 -m unittest -v test_visible_copy_inventory.py
 ```
 
-Expected: PASS, with all current production assets classified and all required product routes represented.
-
-- [ ] **Step 6: Commit asset/route coverage**
+Expected: PASS after every current production asset is classified.
 
 ```bash
 git add scripts/visible_copy_inventory.py scripts/test_visible_copy_inventory.py scripts/visible_copy_asset_registry.json scripts/visible_copy_routes.json
@@ -346,15 +377,13 @@ git commit -m "feat: cover visible asset text and product routes"
 **Files:**
 - Create: `localization/visible-copy-inventory.de.json`
 - Create: `localization/visible-copy-inventory-summary.md`
-- Modify: `scripts/visible_copy_policy.json` only for evidence-backed false positives/internal IDs found during review.
+- Modify: `scripts/visible_copy_policy.json` only for evidence-backed false positives/internal IDs.
 
 **Interfaces:**
 - Consumes: complete `InventoryReport` from Tasks 2–3.
-- Produces: committed canonical German inventory used by the later Japanese plan.
+- Produces: canonical German inventory for the later Japanese plan.
 
 - [ ] **Step 1: Generate the first full report**
-
-Run:
 
 ```bash
 python3 scripts/visible_copy_inventory.py \
@@ -363,17 +392,15 @@ python3 scripts/visible_copy_inventory.py \
   --summary localization/visible-copy-inventory-summary.md
 ```
 
-Expected: command exits 0 and prints all five metrics, including `unique_translatable_units`, `visible_render_occurrences`, and `german_word_count`.
+Expected: exit 0 and print all five metrics.
 
-- [ ] **Step 2: Review every source-type bucket**
+- [ ] **Step 2: Review every source bucket**
 
-Inspect report breakdowns for at least: `compose-ui`, `dynamic-template`, `game-content`, `android-string`, `android-xml`, `widget-notification`, `svg-text`, `bitmap-text`, `brand`.
+Inspect breakdowns for `compose-ui`, `dynamic-template`, `game-content`, `android-string`, `android-xml`, `widget-notification`, `svg-text`, `bitmap-text`, and `brand`. A suspected false positive may be excluded only after confirming it cannot reach normal production UI. Never exclude a German sentence because it is inconvenient to translate.
 
-For each suspected false positive, prove it cannot reach production UI before adding an exact exclusion/pattern to `visible_copy_policy.json`. Never exclude a German sentence merely because it is inconvenient to translate.
+- [ ] **Step 3: Verify previously missed areas explicitly**
 
-- [ ] **Step 3: Verify known previously missed areas are present**
-
-The generated JSON must contain occurrences from each of these concrete files where applicable:
+The report must include occurrences from every applicable file below:
 - `screens/HomeScreen.kt`
 - `screens/GamesScreen.kt`
 - `screens/PackListScreen.kt`
@@ -384,14 +411,12 @@ The generated JSON must contain occurrences from each of these concrete files wh
 - `screens/MomentsScreen.kt`
 - `screens/ProfileSheet.kt`
 - `data/GeneratedHarmonyContent.kt`
-- `widget/` production files
+- `widget/PicShareWidgetProvider.kt`
 - `res/values/strings.xml`
 
-It must not contain a production occurrence from `screens/DevStudioScreen.kt`.
+It must contain no occurrence from `screens/DevStudioScreen.kt`.
 
-- [ ] **Step 4: Regenerate after review and prove determinism**
-
-Run the generator twice and compare hashes:
+- [ ] **Step 4: Prove deterministic output**
 
 ```bash
 python3 scripts/visible_copy_inventory.py --root . --output /tmp/inventory-a.json --summary /tmp/summary-a.md
@@ -402,23 +427,30 @@ cmp /tmp/inventory-a.json /tmp/inventory-b.json
 
 Expected: identical SHA-256 values and `cmp` exit 0.
 
-- [ ] **Step 5: Write the final repository report**
+- [ ] **Step 5: Generate the committed summary with real integers**
 
-Regenerate the committed paths and ensure the summary begins with the exact current values:
+The summary renderer must write the five values directly from `report.metrics`; it must not contain literal template placeholders or estimates. Verify with:
 
-```markdown
-# Harmony German Visible-Copy Baseline
-
-- Unique visible units total: <generated integer>
-- Unique translatable German units: <generated integer>
-- Exempt visible units: <generated integer>
-- Visible render occurrences: <generated integer>
-- German word count: <generated integer>
+```bash
+python3 - <<'PY'
+import json, re
+from pathlib import Path
+report = json.loads(Path('localization/visible-copy-inventory.de.json').read_text(encoding='utf-8'))
+summary = Path('localization/visible-copy-inventory-summary.md').read_text(encoding='utf-8')
+for key in (
+    'unique_visible_units_total',
+    'unique_translatable_units',
+    'exempt_visible_units',
+    'visible_render_occurrences',
+    'german_word_count',
+):
+    value = str(report['metrics'][key])
+    assert re.search(rf'\b{re.escape(value)}\b', summary), (key, value)
+print(report['metrics'])
+PY
 ```
 
-The implementation must substitute actual generated integers; the committed file must not contain angle-bracket placeholders.
-
-- [ ] **Step 6: Commit the locked German baseline**
+- [ ] **Step 6: Commit the locked baseline**
 
 ```bash
 git add localization/visible-copy-inventory.de.json localization/visible-copy-inventory-summary.md scripts/visible_copy_policy.json
@@ -427,20 +459,20 @@ git commit -m "data: lock complete German visible-copy baseline"
 
 ---
 
-### Task 5: Replace the 952 completeness assumption and gate future copy in CI
+### Task 5: Replace the 952/English completeness assumption and gate CI
 
 **Files:**
 - Modify: `scripts/audit_localization.py`
 - Modify: `.github/workflows/localization-audit.yml`
-- Test: `scripts/test_visible_copy_inventory.py`
+- Modify: `scripts/test_visible_copy_inventory.py`
 
 **Interfaces:**
 - Consumes: `localization/visible-copy-inventory.de.json`.
-- Produces: CI invariant that the committed German inventory is regenerated from source and remains current; exposes the canonical count to follow-up locale audits.
+- Produces: CI invariant that the German baseline comes from source, not English or a historical fixed number.
 
-- [ ] **Step 1: Write a RED regression proving English cannot define the canonical count**
+- [ ] **Step 1: Write the RED regression**
 
-Add a source-level regression test:
+Add:
 
 ```python
 def test_audit_no_longer_defines_canonical_from_english_content(self):
@@ -449,9 +481,9 @@ def test_audit_no_longer_defines_canonical_from_english_content(self):
     self.assertIn("visible-copy-inventory.de.json", audit)
 ```
 
-Run it now; expected FAIL because the old English canonical expression is still present.
+Run the test. Expected: FAIL because the old English-derived canonical expression is still present.
 
-- [ ] **Step 2: Change `audit_localization.py` baseline loading**
+- [ ] **Step 2: Load the German inventory in `audit_localization.py`**
 
 Add:
 
@@ -462,11 +494,11 @@ def load_canonical_inventory() -> dict:
     return json.loads(INVENTORY_PATH.read_text(encoding="utf-8"))
 ```
 
-Replace the old English-derived `canonical` definition with the inventory's non-exempt German units. Preserve existing locale-specific checks temporarily, but label their coverage as `legacy-locale coverage` until the Japanese follow-up plan migrates locale catalogs to the new baseline. Do not claim other languages are fully complete against the new baseline yet.
+Replace the English-derived canonical definition with non-exempt German units from the inventory. Preserve old locale-specific checks only as explicitly labeled `legacy-locale coverage` until the Japanese follow-up plan migrates locale coverage. Do not call the other languages complete against the new baseline.
 
-- [ ] **Step 3: Add CI inventory generation and clean-diff check**
+- [ ] **Step 3: Add the CI inventory gate before locale checks**
 
-Before locale coverage steps in `.github/workflows/localization-audit.yml`, add:
+Add to `.github/workflows/localization-audit.yml`:
 
 ```yaml
 - name: Test visible-copy inventory
@@ -483,24 +515,17 @@ Before locale coverage steps in `.github/workflows/localization-audit.yml`, add:
   run: git diff --exit-code -- localization/visible-copy-inventory.de.json localization/visible-copy-inventory-summary.md
 ```
 
-- [ ] **Step 4: Run the full static test suite**
+- [ ] **Step 4: Run static checks and Android compile**
 
 ```bash
 python3 -m unittest -v scripts/test_visible_copy_inventory.py
 python3 scripts/audit_localization.py
-```
-
-Expected: inventory tests PASS. Localization audit may report other locales as legacy/incomplete against the new baseline but must not redefine or shrink the German canonical set.
-
-- [ ] **Step 5: Compile Android**
-
-```bash
 gradle :app:compileDebugKotlin --no-daemon
 ```
 
-Expected: `BUILD SUCCESSFUL`.
+Expected: inventory tests PASS and Gradle prints `BUILD SUCCESSFUL`. The audit may describe other locales as legacy/incomplete, but it must not shrink the German canonical set.
 
-- [ ] **Step 6: Commit CI migration**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add scripts/audit_localization.py scripts/test_visible_copy_inventory.py .github/workflows/localization-audit.yml
@@ -509,18 +534,18 @@ git commit -m "ci: make German visible-copy inventory canonical"
 
 ---
 
-### Task 6: Final verification and handoff to Japanese plan
+### Task 6: Final verification and Japanese handoff
 
 **Files:**
 - Verify: `localization/visible-copy-inventory.de.json`
 - Verify: `localization/visible-copy-inventory-summary.md`
-- Verify: all Task 1–5 code and workflow files.
+- Verify: all Task 1–5 implementation files.
 
 **Interfaces:**
 - Consumes: final German inventory.
-- Produces: exact baseline metrics and a locked artifact that the separate Japanese implementation plan can compare against.
+- Produces: exact baseline metrics and a locked artifact for the Japanese implementation plan.
 
-- [ ] **Step 1: Run all inventory validations from a clean checkout**
+- [ ] **Step 1: Run all validation from the final branch state**
 
 ```bash
 python3 -m unittest -v scripts/test_visible_copy_inventory.py
@@ -532,31 +557,29 @@ gradle :app:compileDebugKotlin --no-daemon
 
 Expected: tests PASS, `cmp` exit 0, and Gradle `BUILD SUCCESSFUL`.
 
-- [ ] **Step 2: Verify the old 952 number is not used as a completeness threshold**
-
-Run:
+- [ ] **Step 2: Verify 952 is no longer an executable completeness threshold**
 
 ```bash
 grep -R "952" scripts localization .github/workflows || true
 ```
 
-Any remaining occurrence must be historical documentation/data only; no executable completeness check may compare against 952.
+Any remaining occurrence may be historical documentation/data only. No executable completeness check may compare a locale against 952.
 
 - [ ] **Step 3: Report the exact real metrics**
 
-Read the committed summary and report these values verbatim to the user:
+Read `localization/visible-copy-inventory-summary.md` and report verbatim:
 - unique visible units total;
 - unique translatable German units;
 - exempt visible units;
 - visible render occurrences;
 - German word count.
 
-Do not estimate or round them.
+Do not estimate or round.
 
-- [ ] **Step 4: Commit any final evidence-only correction, otherwise do not create an empty commit**
+- [ ] **Step 4: Commit only if final verification required an evidence-backed correction**
 
-If verification required no change, leave the branch head unchanged. If a proven false positive/exemption correction was necessary, regenerate both inventory outputs, rerun Step 1, then commit only that correction.
+If source review finds a false positive or missing exemption, update policy/registry, regenerate both output files, rerun Step 1, and commit the correction. Otherwise do not create an empty commit.
 
-- [ ] **Step 5: Create the Japanese implementation plan only after this baseline is reviewed**
+- [ ] **Step 5: Create the separate Japanese implementation plan after the German baseline is reviewed**
 
-The follow-up plan must use `localization/visible-copy-inventory.de.json` as its canonical input and must not use `EXACT_ENGLISH_CONTENT` or a fixed historical number as its coverage target.
+That plan must consume `localization/visible-copy-inventory.de.json` as its canonical source and must not use `EXACT_ENGLISH_CONTENT` or a fixed historical number as its coverage target.
