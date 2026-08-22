@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Repair concrete pre-existing Kotlin build blockers exposed by localization CI.
+"""Repair concrete Kotlin build blockers exposed by localization CI.
 
-This is intentionally narrow and idempotent: it only fixes malformed literal escaping in
-European Portuguese, two references to non-existent panda raster resources, and the missing
-PicShare widget preference model that HomeScreen already imports. Brazilian Portuguese is
-intentionally excluded from this repair pass.
+This is intentionally narrow and idempotent: it normalizes malformed Kotlin dollar escaping
+in both Portuguese catalogs and retains the already established build repairs for panda visuals
+and PicShare widget preferences.
 """
 from pathlib import Path
 
@@ -17,16 +16,18 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-# 1) The European Portuguese catalog accidentally contains two backslashes before Kotlin '$'.
-# Kotlin then escapes the backslash and tries to interpolate partnerName/profile/d as variables.
-path = UI / "PortuguesePortugalContent.kt"
-text = path.read_text(encoding="utf-8")
-text = text.replace(r"\\$", r"\$")
-# A translated variable identifier would also break the stable lookup/value contract.
-text = text.replace("parceiroName", "partnerName")
-write(path, text)
+# Two legacy Portuguese catalogs contain two literal backslashes before Kotlin '$'.
+# In a Kotlin string that escapes the backslash and accidentally activates interpolation.
+# Collapse exactly two backslashes before '$' to the single Kotlin escape '\$'.
+for name in ("PortugueseBrazilContent.kt", "PortuguesePortugalContent.kt"):
+    path = UI / name
+    text = path.read_text(encoding="utf-8")
+    text = text.replace(r"\\$", r"\$")
+    # Preserve stable Kotlin variable identifiers in localized literals.
+    text = text.replace("parceiroName", "partnerName")
+    write(path, text)
 
-# 2) GameCategoryVisuals referenced raster resources that do not exist. The repo already has
+# GameCategoryVisuals referenced raster resources that do not exist. The repo already has
 # the vector PandaCategoryIcon implementation for exactly these category IDs, so use it.
 path = UI / "components/GameCategoryVisuals.kt"
 text = path.read_text(encoding="utf-8")
@@ -49,8 +50,7 @@ new = '''        "wer" -> PandaCategoryIcon(categoryId = "wer", accent = accent,
 text = text.replace(old, new)
 write(path, text)
 
-# 3) HomeScreen already imports this preference model, but no implementation exists in the repo.
-# Keep it deliberately small and compatible with the fields HomeScreen reads/writes.
+# HomeScreen imports this preference model; create it only if an older branch lacks it.
 WIDGET.mkdir(parents=True, exist_ok=True)
 prefs = WIDGET / "PicShareWidgetPreferences.kt"
 if not prefs.exists():
