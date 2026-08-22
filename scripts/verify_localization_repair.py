@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 UI = ROOT / "app/src/main/java/com/example/ui"
 UPDATES = UI / "LocalizationUpdates.kt"
 
+# Brazilian Portuguese is intentionally deferred to a separate follow-up pass.
+EXCLUDED_LOCALES = {"pt-BR"}
+
 REPAIR_MAPS = {
     "it": "LOCALIZATION_UPDATES_ITALIAN",
     "fr": "LOCALIZATION_UPDATES_FRENCH",
@@ -18,7 +21,6 @@ REPAIR_MAPS = {
     "pl": "LOCALIZATION_UPDATES_POLISH",
     "es-419": "LOCALIZATION_UPDATES_SPANISH_LATIN_AMERICA",
     "es-ES": "LOCALIZATION_UPDATES_SPANISH_SPAIN",
-    "pt-BR": "LOCALIZATION_UPDATES_PORTUGUESE_BRAZIL",
     "pt-PT": "LOCALIZATION_UPDATES_PORTUGUESE_PORTUGAL",
     "da": "LOCALIZATION_UPDATES_DANISH",
     "no": "LOCALIZATION_UPDATES_NORWEGIAN",
@@ -116,6 +118,9 @@ def main() -> int:
             failed = True
 
     for code, (filename, base_map_name, _repair_map_name) in audit.LOCALES.items():
+        if code in EXCLUDED_LOCALES:
+            print(f"{code}: intentionally excluded from this merge")
+            continue
         base = audit.extract_map(UI / filename, base_map_name)
         effective = dict(base)
         effective.update(repair_maps.get(code, {}))
@@ -139,8 +144,7 @@ def main() -> int:
     for token in [
         "AppLanguage.JAPANESE", "AppLanguage.POLISH", "AppLanguage.FRENCH",
         "AppLanguage.SPANISH_LATIN_AMERICA", "AppLanguage.SPANISH_SPAIN",
-        "AppLanguage.PORTUGUESE_BRAZIL", "AppLanguage.PORTUGUESE_PORTUGAL",
-        "AppLanguage.DANISH", "AppLanguage.NORWEGIAN",
+        "AppLanguage.PORTUGUESE_PORTUGAL", "AppLanguage.DANISH", "AppLanguage.NORWEGIAN",
     ]:
         if token not in introspection:
             error(f"IntrospectionStrings has no explicit {token} path")
