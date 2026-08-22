@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-"""Static localization gate for Harmony.
+"""Static localization gate for Harmony customer-facing copy.
 
-This deliberately ignores Developer Studio because it is temporary and excluded from the
-production localization requirement. Every customer-facing non-German locale must have its
-own catalog and must cover every canonical display key.
+Developer Studio is intentionally excluded: it is temporary and the product owner explicitly
+excluded it from this localization pass. The gate covers the production language catalogs and
+known customer-facing regressions from the supplied Japanese screen recording.
 """
 from __future__ import annotations
 
+import base64
+import gzip
+import json
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 UI = ROOT / "app/src/main/java/com/example/ui"
+REPORT = ROOT / "localization_missing.json"
 
 LOCALES = {
     "en": ("EnglishContent.kt", "EXACT_ENGLISH_CONTENT"),
@@ -20,7 +24,7 @@ LOCALES = {
     "fr": ("FrenchContent.kt", "EXACT_FRENCH_CONTENT"),
     "ja": ("JapaneseContent.kt", "EXACT_JAPANESE_CONTENT"),
     "pl": ("PolishContent.kt", "EXACT_POLISH_CONTENT"),
-    "es-419": ("SpanishContent.kt", "EXACT_SPANISH_LATAM_CONTENT"),
+    "es-419": ("SpanishContent.kt", "EXACT_SPANISH_LATIN_AMERICA_CONTENT"),
     "es-ES": ("SpanishContent.kt", "EXACT_SPANISH_SPAIN_CONTENT"),
     "pt-BR": ("PortugueseBrazilContent.kt", "EXACT_PORTUGUESE_BRAZIL_CONTENT"),
     "pt-PT": ("PortuguesePortugalContent.kt", "EXACT_PORTUGUESE_PORTUGAL_CONTENT"),
@@ -28,11 +32,23 @@ LOCALES = {
     "no": ("NorwegianContent.kt", "EXACT_NORWEGIAN_CONTENT"),
 }
 
+COMPRESSED_DATA_NAMES = {
+    "EXACT_DANISH_CONTENT": "DANISH_CONTENT_DATA",
+    "EXACT_NORWEGIAN_CONTENT": "NORWEGIAN_CONTENT_DATA",
+}
+
+# Canonical strings that only belong to the temporary developer tooling.
+DEV_ONLY_KEYS = {
+    "Entwickler Studio Öffnen",
+    "Entwickler-Modus",
+    "🛠️ Entwickler-Modus",
+    "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen",
+}
+
 ENTRY_RE = re.compile(r'^\s*"((?:\\.|[^"\\])*)"\s+to\s+"((?:\\.|[^"\\])*)",?\s*$')
 
 
 def unescape_kotlin(value: str) -> str:
-    # Enough for catalog keys/values; preserve interpolation escapes as literal text.
     return (value
             .replace(r'\\"', '"')
             .replace(r'\\n', '\n')
@@ -40,8 +56,7 @@ def unescape_kotlin(value: str) -> str:
             .replace(r'\\\\', '\\'))
 
 
-def extract_map(path: Path, map_name: str) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
+def parse_map_of(text: str, map_name: str) -> dict[str, str]:
     marker = re.search(rf'\b{re.escape(map_name)}\b[^=]*=\s*mapOf\s*\(', text)
     if not marker:
         return {}
@@ -76,30 +91,62 @@ def extract_map(path: Path, map_name: str) -> dict[str, str]:
     return result
 
 
+def parse_compressed_catalog(text: str, map_name: str) -> dict[str, str]:
+    data_name = COMPRESSED_DATA_NAMES.get(map_name)
+    if not data_name:
+        return {}
+    match = re.search(
+        rf'private\s+const\s+val\s+{re.escape(data_name)}\s*=\s*"""(.*?)"""',
+        text,
+        re.DOTALL,
+    )
+    if not match:
+        return {}
+    clean = "".join(match.group(1).split())
+    payload = gzip.decompress(base64.b64decode(clean)).decode("utf-8")
+    result: dict[str, str] = {}
+    for line in payload.splitlines():
+        if not line.strip():
+            continue
+        key, value = line.split("\t", 1)
+        result[unescape_kotlin(key)] = unescape_kotlin(value)
+    return result
+
+
+def extract_map(path: Path, map_name: str) -> dict[str, str]:
+    text = path.read_text(encoding="utf-8")
+    return parse_map_of(text, map_name) or parse_compressed_catalog(text, map_name)
+
+
 def fail(message: str) -> None:
     print(f"::error::{message}")
 
 
 def main() -> int:
-    canonical = extract_map(UI / "EnglishContent.kt", "EXACT_ENGLISH_CONTENT")
-    if not canonical:
+    canonical_all = extract_map(UI / "EnglishContent.kt", "EXACT_ENGLISH_CONTENT")
+    if not canonical_all:
         fail("Could not parse canonical English catalog")
         return 2
+    canonical = {k: v for k, v in canonical_all.items() if k not in DEV_ONLY_KEYS and "Entwickler" not in k}
 
-    print(f"Canonical catalog: {len(canonical)} keys")
+    print(f"Canonical customer catalog: {len(canonical)} keys ({len(canonical_all) - len(canonical)} developer-only excluded)")
     failed = False
     catalogs: dict[str, dict[str, str]] = {}
+    report: dict[str, list[str]] = {}
 
     for code, (filename, map_name) in LOCALES.items():
         catalog = extract_map(UI / filename, map_name)
         catalogs[code] = catalog
         missing = sorted(set(canonical) - set(catalog))
+        report[code] = missing
         if missing:
             failed = True
-            fail(f"{code}: missing {len(missing)} / {len(canonical)} keys")
+            fail(f"{code}: missing {len(missing)} / {len(canonical)} customer keys")
             print(f"MISSING[{code}]=" + " | ".join(missing))
         else:
             print(f"{code}: {len(catalog)} keys, coverage OK")
+
+    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # Video-derived regression checks: these were visibly German/wrong in Japanese.
     ja = catalogs.get("ja", {})
@@ -112,7 +159,7 @@ def main() -> int:
         "Entweder oder": "どちらか",
         "Frage": "質問",
         "Unterhaltung": "エンターテインメント",
-        "Hochzeit": "結婚",
+        "Hochzeit": "結婚式",
         "Burger": "バーガー",
         "Aussehen": "見た目",
         "Das erste Treffen": "初めて会った日",
