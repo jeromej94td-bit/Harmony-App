@@ -9,6 +9,4 @@ object MemoryArchivePolicy {
         entry.completedAt == null -> MemoryBucket.CURRENT_OPEN
         else -> MemoryBucket.ARCHIVED
     }
-
-    fun nextExpiryAt(entries: List<MemoryEntryEntity>, nowMillis: Long): Long? = null
 }

@@ -21,15 +21,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,7 +39,6 @@ class MemoryViewModel(
 ) : ViewModel() {
     private val localState = MutableStateFlow(MemoryLocalState(nowMillis = clock.nowMillis()))
     private val entryGuards = ConcurrentHashMap<String, MemoryEntryGuard>()
-    private var expiryJob: Job? = null
 
     val uiState: StateFlow<MemoryUiState> = combine(
         repository.categories,
@@ -89,7 +85,6 @@ class MemoryViewModel(
             editorEntryId = local.editorEntryId,
             failedPreviewIds = local.failedPreviewIds,
             pendingDeleteEntryId = local.pendingDeleteEntryId,
-            nextExpiryAt = MemoryArchivePolicy.nextExpiryAt(entries, local.nowMillis),
             errorKey = local.errorKey
         )
     }.stateIn(
@@ -101,11 +96,6 @@ class MemoryViewModel(
     init {
         launchOperation(ERROR_SEED_DEFAULTS) {
             repository.ensureDefaultCategories(clock.nowMillis())
-        }
-        viewModelScope.launch {
-            uiState.map { it.nextExpiryAt }
-                .distinctUntilChanged()
-                .collect(::scheduleExpiry)
         }
     }
 
@@ -357,23 +347,6 @@ class MemoryViewModel(
         }
     }
 
-    private fun scheduleExpiry(expiryAt: Long?) {
-        expiryJob?.cancel()
-        expiryJob = expiryAt?.let { target ->
-            viewModelScope.launch {
-                while (true) {
-                    val remaining = remainingUntil(target, clock.nowMillis())
-                    if (remaining == 0L) {
-                        refreshTime()
-                        return@launch
-                    }
-                    delay(remaining)
-                    refreshTime()
-                }
-            }
-        }
-    }
-
     private fun launchOperation(errorKey: String, block: suspend () -> Unit) {
         viewModelScope.launch(ioDispatcher) {
             updateLocal { copy(errorKey = null) }
@@ -565,11 +538,3 @@ private fun normalizeMemoryUrl(rawUrl: String): String? = normalizeHttpUrl(rawUr
         normalized
     }
 }
-
-private fun remainingUntil(target: Long, now: Long): Long = when {
-    now >= target -> 0L
-    target - now > 0L -> minOf(target - now, MAX_EXPIRY_DELAY_MS)
-    else -> MAX_EXPIRY_DELAY_MS
-}
-
-private const val MAX_EXPIRY_DELAY_MS = Long.MAX_VALUE / 2L

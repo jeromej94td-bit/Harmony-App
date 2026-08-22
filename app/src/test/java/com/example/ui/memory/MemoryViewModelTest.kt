@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelStore
 import com.example.data.LinkPreview
 import com.example.data.LinkPreviewResolver
 import com.example.data.LinkPreviewResult
-import com.example.data.MemoryArchivePolicy
 import com.example.data.MemoryBucket
 import com.example.data.model.MemoryCategoryEntity
 import com.example.data.model.MemoryClock
@@ -89,20 +88,19 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `current groups open before grace and archived sorts newest completion first at exact boundary`() = runMemoryTest {
+    fun `current contains open entries and archived sorts newest completion first`() = runMemoryTest {
         repository.seedEntries(
-            entry("grace-newer", updatedAt = 900L, completedAt = START - 10L),
             entry("open-older", updatedAt = 100L),
             entry("open-newer", updatedAt = 200L),
-            entry("archived-old", updatedAt = 800L, completedAt = START - MemoryArchivePolicy.GRACE_PERIOD_MS - 5L),
-            entry("archived-new", updatedAt = 700L, completedAt = START - MemoryArchivePolicy.GRACE_PERIOD_MS)
+            entry("archived-old", updatedAt = 800L, completedAt = START - 5L),
+            entry("archived-new", updatedAt = 700L, completedAt = START)
         )
         val viewModel = viewModel()
         runCurrent()
 
-        assertEquals(listOf("open-newer", "open-older", "grace-newer"), viewModel.uiState.value.visibleEntries.map { it.entity.id })
+        assertEquals(listOf("open-newer", "open-older"), viewModel.uiState.value.visibleEntries.map { it.entity.id })
         assertEquals(
-            listOf(MemoryBucket.CURRENT_OPEN, MemoryBucket.CURRENT_OPEN, MemoryBucket.CURRENT_GRACE),
+            listOf(MemoryBucket.CURRENT_OPEN, MemoryBucket.CURRENT_OPEN),
             viewModel.uiState.value.visibleEntries.map { it.bucket }
         )
 
@@ -113,51 +111,20 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `completion remains current until manual refresh at scheduled 24 hour boundary`() = runMemoryTest {
+    fun `completion moves entry directly to archived`() = runMemoryTest {
         repository.seedEntries(entry("entry-1"))
         val viewModel = viewModel()
         runCurrent()
 
         viewModel.complete("entry-1")
         runCurrent()
-        assertEquals(MemoryBucket.CURRENT_GRACE, viewModel.uiState.value.visibleEntries.single().bucket)
-        assertEquals(START + MemoryArchivePolicy.GRACE_PERIOD_MS, viewModel.uiState.value.nextExpiryAt)
+        assertTrue(viewModel.uiState.value.visibleEntries.isEmpty())
 
-        clock.now = START + MemoryArchivePolicy.GRACE_PERIOD_MS
-        viewModel.refreshTime()
         viewModel.selectTab(MemoryTab.ARCHIVED)
         runCurrent()
 
         assertEquals("entry-1", viewModel.uiState.value.visibleEntries.single().entity.id)
-    }
-
-    @Test
-    fun `nearest expiry reschedules when entries change and refreshes only at the replacement boundary`() = runMemoryTest {
-        val firstExpiry = START + MemoryArchivePolicy.GRACE_PERIOD_MS
-        val secondExpiry = firstExpiry + 1_000L
-        repository.seedEntries(
-            entry("first", completedAt = START),
-            entry("second", completedAt = START + 1_000L)
-        )
-        val viewModel = viewModel()
-        runCurrent()
-        assertEquals(firstExpiry, viewModel.uiState.value.nextExpiryAt)
-
-        repository.seedEntries(entry("second", completedAt = START + 1_000L))
-        runCurrent()
-        assertEquals(secondExpiry, viewModel.uiState.value.nextExpiryAt)
-
-        clock.now = firstExpiry
-        scheduler.advanceTimeBy(MemoryArchivePolicy.GRACE_PERIOD_MS)
-        runCurrent()
-        assertEquals(MemoryBucket.CURRENT_GRACE, viewModel.uiState.value.visibleEntries.single().bucket)
-
-        clock.now = secondExpiry
-        scheduler.advanceTimeBy(1_000L)
-        runCurrent()
-        viewModel.selectTab(MemoryTab.ARCHIVED)
-        runCurrent()
-        assertEquals("second", viewModel.uiState.value.visibleEntries.single().entity.id)
+        assertEquals(MemoryBucket.ARCHIVED, viewModel.uiState.value.visibleEntries.single().bucket)
     }
 
     @Test
@@ -473,45 +440,6 @@ class MemoryViewModelTest {
         assertNull(finalEntry.previewSiteName)
         assertNull(finalEntry.previewFetchedAt)
         assertEquals(setOf("link"), viewModel.uiState.value.failedPreviewIds)
-    }
-
-    @Test
-    fun `scheduled expiry recalculates delay after clock rollback`() = runMemoryTest {
-        val expiry = START + MemoryArchivePolicy.GRACE_PERIOD_MS
-        repository.seedEntries(entry("link", completedAt = START))
-        val viewModel = viewModel()
-        runCurrent()
-
-        clock.now = START - 1_000L
-        scheduler.advanceTimeBy(MemoryArchivePolicy.GRACE_PERIOD_MS)
-        runCurrent()
-        assertEquals(MemoryBucket.CURRENT_GRACE, viewModel.uiState.value.visibleEntries.single().bucket)
-
-        clock.now = expiry
-        scheduler.advanceTimeBy(MemoryArchivePolicy.GRACE_PERIOD_MS + 1_000L)
-        runCurrent()
-        viewModel.selectTab(MemoryTab.ARCHIVED)
-        runCurrent()
-
-        assertEquals("link", viewModel.uiState.value.visibleEntries.single().entity.id)
-    }
-
-    @Test
-    fun `overflow sized expiry delay remains scheduled instead of refreshing immediately`() = runMemoryTest {
-        val completedAt = Long.MAX_VALUE - MemoryArchivePolicy.GRACE_PERIOD_MS / 2L
-        clock.now = Long.MIN_VALUE + 1L
-        repository.seedEntries(entry("link", completedAt = completedAt))
-        val viewModel = viewModel()
-        runCurrent()
-        assertEquals(Long.MAX_VALUE, viewModel.uiState.value.nextExpiryAt)
-
-        clock.now = Long.MAX_VALUE
-        scheduler.advanceTimeBy(Long.MAX_VALUE)
-        runCurrent()
-        viewModel.selectTab(MemoryTab.ARCHIVED)
-        runCurrent()
-
-        assertEquals("link", viewModel.uiState.value.visibleEntries.single().entity.id)
     }
 
     @Test

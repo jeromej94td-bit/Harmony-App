@@ -4,7 +4,6 @@ import com.example.data.model.MemoryDefaults
 import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.MemoryEntryKind
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Test
 
 class MemoryArchivePolicyTest {
@@ -32,16 +31,6 @@ class MemoryArchivePolicyTest {
         assertEquals(
             MemoryBucket.CURRENT_OPEN,
             MemoryArchivePolicy.bucketAt(entry.copy(completedAt = null), completedAt)
-        )
-    }
-
-    @Test
-    fun `completed entries never schedule an expiry`() {
-        assertNull(
-            MemoryArchivePolicy.nextExpiryAt(
-                listOf(entry),
-                completedAt
-            )
         )
     }
 }

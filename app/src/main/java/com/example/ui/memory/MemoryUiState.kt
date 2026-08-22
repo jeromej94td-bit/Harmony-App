@@ -23,6 +23,5 @@ data class MemoryUiState(
     val editorEntryId: String? = null,
     val failedPreviewIds: Set<String> = emptySet(),
     val pendingDeleteEntryId: String? = null,
-    val nextExpiryAt: Long? = null,
     val errorKey: String? = null
 )
