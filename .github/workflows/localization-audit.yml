@@ -12,6 +12,7 @@ on:
       - 'scripts/verify_localization_repair.py'
       - 'scripts/verify_ptbr_ready.py'
       - 'scripts/verify_six_new_locales.py'
+      - 'scripts/verify_41_new_locales.py'
       - 'scripts/scaffold_six_new_locales.py'
       - 'scripts/generate_six_new_locale_catalogs.py'
       - '.github/workflows/localization-audit.yml'
@@ -39,6 +40,9 @@ jobs:
 
       - name: Verify six new locales readiness
         run: python3 scripts/verify_six_new_locales.py
+
+      - name: Verify 41 new locales readiness
+        run: python3 scripts/verify_41_new_locales.py
 
       - name: Discover missing locale keys
         continue-on-error: true
