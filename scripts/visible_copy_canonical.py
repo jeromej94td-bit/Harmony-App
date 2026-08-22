@@ -20,13 +20,72 @@ from visible_copy_inventory import (
     write_summary,
 )
 
+KOTLIN_PLACEHOLDER_RE = re.compile(
+    r"\$\{[^{}]+\}|\$[A-Za-z_][A-Za-z0-9_.]*|\{[A-Za-z_][A-Za-z0-9_.]*\}|%(?:\d+\$)?0?\d*[sd]"
+)
 TECHNICAL_GENERATED_LITERAL_RE = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
+SNAKE_IDENTIFIER_RE = re.compile(r"^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9${}.]+)+$")
+LOWER_CAMEL_RE = re.compile(r"^[a-z]+(?:[A-Z][A-Za-z0-9]*)+$")
+LOWER_IDENTIFIER_RE = re.compile(r"^[a-zäöüß][a-z0-9äöüß.-]*$")
+BASE64ISH_RE = re.compile(r"^[A-Za-z0-9+/=]+$")
+
 LOCALE_ONLY_SOURCES = {
     "app/src/main/java/com/example/data/CuisinePackInstaller.kt",
 }
 PRECISE_SUPPLEMENT_SOURCES = {
     "app/src/main/java/com/example/data/DriveTotAssetInstaller.kt",
 }
+LOWERCASE_VISIBLE_ALLOW = {"oder"}
+DEV_STUDIO_TEXTS = {
+    "Entwickler Studio Öffnen",
+    "Entwickler-Modus",
+    "🛠️ Entwickler-Modus",
+    "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen",
+    "🛠️ Developer mode",
+    "Open Developer Studio",
+    "Edit games and destinations, import folders, adjust images",
+    "Titel, Kategorie, Thema, Tags, Fragen...",
+}
+TECHNICAL_EXACT = {
+    "image/*",
+    "me",
+    "them",
+    "de",
+    "id",
+    "name",
+    "title",
+    "value",
+    "caption",
+    "cat",
+    "type",
+    "side",
+    "count",
+    "text",
+    "audio",
+    "voice",
+    "avatars",
+    "supabase",
+    "disc",
+    "pairIndex",
+    "packId",
+    "slotB",
+    "templateA",
+    "question_index",
+    "category_id",
+    "tag_color_hex",
+}
+CODE_FRAGMENT_TOKENS = (
+    "LanguageManager.tr(",
+    "appLanguage)}",
+    "contentText(",
+    "R.drawable.",
+    "R.string.",
+)
+BRAND_EXACT = {"Harmony", "HARMONY"}
+
+
+def extract_placeholders(text: str) -> tuple[str, ...]:
+    return tuple(match.group(0) for match in KOTLIN_PLACEHOLDER_RE.finditer(text))
 
 
 def _comment_only_lines(path: Path) -> set[int]:
@@ -52,22 +111,59 @@ def _comment_only_lines(path: Path) -> set[int]:
     return comment_lines
 
 
+def _is_base64_blob(text: str) -> bool:
+    compact = text.strip()
+    return len(compact) > 256 and " " not in compact[:200] and bool(BASE64ISH_RE.fullmatch(compact))
+
+
+def _has_translatable_letters(text: str) -> bool:
+    residual = KOTLIN_PLACEHOLDER_RE.sub("", text)
+    residual = re.sub(r"[%0-9:./&+\-–—·↔„“'\"()\[\] ]+", "", residual)
+    return bool(re.search(r"[^\W\d_]", residual, re.UNICODE))
+
+
+def _looks_technical_identifier(text: str) -> bool:
+    if text in LOWERCASE_VISIBLE_ALLOW:
+        return False
+    if text in TECHNICAL_EXACT:
+        return True
+    if SNAKE_IDENTIFIER_RE.fullmatch(text):
+        return True
+    if LOWER_CAMEL_RE.fullmatch(text):
+        return True
+    if LOWER_IDENTIFIER_RE.fullmatch(text):
+        return True
+    if "_" in text and not any(ch.isspace() for ch in text):
+        return True
+    return False
+
+
 def _keep_occurrence(root: Path, occ: dict, comment_cache: dict[str, set[int]]) -> bool:
     rel = occ["path"]
+    text = occ["german"].strip()
+
     if rel in LOCALE_ONLY_SOURCES:
+        return False
+    if text in DEV_STUDIO_TEXTS:
+        return False
+    if _is_base64_blob(text):
+        return False
+    if any(token in text for token in CODE_FRAGMENT_TOKENS):
+        return False
+    if not _has_translatable_letters(text):
+        return False
+    if _looks_technical_identifier(text):
         return False
 
     if rel.endswith("GeneratedHarmonyContent.kt"):
         lines = comment_cache.setdefault(rel, _comment_only_lines(root / rel))
         if occ["line"] in lines:
             return False
-        if occ["presentation"] == "product-content" and TECHNICAL_GENERATED_LITERAL_RE.fullmatch(occ["german"]):
+        if TECHNICAL_GENERATED_LITERAL_RE.fullmatch(text):
             return False
 
-    if rel in PRECISE_SUPPLEMENT_SOURCES and occ["presentation"] == "compose-ui":
-        # DriveTotAssetInstaller is inventoried by its explicit option-map parser.
-        # Generic proximity scanning around comments/map names is intentionally discarded.
-        return False
+    if rel in PRECISE_SUPPLEMENT_SOURCES:
+        return occ["presentation"] == "bundled-image-option"
 
     return True
 
@@ -76,18 +172,23 @@ def discover_repository(root: Path) -> InventoryReport:
     root = root.resolve()
     raw = discover_complete_repository(root)
     comment_cache: dict[str, set[int]] = {}
-    occurrences = [
-        VisibleCopyOccurrence(
-            path=occ["path"],
-            line=occ["line"],
-            presentation=occ["presentation"],
-            german=occ["german"],
-            placeholders=tuple(occ.get("placeholders", [])),
-            exemption=occ.get("exemption"),
+    occurrences: list[VisibleCopyOccurrence] = []
+    for occ in raw.occurrences:
+        if not _keep_occurrence(root, occ, comment_cache):
+            continue
+        text = occ["german"]
+        exemption = occ.get("exemption") or ("brand" if text in BRAND_EXACT else None)
+        occurrences.append(
+            VisibleCopyOccurrence(
+                path=occ["path"],
+                line=occ["line"],
+                presentation=occ["presentation"],
+                german=text,
+                placeholders=extract_placeholders(text),
+                exemption=exemption,
+            )
         )
-        for occ in raw.occurrences
-        if _keep_occurrence(root, occ, comment_cache)
-    ]
+
     occurrences = _dedupe_occurrences(occurrences)
     units = _build_units(occurrences)
     metrics = {
