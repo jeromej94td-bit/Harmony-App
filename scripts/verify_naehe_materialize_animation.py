@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
+# Regression guard for the requested Nähe & Intimität entrance animation.
 path = Path("app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt")
 text = path.read_text(encoding="utf-8")
 
