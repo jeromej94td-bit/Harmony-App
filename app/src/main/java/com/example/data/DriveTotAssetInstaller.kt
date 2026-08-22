@@ -1,23 +1,33 @@
 package com.example.data
 
 import android.content.Context
+import android.util.Base64
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.InputStream
 import java.util.zip.ZipInputStream
 
 /**
- * Installs the Drive-backed "Das oder das?" image bundle that ships inside the APK.
- * The bundle lives in GitHub at app/src/main/assets/drive_tot_assets.zip.
+ * Installs the bundled "Das oder das?" image assets that ship inside the APK.
  *
- * Images are extracted to app-private storage once and returned as option -> local-path
- * mappings. DeveloperDataManager then registers them as generated images, so these local
- * files win over TotImageProvider's network fallback URLs and work offline like the other
- * shipped visual packs.
+ * Existing Drive-backed images stay in drive_tot_assets.zip. The generated
+ * "Marken & Alltag" images are stored as a split Base64 bundle so they can live
+ * in the repository as normal text assets. Both bundles are extracted to
+ * app-private storage and registered as generated images by HarmonyViewModel.
  */
 object DriveTotAssetInstaller {
-    private const val ASSET_ZIP = "drive_tot_assets.zip"
-    private const val OUTPUT_DIR = "drive_tot_assets_v1"
+    private const val DRIVE_ASSET_ZIP = "drive_tot_assets.zip"
+    private const val OUTPUT_DIR = "drive_tot_assets_v2"
 
-    private val optionToFile = linkedMapOf(
+    private val BRAND_ASSET_CHUNKS = listOf(
+        "brand_everyday_assets_01.b64",
+        "brand_everyday_assets_02.b64",
+        "brand_everyday_assets_03_04.b64",
+        "brand_everyday_assets_05_06.b64",
+        "brand_everyday_assets_07_08.b64"
+    )
+
+    private val driveOptionToFile = linkedMapOf(
         // Getränke
         "Cappuccino" to "drink_cappuccino.webp",
         "Matcha-Latte" to "drink_matcha_latte.webp",
@@ -80,34 +90,95 @@ object DriveTotAssetInstaller {
         "Tokyo, Japan" to "travel_tokyo.webp"
     )
 
+    private val brandOptionToFile = linkedMapOf(
+        "McDonald’s" to "brand_mcdonalds.webp",
+        "Burger King" to "brand_burger_king.webp",
+        "iPhone" to "brand_iphone.webp",
+        "Android" to "brand_android.webp",
+        "Netflix" to "brand_netflix.webp",
+        "Kino" to "brand_kino.webp",
+        "Nike" to "brand_nike.webp",
+        "Adidas" to "brand_adidas.webp",
+        "Spotify" to "brand_spotify.webp",
+        "YouTube Music" to "brand_youtube_music.webp",
+        "PlayStation" to "brand_playstation.webp",
+        "Xbox" to "brand_xbox.webp",
+        "Coca-Cola" to "brand_coca_cola.webp",
+        "Pepsi" to "brand_pepsi.webp",
+        "IKEA" to "brand_ikea.webp",
+        "Möbelhaus" to "brand_moebelhaus.webp",
+        "Amazon" to "brand_amazon.webp",
+        "Lokal einkaufen" to "brand_lokal_einkaufen.webp",
+        "Disney" to "brand_disney.webp",
+        "Studio Ghibli" to "brand_studio_ghibli.webp"
+    )
+
+    private fun extractZip(
+        input: InputStream,
+        outputDir: File,
+        expectedFiles: Set<String>
+    ) {
+        ZipInputStream(input.buffered()).use { zip ->
+            while (true) {
+                val entry = zip.nextEntry ?: break
+                if (!entry.isDirectory) {
+                    val name = entry.name.substringAfterLast('/')
+                    if (name in expectedFiles) {
+                        File(outputDir, name).outputStream().buffered().use { out ->
+                            zip.copyTo(out)
+                        }
+                    }
+                }
+                zip.closeEntry()
+            }
+        }
+    }
+
     fun install(context: Context): Map<String, String> {
         val outputDir = File(context.filesDir, OUTPUT_DIR).apply { mkdirs() }
-        val expectedFiles = optionToFile.values.toSet()
+        val expectedFiles = (driveOptionToFile.values + brandOptionToFile.values).toSet()
         val needsInstall = expectedFiles.any { !File(outputDir, it).isFile }
 
         if (needsInstall) {
             outputDir.listFiles()?.forEach { it.delete() }
-            context.assets.open(ASSET_ZIP).use { input ->
-                ZipInputStream(input.buffered()).use { zip ->
-                    while (true) {
-                        val entry = zip.nextEntry ?: break
-                        if (!entry.isDirectory) {
-                            val name = entry.name.substringAfterLast('/')
-                            if (name in expectedFiles) {
-                                File(outputDir, name).outputStream().buffered().use { out ->
-                                    zip.copyTo(out)
-                                }
-                            }
+
+            context.assets.open(DRIVE_ASSET_ZIP).use { input ->
+                extractZip(input, outputDir, expectedFiles)
+            }
+
+            val encodedBrandZip = buildString {
+                BRAND_ASSET_CHUNKS.forEach { chunkName ->
+                    append(
+                        context.assets.open(chunkName).bufferedReader().use { reader ->
+                            reader.readText()
                         }
-                        zip.closeEntry()
-                    }
+                    )
                 }
+            }
+            val brandZipBytes = Base64.decode(encodedBrandZip, Base64.DEFAULT)
+            ByteArrayInputStream(brandZipBytes).use { input ->
+                extractZip(input, outputDir, expectedFiles)
             }
         }
 
-        return optionToFile.mapNotNull { (option, fileName) ->
+        val result = LinkedHashMap<String, String>()
+
+        // Keep the original Drive mapping first. In particular, the existing drinks
+        // Coca-Cola image remains the canonical Coca-Cola image across the app.
+        driveOptionToFile.forEach { (option, fileName) ->
             val file = File(outputDir, fileName)
-            if (file.isFile && file.length() > 0L) option to file.absolutePath else null
-        }.toMap(LinkedHashMap())
+            if (file.isFile && file.length() > 0L) {
+                result[option] = file.absolutePath
+            }
+        }
+
+        brandOptionToFile.forEach { (option, fileName) ->
+            val file = File(outputDir, fileName)
+            if (file.isFile && file.length() > 0L && option !in result) {
+                result[option] = file.absolutePath
+            }
+        }
+
+        return result
     }
 }
