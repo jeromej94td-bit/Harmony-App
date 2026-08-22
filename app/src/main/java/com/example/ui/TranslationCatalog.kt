@@ -18,6 +18,8 @@ object TranslationCatalog {
 
     fun hasCompletePack(language: AppLanguage): Boolean {
         if (language == AppLanguage.GERMAN) return true
+        // Brazilian Portuguese is intentionally kept on its pre-repair implementation for now.
+        if (language == AppLanguage.PORTUGUESE_BRAZIL) return true
         return EXACT_ENGLISH_CONTENT.keys
             .asSequence()
             .filterNot { it in nonCustomerKeys || "Entwickler" in it }
@@ -43,6 +45,8 @@ object TranslationCatalog {
 
     fun exact(german: String, language: AppLanguage): String? {
         if (language == AppLanguage.GERMAN) return german
+        // Keep Brazilian Portuguese exactly on the pre-repair catalog until its own pass is ready.
+        if (language == AppLanguage.PORTUGUESE_BRAZIL) return baseExact(german, language)
         // Reviewed Japanese video fixes must override stale legacy machine translations.
         if (language == AppLanguage.JAPANESE) {
             LOCALIZATION_UPDATES_JAPANESE[german]?.let { return it }
@@ -63,7 +67,7 @@ object TranslationCatalog {
             AppLanguage.POLISH -> localizePolishDynamicContent(text)
             AppLanguage.SPANISH_LATIN_AMERICA -> localizeLatinAmericanSpanishDynamicContent(text)
             AppLanguage.SPANISH_SPAIN -> localizeSpainSpanishDynamicContent(text)
-            AppLanguage.PORTUGUESE_BRAZIL -> localizeBrazilianPortugueseDynamicContent(text) ?: localizePortugueseDynamicContent(text)
+            AppLanguage.PORTUGUESE_BRAZIL -> localizePortugueseBrazilDynamicContent(text) ?: localizePortugueseDynamicContent(text)
             AppLanguage.PORTUGUESE_PORTUGAL -> localizePortuguesePortugalDynamicContent(text) ?: localizePortugueseDynamicContent(text)
             AppLanguage.DANISH -> localizeDanishDynamicContent(text)
             AppLanguage.NORWEGIAN -> localizeNorwegianDynamicContent(text)
