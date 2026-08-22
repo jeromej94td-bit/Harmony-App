@@ -44,9 +44,6 @@ jobs:
       - name: Show canonical metrics
         run: cat localization/visible-copy-inventory-summary.md
 
-      - name: Audit Japanese against canonical visible copy
-        run: python3 scripts/audit_japanese_visible_copy.py
-
       - name: Persist canonical inventory
         run: |
           git config user.name "harmony-visible-copy-bot"
@@ -56,6 +53,9 @@ jobs:
             git commit -m "Generate canonical German visible-copy inventory"
             git push origin HEAD:${{ github.head_ref }}
           fi
+
+      - name: Audit Japanese against canonical visible copy
+        run: python3 scripts/audit_japanese_visible_copy.py
 
       - name: Set up Java 21
         uses: actions/setup-java@v4
