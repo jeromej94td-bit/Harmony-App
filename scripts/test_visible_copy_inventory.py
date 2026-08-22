@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from visible_copy_complete import discover_repository
+from visible_copy_canonical import discover_repository
 from visible_copy_inventory import (
     extract_placeholders,
     normalize_visible_text,
@@ -30,47 +30,51 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         )
 
     def test_repository_discovers_android_strings(self):
-        report = discover_repository(ROOT)
-        texts = {unit["german"] for unit in report.units}
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
         self.assertIn("Überspringen", texts)
         self.assertIn("Das oder das?", texts)
 
-    def test_repository_discovers_game_content_beyond_legacy_catalog(self):
-        report = discover_repository(ROOT)
-        locations = [occ["path"] for occ in report.occurrences]
-        self.assertTrue(any(path.endswith("GeneratedHarmonyContent.kt") for path in locations))
-
-    def test_repository_discovers_introspection_german_source(self):
+    def test_repository_discovers_universal_game_content(self):
         report = discover_repository(ROOT)
         texts = {unit["german"] for unit in report.units}
+        self.assertIn("Reiseziele", texts)
+        self.assertIn("Paris, Frankreich", texts)
+        self.assertIn("Ich habe noch nie bei einem Disney-Film geweint.", texts)
+        self.assertTrue(any(occ["path"].endswith("GeneratedHarmonyContent.kt") for occ in report.occurrences))
+
+    def test_generated_metadata_and_comments_are_not_customer_copy(self):
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
+        for technical in (
+            "reiseziele",
+            "reisen",
+            "cj_disney_quiz",
+            "filme_serien",
+            "ichhabenochnie",
+        ):
+            self.assertNotIn(technical, texts)
+        self.assertNotIn("Das oder das", texts)  # only appears in GeneratedHarmonyContent's source comment
+
+    def test_locale_specific_cuisine_installers_do_not_define_german_baseline(self):
+        report = discover_repository(ROOT)
+        self.assertFalse(any(occ["path"].endswith("CuisinePackInstaller.kt") for occ in report.occurrences))
+
+    def test_repository_discovers_introspection_german_source(self):
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
         self.assertIn("Tauche ins Unterbewusstsein", texts)
         self.assertIn("Reise beginnen", texts)
 
     def test_repository_discovers_widget_copy(self):
-        report = discover_repository(ROOT)
-        texts = {unit["german"] for unit in report.units}
+        texts = {unit["german"] for unit in discover_repository(ROOT).units}
         self.assertIn("Ein Bild nur für euch 💕", texts)
         self.assertIn("Öffne Harmony und füge euer erstes Bild hinzu", texts)
         self.assertIn("Harmony PicShare · ${pictures.size} Bilder rotieren", texts)
 
-    def test_cuisine_metadata_is_not_customer_copy(self):
+    def test_bundled_options_are_inventoried_without_generic_duplicates(self):
         report = discover_repository(ROOT)
-        texts = {unit["german"] for unit in report.units}
-        for technical in (
-            "harmony_settings_prefs",
-            "app_language",
-            "tot_italian_cuisine_mixed",
-            "tot_polish_cuisine_traditional",
-            "cucina",
-            "italia",
-            "kuchnia",
-            "polska",
-        ):
-            self.assertNotIn(technical, texts)
-        self.assertIn("🍝 Cucina italiana — scelte regionali", texts)
-        self.assertIn("Pizza napoletana", texts)
-        self.assertIn("🇵🇱 Tradycyjna kuchnia polska", texts)
-        self.assertIn("Pierogi ruskie", texts)
+        coca = [occ for occ in report.occurrences if occ["german"] == "Coca-Cola" and occ["path"].endswith("DriveTotAssetInstaller.kt")]
+        self.assertEqual(len(coca), 1)
+        self.assertEqual(coca[0]["presentation"], "bundled-image-option")
+        self.assertEqual(coca[0]["exemption"], "brand")
 
     def test_locale_catalogs_are_not_inventory_sources(self):
         report = discover_repository(ROOT)
