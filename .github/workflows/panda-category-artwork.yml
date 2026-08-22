@@ -1,0 +1,20 @@
+name: Panda Category Artwork
+
+on:
+  push:
+    branches:
+      - fix/restore-premium-panda-category-artwork
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify premium panda category artwork
+        run: python3 scripts/verify_panda_category_artwork.py
