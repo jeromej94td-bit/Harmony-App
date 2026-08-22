@@ -1005,6 +1005,33 @@ fun TotCardPairView(
             topFlip.snapTo(0f)
             bottomFlip.snapTo(0f)
             skipNextTotEntrance = false
+
+            // A short damped 3D settle keeps the incoming pair feeling physical without
+            // moving it away from its final position. Any new tap cancels these Animatables.
+            coroutineScope {
+                launch { topTilt.animateTo(0.9f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(-0.9f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(2.4f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-2.4f, tween(120, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topTilt.animateTo(-0.55f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(0.55f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(-1.35f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(1.35f, tween(150, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topTilt.animateTo(0.22f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(-0.22f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(0.55f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-0.55f, tween(130, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topTilt.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+                launch { bottomTilt.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+            }
             return@LaunchedEffect
         }
 
@@ -1047,6 +1074,8 @@ fun TotCardPairView(
             skipNextTotEntrance = true
             onPick(option)
             isAnimating = false
+            // tot_settle_wobble: the incoming pair is already clickable while its tiny
+            // inertial settle runs in the keyed LaunchedEffect above.
         }
     }
 
