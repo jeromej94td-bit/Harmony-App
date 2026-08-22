@@ -2,8 +2,8 @@
 """Repair concrete Kotlin build blockers exposed by localization CI.
 
 This is intentionally narrow and idempotent: it normalizes malformed Kotlin dollar escaping
-in generated locale catalogs and retains the already established build repairs for panda visuals
-and PicShare widget preferences.
+in generated locale catalogs and retains the PicShare widget preference compatibility repair.
+Premium panda artwork is a real bundled resource and must never be downgraded by this script.
 """
 from pathlib import Path
 
@@ -38,29 +38,6 @@ for name in (
     text = text.replace("parceiroName", "partnerName")
     write(path, text)
 
-# GameCategoryVisuals referenced raster resources that do not exist. The repo already has
-# the vector PandaCategoryIcon implementation for exactly these category IDs, so use it.
-path = UI / "components/GameCategoryVisuals.kt"
-text = path.read_text(encoding="utf-8")
-old = '''        "wer" -> PandaArtworkIcon(
-            drawableRes = R.drawable.panda_thinking_harmony,
-            accent = accent,
-            animationLabel = "thinking_panda",
-            modifier = modifier
-        )
-
-        "nie" -> PandaArtworkIcon(
-            drawableRes = R.drawable.panda_never_harmony,
-            accent = accent,
-            animationLabel = "never_panda",
-            modifier = modifier
-        )'''
-new = '''        "wer" -> PandaCategoryIcon(categoryId = "wer", accent = accent, modifier = modifier)
-
-        "nie" -> PandaCategoryIcon(categoryId = "nie", accent = accent, modifier = modifier)'''
-text = text.replace(old, new)
-write(path, text)
-
 # HomeScreen imports this preference model; create it only if an older branch lacks it.
 WIDGET.mkdir(parents=True, exist_ok=True)
 prefs = WIDGET / "PicShareWidgetPreferences.kt"
@@ -91,7 +68,8 @@ object PicShareWidgetPreferences {
             caption = prefs.getString(KEY_CAPTION, "").orEmpty(),
             showCaption = prefs.getBoolean(KEY_SHOW_CAPTION, true),
             showStatus = prefs.getBoolean(KEY_SHOW_STATUS, true),
-            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, false)
+            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, false
+            )
         )
     }
 
