@@ -5,16 +5,16 @@ internal fun localizeGeneratedLocaleDynamicContent(
     text: String,
     exact: Map<String, String>
 ): String? {
-    Regex("^([\p{So}\p{Sk}\uFE0F\u200D]+\s+)(.+)$").matchEntire(text)?.let { match ->
+    Regex("""^([\p{So}\p{Sk}\uFE0F\u200D]+\s+)(.+)$""").matchEntire(text)?.let { match ->
         exact[match.groupValues[2]]?.let { return match.groupValues[1] + it }
     }
-    Regex("^(\d+[.)]\s+)(.+)$").matchEntire(text)?.let { match ->
+    Regex("""^(\d+[.)]\s+)(.+)$""").matchEntire(text)?.let { match ->
         exact[match.groupValues[2]]?.let { return match.groupValues[1] + it }
     }
 
     // Resolve variable-bearing catalog templates while preserving names/counts exactly.
     for ((source, target) in exact) {
-        val tokens = Regex("(\\?\$\{[^}]+\}|\{[^}]+\})").findAll(source).map { it.value }.toList()
+        val tokens = Regex("""(\\?\${'$'}\{[^}]+\}|\{[^}]+\})""").findAll(source).map { it.value }.toList()
         if (tokens.isEmpty()) continue
         var cursor = 0
         val pattern = StringBuilder("^")
