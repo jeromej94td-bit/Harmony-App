@@ -1006,29 +1006,21 @@ fun TotCardPairView(
             bottomFlip.snapTo(0f)
             skipNextTotEntrance = false
 
-            // A short damped 3D settle keeps the incoming pair feeling physical without
-            // moving it away from its final position. Any new tap cancels these Animatables.
+            // Continue the final shuffle momentum on the same rotationY axis only.
+            // No extra Z tilt or positional wobble: just a small, damped rotational settle.
             coroutineScope {
-                launch { topTilt.animateTo(0.9f, tween(120, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(-0.9f, tween(120, easing = FastOutSlowInEasing)) }
-                launch { topFlip.animateTo(2.4f, tween(120, easing = FastOutSlowInEasing)) }
-                launch { bottomFlip.animateTo(-2.4f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(2.0f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-2.0f, tween(120, easing = FastOutSlowInEasing)) }
             }
             coroutineScope {
-                launch { topTilt.animateTo(-0.55f, tween(150, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(0.55f, tween(150, easing = FastOutSlowInEasing)) }
-                launch { topFlip.animateTo(-1.35f, tween(150, easing = FastOutSlowInEasing)) }
-                launch { bottomFlip.animateTo(1.35f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(-1.0f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(1.0f, tween(150, easing = FastOutSlowInEasing)) }
             }
             coroutineScope {
-                launch { topTilt.animateTo(0.22f, tween(130, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(-0.22f, tween(130, easing = FastOutSlowInEasing)) }
-                launch { topFlip.animateTo(0.55f, tween(130, easing = FastOutSlowInEasing)) }
-                launch { bottomFlip.animateTo(-0.55f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { topFlip.animateTo(0.35f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-0.35f, tween(130, easing = FastOutSlowInEasing)) }
             }
             coroutineScope {
-                launch { topTilt.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
                 launch { topFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
                 launch { bottomFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
             }
