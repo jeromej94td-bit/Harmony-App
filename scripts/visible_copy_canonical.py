@@ -14,7 +14,9 @@ from visible_copy_inventory import (
     InventoryReport,
     VisibleCopyOccurrence,
     _build_units,
+    _decode_kotlin_string,
     _dedupe_occurrences,
+    _line_number,
     write_report,
     write_summary,
 )
@@ -23,6 +25,19 @@ KOTLIN_PLACEHOLDER_RE = re.compile(
     r"\$\{[^{}]+\}|\$[A-Za-z_][A-Za-z0-9_.]*|\{[A-Za-z_][A-Za-z0-9_.]*\}|%(?:\d+\$)?0?\d*[sd]"
 )
 WORD_RE = re.compile(r"[^\W_]+(?:[’'\-‑][^\W_]+)*", re.UNICODE)
+KOTLIN_STRING = r'"((?:\\.|[^"\\])*)"'
+TR_PAIR_RE = re.compile(
+    rf"\btr\s*\(\s*{KOTLIN_STRING}\s*,\s*{KOTLIN_STRING}\s*\)",
+    re.DOTALL,
+)
+TR_NAMED_RE = re.compile(
+    rf"\btr\s*\(\s*german\s*=\s*{KOTLIN_STRING}\s*,\s*english\s*=\s*{KOTLIN_STRING}\s*\)",
+    re.DOTALL,
+)
+M_LOCALE_RE = re.compile(
+    rf"\b(?:IntrospectionStrings\.)?m\s*\(\s*[^,()]+\s*,\s*{KOTLIN_STRING}\s*,\s*{KOTLIN_STRING}\s*,\s*{KOTLIN_STRING}\s*\)",
+    re.DOTALL,
+)
 TECHNICAL_GENERATED_LITERAL_RE = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
 SNAKE_IDENTIFIER_RE = re.compile(r"^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9${}.]+)+$")
 LOWER_CAMEL_RE = re.compile(r"^[a-z][a-z0-9]*(?:[A-Z][A-Za-z0-9]*)+$")
@@ -116,6 +131,28 @@ def _comment_only_lines(path: Path) -> set[int]:
     return comment_lines
 
 
+def _localization_fallbacks(path: Path) -> set[tuple[int, str]]:
+    if not path.exists() or path.suffix != ".kt":
+        return set()
+    source = path.read_text(encoding="utf-8", errors="replace")
+    fallbacks: set[tuple[int, str]] = set()
+
+    for regex in (TR_PAIR_RE, TR_NAMED_RE):
+        for match in regex.finditer(source):
+            german = _decode_kotlin_string(match.group(1), False)
+            english = _decode_kotlin_string(match.group(2), False)
+            if english != german:
+                fallbacks.add((_line_number(source, match.start(2)), english))
+
+    for match in M_LOCALE_RE.finditer(source):
+        german = _decode_kotlin_string(match.group(1), False)
+        for group_index in (2, 3):
+            fallback = _decode_kotlin_string(match.group(group_index), False)
+            if fallback != german:
+                fallbacks.add((_line_number(source, match.start(group_index)), fallback))
+    return fallbacks
+
+
 def _is_base64_blob(text: str) -> bool:
     compact = text.strip()
     return len(compact) > 256 and " " not in compact[:200] and bool(BASE64ISH_RE.fullmatch(compact))
@@ -143,11 +180,19 @@ def _looks_technical_identifier(text: str) -> bool:
     return False
 
 
-def _keep_occurrence(root: Path, occ: dict, comment_cache: dict[str, set[int]]) -> bool:
+def _keep_occurrence(
+    root: Path,
+    occ: dict,
+    comment_cache: dict[str, set[int]],
+    fallback_cache: dict[str, set[tuple[int, str]]],
+) -> bool:
     rel = occ["path"]
     text = occ["german"].strip()
 
     if rel in LOCALE_ONLY_SOURCES:
+        return False
+    fallback_items = fallback_cache.setdefault(rel, _localization_fallbacks(root / rel))
+    if (occ["line"], text) in fallback_items:
         return False
     if text in DEV_STUDIO_TEXTS:
         return False
@@ -177,9 +222,10 @@ def discover_repository(root: Path) -> InventoryReport:
     root = root.resolve()
     raw = discover_complete_repository(root)
     comment_cache: dict[str, set[int]] = {}
+    fallback_cache: dict[str, set[tuple[int, str]]] = {}
     occurrences: list[VisibleCopyOccurrence] = []
     for occ in raw.occurrences:
-        if not _keep_occurrence(root, occ, comment_cache):
+        if not _keep_occurrence(root, occ, comment_cache, fallback_cache):
             continue
         text = occ["german"]
         exemption = occ.get("exemption") or ("brand" if text in BRAND_EXACT else None)
