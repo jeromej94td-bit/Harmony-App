@@ -7,6 +7,12 @@ on:
     paths:
       - 'scripts/verify_naehe_materialize_animation.py'
       - 'app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/verify_naehe_materialize_animation.py'
+      - 'app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt'
 
 jobs:
   verify:
