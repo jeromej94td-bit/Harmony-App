@@ -13,6 +13,7 @@ on:
       - 'scripts/verify_ptbr_ready.py'
       - 'scripts/verify_six_new_locales.py'
       - 'scripts/verify_41_new_locales.py'
+      - 'scripts/verify_production_locale_generator.py'
       - 'scripts/scaffold_six_new_locales.py'
       - 'scripts/generate_six_new_locale_catalogs.py'
       - '.github/workflows/localization-audit.yml'
@@ -28,6 +29,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+
+      - name: Verify production locale generator regression
+        run: python3 scripts/verify_production_locale_generator.py
 
       - name: Apply six-locale scaffolding
         run: python3 scripts/scaffold_six_new_locales.py
