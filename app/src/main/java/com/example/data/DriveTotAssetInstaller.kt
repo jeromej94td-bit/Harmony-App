@@ -135,6 +135,11 @@ object DriveTotAssetInstaller {
     }
 
     fun install(context: Context): Map<String, String> {
+        // Re-apply the locale-specific cuisine packs and stable local image keys.
+        // The installer also observes language changes, so the Italian/Polish
+        // cuisine deck switches without replacing newer dynamic content.
+        CuisinePackInstaller.install(context)
+
         val outputDir = File(context.filesDir, OUTPUT_DIR).apply { mkdirs() }
         val expectedFiles = (driveOptionToFile.values + brandOptionToFile.values).toSet()
         val needsInstall = expectedFiles.any { !File(outputDir, it).isFile }
