@@ -34,11 +34,11 @@ jobs:
       - name: Verify pt-BR readiness
         run: python3 scripts/verify_ptbr_ready.py
 
-      - name: Verify six new locales readiness
-        run: python3 scripts/verify_six_new_locales.py
-
       - name: Repair concrete Kotlin build blockers
         run: python3 scripts/repair_build_blockers.py
+
+      - name: Verify six new locales readiness
+        run: python3 scripts/verify_six_new_locales.py
 
       - name: Discover missing locale keys
         continue-on-error: true
