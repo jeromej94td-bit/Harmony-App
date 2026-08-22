@@ -15,6 +15,12 @@ INVENTORY = ROOT / "localization/visible-copy-inventory.de.json"
 REPORT = ROOT / "localization/japanese-visible-copy-missing.json"
 
 
+def _normalize_kotlin_literal(value: str) -> str:
+    # Supplemental Kotlin maps must escape $ so source templates such as ${pics.size}
+    # compile as literal catalog keys. The static audit compares runtime string values.
+    return value.replace(r"\$", "$")
+
+
 def load_japanese_catalog() -> dict[str, str]:
     catalog = extract_map(UI / "JapaneseContent.kt", "EXACT_JAPANESE_CONTENT")
     updates_path = UI / "LocalizationUpdates.kt"
@@ -27,7 +33,13 @@ def load_japanese_catalog() -> dict[str, str]:
         )
     overrides = UI / "JapaneseVisibleCopyOverrides.kt"
     if overrides.exists():
-        catalog.update(extract_map(overrides, "JAPANESE_VISIBLE_COPY_OVERRIDES"))
+        raw_overrides = extract_map(overrides, "JAPANESE_VISIBLE_COPY_OVERRIDES")
+        catalog.update(
+            {
+                _normalize_kotlin_literal(key): _normalize_kotlin_literal(value)
+                for key, value in raw_overrides.items()
+            }
+        )
     return catalog
 
 
