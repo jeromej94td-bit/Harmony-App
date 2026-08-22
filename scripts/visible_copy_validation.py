@@ -24,14 +24,31 @@ def _svg_has_text(path: Path) -> bool:
     except ET.ParseError:
         return False
     for elem in tree.getroot().iter():
-        if _strip_namespace(elem.tag) in {"text", "tspan"}:
-            if "".join(elem.itertext()).strip():
-                return True
+        if _strip_namespace(elem.tag) in {"text", "tspan"} and "".join(elem.itertext()).strip():
+            return True
     return False
+
+
+def _expand_reviewed_globs(root: Path, registry: dict) -> dict:
+    expanded = dict(registry)
+    reviewed = list(registry.get("reviewed_text_free_assets", []))
+    known = {entry["path"] for entry in reviewed}
+    for pattern in registry.get("reviewed_text_free_globs", []):
+        matches = [path for path in root.glob(pattern) if path.is_file()]
+        if not matches:
+            continue
+        for path in sorted(matches):
+            rel = path.relative_to(root).as_posix()
+            if rel not in known:
+                reviewed.append({"path": rel})
+                known.add(rel)
+    expanded["reviewed_text_free_assets"] = reviewed
+    return expanded
 
 
 def validate_asset_registry(root: Path, registry: dict) -> list[str]:
     root = root.resolve()
+    registry = _expand_reviewed_globs(root, registry)
     errors: list[str] = []
     classified: dict[str, str] = {}
 
@@ -47,10 +64,7 @@ def validate_asset_registry(root: Path, registry: dict) -> list[str]:
         if not base.exists():
             continue
         for path in base.rglob("*"):
-            if not path.is_file():
-                continue
-            suffix = path.suffix.lower()
-            if suffix in RASTER_SUFFIXES or suffix == ".svg":
+            if path.is_file() and (path.suffix.lower() in RASTER_SUFFIXES or path.suffix.lower() == ".svg"):
                 candidates.append(path)
 
     for path in sorted(candidates):
@@ -65,9 +79,7 @@ def validate_asset_registry(root: Path, registry: dict) -> list[str]:
         if not path.exists():
             errors.append(f"registered asset missing: {rel}")
             continue
-        entry = next(
-            item for item in registry[bucket] if item["path"] == rel
-        )
+        entry = next(item for item in registry[bucket] if item["path"] == rel)
         if bucket == "text_bearing_assets" and not entry.get("german_text"):
             errors.append(f"text-bearing asset has no german_text: {rel}")
         if bucket == "brand_only_assets" and not entry.get("visible_text"):
@@ -116,12 +128,10 @@ def main() -> int:
     args = parser.parse_args()
     root = args.root.resolve()
 
-    from visible_copy_inventory import discover_repository
+    from visible_copy_complete import discover_repository
 
     report = discover_repository(root)
-    errors = validate_asset_registry(
-        root, _load_json(root / "scripts/visible_copy_asset_registry.json")
-    )
+    errors = validate_asset_registry(root, _load_json(root / "scripts/visible_copy_asset_registry.json"))
     if not args.asset_only:
         errors.extend(
             validate_route_manifest(
