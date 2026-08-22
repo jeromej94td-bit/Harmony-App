@@ -68,8 +68,7 @@ object PicShareWidgetPreferences {
             caption = prefs.getString(KEY_CAPTION, "").orEmpty(),
             showCaption = prefs.getBoolean(KEY_SHOW_CAPTION, true),
             showStatus = prefs.getBoolean(KEY_SHOW_STATUS, true),
-            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, false
-            )
+            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, false)
         )
     }
 
