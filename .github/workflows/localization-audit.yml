@@ -6,6 +6,7 @@ on:
     paths:
       - 'app/src/main/java/com/example/ui/**'
       - 'scripts/audit_localization.py'
+      - 'scripts/generate_localization_updates.py'
       - '.github/workflows/localization-audit.yml'
 
 jobs:
@@ -17,12 +18,20 @@ jobs:
         id: localization
         continue-on-error: true
         run: python3 scripts/audit_localization.py
+      - name: Generate missing translation updates
+        run: python3 scripts/generate_localization_updates.py
       - name: Upload missing-key report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: localization-missing
           path: localization_missing.json
+      - name: Upload generated translation updates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-generated
+          path: generated-localization-updates.kt
       - name: Fail when localization is incomplete
         if: steps.localization.outcome == 'failure'
         run: exit 1
