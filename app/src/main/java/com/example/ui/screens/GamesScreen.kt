@@ -602,13 +602,13 @@ private fun UnansweredQuestionsDialog(
         onDismissRequest = onDismiss,
         title = {
             Column {
-                Text("Unbeantwortete Fragen", fontWeight = FontWeight.ExtraBold)
-                Text("${unanswered.size} Fragen warten auf euch", color = HarmonyMuted, fontSize = 12.sp)
+                Text(LanguageManager.tr("Unbeantwortete Fragen", appLanguage), fontWeight = FontWeight.ExtraBold)
+                Text(LanguageManager.tr("{count} Fragen warten auf euch", appLanguage).replace("{count}", unanswered.size.toString()), color = HarmonyMuted, fontSize = 12.sp)
             }
         },
         text = {
             if (unanswered.isEmpty()) {
-                Text("Ihr habt bereits alle Fragen beantwortet.", color = HarmonyMuted)
+                Text(LanguageManager.tr("Ihr habt bereits alle Fragen beantwortet.", appLanguage), color = HarmonyMuted)
             } else {
                 LazyColumn(
                     modifier = Modifier
@@ -662,7 +662,7 @@ private fun UnansweredQuestionsDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Schließen", color = HarmonyPink) }
+            TextButton(onClick = onDismiss) { Text(LanguageManager.tr("Schließen", appLanguage), color = HarmonyPink) }
         }
     )
 }

@@ -143,7 +143,7 @@ fun MomentsScreen(
                             verticalAlignment = Alignment.Top
                         ) {
                             Text(
-                                text = "${moment.emoji} ${moment.title}",
+                                text = "${moment.emoji} ${LanguageManager.tr(moment.title, appLanguage)}",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyText
@@ -155,7 +155,7 @@ fun MomentsScreen(
 
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = moment.content,
+                            text = LanguageManager.tr(moment.content, appLanguage),
                             fontSize = 13.sp,
                             color = HarmonyMuted,
                             lineHeight = 18.sp

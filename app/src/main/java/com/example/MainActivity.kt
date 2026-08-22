@@ -292,6 +292,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     PandaEitherOrScreen(
                         profile = uiState.profile,
                         answers = uiState.answers,
+                        appLanguage = uiState.appLanguage,
                         onSaveAnswer = { questionIndex, userChoice, partnerChoice ->
                             viewModel.saveEitherOrAnswer(questionIndex, userChoice, partnerChoice)
                         },
