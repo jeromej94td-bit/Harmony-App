@@ -51,4 +51,5 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           git commit -m "feat: add cinematic glitch materialization to Nähe"
+          git pull --rebase origin feat/naehe-cinematic-glitch-v2
           git push origin HEAD:feat/naehe-cinematic-glitch-v2
