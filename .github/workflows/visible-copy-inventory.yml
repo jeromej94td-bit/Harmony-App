@@ -37,6 +37,27 @@ jobs:
       - name: Generate canonical German inventory
         run: python3 scripts/visible_copy_canonical.py --root . --write
 
+      - name: Diagnose occurrence delta against locked 1367 baseline
+        run: |
+          git show 0d81111072e1e52485c3874c93d800963f3fe443:localization/visible-copy-inventory.de.json > /tmp/visible-copy-baseline.json
+          python3 - <<'PY'
+          from collections import Counter
+          import json
+          def load(path):
+              with open(path, encoding='utf-8') as f:
+                  return json.load(f)['occurrences']
+          old = load('/tmp/visible-copy-baseline.json')
+          new = load('localization/visible-copy-inventory.de.json')
+          def key(o):
+              return (o.get('path'), o.get('presentation'), o.get('german'), o.get('exemption'))
+          a, b = Counter(map(key, old)), Counter(map(key, new))
+          print(f'BASELINE={len(old)} CURRENT={len(new)}')
+          for k, n in sorted((a-b).items()):
+              print('REMOVED', n, k)
+          for k, n in sorted((b-a).items()):
+              print('ADDED', n, k)
+          PY
+
       - name: Run inventory tests
         working-directory: scripts
         run: python3 -m unittest -v test_visible_copy_inventory.py test_japanese_render_occurrences.py
