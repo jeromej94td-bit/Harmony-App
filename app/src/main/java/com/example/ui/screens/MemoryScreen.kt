@@ -333,14 +333,22 @@ private fun MemoryPinboardHeader(
                     modifier = Modifier.size(31.dp)
                 )
             }
-            Text(
-                text = LanguageManager.tr("Das müssen wir uns merken", appLanguage),
-                color = HarmonyText,
-                fontSize = 28.sp,
-                lineHeight = 32.sp,
-                fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.weight(1f)
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = LanguageManager.tr("Das müssen wir uns merken", appLanguage),
+                    color = HarmonyText,
+                    fontSize = 28.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(Modifier.height(3.dp))
+                Text(
+                    text = LanguageManager.tr("Gemeinsam sammeln. Nie vergessen.", appLanguage),
+                    color = HarmonyMuted,
+                    fontSize = 13.sp,
+                    lineHeight = 17.sp
+                )
+            }
         }
 
         Spacer(Modifier.height(20.dp))

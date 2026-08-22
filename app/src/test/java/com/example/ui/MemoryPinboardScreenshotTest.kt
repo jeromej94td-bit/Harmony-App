@@ -1,6 +1,11 @@
 package com.example.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -15,6 +20,8 @@ import com.example.data.model.MemoryDefaults
 import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.MemoryEntryKind
 import com.example.ui.components.AmbientBackground
+import com.example.ui.components.HarmonyBottomNav
+import com.example.ui.components.HarmonyTopBar
 import com.example.ui.memory.MemoryEditorMode
 import com.example.ui.memory.MemoryEntryUi
 import com.example.ui.memory.MemoryTab
@@ -39,6 +46,68 @@ class MemoryPinboardScreenshotTest {
 
     @get:Rule
     val composeRule = createComposeRule()
+
+    @Test
+    fun integratedPinboardShell() {
+        composeRule.mainClock.autoAdvance = false
+        composeRule.setContent {
+            val packageName = LocalContext.current.packageName
+            MemoryScreenshotTheme {
+                AmbientBackground {
+                    Scaffold(
+                        containerColor = Color.Transparent,
+                        topBar = {
+                            HarmonyTopBar(
+                                userName = "Mia",
+                                partnerName = "Noah",
+                                onProfileClick = {},
+                                onRefresh = {}
+                            )
+                        },
+                        bottomBar = {
+                            HarmonyBottomNav(
+                                selectedTab = 4,
+                                onTabSelected = {},
+                                appLanguage = "de"
+                            )
+                        }
+                    ) { padding ->
+                        Box(Modifier.padding(padding)) {
+                            ScreenForCapture(
+                                state = MemoryUiState(
+                                    categories = categories,
+                                    visibleEntries = listOf(
+                                        entry(
+                                            id = "link-observatory",
+                                            categoryId = MemoryDefaults.PLACES_ID,
+                                            title = "Sternwarte im Harz",
+                                            kind = MemoryEntryKind.LINK,
+                                            url = "https://example.invalid/sternwarte",
+                                            previewTitle = "Sternennacht über dem Brocken",
+                                            previewDescription = "Ein stiller Ort für unsere nächste klare Nacht.",
+                                            previewImageUrl = "android.resource://$packageName/${R.drawable.tokyo_tower_zojoji}",
+                                            previewSiteName = "Reiseideen"
+                                        ),
+                                        entry(
+                                            id = "note-picnic",
+                                            categoryId = MemoryDefaults.IDEAS_ID,
+                                            title = "Picknick bei Sonnenuntergang",
+                                            body = "Decke, Erdbeeren und unsere Lieblingsplaylist einpacken."
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        composeRule.waitForIdle()
+        composeRule.onRoot().captureRoboImage(
+            filePath = "build/outputs/roborazzi/memory-pinboard/00-integrated-shell.png"
+        )
+    }
 
     @Test
     fun populatedCurrentPinboard() {
@@ -86,7 +155,7 @@ class MemoryPinboardScreenshotTest {
     }
 
     @Test
-    fun completedGraceNotice() {
+    fun freshlyCompletedArchiveCard() {
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
             MemoryScreenshotTheme {
@@ -95,28 +164,22 @@ class MemoryPinboardScreenshotTest {
                         categories = categories,
                         visibleEntries = listOf(
                             entry(
-                                id = "grace-summer-cinema",
+                                id = "archive-summer-cinema",
                                 categoryId = MemoryDefaults.FILMS_ID,
                                 title = "Sommerkino am See",
                                 body = "Die Vorstellung am Freitagabend vormerken.",
-                                bucket = MemoryBucket.CURRENT_GRACE,
+                                bucket = MemoryBucket.ARCHIVED,
                                 completedAt = FIXED_NOW
-                            ),
-                            entry(
-                                id = "open-northern-lights",
-                                categoryId = MemoryDefaults.IDEAS_ID,
-                                title = "Nordlicht-Reise planen",
-                                body = "Beste Reisezeit und ruhige Unterkunft vergleichen."
                             )
                         ),
-                        nextExpiryAt = FIXED_NOW + 86_400_000L
+                        selectedTab = MemoryTab.ARCHIVED
                     )
                 )
             }
         }
 
         composeRule.onRoot().captureRoboImage(
-            filePath = "build/outputs/roborazzi/memory-pinboard/02-current-completed-grace.png"
+            filePath = "build/outputs/roborazzi/memory-pinboard/02-archived-completed.png"
         )
     }
 

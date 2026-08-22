@@ -52,7 +52,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -63,7 +62,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,7 +108,6 @@ fun MemoryEntryCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .alpha(if (item.bucket == MemoryBucket.CURRENT_GRACE) 0.72f else 1f)
             .then(
                 if (isCompleted) {
                     Modifier.semantics { stateDescription = "completed" }
@@ -203,8 +200,6 @@ private fun MemoryNoteCardContent(
     onOpenMenu: () -> Unit
 ) {
     val entry = item.entity
-    val decoration = if (item.bucket == MemoryBucket.CURRENT_GRACE) TextDecoration.LineThrough else null
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,10 +219,9 @@ private fun MemoryNoteCardContent(
         Text(
             text = entry.title,
             color = HarmonyText,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
+            fontSize = 16.sp,
+            lineHeight = 20.sp,
             fontWeight = FontWeight.Bold,
-            textDecoration = decoration,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
         )
@@ -238,7 +232,6 @@ private fun MemoryNoteCardContent(
                 color = HarmonyMuted,
                 fontSize = 14.sp,
                 lineHeight = 19.sp,
-                textDecoration = decoration,
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis
             )
@@ -349,25 +342,36 @@ private fun MemoryLinkVisual(
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 onError = { onImageError() },
+                loading = { MemoryLinkVisualFallback(accent) },
+                error = { MemoryLinkVisualFallback(accent) },
                 modifier = Modifier.fillMaxSize()
             )
         } else {
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background(accent.copy(alpha = 0.24f))
-                    .border(1.dp, accent.copy(alpha = 0.72f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Language,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
+            MemoryLinkVisualFallback(accent)
         }
+    }
+}
+
+@Composable
+private fun MemoryLinkVisualFallback(accent: Color) {
+    Box(
+        modifier = Modifier
+            .size(76.dp)
+            .clip(CircleShape)
+            .background(
+                Brush.radialGradient(
+                    listOf(Color.White.copy(alpha = 0.16f), accent.copy(alpha = 0.34f))
+                )
+            )
+            .border(1.dp, accent.copy(alpha = 0.78f), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.Language,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(32.dp)
+        )
     }
 }
 
@@ -386,7 +390,6 @@ private fun MemoryLinkText(
     modifier: Modifier = Modifier
 ) {
     val entry = item.entity
-    val decoration = if (item.bucket == MemoryBucket.CURRENT_GRACE) TextDecoration.LineThrough else null
     Column(modifier = modifier.padding(16.dp)) {
         MemoryCardTopRow(
             entryId = entry.id,
@@ -413,7 +416,6 @@ private fun MemoryLinkText(
             fontSize = 18.sp,
             lineHeight = 22.sp,
             fontWeight = FontWeight.Bold,
-            textDecoration = decoration,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
         )
@@ -424,7 +426,6 @@ private fun MemoryLinkText(
                 color = HarmonyMuted,
                 fontSize = 13.sp,
                 lineHeight = 18.sp,
-                textDecoration = decoration,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
@@ -514,13 +515,6 @@ private fun MemoryCardTopRow(
                 )
             }
 
-            MemoryBucket.CURRENT_GRACE -> Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = null,
-                tint = HarmonyPinkSoft,
-                modifier = Modifier.size(34.dp)
-            )
-
             MemoryBucket.ARCHIVED -> IconButton(
                 onClick = onOpenMenu,
                 modifier = Modifier
@@ -564,26 +558,23 @@ private fun MemoryCardFooter(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        if (item.bucket == MemoryBucket.CURRENT_GRACE) {
+        if (item.bucket == MemoryBucket.ARCHIVED) {
             Spacer(Modifier.height(8.dp))
-            Text(
-                text = LanguageManager.tr("Wird nach 24 Std. archiviert", appLanguage),
-                color = HarmonyPinkSoft,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            TextButton(
-                onClick = { onRestore(entryId) },
-                modifier = Modifier
-                    .heightIn(min = 48.dp)
-                    .testTag("memory_entry_${entryId}_undo")
-            ) {
-                Icon(Icons.Default.Restore, contentDescription = null, modifier = Modifier.size(18.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = HarmonyPinkSoft,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(Modifier.width(6.dp))
-                Text(LanguageManager.tr("Rückgängig", appLanguage))
+                Text(
+                    text = LanguageManager.tr("Erledigt", appLanguage),
+                    color = HarmonyPinkSoft,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
-        } else if (item.bucket == MemoryBucket.ARCHIVED) {
-            Spacer(Modifier.height(8.dp))
             TextButton(
                 onClick = { onRestore(entryId) },
                 modifier = Modifier

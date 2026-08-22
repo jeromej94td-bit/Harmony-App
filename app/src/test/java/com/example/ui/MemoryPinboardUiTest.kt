@@ -78,37 +78,47 @@ class MemoryPinboardUiTest {
     }
 
     @Test
-    fun `failed preview retries and grace entry announces completion with undo`() {
+    fun `failed preview exposes retry action`() {
         var retriedId: String? = null
-        var restoredId: String? = null
         val failedLink = memoryEntry(
             id = "failed-link",
             title = "https://example.invalid",
             kind = MemoryEntryKind.LINK,
             url = "https://example.invalid"
         )
-        val grace = memoryEntry(
-            id = "grace-entry",
+        setScreen(
+            state = memoryState(
+                entries = listOf(failedLink),
+                failedPreviewIds = setOf(failedLink.entity.id)
+            ),
+            onRetryPreview = { retriedId = it }
+        )
+
+        composeRule.onNodeWithTag("memory_entry_failed-link_retry").performScrollTo().performClick()
+        assertEquals("failed-link", retriedId)
+    }
+
+    @Test
+    fun `archived entry announces completion and restores`() {
+        var restoredId: String? = null
+        val archived = memoryEntry(
+            id = "archived-entry",
             title = "Museum besuchen",
-            bucket = MemoryBucket.CURRENT_GRACE,
+            bucket = MemoryBucket.ARCHIVED,
             completedAt = 10_000L
         )
 
         setScreen(
             state = memoryState(
-                entries = listOf(failedLink, grace),
-                failedPreviewIds = setOf(failedLink.entity.id)
+                tab = MemoryTab.ARCHIVED,
+                entries = listOf(archived)
             ),
-            onRetryPreview = { retriedId = it },
             onRestore = { restoredId = it }
         )
 
-        composeRule.onNodeWithTag("memory_entry_failed-link_retry").performScrollTo().performClick()
-        assertEquals("failed-link", retriedId)
-        composeRule.onNodeWithText("Wird nach 24 Std. archiviert").assertExists()
-        composeRule.onNodeWithTag("memory_entry_grace-entry_undo").performScrollTo()
-        composeRule.onNodeWithTag("memory_entry_grace-entry_undo").performClick()
-        assertEquals("grace-entry", restoredId)
+        composeRule.onNodeWithText("Erledigt").assertExists()
+        composeRule.onNodeWithTag("memory_entry_archived-entry_restore").performScrollTo().performClick()
+        assertEquals("archived-entry", restoredId)
     }
 
     @Test

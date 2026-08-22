@@ -36,7 +36,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
-import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -229,8 +229,7 @@ fun HarmonyBottomNav(
             Triple(1, LanguageManager.tr("Spiele", appLanguage), Icons.Default.Psychology),
             Triple(2, LanguageManager.tr("Chat", appLanguage), Icons.Default.ChatBubble),
             Triple(3, LanguageManager.tr("Momente", appLanguage), Icons.Default.PhotoLibrary),
-            Triple(4, LanguageManager.tr("Profil", appLanguage), Icons.Default.Favorite),
-            Triple(5, "Dev", Icons.Default.Build)
+            Triple(4, LanguageManager.tr("Merken", appLanguage), Icons.Default.Bookmarks)
         )
 
         navItems.forEach { (index, label, icon) ->

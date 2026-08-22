@@ -27,9 +27,15 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel as composeViewModel
+import com.example.data.OkHttpLinkPreviewResolver
+import com.example.data.db.HarmonyDatabase
+import com.example.data.repository.RoomMemoryRepository
 import com.example.ui.AppLanguage
 import com.example.ui.HarmonyViewModel
 import com.example.ui.LocalAppLanguage
+import com.example.ui.memory.MemoryViewModel
+import com.example.ui.memory.MemoryViewModelFactory
 import com.example.ui.components.AmbientBackground
 import com.example.ui.components.HarmonyBottomNav
 import com.example.ui.components.HarmonyToast
@@ -40,6 +46,8 @@ import com.example.ui.screens.GamesScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.IntrospectionExperienceScreen
 import com.example.ui.screens.MomentsScreen
+import com.example.ui.screens.MemoryEditorSheet
+import com.example.ui.screens.MemoryScreen
 import com.example.ui.screens.PackListScreen
 import com.example.ui.screens.PANDA_EITHER_OR_PACK_ID
 import com.example.ui.screens.PandaEitherOrScreen
@@ -80,6 +88,14 @@ class MainActivity : ComponentActivity() {
 fun HarmonyApp(viewModel: HarmonyViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val memoryFactory = remember(context.applicationContext) {
+        MemoryViewModelFactory(
+            repository = RoomMemoryRepository(HarmonyDatabase.getInstance(context.applicationContext)),
+            linkPreviewResolver = OkHttpLinkPreviewResolver()
+        )
+    }
+    val memoryViewModel: MemoryViewModel = composeViewModel(factory = memoryFactory)
+    val memoryState by memoryViewModel.uiState.collectAsStateWithLifecycle()
     var isIntrospectionOpen by remember { mutableStateOf(false) }
     var isPandaEitherOrOpen by remember { mutableStateOf(false) }
 
@@ -92,7 +108,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
     }
 
     val isQuizActive = uiState.activeRun != null
-    val isSheetOrDialogActive = uiState.isProfileSheetOpen || uiState.isAddMomentOpen
+    val isMemoryOverlayActive = memoryState.editorMode != null || memoryState.pendingDeleteEntryId != null
+    val isSheetOrDialogActive = uiState.isProfileSheetOpen || uiState.isAddMomentOpen || isMemoryOverlayActive
     val isNotHomeTab = uiState.selectedTab != 0
 
     val canHandleBack = isIntrospectionOpen || isPandaEitherOrOpen || isQuizActive || isSheetOrDialogActive || isNotHomeTab
@@ -119,6 +136,12 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
             }
             uiState.isAddMomentOpen -> {
                 viewModel.closeAddMomentDialog()
+            }
+            memoryState.pendingDeleteEntryId != null -> {
+                memoryViewModel.dismissPermanentDelete()
+            }
+            memoryState.editorMode != null -> {
+                memoryViewModel.closeEditor()
             }
             uiState.selectedTab == 6 -> { // PackListScreen
                 viewModel.selectTab(1) // Back to GamesScreen
@@ -153,13 +176,7 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                     }
                     HarmonyBottomNav(
                         selectedTab = navSelectedTab,
-                        onTabSelected = { tab ->
-                            if (tab == 4) {
-                                viewModel.openProfileSheet()
-                            } else {
-                                viewModel.selectTab(tab)
-                            }
-                        },
+                        onTabSelected = { tab -> viewModel.selectTab(tab) },
                         appLanguage = uiState.appLanguage
                     )
                 }
@@ -222,6 +239,53 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onCloseAddMoment = { viewModel.closeAddMomentDialog() },
                         onAddMoment = { title, content -> viewModel.addMoment(title, content) }
                     )
+
+                    4 -> {
+                        MemoryScreen(
+                            state = memoryState,
+                            appLanguage = uiState.appLanguage,
+                            onSelectTab = memoryViewModel::selectTab,
+                            onQueryChange = memoryViewModel::setQuery,
+                            onCategoryFilter = memoryViewModel::setCategoryFilter,
+                            onOpenEditor = memoryViewModel::openEditor,
+                            onComplete = memoryViewModel::complete,
+                            onRestore = memoryViewModel::restore,
+                            onRetryPreview = memoryViewModel::retryPreview,
+                            onDeleteRequest = memoryViewModel::requestPermanentDelete,
+                            onDeleteConfirm = memoryViewModel::confirmPermanentDelete,
+                            onDeleteDismiss = memoryViewModel::dismissPermanentDelete,
+                            onCreateCategory = memoryViewModel::createCategory,
+                            onUpdateCategory = memoryViewModel::updateCategory,
+                            onDeleteCategory = memoryViewModel::deleteCategory
+                        )
+
+                        memoryState.editorMode?.let { editorMode ->
+                            MemoryEditorSheet(
+                                mode = editorMode,
+                                categories = memoryState.categories,
+                                appLanguage = uiState.appLanguage,
+                                onModeChange = { mode ->
+                                    memoryViewModel.openEditor(mode, memoryState.editorEntryId)
+                                },
+                                onDismiss = memoryViewModel::closeEditor,
+                                onSaveNote = { entryId, categoryId, title, body ->
+                                    memoryViewModel.saveNote(entryId, categoryId, title, body)
+                                    memoryViewModel.closeEditor()
+                                },
+                                onSaveList = { categoryId, lines ->
+                                    memoryViewModel.saveList(categoryId, lines)
+                                    memoryViewModel.closeEditor()
+                                },
+                                onSaveLink = { entryId, categoryId, url, note ->
+                                    memoryViewModel.saveLink(entryId, categoryId, url, note)
+                                    memoryViewModel.closeEditor()
+                                },
+                                initialEntry = memoryState.visibleEntries
+                                    .firstOrNull { it.entity.id == memoryState.editorEntryId }
+                                    ?.entity
+                            )
+                        }
+                    }
 
                     5 -> DevStudioScreen(
                         onStartPack = { packId -> openPack(packId) },
