@@ -119,11 +119,15 @@ def _scan_bundled_option_labels(root: Path) -> list[VisibleCopyOccurrence]:
     brands = set(policy.get("brand_literals", []))
     rel = path.relative_to(root).as_posix()
     out: list[VisibleCopyOccurrence] = []
+    seen_labels: set[str] = set()
+    # Drive mapping is intentionally first/canonical; the brand mapping only fills
+    # labels not already supplied by the original Drive bundle (notably Coca-Cola).
     for map_name in ("driveOptionToFile", "brandOptionToFile"):
         for text, offset in _extract_map_labels(source, map_name):
             normalized = normalize_visible_text(text)
-            if not normalized:
+            if not normalized or normalized in seen_labels:
                 continue
+            seen_labels.add(normalized)
             out.append(
                 VisibleCopyOccurrence(
                     path=rel,
