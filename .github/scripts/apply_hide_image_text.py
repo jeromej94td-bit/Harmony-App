@@ -48,11 +48,13 @@ old = '''        OutlinedTextField(
 new = '''        OutlinedTextField(
             value = displayValue,
             onValueChange = { newValue ->
-                if (newValue.isBlank() && text.isNotBlank()) {
-                    onTextChange(DeveloperDataManager.hideOptionLabel(context, text))
-                } else {
-                    onTextChange(newValue)
-                }
+                onTextChange(
+                    DeveloperDataManager.renameOptionKeepingImage(
+                        context = context,
+                        oldKey = text,
+                        newLabel = newValue
+                    )
+                )
             },
             placeholder = { Text("Name (optional)", fontSize = 11.5.sp, color = HarmonyMuted) },
             singleLine = false,
@@ -69,7 +71,13 @@ new = '''        OutlinedTextField(
         OutlinedButton(
             onClick = {
                 if (text.isNotBlank()) {
-                    onTextChange(DeveloperDataManager.hideOptionLabel(context, text))
+                    onTextChange(
+                        DeveloperDataManager.renameOptionKeepingImage(
+                            context = context,
+                            oldKey = text,
+                            newLabel = ""
+                        )
+                    )
                 }
             },
             enabled = text.isNotBlank() && isUserFacing,
@@ -105,25 +113,36 @@ new = '''    fun setImageFromUri(context: Context, optionName: String, uri: Uri)
     }
 
     /**
-     * Blendet nur den sichtbaren Text aus, ohne die Bildzuordnung zu verlieren.
-     * Dafür wird ein interner, nicht sichtbarer Schlüssel erzeugt und dieselbe
-     * Bildquelle unter diesem Schlüssel weitergeführt.
+     * Changes only the visible label while preserving the image identity.
+     * Drive/gallery imports are copied under the new internal lookup key, so
+     * typing a new name or hiding the text cannot detach the image anymore.
      */
-    fun hideOptionLabel(context: Context, optionName: String): String {
-        val sourceKey = optionName.trim()
-        if (sourceKey.isEmpty()) return sourceKey
-        if (!DevAssetStore.isUserFacingLabel(sourceKey)) return sourceKey
+    fun renameOptionKeepingImage(context: Context, oldKey: String, newLabel: String): String {
+        val sourceKey = oldKey.trim()
+        val typedLabel = newLabel.trim()
 
-        val hiddenKey = "img_hidden_${System.currentTimeMillis()}_${DevAssetStore.slug(sourceKey).take(24)}"
+        if (sourceKey.isEmpty()) return typedLabel
+        if (typedLabel.equals(sourceKey, ignoreCase = false)) return sourceKey
+        if (typedLabel.isEmpty() && !DevAssetStore.isUserFacingLabel(sourceKey)) return sourceKey
+
+        val targetKey = if (typedLabel.isNotEmpty()) {
+            typedLabel
+        } else {
+            "img_hidden_${System.currentTimeMillis()}_${DevAssetStore.slug(sourceKey).take(24)}"
+        }
+
         val path = imagePathFor(sourceKey)
         if (!path.isNullOrBlank()) {
-            imageOverrides[hiddenKey] = path
-            saveData(context)
+            // Keep the old mapping for backward compatibility/other packs and
+            // mirror the same physical image under the new display/internal key.
+            imageOverrides[targetKey] = path
+            TotImageProvider.setCustomImage(targetKey, path)
         } else {
-            // Built-in/URL image: preserve lookup for the current session as alias.
-            TotImageProvider.setAlias(hiddenKey, sourceKey)
+            // Built-in images and URL mappings can use the provider alias directly.
+            TotImageProvider.setAlias(targetKey, sourceKey)
         }
-        return hiddenKey
+
+        return targetKey
     }
 '''
 assert old in data, 'setImageFromUri not found'
@@ -131,4 +150,4 @@ data = data.replace(old, new, 1)
 
 screen_path.write_text(screen)
 data_path.write_text(data)
-print('Applied Dev Studio image-text decoupling fix')
+print('Applied Dev Studio image-label decoupling fix')
