@@ -45,7 +45,7 @@ jobs:
         run: |
           git config user.name "harmony-naehe-animation-bot"
           git config user.email "actions@users.noreply.github.com"
-          git pull --rebase origin feat/naehe-materialize-animation
           git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           git commit -m "feat: animate Nähe & Intimität question flow"
+          git pull --rebase origin feat/naehe-materialize-animation
           git push origin HEAD:feat/naehe-materialize-animation
