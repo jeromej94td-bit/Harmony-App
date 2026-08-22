@@ -15,7 +15,6 @@ from visible_copy_inventory import (
     VisibleCopyOccurrence,
     _build_units,
     _dedupe_occurrences,
-    word_count,
     write_report,
     write_summary,
 )
@@ -23,9 +22,10 @@ from visible_copy_inventory import (
 KOTLIN_PLACEHOLDER_RE = re.compile(
     r"\$\{[^{}]+\}|\$[A-Za-z_][A-Za-z0-9_.]*|\{[A-Za-z_][A-Za-z0-9_.]*\}|%(?:\d+\$)?0?\d*[sd]"
 )
+WORD_RE = re.compile(r"[^\W_]+(?:[’'\-‑][^\W_]+)*", re.UNICODE)
 TECHNICAL_GENERATED_LITERAL_RE = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
 SNAKE_IDENTIFIER_RE = re.compile(r"^[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9${}.]+)+$")
-LOWER_CAMEL_RE = re.compile(r"^[a-z]+(?:[A-Z][A-Za-z0-9]*)+$")
+LOWER_CAMEL_RE = re.compile(r"^[a-z][a-z0-9]*(?:[A-Z][A-Za-z0-9]*)+$")
 LOWER_IDENTIFIER_RE = re.compile(r"^[a-zäöüß][a-z0-9äöüß.-]*$")
 BASE64ISH_RE = re.compile(r"^[A-Za-z0-9+/=]+$")
 
@@ -86,6 +86,11 @@ BRAND_EXACT = {"Harmony", "HARMONY"}
 
 def extract_placeholders(text: str) -> tuple[str, ...]:
     return tuple(match.group(0) for match in KOTLIN_PLACEHOLDER_RE.finditer(text))
+
+
+def canonical_word_count(text: str) -> int:
+    clean = KOTLIN_PLACEHOLDER_RE.sub(" ", text)
+    return len(WORD_RE.findall(clean))
 
 
 def _comment_only_lines(path: Path) -> set[int]:
@@ -196,7 +201,7 @@ def discover_repository(root: Path) -> InventoryReport:
         "unique_translatable_units": sum(1 for unit in units if not unit["exemption"]),
         "exempt_visible_units": sum(1 for unit in units if unit["exemption"]),
         "visible_render_occurrences": len(occurrences),
-        "german_word_count": sum(word_count(unit["german"]) for unit in units if not unit["exemption"]),
+        "german_word_count": sum(canonical_word_count(unit["german"]) for unit in units if not unit["exemption"]),
     }
     breakdown = dict(sorted(Counter(occ.presentation for occ in occurrences).items()))
     return InventoryReport(
