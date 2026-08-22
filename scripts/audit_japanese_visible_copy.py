@@ -2,6 +2,7 @@
 """Audit Japanese against the locked canonical German visible-copy inventory."""
 from __future__ import annotations
 
+from collections import Counter
 import json
 from pathlib import Path
 
@@ -24,6 +25,9 @@ def load_japanese_catalog() -> dict[str, str]:
                 "LOCALIZATION_UPDATES_JAPANESE",
             )
         )
+    overrides = UI / "JapaneseVisibleCopyOverrides.kt"
+    if overrides.exists():
+        catalog.update(extract_map(overrides, "JAPANESE_VISIBLE_COPY_OVERRIDES"))
     return catalog
 
 
@@ -38,7 +42,7 @@ def main() -> int:
     for german in sorted(set(canonical) & set(japanese)):
         expected = tuple(canonical[german].get("placeholders", []))
         actual = extract_placeholders(japanese[german])
-        if actual != expected:
+        if Counter(actual) != Counter(expected):
             placeholder_mismatches.append(
                 {
                     "german": german,
