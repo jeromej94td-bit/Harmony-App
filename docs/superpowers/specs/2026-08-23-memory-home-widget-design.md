@@ -36,7 +36,7 @@ The widget must reuse the existing Room-backed `memory_entries` data and existin
 4. Note presentation with title plus short body preview.
 5. Link presentation with compact preview image or branded fallback, site name, title and optional short note/description.
 6. Direct check action to complete an entry.
-7. Deep-link-style navigation into Harmony's Memory tab and, for a specific entry, opening/focusing that entry.
+7. Deep-link-style navigation into Harmony's Memory tab and, for a specific entry, opening that entry in the existing Memory editor flow.
 8. Direct browser opening from the link-preview affordance.
 9. Automatic widget refresh when memory data changes in relevant flows (create/update/preview loaded/complete/restore/delete).
 10. Tests around selection, rendering decisions, completion, deep-link intent generation and fallback behavior.
@@ -92,6 +92,8 @@ Use per-widget `SharedPreferences` keyed by `appWidgetId` for:
 
 The actual memory content remains only in Room.
 
+When Android deletes a widget instance, remove only that widget ID's preference keys. Shared preview-image cache files remain reusable and disposable.
+
 ## UI design
 
 Use Harmony's existing dark glass / pink-violet visual language. `RemoteViews` limits dynamic Compose-like visuals, so the design should prioritize clean hierarchy over effects that are unreliable in launcher widgets.
@@ -102,6 +104,12 @@ Use Harmony's existing dark glass / pink-violet visual language. `RemoteViews` l
 - pink-violet accent line or header treatment;
 - compact header: Memory/Bookmark icon + **„Das müssen wir uns merken“**;
 - tapping header opens Memory tab.
+
+### Rendering structure
+
+Use one widget layout with **three fixed row slots** (`slot_1`, `slot_2`, `slot_3`). Each slot contains the note/link views needed for one compact entry and can be shown/hidden independently.
+
+This avoids fragile runtime `RemoteViews.addView` behavior and makes Samsung/Pixel launcher rendering predictable. The provider binds up to the effective slot count and hides unused slots.
 
 ### Note row
 
@@ -142,13 +150,19 @@ Rules:
 
 1. Do not refetch metadata; only use stored `previewImageUrl`.
 2. If the image is cached, decode a downsampled bitmap suitable for the widget.
-3. If not cached, fetch the image asynchronously with the app's existing network stack or a minimal OkHttp request, resize/downsample it, save it to app cache, then refresh the widget.
+3. If not cached, fetch the image asynchronously with OkHttp, resize/downsample it, save it to app cache, then refresh the affected Memory widgets.
 4. On network/image failure, render the branded Harmony link fallback immediately.
 5. Never block the widget update waiting indefinitely for an image.
 
 Cache files are disposable and can be regenerated from `previewImageUrl`.
 
 ## Interaction model
+
+### PendingIntent identity
+
+Every actionable row/slot must get a unique `PendingIntent` identity. Use stable request codes and/or a unique intent `data` URI containing action + widget ID + entry ID so Android does not reuse the wrong pending intent across the three rows.
+
+All intents use the appropriate immutable flag for the current target SDK.
 
 ### Complete button
 
@@ -168,11 +182,13 @@ Create an activity `PendingIntent` to `MainActivity` with intent extras such as:
 - `EXTRA_OPEN_MEMORY = true`
 - `EXTRA_MEMORY_ENTRY_ID = <id>`
 
-`MainActivity` / app state handling will consume these extras once and switch to Memory tab (`selectedTab = 4`). For a specific entry, the Memory layer will open/focus the corresponding entry using the existing editor/navigation state rather than starting a duplicate screen.
+`MainActivity` / app state handling consumes these extras once, switches to Memory tab (`selectedTab = 4`) and opens the existing Memory editor for that row. The editor mode is derived from the stored entry kind (`NOTE` or `LINK`); no duplicate detail screen is introduced.
 
 ### Open link
 
 The preview-image click uses `ACTION_VIEW` with the stored normalized `http/https` URL. Only valid normalized URLs already stored by the Memory feature are used.
+
+If the URL is missing/invalid, the preview affordance falls back to the same app-open action as the row body instead of producing a dead click.
 
 ## Refresh strategy
 
@@ -193,9 +209,9 @@ App-side Memory write paths will call this helper after successful mutations. Wi
 
 ## Configuration flow
 
-Use a dedicated `MemoryWidgetConfigActivity` started by the launcher when adding the widget.
+Use a dedicated `MemoryWidgetConfigActivity` started by the launcher when adding the widget. Implement the configuration UI with Compose inside a small `ComponentActivity`, so it can reuse Harmony theme conventions without introducing another XML-screen architecture.
 
-The configuration screen should use Harmony styling and show:
+The configuration screen should show:
 
 1. segmented choice: **Automatisch** / **Bestimmte auswählen**;
 2. visible count: **1 / 2 / 3**;
@@ -209,6 +225,8 @@ Defaults:
 - visible count: 3;
 - pinned IDs: none.
 
+In pinned mode, the order in which entries are selected becomes their widget order. Toggling a selected entry off removes it; selecting it again appends it at the end.
+
 Saving writes widget preferences, updates the widget and returns `RESULT_OK` with the widget ID. Cancelling leaves the widget unconfigured and returns `RESULT_CANCELED`.
 
 ## Architecture / files
@@ -217,16 +235,16 @@ Expected additions/changes:
 
 - `app/src/main/java/com/example/widget/MemoryWidgetProvider.kt`
 - `app/src/main/java/com/example/widget/MemoryWidgetConfigActivity.kt`
-- optional focused helper(s) under `com.example.widget` for selection/render model/image cache
-- `app/src/main/res/layout/widget_memory.xml` plus row layouts or ViewStubs if needed
+- focused helper(s) under `com.example.widget` for preferences, selection/render model and image cache
+- `app/src/main/res/layout/widget_memory.xml` with three fixed row slots
 - `app/src/main/res/xml/memory_widget_info.xml`
 - widget background/fallback drawables
 - `AndroidManifest.xml` provider + config activity registration
 - `MemoryDao.kt` focused query helpers for open/widget entries if needed
 - `MemoryRepository.kt` only if a clean shared API is preferable to direct DAO access
 - `MemoryViewModel.kt` refresh hook calls after successful mutations
-- `MainActivity.kt` intent handling for Memory tab / entry focus
-- tests under `app/src/test/...` for selection and intent/action behavior
+- `MainActivity.kt` intent handling for Memory tab / exact entry editor
+- tests under `app/src/test/...` for selection, action identity and navigation behavior
 
 Avoid unrelated refactors.
 
@@ -236,9 +254,10 @@ Avoid unrelated refactors.
 - Completed pinned ID: skip and fill from automatic list.
 - Missing preview image: fallback visual, no empty image frame.
 - Failed image download: fallback and keep widget usable.
-- Invalid/missing URL: disable browser-specific action and retain app-open action.
+- Invalid/missing URL: preview action falls back to app-open action.
 - Database failure during completion: do not optimistically remove the row; next refresh keeps the source-of-truth state.
 - Empty Memory list: widget shows an empty-state message inviting the user to open Harmony and add a memory.
+- Widget deletion: remove only the deleted widget instance's configuration keys.
 
 ## Testing
 
@@ -251,13 +270,15 @@ Avoid unrelated refactors.
 - compact/medium/large size calculation returns 1/2/3 appropriately;
 - only max 3 pinned IDs are accepted;
 - completion action targets the correct entry ID;
+- pending intents for multiple rows remain distinct;
 - generated app-open intent targets Memory tab / specific entry;
-- valid link action uses `ACTION_VIEW`, invalid/missing URL falls back safely.
+- valid link action uses `ACTION_VIEW`, invalid/missing URL falls back safely;
+- deleting a widget clears only its own preferences.
 
 ### Integration/resource checks
 
 - manifest provider/config activity are valid;
-- widget info XML references correct layouts/configuration activity;
+- widget info XML references correct layout/configuration activity;
 - Android resource processing succeeds;
 - existing PicShare widget remains registered and unchanged in behavior.
 
@@ -268,14 +289,15 @@ The feature is complete when:
 1. Android's widget picker offers a dedicated Harmony Memory widget.
 2. Adding it opens a configuration screen.
 3. Automatic mode shows the newest open entries.
-4. Pinned mode allows selecting and ordering up to 3 specific entries.
+4. Pinned mode allows selecting up to 3 specific entries, with selection order used as widget order.
 5. The homescreen shows 1–3 items depending on widget size/configuration.
 6. Notes show meaningful text previews.
 7. Links show a compact URL preview with image when available and a polished fallback otherwise.
 8. Tapping a link preview opens the website.
-9. Tapping entry text opens the corresponding Memory entry inside Harmony.
+9. Tapping entry text opens the corresponding Memory entry inside Harmony's existing editor flow.
 10. Tapping the check marks the entry completed without opening Harmony.
 11. Completed/deleted pinned items are replaced by the next newest open item instead of leaving a gap.
 12. Relevant Memory changes refresh the widget.
 13. No duplicate Memory data store is introduced.
-14. The existing PicShare widget continues to work unchanged.
+14. Different rows' click actions always target the correct entry.
+15. The existing PicShare widget continues to work unchanged.
