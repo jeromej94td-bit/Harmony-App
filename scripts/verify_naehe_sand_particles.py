@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
+# Final verification trigger: production source is unchanged; this reruns source invariants + Kotlin compile.
 path = Path("app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt")
 text = path.read_text(encoding="utf-8")
 
