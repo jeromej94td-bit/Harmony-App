@@ -150,7 +150,9 @@ object CuisinePackInstaller {
 
         if (observedPrefs !== prefs) {
             observedPrefs?.let { oldPrefs ->
-                languageListener?.let(oldPrefs::unregisterOnSharedPreferenceChangeListener)
+                languageListener?.let { listener ->
+                    oldPrefs.unregisterOnSharedPreferenceChangeListener(listener)
+                }
             }
             val listener = SharedPreferences.OnSharedPreferenceChangeListener { changedPrefs, key ->
                 if (key == LANGUAGE_KEY) {
@@ -166,13 +168,17 @@ object CuisinePackInstaller {
     }
 
     private fun registerImages() {
-        italianImages.forEachIndexed { index, (left, right) ->
-            TotImageProvider.setGeneratedImage("tot:$ITALIAN_PACK_ID:$index:a", left)
-            TotImageProvider.setGeneratedImage("tot:$ITALIAN_PACK_ID:$index:b", right)
+        italianPack.pairs.zip(italianImages).forEachIndexed { index, (pair, images) ->
+            TotImageProvider.setGeneratedImage(pair.first, images.first)
+            TotImageProvider.setGeneratedImage(pair.second, images.second)
+            TotImageProvider.setGeneratedImage("tot:$ITALIAN_PACK_ID:$index:a", images.first)
+            TotImageProvider.setGeneratedImage("tot:$ITALIAN_PACK_ID:$index:b", images.second)
         }
-        polishImages.forEachIndexed { index, (left, right) ->
-            TotImageProvider.setGeneratedImage("tot:$POLISH_PACK_ID:$index:a", left)
-            TotImageProvider.setGeneratedImage("tot:$POLISH_PACK_ID:$index:b", right)
+        polishPack.pairs.zip(polishImages).forEachIndexed { index, (pair, images) ->
+            TotImageProvider.setGeneratedImage(pair.first, images.first)
+            TotImageProvider.setGeneratedImage(pair.second, images.second)
+            TotImageProvider.setGeneratedImage("tot:$POLISH_PACK_ID:$index:a", images.first)
+            TotImageProvider.setGeneratedImage("tot:$POLISH_PACK_ID:$index:b", images.second)
         }
     }
 
