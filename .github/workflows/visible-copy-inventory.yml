@@ -35,10 +35,10 @@ jobs:
         run: python3 scripts/visible_copy_validation.py --root .
 
       - name: Generate canonical German inventory
-        run: python3 scripts/visible_copy_complete.py --root . --write
+        run: python3 scripts/visible_copy_canonical.py --root . --write
 
       - name: Verify deterministic inventory
-        run: python3 scripts/visible_copy_complete.py --root . --check
+        run: python3 scripts/visible_copy_canonical.py --root . --check
 
       - name: Show canonical metrics
         run: cat localization/visible-copy-inventory-summary.md
