@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -43,3 +46,25 @@ jobs:
           name: cinematic-quizrunner
           path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           if-no-files-found: error
+
+      - name: Persist verified source
+        if: github.event_name == 'push'
+        run: |
+          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
+            echo "Source already persisted"
+            exit 0
+          fi
+          git config user.name "harmony-cinematic-glitch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          git commit -m "feat: add cinematic glitch materialization to Nähe"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin feat/naehe-cinematic-glitch-v2
+            git rebase origin/feat/naehe-cinematic-glitch-v2
+            if git push origin HEAD:feat/naehe-cinematic-glitch-v2; then
+              exit 0
+            fi
+            echo "Push race on attempt $attempt; retrying"
+            sleep 3
+          done
+          exit 1
