@@ -8,11 +8,20 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: feat/naehe-cinematic-glitch-v2
+          fetch-depth: 0
+
+      - name: Apply cinematic implementation
+        run: python3 scripts/apply_naehe_cinematic_glitch.py
 
       - name: Verify cinematic source requirements
         run: python3 scripts/verify_naehe_cinematic_glitch.py
@@ -30,3 +39,16 @@ jobs:
 
       - name: Compile debug Kotlin
         run: gradle :app:compileDebugKotlin --no-daemon
+
+      - name: Commit implementation to feature branch
+        if: github.event_name == 'push'
+        run: |
+          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
+            echo "No implementation changes to commit"
+            exit 0
+          fi
+          git config user.name "harmony-cinematic-glitch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          git commit -m "feat: add cinematic glitch materialization to Nähe"
+          git push origin HEAD:feat/naehe-cinematic-glitch-v2
