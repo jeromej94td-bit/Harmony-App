@@ -44,15 +44,11 @@ object TranslationCatalog {
     fun exact(german: String, language: AppLanguage): String? {
         if (language == AppLanguage.GERMAN) return german
 
-        // Reviewed high-visibility corrections always win for Brazilian Portuguese.
         if (language == AppLanguage.PORTUGUESE_BRAZIL) {
             PT_BR_REVIEWED_OVERRIDES[german]?.let { return it }
-            // pt-BR was generated from the current canonical catalog, so prefer it over
-            // the older generic Portuguese compatibility map when both contain a key.
             LOCALIZATION_UPDATES_PORTUGUESE_BRAZIL[german]?.let { return it }
         }
 
-        // Reviewed Japanese video fixes must override stale legacy machine translations.
         if (language == AppLanguage.JAPANESE) {
             LOCALIZATION_UPDATES_JAPANESE[german]?.let { return it }
         }
@@ -73,7 +69,7 @@ object TranslationCatalog {
             AppLanguage.POLISH -> localizePolishDynamicContent(text)
             AppLanguage.SPANISH_LATIN_AMERICA -> localizeLatinAmericanSpanishDynamicContent(text)
             AppLanguage.SPANISH_SPAIN -> localizeSpainSpanishDynamicContent(text)
-            AppLanguage.PORTUGUESE_BRAZIL -> localizePortugueseBrazilDynamicContent(text) ?: localizePortugueseDynamicContent(text)
+            AppLanguage.PORTUGUESE_BRAZIL -> localizeBrazilianPortugueseDynamicContent(text) ?: localizePortugueseDynamicContent(text)
             AppLanguage.PORTUGUESE_PORTUGAL -> localizePortuguesePortugalDynamicContent(text) ?: localizePortugueseDynamicContent(text)
             AppLanguage.DANISH -> localizeDanishDynamicContent(text)
             AppLanguage.NORWEGIAN -> localizeNorwegianDynamicContent(text)
