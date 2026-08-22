@@ -1,12 +1,24 @@
 #!/usr/bin/env python3
-"""Regression check for the premium panda category artwork and animation."""
+"""Regression check for the original premium panda category artwork and animation.
+
+The two panda PNGs and their established Compose motion are approved Harmony assets.
+This guard intentionally fails if an automated repair/export/AI edit replaces the artwork,
+changes the wiring, or alters the original tilt/breathe/glow behavior.
+"""
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 VISUALS = ROOT / "app/src/main/java/com/example/ui/components/GameCategoryVisuals.kt"
 REPAIR = ROOT / "scripts/repair_build_blockers.py"
 DRAWABLES = ROOT / "app/src/main/res/drawable-nodpi"
+
+# Git blob IDs of the approved original panda artwork restored in PR #39.
+APPROVED_PANDA_BLOBS = {
+    "panda_thinking_harmony.png": "4989d7b9b76d34a2204bfb8e3d91e4c46207e198",
+    "panda_never_harmony.png": "f39cf088d38a88db17bf5f724a3752795bc9cb6d",
+}
 
 errors: list[str] = []
 
@@ -16,21 +28,63 @@ def require(condition: bool, message: str) -> None:
         errors.append(message)
 
 
+def git_blob_sha(path: Path) -> str | None:
+    try:
+        return subprocess.run(
+            ["git", "hash-object", str(path.relative_to(ROOT))],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
 visuals = VISUALS.read_text(encoding="utf-8")
 repair = REPAIR.read_text(encoding="utf-8")
 
-require((DRAWABLES / "panda_thinking_harmony.png").exists(), "missing premium thinking panda artwork")
-require((DRAWABLES / "panda_never_harmony.png").exists(), "missing premium never panda artwork")
+for filename, expected_blob in APPROVED_PANDA_BLOBS.items():
+    asset = DRAWABLES / filename
+    require(asset.exists(), f"missing approved panda artwork: {filename}")
+    if asset.exists():
+        actual_blob = git_blob_sha(asset)
+        require(actual_blob is not None, f"could not verify Git blob for {filename}")
+        require(
+            actual_blob == expected_blob,
+            f"approved panda artwork changed: {filename} (expected {expected_blob}, got {actual_blob})",
+        )
 
+# Keep the exact original artwork wiring.
 require('"wer" -> PandaArtworkIcon(' in visuals, 'wer category no longer uses PandaArtworkIcon')
 require('drawableRes = R.drawable.panda_thinking_harmony' in visuals, 'wer category is not wired to panda_thinking_harmony')
+require('animationLabel = "thinking_panda"' in visuals, 'thinking panda animation label changed')
 require('"nie" -> PandaArtworkIcon(' in visuals, 'nie category no longer uses PandaArtworkIcon')
 require('drawableRes = R.drawable.panda_never_harmony' in visuals, 'nie category is not wired to panda_never_harmony')
+require('animationLabel = "never_panda"' in visuals, 'never panda animation label changed')
 
-# Preserve the softer original motion visible in the approved screenshots.
-require('durationMillis = 11_000' in visuals, 'premium panda slow tilt animation was changed')
-require('durationMillis = 3_200' in visuals, 'premium panda breathing animation was changed')
-require('durationMillis = 2_400' in visuals, 'premium panda glow animation was changed')
+# Preserve the approved slow tilt + breathing + glow motion exactly.
+for snippet, message in (
+    ('initialValue = -1.6f', 'premium panda tilt start changed'),
+    ('targetValue = 1.6f', 'premium panda tilt end changed'),
+    ('durationMillis = 11_000', 'premium panda slow tilt duration changed'),
+    ('initialValue = 0.985f', 'premium panda breathing minimum changed'),
+    ('targetValue = 1.025f', 'premium panda breathing maximum changed'),
+    ('durationMillis = 3_200', 'premium panda breathing duration changed'),
+    ('initialValue = 0.44f', 'premium panda glow minimum changed'),
+    ('targetValue = 0.88f', 'premium panda glow maximum changed'),
+    ('durationMillis = 2_400', 'premium panda glow duration changed'),
+    ('rotationZ = tilt', 'premium panda tilt application changed'),
+    ('scaleX = breathe', 'premium panda horizontal breathing changed'),
+    ('scaleY = breathe', 'premium panda vertical breathing changed'),
+    ('.size(76.dp)', 'premium panda outer size changed'),
+    ('.clip(RoundedCornerShape(23.dp))', 'premium panda corner shape changed'),
+    ('.background(Color(0xFF15091E))', 'premium panda background changed'),
+    ('width = 1.4.dp', 'premium panda border width changed'),
+    ('contentScale = ContentScale.Crop', 'premium panda image crop behavior changed'),
+    ('modifier = Modifier.size(74.dp)', 'premium panda artwork size changed'),
+):
+    require(snippet in visuals, message)
 
 # CI/build repair must never silently downgrade the artwork again.
 require('new = \'\'\'        "wer" -> PandaCategoryIcon' not in repair, 'build repair still downgrades panda artwork to Canvas icons')
@@ -42,4 +96,4 @@ if errors:
     print(f"panda category artwork verification FAILED ({len(errors)} errors)")
     sys.exit(1)
 
-print("panda category artwork verification PASSED")
+print("panda category artwork verification PASSED: original assets and animations are locked")
