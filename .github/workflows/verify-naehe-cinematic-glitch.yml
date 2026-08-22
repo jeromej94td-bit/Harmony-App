@@ -47,24 +47,15 @@ jobs:
           path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           if-no-files-found: error
 
-      - name: Persist verified source
+      - name: Publish clean final branch
         if: github.event_name == 'push'
         run: |
-          if git diff --quiet -- app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt; then
-            echo "Source already persisted"
-            exit 0
-          fi
+          cp app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt /tmp/QuizRunnerScreen.kt
           git config user.name "harmony-cinematic-glitch-bot"
           git config user.email "actions@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B agent/naehe-cinematic-final origin/main
+          cp /tmp/QuizRunnerScreen.kt app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
           git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
-          git commit -m "feat: add cinematic glitch materialization to Nähe"
-          for attempt in 1 2 3 4 5; do
-            git fetch origin feat/naehe-cinematic-glitch-v2
-            git rebase origin/feat/naehe-cinematic-glitch-v2
-            if git push origin HEAD:feat/naehe-cinematic-glitch-v2; then
-              exit 0
-            fi
-            echo "Push race on attempt $attempt; retrying"
-            sleep 3
-          done
-          exit 1
+          git commit -m "feat: cinematic Nähe transformer materialization"
+          git push --force origin HEAD:agent/naehe-cinematic-final
