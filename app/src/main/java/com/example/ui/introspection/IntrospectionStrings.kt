@@ -1,6 +1,7 @@
 package com.example.ui.introspection
 
 import com.example.ui.AppLanguage
+import com.example.ui.TranslationCatalog
 
 enum class IntrospectionStringKey {
     ENTRY_EYEBROW,
@@ -66,10 +67,22 @@ enum class IntrospectionStringKey {
 object IntrospectionStrings {
 
     fun tr(key: IntrospectionStringKey, lang: AppLanguage): String {
+        val german = germanStrings[key] ?: return key.name
         return when (lang) {
-            AppLanguage.GERMAN -> germanStrings[key] ?: key.name
-            AppLanguage.ITALIAN -> italianStrings[key] ?: englishStrings[key] ?: germanStrings[key] ?: key.name
-            else -> englishStrings[key] ?: germanStrings[key] ?: key.name
+            AppLanguage.GERMAN -> german
+            AppLanguage.ENGLISH -> englishStrings[key] ?: german
+            AppLanguage.ITALIAN -> italianStrings[key] ?: TranslationCatalog.translate(german, lang) ?: german
+            AppLanguage.FRENCH,
+            AppLanguage.JAPANESE,
+            AppLanguage.POLISH,
+            AppLanguage.SPANISH_LATIN_AMERICA,
+            AppLanguage.SPANISH_SPAIN,
+            AppLanguage.PORTUGUESE_BRAZIL,
+            AppLanguage.PORTUGUESE_PORTUGAL,
+            AppLanguage.DANISH,
+            AppLanguage.NORWEGIAN -> TranslationCatalog.translate(german, lang)
+                ?: englishStrings[key]
+                ?: german
         }
     }
 
@@ -80,8 +93,17 @@ object IntrospectionStrings {
     fun m(lang: AppLanguage, de: String, en: String, it: String): String {
         return when (lang) {
             AppLanguage.GERMAN -> de
+            AppLanguage.ENGLISH -> en
             AppLanguage.ITALIAN -> it
-            else -> en
+            AppLanguage.FRENCH,
+            AppLanguage.JAPANESE,
+            AppLanguage.POLISH,
+            AppLanguage.SPANISH_LATIN_AMERICA,
+            AppLanguage.SPANISH_SPAIN,
+            AppLanguage.PORTUGUESE_BRAZIL,
+            AppLanguage.PORTUGUESE_PORTUGAL,
+            AppLanguage.DANISH,
+            AppLanguage.NORWEGIAN -> TranslationCatalog.translate(de, lang) ?: en
         }
     }
 

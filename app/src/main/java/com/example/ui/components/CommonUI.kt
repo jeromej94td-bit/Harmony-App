@@ -2,6 +2,7 @@ package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import com.example.util.LanguageManager
+import com.example.ui.LocalAppLanguage
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -284,21 +285,40 @@ fun HarmonyBottomNav(
 
 @Composable
 fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
-    val category = com.example.data.model.HarmonyPacksData.CATEGORIES.find { 
-        it.id.equals(tag, ignoreCase = true) || it.name.equals(tag, ignoreCase = true) 
+    val appLanguage = LocalAppLanguage.current.code
+    val category = com.example.data.model.HarmonyPacksData.CATEGORIES.find {
+        it.id.equals(tag, ignoreCase = true) || it.name.equals(tag, ignoreCase = true)
     }
-    
+
     val (bg, fg, label) = if (category != null) {
         val catColor = Color(category.tagColorHex)
-        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${category.name}")
+        val localizedCategory = LanguageManager.translateCategory(category, appLanguage)
+        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${localizedCategory.name}")
     } else {
+        val normalized = when (tag.lowercase()) {
+            "unterhaltung", "entertainment" -> "Unterhaltung"
+            "dasoderdas", "tot", "oder" -> "Das oder das"
+            "hochzeit" -> "Hochzeit"
+            "kinder" -> "Kinder"
+            "reden" -> "Reden vor..."
+            "tiere" -> "Tiere"
+            "fürpaare", "fuerpaare" -> "Für Paare"
+            "party" -> "Party"
+            "wer", "werwuerde" -> "Wer würde eher?"
+            "ichhabenochnie" -> "Ich habe noch nie"
+            "essen" -> "Essen & Genuss"
+            "zuhause" -> "Zuhause & Alltag"
+            "games" -> "Spiele"
+            else -> tag.replaceFirstChar { it.uppercase() }
+        }
+        val localized = LanguageManager.tr(normalized, appLanguage)
         when (tag.lowercase()) {
-            "unterhaltung" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, "Unterhaltung")
-            "dasoderdas", "tot" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, "Das oder das")
-            "hochzeit" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, "Hochzeit")
-            "kinder" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, "Kinder")
-            "reden" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, "Reden vor...")
-            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, tag.replaceFirstChar { it.uppercase() })
+            "unterhaltung", "entertainment" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, localized)
+            "dasoderdas", "tot", "oder" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, localized)
+            "hochzeit" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, localized)
+            "kinder" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, localized)
+            "reden" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, localized)
+            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, localized)
         }
     }
 
@@ -310,11 +330,11 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
             .padding(horizontal = 9.dp, vertical = 4.dp)
     ) {
         Text(
-            text = label.uppercase(Locale.GERMAN),
+            text = label.uppercase(Locale.ROOT),
             fontSize = 9.5.sp,
             fontWeight = FontWeight.ExtraBold,
             color = fg,
-            letterSpacing = 0.8.sp
+            letterSpacing = 0.4.sp
         )
     }
 }

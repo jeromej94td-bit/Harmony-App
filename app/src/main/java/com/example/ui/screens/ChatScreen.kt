@@ -97,10 +97,10 @@ fun ChatScreen(
             Spacer(Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(partnerName, color = HarmonyText, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
-                Text("Privater Paar-Chat", color = HarmonyMuted, fontSize = 11.sp)
+                Text(LanguageManager.tr("Privater Paar-Chat", appLanguage), color = HarmonyMuted, fontSize = 11.sp)
             }
             IconButton(onClick = { showReportDialog = true }, modifier = Modifier.testTag("report_user_button")) {
-                Icon(Icons.Default.Flag, contentDescription = "Nutzer melden", tint = HarmonyMuted)
+                Icon(Icons.Default.Flag, contentDescription = LanguageManager.tr("Nutzer melden", appLanguage), tint = HarmonyMuted)
             }
         }
 
@@ -110,7 +110,7 @@ fun ChatScreen(
             verticalArrangement = Arrangement.spacedBy(9.dp)
         ) {
             items(messages, key = { it.id }) { message ->
-                ChatMessageBubble(message, onImageClick = { fullscreenImagePath = it })
+                ChatMessageBubble(message, appLanguage, onImageClick = { fullscreenImagePath = it })
             }
         }
 
@@ -127,7 +127,7 @@ fun ChatScreen(
                     .border(1.dp, HarmonyLine, CircleShape)
                     .testTag("add_chat_image_button")
             ) {
-                Icon(Icons.Default.PhotoLibrary, contentDescription = "Bild hinzufügen", tint = HarmonyPink)
+                Icon(Icons.Default.PhotoLibrary, contentDescription = LanguageManager.tr("Bild hinzufügen", appLanguage), tint = HarmonyPink)
             }
             Spacer(Modifier.width(8.dp))
             OutlinedTextField(
@@ -160,7 +160,7 @@ fun ChatScreen(
                     .background(Brush.linearGradient(listOf(HarmonyPink, HarmonyPurple)))
                     .testTag("send_chat_button")
             ) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Senden", tint = Color.White, modifier = Modifier.size(18.dp))
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = LanguageManager.tr("Senden", appLanguage), tint = Color.White, modifier = Modifier.size(18.dp))
             }
         }
     }
@@ -168,21 +168,29 @@ fun ChatScreen(
     if (showReportDialog) {
         AlertDialog(
             onDismissRequest = { showReportDialog = false },
-            title = { Text("Nutzer melden") },
-            text = { Text("Möchtest du $partnerName melden? Die Meldung wird erst nach deiner Bestätigung vorbereitet.") },
+            title = { Text(LanguageManager.tr("Nutzer melden", appLanguage)) },
+            text = {
+                Text(
+                    LanguageManager.tr(
+                        "Möchtest du {partner} melden? Die Meldung wird erst nach deiner Bestätigung vorbereitet.",
+                        appLanguage
+                    ).replace("{partner}", partnerName)
+                )
+            },
             confirmButton = {
                 TextButton(onClick = {
                     showReportDialog = false
                     onReportUser()
-                }) { Text("Meldung vorbereiten", color = HarmonyPink) }
+                }) { Text(LanguageManager.tr("Meldung vorbereiten", appLanguage), color = HarmonyPink) }
             },
-            dismissButton = { TextButton(onClick = { showReportDialog = false }) { Text("Abbrechen") } }
+            dismissButton = { TextButton(onClick = { showReportDialog = false }) { Text(LanguageManager.tr("Abbrechen", appLanguage)) } }
         )
     }
 
     fullscreenImagePath?.let { path ->
         ChatImageFullscreen(
             path = path,
+            appLanguage = appLanguage,
             onDismiss = { fullscreenImagePath = null }
         )
     }
@@ -191,6 +199,7 @@ fun ChatScreen(
 @Composable
 fun ChatMessageBubble(
     message: ChatMessageEntity,
+    appLanguage: String = "de",
     onImageClick: (String) -> Unit = {}
 ) {
     val isMe = message.sender == "me"
@@ -213,7 +222,7 @@ fun ChatMessageBubble(
                 message.imagePath?.let { path ->
                     AsyncImage(
                         model = File(path),
-                        contentDescription = "Geteiltes Bild",
+                        contentDescription = LanguageManager.tr("Geteiltes Bild", appLanguage),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -239,7 +248,7 @@ fun ChatMessageBubble(
 }
 
 @Composable
-private fun ChatImageFullscreen(path: String, onDismiss: () -> Unit) {
+private fun ChatImageFullscreen(path: String, appLanguage: String, onDismiss: () -> Unit) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -257,7 +266,7 @@ private fun ChatImageFullscreen(path: String, onDismiss: () -> Unit) {
         ) {
             AsyncImage(
                 model = File(path),
-                contentDescription = "Geteiltes Bild im Vollbildmodus",
+                contentDescription = LanguageManager.tr("Geteiltes Bild im Vollbildmodus", appLanguage),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxSize()

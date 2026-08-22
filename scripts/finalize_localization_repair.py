@@ -1,4 +1,34 @@
-package com.example.ui
+#!/usr/bin/env python3
+"""Finalize generated localization repair before it is committed to the Android app."""
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+UI = ROOT / "app/src/main/java/com/example/ui"
+UPDATES = UI / "LocalizationUpdates.kt"
+
+
+def repair_generator_placeholders() -> None:
+    text = UPDATES.read_text(encoding="utf-8")
+    line_re = re.compile(r'^(\s*)"((?:\\.|[^"\\])*)" to "((?:\\.|[^"\\])*)",$', re.MULTILINE)
+    placeholder_re = re.compile(r'(\{[^}]+\}|%\d*\$?[a-zA-Z])')
+
+    def fix_line(match: re.Match[str]) -> str:
+        indent, key, value = match.groups()
+        placeholders = placeholder_re.findall(key)
+        for index, placeholder in enumerate(placeholders):
+            token = re.compile(rf'HARMONYPLACEHOLDER{index:02d}', re.IGNORECASE)
+            value = token.sub(lambda _: placeholder, value)
+        return f'{indent}"{key}" to "{value}",'
+
+    text = line_re.sub(fix_line, text)
+    UPDATES.write_text(text, encoding="utf-8")
+
+
+def write_translation_catalog() -> None:
+    (UI / "TranslationCatalog.kt").write_text('''package com.example.ui
 
 /**
  * Central catalog providing lookups and dynamic localization for all supported app languages.
@@ -18,8 +48,6 @@ object TranslationCatalog {
 
     fun hasCompletePack(language: AppLanguage): Boolean {
         if (language == AppLanguage.GERMAN) return true
-        // Brazilian Portuguese is intentionally kept on its pre-repair implementation for now.
-        if (language == AppLanguage.PORTUGUESE_BRAZIL) return true
         return EXACT_ENGLISH_CONTENT.keys
             .asSequence()
             .filterNot { it in nonCustomerKeys || "Entwickler" in it }
@@ -45,8 +73,6 @@ object TranslationCatalog {
 
     fun exact(german: String, language: AppLanguage): String? {
         if (language == AppLanguage.GERMAN) return german
-        // Keep Brazilian Portuguese exactly on the pre-repair catalog until its own pass is ready.
-        if (language == AppLanguage.PORTUGUESE_BRAZIL) return baseExact(german, language)
         // Reviewed Japanese video fixes must override stale legacy machine translations.
         if (language == AppLanguage.JAPANESE) {
             LOCALIZATION_UPDATES_JAPANESE[german]?.let { return it }
@@ -74,3 +100,21 @@ object TranslationCatalog {
         }
     }
 }
+''', encoding="utf-8")
+
+
+def patch_small_misses() -> None:
+    games = UI / "screens/GamesScreen.kt"
+    text = games.read_text(encoding="utf-8")
+    text = text.replace(
+        'TextButton(onClick = onDismiss) { Text("Schließen", color = HarmonyPink) }',
+        'TextButton(onClick = onDismiss) { Text(LanguageManager.tr("Schließen", appLanguage), color = HarmonyPink) }',
+    )
+    games.write_text(text, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    repair_generator_placeholders()
+    write_translation_catalog()
+    patch_small_misses()
+    print("Localization repair finalized")
