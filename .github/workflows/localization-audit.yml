@@ -1,0 +1,17 @@
+name: Localization Audit
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/src/main/java/com/example/ui/**'
+      - 'scripts/audit_localization.py'
+      - '.github/workflows/localization-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check complete customer localization
+        run: python3 scripts/audit_localization.py
