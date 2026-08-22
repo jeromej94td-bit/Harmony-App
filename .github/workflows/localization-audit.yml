@@ -12,6 +12,8 @@ on:
       - 'scripts/verify_localization_repair.py'
       - 'scripts/verify_ptbr_ready.py'
       - 'scripts/verify_six_new_locales.py'
+      - 'scripts/scaffold_six_new_locales.py'
+      - 'scripts/generate_six_new_locale_catalogs.py'
       - '.github/workflows/localization-audit.yml'
 
 permissions:
@@ -26,6 +28,9 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Apply six-locale scaffolding
+        run: python3 scripts/scaffold_six_new_locales.py
+
       - name: Verify pt-BR readiness
         run: python3 scripts/verify_ptbr_ready.py
 
@@ -34,6 +39,13 @@ jobs:
 
       - name: Repair concrete Kotlin build blockers
         run: python3 scripts/repair_build_blockers.py
+
+      - name: Discover missing locale keys
+        continue-on-error: true
+        run: python3 scripts/audit_localization.py
+
+      - name: Generate six complete locale catalogs
+        run: python3 scripts/generate_six_new_locale_catalogs.py
 
       - name: Audit all source catalogs
         run: python3 scripts/audit_localization.py
@@ -59,8 +71,8 @@ jobs:
         run: |
           git config user.name "harmony-localization-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add app/src/main/java/com/example/ui app/src/main/java/com/example/widget
+          git add app/src/main/java/com/example/ui app/src/main/java/com/example/widget scripts/audit_localization.py scripts/verify_localization_repair.py
           if ! git diff --cached --quiet; then
-            git commit -m "Fix localization source issues"
+            git commit -m "Generate six complete production locale catalogs"
             git push origin HEAD:${{ github.head_ref }}
           fi
