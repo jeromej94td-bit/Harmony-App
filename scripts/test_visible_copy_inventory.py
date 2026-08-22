@@ -53,6 +53,25 @@ class VisibleCopyInventoryTests(unittest.TestCase):
         self.assertIn("Öffne Harmony und füge euer erstes Bild hinzu", texts)
         self.assertIn("Harmony PicShare · ${pictures.size} Bilder rotieren", texts)
 
+    def test_cuisine_metadata_is_not_customer_copy(self):
+        report = discover_repository(ROOT)
+        texts = {unit["german"] for unit in report.units}
+        for technical in (
+            "harmony_settings_prefs",
+            "app_language",
+            "tot_italian_cuisine_mixed",
+            "tot_polish_cuisine_traditional",
+            "cucina",
+            "italia",
+            "kuchnia",
+            "polska",
+        ):
+            self.assertNotIn(technical, texts)
+        self.assertIn("🍝 Cucina italiana — scelte regionali", texts)
+        self.assertIn("Pizza napoletana", texts)
+        self.assertIn("🇵🇱 Tradycyjna kuchnia polska", texts)
+        self.assertIn("Pierogi ruskie", texts)
+
     def test_locale_catalogs_are_not_inventory_sources(self):
         report = discover_repository(ROOT)
         self.assertFalse(any(occ["path"].endswith("JapaneseContent.kt") for occ in report.occurrences))
