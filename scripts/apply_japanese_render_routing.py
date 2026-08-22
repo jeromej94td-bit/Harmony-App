@@ -41,6 +41,18 @@ def main() -> int:
 
     changed = False
 
+    # PicShare has a nested appText(if/else) expression. The normal 300-character lookback is
+    # deliberately conservative for the rest of the app, but it cut off the second real widget
+    # branch ("Harmony PicShare · bereit"). Extend only this provider's lookback so both render
+    # branches remain individual canonical occurrences.
+    changed |= patch_file(root, "scripts/visible_copy_complete.py", [
+        (
+            '            before = source[max(0, start - 360):start]\n            if not any(call in before for call in NON_COMPOSE_RENDER_CALLS):\n                continue\n            nearest = max((before.rfind(call) for call in NON_COMPOSE_RENDER_CALLS), default=-1)\n            if nearest < 0 or len(before) - nearest > 300:\n                continue',
+            '            is_picshare_widget = rel.endswith("/widget/PicShareWidgetProvider.kt")\n            lookback = 760 if is_picshare_widget else 360\n            max_distance = 700 if is_picshare_widget else 300\n            before = source[max(0, start - lookback):start]\n            if not any(call in before for call in NON_COMPOSE_RENDER_CALLS):\n                continue\n            nearest = max((before.rfind(call) for call in NON_COMPOSE_RENDER_CALLS), default=-1)\n            if nearest < 0 or len(before) - nearest > max_distance:\n                continue',
+            "PicShare nested widget branch lookback",
+        ),
+    ])
+
     changed |= patch_file(root, "app/src/main/java/com/example/ui/screens/GamesScreen.kt", [
         ('contentDescription = "Suchfeld löschen"', 'contentDescription = LanguageManager.tr("Suchfeld löschen", appLanguage)', "clear-search a11y"),
         ('contentDescription = "Suche schließen"', 'contentDescription = LanguageManager.tr("Suche schließen", appLanguage)', "close-search a11y"),
