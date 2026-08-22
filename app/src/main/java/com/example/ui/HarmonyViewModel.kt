@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.DeveloperDataManager
+import com.example.data.DriveTotAssetInstaller
 import com.example.data.db.HarmonyDatabase
 import com.example.data.model.AnswerEntity
 import com.example.data.model.ChatMessageEntity
@@ -16,6 +17,7 @@ import com.example.data.model.ProfileEntity
 import com.example.data.model.QuestionPack
 import com.example.data.model.SharedPicEntity
 import com.example.data.repository.HarmonyRepository
+import com.example.ui.components.TotImageProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -138,8 +140,15 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         initialValue = HarmonyUiState()
     )
 
+    private fun installDriveTotImages(application: Application) {
+        DriveTotAssetInstaller.install(application).forEach { (name, path) ->
+            TotImageProvider.setGeneratedImage(name, path)
+        }
+    }
+
     init {
         DeveloperDataManager.init(application)
+        installDriveTotImages(application)
         
         // Supabase initialisieren
         com.example.data.SupabaseClientProvider.init(
@@ -150,6 +159,9 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.ensureInitialData()
             com.example.data.SupabaseSync.fetchAndSync()
+            // SupabaseSync baut die Bildregistrierung neu auf. Drive-Bilder danach
+            // erneut setzen, damit die lokalen GitHub-Assets die Web-Fallbacks schlagen.
+            installDriveTotImages(application)
         }
     }
 
@@ -177,8 +189,9 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             _isRefreshing.value = true
             com.example.data.SupabaseSync.fetchAndSync()
+            installDriveTotImages(getApplication())
             _isRefreshing.value = false
-            showToast("Daten aktualisiert \ud83d\udd04")
+            showToast("Daten aktualisiert 🔄")
         }
     }
 
