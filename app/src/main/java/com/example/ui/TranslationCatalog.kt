@@ -97,6 +97,7 @@ object TranslationCatalog {
         }
 
         if (language == AppLanguage.JAPANESE) {
+            JAPANESE_VISIBLE_COPY_OVERRIDES[german]?.let { return it }
             LOCALIZATION_UPDATES_JAPANESE[german]?.let { return it }
         }
 
@@ -112,7 +113,7 @@ object TranslationCatalog {
             AppLanguage.ENGLISH -> localizeEnglishDynamicContent(text)
             AppLanguage.ITALIAN -> localizeItalianDynamicContent(text)
             AppLanguage.FRENCH -> localizeFrenchDynamicContent(text)
-            AppLanguage.JAPANESE -> localizeJapaneseDynamicContent(text)
+            AppLanguage.JAPANESE -> localizeJapaneseVisibleCopyDynamic(text) ?: localizeJapaneseDynamicContent(text)
             AppLanguage.POLISH -> localizePolishDynamicContent(text)
             AppLanguage.SPANISH_LATIN_AMERICA -> localizeLatinAmericanSpanishDynamicContent(text)
             AppLanguage.SPANISH_SPAIN -> localizeSpainSpanishDynamicContent(text)
