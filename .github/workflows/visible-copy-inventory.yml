@@ -8,6 +8,7 @@ on:
       - 'app/src/main/res/**'
       - 'app/src/main/assets/**'
       - 'scripts/visible_copy_*.py'
+      - 'scripts/audit_japanese_visible_copy.py'
       - 'scripts/validate_visible_copy_complete.py'
       - 'scripts/visible_copy_*.json'
       - 'localization/**'
@@ -42,6 +43,9 @@ jobs:
 
       - name: Show canonical metrics
         run: cat localization/visible-copy-inventory-summary.md
+
+      - name: Audit Japanese against canonical visible copy
+        run: python3 scripts/audit_japanese_visible_copy.py
 
       - name: Persist canonical inventory
         run: |
