@@ -9,7 +9,6 @@ import org.junit.Test
 
 class MemoryArchivePolicyTest {
     private val completedAt = 1_000_000L
-    private val day = 24L * 60L * 60L * 1_000L
     private val entry = MemoryEntryEntity(
         id = "entry-1",
         categoryId = MemoryDefaults.FILMS_ID,
@@ -21,27 +20,27 @@ class MemoryArchivePolicyTest {
     )
 
     @Test
-    fun `completed entry stays current immediately before 24 hours`() {
-        assertEquals(
-            MemoryBucket.CURRENT_GRACE,
-            MemoryArchivePolicy.bucketAt(entry, completedAt + day - 1L)
-        )
-    }
-
-    @Test
-    fun `completed entry is archived exactly at 24 hours`() {
+    fun `completed entry is archived immediately`() {
         assertEquals(
             MemoryBucket.ARCHIVED,
-            MemoryArchivePolicy.bucketAt(entry, completedAt + day)
+            MemoryArchivePolicy.bucketAt(entry, completedAt)
         )
     }
 
     @Test
-    fun `open entry never has an expiry`() {
+    fun `open entry remains current`() {
+        assertEquals(
+            MemoryBucket.CURRENT_OPEN,
+            MemoryArchivePolicy.bucketAt(entry.copy(completedAt = null), completedAt)
+        )
+    }
+
+    @Test
+    fun `completed entries never schedule an expiry`() {
         assertNull(
             MemoryArchivePolicy.nextExpiryAt(
-                listOf(entry.copy(completedAt = null)),
-                9_000_000L
+                listOf(entry),
+                completedAt
             )
         )
     }
