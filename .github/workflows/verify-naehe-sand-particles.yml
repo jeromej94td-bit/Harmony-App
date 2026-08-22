@@ -13,5 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Apply micro-sand particle implementation
+        run: python3 scripts/apply_naehe_sand_particles.py
+
       - name: Verify micro-sand particle requirements
         run: python3 scripts/verify_naehe_sand_particles.py
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon
+
+      - name: Upload verified QuizRunner
+        uses: actions/upload-artifact@v4
+        with:
+          name: naehe-sand-quizrunner
+          path: app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          if-no-files-found: error
