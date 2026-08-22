@@ -33,4 +33,23 @@ class TotShufflePolicyTest {
 
         assertTrue(frames.isEmpty())
     }
+
+    @Test
+    fun `transition plan ends on the real pair and keeps shuffle phase short`() {
+        val visiblePair = "Vanille" to "Schokolade"
+        val plan = buildTotShufflePlan(
+            allPairs = listOf(
+                visiblePair,
+                "Erdbeere" to "Pistazie",
+                "Mango" to "Zitrone"
+            ),
+            visiblePair = visiblePair,
+            random = java.util.Random(7)
+        )
+
+        assertEquals(3, plan.shuffleKeys.size)
+        assertTrue(plan.shuffleKeys.none { it == visiblePair.first || it == visiblePair.second })
+        assertEquals(visiblePair, plan.finalPair)
+        assertTrue(plan.shufflePhaseDurationMillis <= 550)
+    }
 }
