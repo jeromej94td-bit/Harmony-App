@@ -24,6 +24,8 @@ else:
 
     sample = r"$name · ${profile.partnerName} · {count} · %1$s · %d"
     protected, placeholders = module.protect(sample)
+    if any(ch.isalpha() for ch in protected if ch not in sample.replace("$name", "").replace("${profile.partnerName}", "").replace("{count}", "").replace("%1$s", "").replace("%d", "")):
+        fail("placeholder protection token contains alphabetic characters and can be transliterated")
     if any(token in protected for token in ("$name", "${profile.partnerName}", "{count}", "%1$s", "%d")):
         fail("not all dynamic placeholders are protected before translation")
     if module.restore(protected, placeholders) != sample:

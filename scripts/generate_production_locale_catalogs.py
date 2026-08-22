@@ -26,7 +26,7 @@ def protect(text: str) -> tuple[str, dict[str, str]]:
     placeholders: dict[str, str] = {}
 
     def repl(match: re.Match[str]) -> str:
-        token = f"HARMONYPLACEHOLDER{len(placeholders):02d}"
+        token = f"⟦{len(placeholders):02d}⟧"
         placeholders[token] = match.group(0)
         return token
 
