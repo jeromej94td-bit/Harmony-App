@@ -137,6 +137,69 @@ def _scan_bundled_option_labels(root: Path) -> list[VisibleCopyOccurrence]:
     return out
 
 
+def _scan_cuisine_pack_labels(root: Path) -> list[VisibleCopyOccurrence]:
+    path = root / "app/src/main/java/com/example/data/CuisinePackInstaller.kt"
+    if not path.exists():
+        return []
+    source = path.read_text(encoding="utf-8", errors="replace")
+    rel = path.relative_to(root).as_posix()
+    out: list[VisibleCopyOccurrence] = []
+
+    for match in re.finditer(r'\btitle\s*=\s*"((?:\\.|[^"\\])*)"', source):
+        text = normalize_visible_text(_decode_kotlin_string(match.group(1), False))
+        if text:
+            out.append(
+                VisibleCopyOccurrence(
+                    path=rel,
+                    line=_line_number(source, match.start(1)),
+                    presentation="product-content",
+                    german=text,
+                    placeholders=extract_placeholders(text),
+                )
+            )
+
+    for list_match in re.finditer(r'\bpairs\s*=\s*listOf\s*\(', source):
+        pos = list_match.end()
+        depth = 1
+        in_string = False
+        escaped = False
+        end = pos
+        while end < len(source) and depth:
+            ch = source[end]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif ch == "\\":
+                    escaped = True
+                elif ch == '"':
+                    in_string = False
+            else:
+                if ch == '"':
+                    in_string = True
+                elif ch == '(':
+                    depth += 1
+                elif ch == ')':
+                    depth -= 1
+            end += 1
+        body = source[pos:end - 1]
+        pair_re = re.compile(r'"((?:\\.|[^"\\])*)"\s+to\s+"((?:\\.|[^"\\])*)"')
+        for match in pair_re.finditer(body):
+            for group_index in (1, 2):
+                text = normalize_visible_text(_decode_kotlin_string(match.group(group_index), False))
+                if not text:
+                    continue
+                out.append(
+                    VisibleCopyOccurrence(
+                        path=rel,
+                        line=_line_number(source, pos + match.start(group_index)),
+                        presentation="product-content",
+                        german=text,
+                        placeholders=extract_placeholders(text),
+                    )
+                )
+    return out
+
+
 def discover_repository(root: Path) -> InventoryReport:
     root = root.resolve()
     base = discover_core_repository(root)
@@ -150,7 +213,9 @@ def discover_repository(root: Path) -> InventoryReport:
             exemption=occ.get("exemption"),
         )
         for occ in base.occurrences
+        if not occ["path"].endswith("CuisinePackInstaller.kt")
     ]
+    occurrences.extend(_scan_cuisine_pack_labels(root))
     occurrences.extend(_scan_non_compose_render_calls(root))
     occurrences.extend(_scan_bundled_option_labels(root))
     occurrences = _dedupe_occurrences(occurrences)
