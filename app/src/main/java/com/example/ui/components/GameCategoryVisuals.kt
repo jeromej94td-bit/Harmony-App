@@ -67,9 +67,19 @@ fun GameCategoryVisual(
     modifier: Modifier = Modifier
 ) {
     when (categoryId) {
-        "wer" -> PandaCategoryIcon(categoryId = "wer", accent = accent, modifier = modifier)
+        "wer" -> PandaArtworkIcon(
+            drawableRes = R.drawable.panda_thinking_harmony,
+            accent = accent,
+            animationLabel = "thinking_panda",
+            modifier = modifier
+        )
 
-        "nie" -> PandaCategoryIcon(categoryId = "nie", accent = accent, modifier = modifier)
+        "nie" -> PandaArtworkIcon(
+            drawableRes = R.drawable.panda_never_harmony,
+            accent = accent,
+            animationLabel = "never_panda",
+            modifier = modifier
+        )
 
         "tot" -> AnimatedHarmonyCards(accent = accent, modifier = modifier)
         "zeich" -> AnimatedPaletteCategoryIcon(accent = accent, modifier = modifier)
