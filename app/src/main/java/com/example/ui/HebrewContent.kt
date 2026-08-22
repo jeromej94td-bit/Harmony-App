@@ -576,7 +576,7 @@ internal val EXACT_HEBREW_CONTENT: Map<String, String> = mapOf(
     "Neues Spiel" to "משחק חדש",
     "Neugier" to "סקרנות",
     "New York" to "ניו יורק",
-    "New York, USA" to "ניו יורק, ארה\"ב",
+    "New York, USA" to "ניו יורק, ארה\\\"ב",
     "Nicht mein Fall" to "לא כוס התה שלי",
     "Nicht nötig, lieber klassisch bleiben" to "אין צורך, עדיף להישאר קלאסי",
     "Nichts — es passt so" to "כלום - זה מתאים",

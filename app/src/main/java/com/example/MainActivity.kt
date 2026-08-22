@@ -23,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.AppLanguage
@@ -62,7 +64,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val currentLanguage = AppLanguage.fromCode(uiState.appLanguage)
-            CompositionLocalProvider(LocalAppLanguage provides currentLanguage) {
+            CompositionLocalProvider(
+                LocalAppLanguage provides currentLanguage,
+                LocalLayoutDirection provides if (currentLanguage.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+            ) {
                 HarmonyTheme(darkTheme = uiState.isDarkMode) {
                     HarmonyApp(viewModel = viewModel)
                 }
