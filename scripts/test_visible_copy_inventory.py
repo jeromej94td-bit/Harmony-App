@@ -2,9 +2,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from visible_copy_canonical import discover_repository
+from visible_copy_canonical import discover_repository, extract_placeholders
 from visible_copy_inventory import (
-    extract_placeholders,
     normalize_visible_text,
     write_report,
 )
@@ -52,7 +51,7 @@ class VisibleCopyInventoryTests(unittest.TestCase):
             "ichhabenochnie",
         ):
             self.assertNotIn(technical, texts)
-        self.assertNotIn("Das oder das", texts)  # only appears in GeneratedHarmonyContent's source comment
+        self.assertNotIn("Das oder das", texts)
 
     def test_locale_specific_cuisine_installers_do_not_define_german_baseline(self):
         report = discover_repository(ROOT)
