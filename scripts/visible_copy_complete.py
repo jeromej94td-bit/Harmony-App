@@ -75,6 +75,68 @@ def _scan_non_compose_render_calls(root: Path) -> list[VisibleCopyOccurrence]:
     return out
 
 
+def _extract_map_labels(source: str, map_name: str) -> list[tuple[str, int]]:
+    marker = re.search(rf"\b{re.escape(map_name)}\b[^=]*=\s*linkedMapOf\s*\(", source)
+    if not marker:
+        return []
+    pos = marker.end()
+    depth = 1
+    in_string = False
+    escaped = False
+    end = pos
+    while end < len(source) and depth:
+        ch = source[end]
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+        else:
+            if ch == '"':
+                in_string = True
+            elif ch == '(':
+                depth += 1
+            elif ch == ')':
+                depth -= 1
+        end += 1
+    body = source[pos:end - 1]
+    pattern = re.compile(r'^\s*"((?:\\.|[^"\\])*)"\s+to\s+"(?:\\.|[^"\\])*",?\s*(?://.*)?$', re.MULTILINE)
+    result: list[tuple[str, int]] = []
+    for match in pattern.finditer(body):
+        absolute = pos + match.start(1)
+        result.append((_decode_kotlin_string(match.group(1), False), absolute))
+    return result
+
+
+def _scan_bundled_option_labels(root: Path) -> list[VisibleCopyOccurrence]:
+    path = root / "app/src/main/java/com/example/data/DriveTotAssetInstaller.kt"
+    if not path.exists():
+        return []
+    source = path.read_text(encoding="utf-8", errors="replace")
+    policy = load_json(root / "scripts/visible_copy_policy.json")
+    brands = set(policy.get("brand_literals", []))
+    rel = path.relative_to(root).as_posix()
+    out: list[VisibleCopyOccurrence] = []
+    for map_name in ("driveOptionToFile", "brandOptionToFile"):
+        for text, offset in _extract_map_labels(source, map_name):
+            normalized = normalize_visible_text(text)
+            if not normalized:
+                continue
+            out.append(
+                VisibleCopyOccurrence(
+                    path=rel,
+                    line=_line_number(source, offset),
+                    presentation="bundled-image-option",
+                    german=normalized,
+                    placeholders=extract_placeholders(normalized),
+                    exemption="brand" if normalized in brands else None,
+                )
+            )
+    return out
+
+
 def discover_repository(root: Path) -> InventoryReport:
     root = root.resolve()
     base = discover_core_repository(root)
@@ -90,6 +152,7 @@ def discover_repository(root: Path) -> InventoryReport:
         for occ in base.occurrences
     ]
     occurrences.extend(_scan_non_compose_render_calls(root))
+    occurrences.extend(_scan_bundled_option_labels(root))
     occurrences = _dedupe_occurrences(occurrences)
     units = _build_units(occurrences)
     metrics = {
