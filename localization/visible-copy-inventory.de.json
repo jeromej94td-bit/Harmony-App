@@ -3,17 +3,17 @@
     "android-string": 4,
     "android-xml": 1,
     "bundled-image-option": 71,
-    "compose-ui": 789,
+    "compose-ui": 738,
     "introspection-string": 58,
     "product-content": 490,
     "widget-notification": 5
   },
   "metrics": {
     "exempt_visible_units": 18,
-    "german_word_count": 4126,
-    "unique_translatable_units": 936,
-    "unique_visible_units_total": 954,
-    "visible_render_occurrences": 1418
+    "german_word_count": 3991,
+    "unique_translatable_units": 891,
+    "unique_visible_units_total": 909,
+    "visible_render_occurrences": 1367
   },
   "occurrences": [
     {
@@ -9354,30 +9354,6 @@
     },
     {
       "exemption": null,
-      "german": "nebula1Alpha",
-      "line": 121,
-      "path": "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "nebula2Alpha",
-      "line": 131,
-      "path": "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "nebula3Alpha",
-      "line": 141,
-      "path": "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "✨️ Das Verborgene in dir",
       "line": 205,
       "path": "app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt",
@@ -10544,32 +10520,8 @@
     },
     {
       "exemption": null,
-      "german": "Your photo",
-      "line": 128,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Partner photo",
-      "line": 135,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Partnerbild",
       "line": 135,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Invite code: HRM-8731 · everything unlocked",
-      "line": 148,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10592,32 +10544,8 @@
     },
     {
       "exemption": null,
-      "german": "Profile",
-      "line": 160,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Dein Name",
       "line": 167,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Your name",
-      "line": 167,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Partner",
-      "line": 168,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10632,14 +10560,6 @@
     },
     {
       "exemption": null,
-      "german": "Together since",
-      "line": 169,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Zusammen seit",
       "line": 169,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
@@ -10648,24 +10568,8 @@
     },
     {
       "exemption": null,
-      "german": "Partner simulator",
-      "line": 178,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Partner-Simulator",
       "line": 178,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Dark mode",
-      "line": 198,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10688,22 +10592,6 @@
     },
     {
       "exemption": null,
-      "german": "Edit",
-      "line": 222,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Language",
-      "line": 239,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Sprache",
       "line": 239,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
@@ -10714,30 +10602,6 @@
       "exemption": null,
       "german": "App-Sprache auswählen",
       "line": 246,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Select app language",
-      "line": 246,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Tap to collapse",
-      "line": 280,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Tap to select & scroll",
-      "line": 280,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10760,24 +10624,8 @@
     },
     {
       "exemption": null,
-      "german": "Close",
-      "line": 416,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Schließen",
       "line": 416,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Edit profile",
-      "line": 443,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10800,23 +10648,7 @@
     },
     {
       "exemption": null,
-      "german": "Your names and relationship start date.",
-      "line": 450,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Dein Name",
-      "line": 459,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Your name",
       "line": 459,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
@@ -10826,22 +10658,6 @@
       "exemption": null,
       "german": "Name Partnerin",
       "line": 476,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Partner's name",
-      "line": 476,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Together since (DD.MM.YYYY)",
-      "line": 493,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10864,33 +10680,9 @@
     },
     {
       "exemption": null,
-      "german": "Cancel",
-      "line": 517,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Save",
-      "line": 533,
-      "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Speichern",
       "line": 533,
       "path": "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Back",
-      "line": 377,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
     },
@@ -10912,32 +10704,8 @@
     },
     {
       "exemption": null,
-      "german": "This or That?",
-      "line": 385,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Back",
-      "line": 419,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Zurück",
       "line": 419,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Done!",
-      "line": 485,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -10962,38 +10730,10 @@
     },
     {
       "exemption": null,
-      "german": "Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together.",
-      "line": 492,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [
-        "${profile.partnerName}"
-      ],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "✎ Tap to answer",
-      "line": 617,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "✎ Tippe, um zu antworten",
       "line": 617,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Connect with ${profile.partnerName} to see the answer",
-      "line": 651,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [
-        "${profile.partnerName}"
-      ],
       "presentation": "compose-ui"
     },
     {
@@ -11016,32 +10756,8 @@
     },
     {
       "exemption": null,
-      "german": "Skip",
-      "line": 683,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Write your own answer",
-      "line": 683,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Überspringen",
       "line": 683,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Back",
-      "line": 733,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11056,24 +10772,8 @@
     },
     {
       "exemption": null,
-      "german": "Done",
-      "line": 745,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Fertig",
       "line": 745,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Leave quiz?",
-      "line": 764,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11088,14 +10788,6 @@
     },
     {
       "exemption": null,
-      "german": "Are you sure you want to leave? Your progress will be saved.",
-      "line": 771,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Möchtest du das Quiz wirklich verlassen? Dein bisheriger Fortschritt bleibt gespeichert.",
       "line": 771,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
@@ -11104,24 +10796,8 @@
     },
     {
       "exemption": null,
-      "german": "Keep playing",
-      "line": 787,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Weiter spielen",
       "line": 787,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Leave quiz",
-      "line": 795,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11144,23 +10820,7 @@
     },
     {
       "exemption": null,
-      "german": "Your own answer",
-      "line": 816,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Schreib frei, was dir wirklich dazu einfällt.",
-      "line": 823,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Write what truly comes to mind.",
       "line": 823,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
@@ -11176,14 +10836,6 @@
     },
     {
       "exemption": null,
-      "german": "Your answer...",
-      "line": 832,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Abbrechen",
       "line": 856,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
@@ -11192,32 +10844,8 @@
     },
     {
       "exemption": null,
-      "german": "Cancel",
-      "line": 856,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Save",
-      "line": 868,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Übernehmen",
       "line": 868,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Back",
-      "line": 1224,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11240,32 +10868,8 @@
     },
     {
       "exemption": null,
-      "german": "Results",
-      "line": 1274,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Discussion",
-      "line": 1292,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Diskussion",
       "line": 1292,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Answer similarity",
-      "line": 1314,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11280,24 +10884,8 @@
     },
     {
       "exemption": null,
-      "german": "Discuss your answers",
-      "line": 1386,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
       "german": "Diskutiert eure Antworten",
       "line": 1386,
-      "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
-      "placeholders": [],
-      "presentation": "compose-ui"
-    },
-    {
-      "exemption": null,
-      "german": "Did you discover surprising differences? Talk about why you prefer certain options!",
-      "line": 1393,
       "path": "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt",
       "placeholders": [],
       "presentation": "compose-ui"
@@ -11586,19 +11174,6 @@
     },
     {
       "exemption": null,
-      "german": "Done!",
-      "id": "de_03f4def94b34fb34",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ich habe noch nie einen Wutanfall bekommen (Rage Quit) und das Spiel beendet.",
       "id": "de_0452b34a1caff7be",
       "occurrence_count": 1,
@@ -11634,19 +11209,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Select app language",
-      "id": "de_05038f523df64f51",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
       ]
     },
     {
@@ -12230,19 +11792,6 @@
     },
     {
       "exemption": null,
-      "german": "Write what truly comes to mind.",
-      "id": "de_0fa63bd5ab0a88e2",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Erzähler erneut anhören",
       "id": "de_10312be2144f7bed",
       "occurrence_count": 1,
@@ -12702,32 +12251,6 @@
     },
     {
       "exemption": null,
-      "german": "Your own answer",
-      "id": "de_1b75c4c6b4fad9c2",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Partner's name",
-      "id": "de_1bc36739836402d4",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Wasser",
       "id": "de_1c339cdb4dff451c",
       "occurrence_count": 1,
@@ -12925,19 +12448,6 @@
     },
     {
       "exemption": null,
-      "german": "Dark mode",
-      "id": "de_20acd57f42db3137",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Kaninchen",
       "id": "de_2111e6d351353360",
       "occurrence_count": 2,
@@ -13061,19 +12571,6 @@
     },
     {
       "exemption": null,
-      "german": "Write your own answer",
-      "id": "de_22995bddff4422b7",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Übernehmen",
       "id": "de_22ae28bfeb9a312a",
       "occurrence_count": 1,
@@ -13167,19 +12664,6 @@
     },
     {
       "exemption": null,
-      "german": "Discuss your answers",
-      "id": "de_251960b192039553",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Aufnahmefehler. Bitte versuche es erneut.",
       "id": "de_25207140f40a57b5",
       "occurrence_count": 1,
@@ -13247,19 +12731,6 @@
     },
     {
       "exemption": null,
-      "german": "nebula2Alpha",
-      "id": "de_26692380efb3a877",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Innenpool",
       "id": "de_267ab4e9b68c3bc2",
       "occurrence_count": 1,
@@ -13269,19 +12740,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Tap to collapse",
-      "id": "de_267e938a0d9f74b5",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
       ]
     },
     {
@@ -13539,19 +12997,6 @@
     },
     {
       "exemption": null,
-      "german": "Your name",
-      "id": "de_2aafa7ddc337936c",
-      "occurrence_count": 2,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Wer würde eher eine Flasche öffnen, ohne einen Flaschenöffner zu benutzen?",
       "id": "de_2ade828711038c61",
       "occurrence_count": 1,
@@ -13682,19 +13127,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/ui/components/CommonUI.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Close",
-      "id": "de_2d6a01e441d5f8cd",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
       ]
     },
     {
@@ -13948,19 +13380,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Leave quiz?",
-      "id": "de_3256f2d000406556",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -14564,19 +13983,6 @@
     },
     {
       "exemption": null,
-      "german": "Your names and relationship start date.",
-      "id": "de_406ee85dc872888a",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Schreib frei, was dir wirklich dazu einfällt.",
       "id": "de_40886e50be250e8e",
       "occurrence_count": 1,
@@ -14919,19 +14325,6 @@
     },
     {
       "exemption": null,
-      "german": "✎ Tap to answer",
-      "id": "de_47f7b717c5953401",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Wir brauchen ewig",
       "id": "de_480931dbdfb131be",
       "occurrence_count": 1,
@@ -15155,20 +14548,6 @@
     },
     {
       "exemption": null,
-      "german": "Save",
-      "id": "de_4ada977548f4f98c",
-      "occurrence_count": 2,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Hochzeitssträuße",
       "id": "de_4b68d385a84eb055",
       "occurrence_count": 1,
@@ -15217,19 +14596,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Answer similarity",
-      "id": "de_4c8a38654b38a95e",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -15591,32 +14957,6 @@
     },
     {
       "exemption": null,
-      "german": "Done",
-      "id": "de_561d7c60b9517e0b",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Discussion",
-      "id": "de_56b9a48ccb5cb37d",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Neu aufnehmen",
       "id": "de_56fa309d0b5f2d11",
       "occurrence_count": 1,
@@ -15654,19 +14994,6 @@
       "source_paths": [
         "app/src/main/java/com/example/data/DriveTotAssetInstaller.kt",
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Skip",
-      "id": "de_572ba2259b149038",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -16146,19 +15473,6 @@
     },
     {
       "exemption": null,
-      "german": "Leave quiz",
-      "id": "de_61e9a9cb3bba535c",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ein romantisches Bild",
       "id": "de_62e4f6ebb27ef026",
       "occurrence_count": 1,
@@ -16586,19 +15900,6 @@
     },
     {
       "exemption": null,
-      "german": "Invite code: HRM-8731 · everything unlocked",
-      "id": "de_6caac40345c8ae36",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Neue Reise beginnen",
       "id": "de_6cb263a1eeb70514",
       "occurrence_count": 1,
@@ -16662,32 +15963,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Did you discover surprising differences? Talk about why you prefer certain options!",
-      "id": "de_6db739154f6cdac5",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Results",
-      "id": "de_6df7437075a0fdbf",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -17099,19 +16374,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Your photo",
-      "id": "de_7850eade972f746c",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
       ]
     },
     {
@@ -17699,19 +16961,6 @@
     },
     {
       "exemption": null,
-      "german": "Together since",
-      "id": "de_855fa5fe81a0ccc5",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Zu zweit reisen",
       "id": "de_8585c21098e74da4",
       "occurrence_count": 1,
@@ -17944,21 +17193,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/ui/screens/GamesScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Your answers are saved. Once ${profile.partnerName} finishes the pack, you will see both answers together.",
-      "id": "de_8ad1cbc8d652530b",
-      "occurrence_count": 1,
-      "placeholders": [
-        "${profile.partnerName}"
-      ],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -18933,19 +18167,6 @@
     },
     {
       "exemption": null,
-      "german": "nebula1Alpha",
-      "id": "de_9b8b3430de9dd59a",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Worauf freust du dich bei uns am meisten?",
       "id": "de_9bb400f85777893f",
       "occurrence_count": 1,
@@ -19078,19 +18299,6 @@
     },
     {
       "exemption": null,
-      "german": "Partner simulator",
-      "id": "de_9ec7b4d996327a53",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Gemischt",
       "id": "de_9f1b9eb753c5d8d2",
       "occurrence_count": 1,
@@ -19206,19 +18414,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/GeneratedHarmonyContent.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Edit",
-      "id": "de_a11c9241d884155a",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
       ]
     },
     {
@@ -19621,19 +18816,6 @@
     },
     {
       "exemption": null,
-      "german": "Language",
-      "id": "de_a8cecea7e0c136de",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ein ungewöhnliches Gericht",
       "id": "de_a8e695c3a82c0c36",
       "occurrence_count": 1,
@@ -19710,19 +18892,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Are you sure you want to leave? Your progress will be saved.",
-      "id": "de_a9b5a2ff8aa98d72",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -20528,19 +19697,6 @@
     },
     {
       "exemption": null,
-      "german": "Together since (DD.MM.YYYY)",
-      "id": "de_b96dda4657d29ade",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Ich habe noch nie behauptet, ich sei zu alt für Disney-Filme (und es heimlich genossen).",
       "id": "de_b9e979cfe7c04158",
       "occurrence_count": 1,
@@ -20874,19 +20030,6 @@
     },
     {
       "exemption": null,
-      "german": "This or That?",
-      "id": "de_c0234b1a3c55fb39",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Urlaub",
       "id": "de_c03586ae7f4e81c4",
       "occurrence_count": 1,
@@ -21168,19 +20311,6 @@
     },
     {
       "exemption": null,
-      "german": "Partner photo",
-      "id": "de_c4245eefd8025b74",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Alle Fragen beantwortet",
       "id": "de_c4365e74f17b3631",
       "occurrence_count": 1,
@@ -21255,32 +20385,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Edit profile",
-      "id": "de_c5905ccb151a3c18",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Keep playing",
-      "id": "de_c5aad85521dad5a9",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -21432,21 +20536,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Connect with ${profile.partnerName} to see the answer",
-      "id": "de_c9225297717ea4f4",
-      "occurrence_count": 1,
-      "placeholders": [
-        "${profile.partnerName}"
-      ],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -21642,46 +20731,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Partner",
-      "id": "de_cd155a61e550e465",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Cancel",
-      "id": "de_cd4846163eb1f5fb",
-      "occurrence_count": 2,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt",
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Back",
-      "id": "de_cde91ccd93bc5df8",
-      "occurrence_count": 4,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -22089,19 +21138,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/ui/screens/ChatScreen.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "Your answer...",
-      "id": "de_d67c4ead1e9c7575",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"
       ]
     },
     {
@@ -23087,19 +22123,6 @@
     },
     {
       "exemption": null,
-      "german": "Profile",
-      "id": "de_eb67558b9841fcd3",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "Wer würde eher ein spontanes Karaoke-Battle starten?",
       "id": "de_eb7e2da2f740dd38",
       "occurrence_count": 1,
@@ -23743,19 +22766,6 @@
     },
     {
       "exemption": null,
-      "german": "Tap to select & scroll",
-      "id": "de_fa19df93dd155fcf",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"
-      ]
-    },
-    {
-      "exemption": null,
       "german": "RnB / Soul",
       "id": "de_fa829c220ee6e6d9",
       "occurrence_count": 1,
@@ -23791,19 +22801,6 @@
       ],
       "source_paths": [
         "app/src/main/java/com/example/data/model/Models.kt"
-      ]
-    },
-    {
-      "exemption": null,
-      "german": "nebula3Alpha",
-      "id": "de_fb08fca3a20e9bf5",
-      "occurrence_count": 1,
-      "placeholders": [],
-      "presentations": [
-        "compose-ui"
-      ],
-      "source_paths": [
-        "app/src/main/java/com/example/ui/introspection/IntrospectionPortal.kt"
       ]
     },
     {
