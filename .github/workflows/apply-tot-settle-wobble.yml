@@ -1,0 +1,45 @@
+name: Apply Tot Settle Wobble
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/apply_tot_settle_wobble.py'
+      - '.github/workflows/apply-tot-settle-wobble.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Apply exact animation patch
+        run: python3 scripts/apply_tot_settle_wobble.py
+      - name: Verify settle wobble contract
+        run: python3 scripts/verify_tot_settle_wobble.py
+      - name: Verify old final converge stays removed
+        run: python3 scripts/verify_tot_no_final_reentry.py
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon
+      - name: Commit verified production change and remove helper
+        run: |
+          git config user.name "harmony-animation-fix-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm scripts/apply_tot_settle_wobble.py .github/workflows/apply-tot-settle-wobble.yml
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          git commit -m "feat: add natural 3D settle after Das-oder-das shuffle"
+          git push origin HEAD:main
