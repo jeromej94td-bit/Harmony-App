@@ -198,6 +198,7 @@ object DriveTotAssetInstaller {
     fun install(context: Context): Map<String, String> {
         CuisinePackInstaller.install(context)
         applyEngagementRingPack()
+        ExtraBrandPairsInstaller.apply()
 
         val outputDir = File(context.filesDir, OUTPUT_DIR).apply { mkdirs() }
         val installMarker = File(outputDir, INSTALL_MARKER)
