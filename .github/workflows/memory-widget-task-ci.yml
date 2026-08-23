@@ -29,5 +29,6 @@ jobs:
             --tests 'com.example.widget.MemoryWidgetLogicTest' \
             --tests 'com.example.widget.MemoryWidgetPreferencesTest' \
             --tests 'com.example.widget.MemoryWidgetIntentsTest' \
+            --tests 'com.example.widget.MemoryWidgetProviderTest' \
             --tests 'com.example.ui.memory.MemoryViewModelTest' \
             --no-daemon
