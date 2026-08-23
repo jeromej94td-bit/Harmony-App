@@ -15,6 +15,8 @@ import com.example.data.model.AnswerEntity
 import com.example.data.model.ChatMessageEntity
 import com.example.data.model.CoupleStatsEntity
 import com.example.data.model.MomentEntity
+import com.example.data.model.MemoryCategoryEntity
+import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.ProfileEntity
 import com.example.data.model.SharedPicEntity
 import kotlinx.coroutines.flow.Flow
@@ -92,10 +94,12 @@ interface CoupleStatsDao {
         ChatMessageEntity::class,
         SharedPicEntity::class,
         MomentEntity::class,
-        CoupleStatsEntity::class
+        CoupleStatsEntity::class,
+        MemoryCategoryEntity::class,
+        MemoryEntryEntity::class
     ],
-    version = 2,
-    exportSchema = false
+    version = 4,
+    exportSchema = true
 )
 abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
@@ -104,6 +108,7 @@ abstract class HarmonyDatabase : RoomDatabase() {
     abstract fun sharedPicDao(): SharedPicDao
     abstract fun momentDao(): MomentDao
     abstract fun coupleStatsDao(): CoupleStatsDao
+    abstract fun memoryDao(): MemoryDao
 
     companion object {
         @Volatile
@@ -116,7 +121,7 @@ abstract class HarmonyDatabase : RoomDatabase() {
                     HarmonyDatabase::class.java,
                     "harmony_database"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                 INSTANCE = instance
                 instance
@@ -141,6 +146,56 @@ abstract class HarmonyDatabase : RoomDatabase() {
                         timestamp INTEGER NOT NULL
                     )
                     """.trimIndent()
+                )
+            }
+        }
+
+        internal val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS memory_categories (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        systemKey TEXT,
+                        customName TEXT,
+                        colorKey TEXT NOT NULL,
+                        iconKey TEXT NOT NULL,
+                        sortOrder INTEGER NOT NULL,
+                        createdAt INTEGER NOT NULL,
+                        updatedAt INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS memory_entries (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        categoryId TEXT NOT NULL,
+                        kind TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        body TEXT,
+                        url TEXT,
+                        previewTitle TEXT,
+                        previewDescription TEXT,
+                        previewImageUrl TEXT,
+                        previewSiteName TEXT,
+                        previewFetchedAt INTEGER,
+                        createdAt INTEGER NOT NULL,
+                        updatedAt INTEGER NOT NULL,
+                        completedAt INTEGER,
+                        FOREIGN KEY(categoryId) REFERENCES memory_categories(id) ON UPDATE NO ACTION ON DELETE RESTRICT
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_memory_entries_categoryId ON memory_entries(categoryId)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_memory_entries_completedAt ON memory_entries(completedAt)")
+            }
+        }
+
+        internal val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE memory_categories ADD COLUMN isVisible INTEGER NOT NULL DEFAULT 1"
                 )
             }
         }

@@ -1,0 +1,96 @@
+name: Universal intro PR render
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: universal-intro-pr-render
+  cancel-in-progress: true
+
+jobs:
+  render-integrate-test:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'feature/universal-studios-intro' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/universal-studios-intro
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Prepare panda asset
+        run: |
+          mkdir -p tools/remotion/universal-intro/public
+          cp app/src/main/res/drawable/panda_thinking_harmony.png tools/remotion/universal-intro/public/panda.png
+
+      - name: Install Remotion
+        working-directory: tools/remotion/universal-intro
+        run: npm install --no-audit --no-fund
+
+      - name: Render intro
+        working-directory: tools/remotion/universal-intro
+        run: npm run render
+
+      - name: Apply Android integration
+        run: python .github/scripts/apply_universal_intro.py
+
+      - name: Bundle and validate video
+        run: |
+          mkdir -p app/src/main/res/raw
+          cp tools/remotion/universal-intro/out/universal_studios_intro.mp4 app/src/main/res/raw/universal_studios_intro.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration -of default=noprint_wrappers=1 app/src/main/res/raw/universal_studios_intro.mp4
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 app/src/main/res/raw/universal_studios_intro.mp4)" = "720"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 app/src/main/res/raw/universal_studios_intro.mp4)" = "1280"
+
+      - name: Create verification images
+        run: |
+          mkdir -p tools/remotion/universal-intro/out/verification
+          ffmpeg -y -i app/src/main/res/raw/universal_studios_intro.mp4 -vf "fps=1,scale=180:-1,tile=4x2" -frames:v 1 tools/remotion/universal-intro/out/verification/contact-sheet.png
+          ffmpeg -y -ss 6.55 -i app/src/main/res/raw/universal_studios_intro.mp4 -frames:v 1 tools/remotion/universal-intro/out/verification/final-frame.png
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Run contract tests
+        run: gradle :app:testDebugUnitTest --tests com.example.ui.UniversalStudiosIntroContractTest --stacktrace
+
+      - name: Compile app
+        run: gradle :app:compileDebugKotlin --stacktrace
+
+      - name: Upload verification artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-studios-intro-verification
+          path: |
+            app/src/main/res/raw/universal_studios_intro.mp4
+            tools/remotion/universal-intro/out/verification/contact-sheet.png
+            tools/remotion/universal-intro/out/verification/final-frame.png
+          if-no-files-found: error
+
+      - name: Commit integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt app/src/main/res/raw/universal_studios_intro.mp4
+          git commit -m "feat: integrate rendered Universal intro"
+          git push origin HEAD:feature/universal-studios-intro

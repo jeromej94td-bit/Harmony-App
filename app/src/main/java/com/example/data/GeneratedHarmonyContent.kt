@@ -10,6 +10,34 @@ object GeneratedHarmonyContent {
     val CATEGORIES: List<GenCategory> = emptyList()
 
     val PACKS: List<GenPack> = listOf(
+        // DRIVE_TOT_RELEASE_BEGIN
+        // Drive catalogue integration. Existing Gourmet-Eis pack is intentionally untouched.
+        GenPack(id="reiseziele", title="Reiseziele", cat="tot", topic="reisen", type="tot", tags=listOf("dasoderdas","reisen"), pairs=listOf(
+            "Paris, Frankreich" to "Rom, Italien", "Bali, Indonesien" to "Santorini, Griechenland", "London, England" to "New York, USA",
+            "Malediven" to "Seychellen", "Tokyo, Japan" to "Dubai, VAE", "Venedig, Italien" to "Amsterdam, Niederlande", "Lappland, Finnland" to "Island",
+            "Miami, USA" to "Bangkok, Thailand", "Chicago, USA" to "Barcelona, Spanien", "Lissabon, Portugal" to "Kopenhagen, Dänemark", "Prag, Tschechien" to "Budapest, Ungarn")),
+        GenPack(id="traumhaus", title="Unser Traumhaus", cat="tot", topic="geld", type="tot", tags=listOf("dasoderdas"), pairs=listOf(
+            "Altbau mit Charme" to "Neubau mit Smart Home", "Offene Wohnküche" to "Separate Küche", "Prasselnder Kamin" to "Fußbodenheizung", "Großer Garten" to "Sonnige Dachterrasse",
+            "Stadtvilla" to "Landhaus", "Glasfassade" to "Natursteinfassade", "Penthouse mit Ausblick" to "Haus am See", "Minimalistisches Interieur" to "Landhausstil",
+            "Bibliothek" to "Heimkino", "Innenpool" to "Wellnessbad", "Große Fensterfront" to "Privater Innenhof", "Tiny House" to "Mehrgenerationenhaus")),
+        GenPack(id="aussen", title="Traumhaus Außenbereich", cat="tot", topic="geld", type="tot", tags=listOf("dasoderdas"), pairs=listOf(
+            "Großer Außenpool" to "Outdoor-Whirlpool", "Moderne Grillstation" to "Gemütliche Feuerstelle", "Eigenes Gemüsebeet" to "Bunte Blumenwiese", "Entspannte Hängematte" to "Stilvolles Outdoor-Sofa",
+            "Infinity-Pool" to "Naturteich", "Outdoor-Küche" to "Pizzaofen", "Pergola mit Lounge" to "Wintergarten", "Kräuterbeet" to "Obstgarten", "Dachgarten mit Lounge" to "Mediterraner Innenhof",
+            "Feuerstelle" to "Außenkamin", "Spielbereich für Kinder" to "Sportplatz", "Gewächshaus" to "Saunahaus")),
+        GenPack(id="aktivitaeten", title="Aktivitäten & Hobbys", cat="tot", topic="hobbys", type="tot", tags=listOf("dasoderdas","hobbys"), pairs=listOf(
+            "Wandern" to "Strandtag", "Konzert" to "Kino", "Kochkurs" to "Restaurant", "Museum" to "Freizeitpark",
+            "Töpfern" to "Klavier spielen", "Malen" to "Zeichnen", "Badminton" to "Mountainbike", "Bowling" to "Holzwerken", "Gitarre spielen" to "Tennis", "Brettspiele" to "Darts")),
+        GenPack(id="ringe", title="Verlobungsringe", cat="tot", topic="beziehung", type="tot", tags=listOf("hochzeit","dasoderdas"), pairs=listOf(
+            "Klassisch Solitär" to "Vintage verspielt", "Gelbgold" to "Weißgold", "Großer Stein" to "Filigran & schlicht", "Diamant" to "Farbedelstein", "Platin" to "Roségold",
+            "Drei-Stein-Ring" to "Moderner Solitär", "Ovaler Diamant" to "Runder Diamant", "Schmal & zart" to "Markant & breit", "Moissanit" to "Saphir",
+            "Vintage Art déco" to "Modern geometrisch", "Gravur innen" to "Diamanten im Band", "Ohne Stein" to "Statement-Ring")),
+        GenPack(id="getraenke", title="Getränke", cat="tot", topic="essen", type="tot", tags=listOf("dasoderdas","getraenke"), pairs=listOf(
+            "Cappuccino" to "Matcha-Latte", "Heiße Schokolade" to "Eistee", "Minzlimonade" to "Fruchtpunsch", "Bier" to "Rote-Bete-Saft",
+            "Coca-Cola" to "Fanta", "Orangensaft" to "Apfelsaft", "Kaffee" to "Tee")),
+        GenPack(id="tiere", title="Tiere", cat="tot", topic="kennen", type="tot", tags=listOf("dasoderdas","tiere"), pairs=listOf(
+            "Hund" to "Katze", "Singvogel" to "Pinguin", "Kaninchen" to "Otter", "Roter Panda" to "Fuchs", "Meerschweinchen" to "Giraffe",
+            "Löwe" to "Gorilla", "Meeresschildkröte" to "Igel", "Tiger" to "Wolf", "Adler" to "Delfin")),
+        // DRIVE_TOT_RELEASE_END
         GenPack(
             id = "custom_gourmet_eissorten",
             title = "Gourmet Eis-Sorten",

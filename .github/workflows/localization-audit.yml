@@ -1,0 +1,146 @@
+name: Localization Audit
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'app/src/main/java/com/example/ui/**'
+      - 'app/src/main/java/com/example/widget/**'
+      - 'app/src/main/java/com/example/MainActivity.kt'
+      - 'scripts/**'
+      - 'docs/superpowers/specs/**'
+      - 'docs/superpowers/plans/**'
+      - '.github/workflows/localization-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Verify generic generator regression
+        run: python3 scripts/verify_production_locale_generator.py
+      - name: Apply 41-locale scaffolding
+        run: python3 scripts/scaffold_41_new_locales.py
+      - name: Verify RTL app-language behavior
+        run: python3 scripts/verify_rtl_locales.py
+
+  generate-new-locales:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - batch: europe-1
+            codes: hu,ro,bg,uk,ru
+          - batch: europe-rtl
+            codes: el,tr,ar,he,fa
+          - batch: south-asia-1
+            codes: hi,bn,ur,ta,te
+          - batch: south-asia-2
+            codes: mr,gu,kn,ml,th
+          - batch: southeast-asia
+            codes: vi,id,ms,fil,my
+          - batch: asia-africa
+            codes: km,lo,sw,af,am
+          - batch: africa
+            codes: yo,ig,ha,zu,xh
+          - batch: africa-europe-2
+            codes: so,et,lv,lt,sl,sr
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Verify generic generator regression
+        run: python3 scripts/verify_production_locale_generator.py
+      - name: Apply 41-locale scaffolding
+        run: python3 scripts/scaffold_41_new_locales.py
+      - name: Generate locale batch
+        run: python3 scripts/generate_production_locale_catalogs.py --codes "${{ matrix.codes }}" --artifact-dir build/generated-locales
+      - name: Normalize generated Kotlin sources
+        run: |
+          python3 scripts/repair_generated_locale_sources.py
+          for file in build/generated-locales/*.kt; do
+            cp "app/src/main/java/com/example/ui/$(basename "$file")" "$file"
+          done
+      - name: Upload locale batch
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-locales-${{ matrix.batch }}
+          path: build/generated-locales/*.kt
+          if-no-files-found: error
+
+  audit:
+    needs: generate-new-locales
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Apply existing six-locale scaffolding
+        run: python3 scripts/scaffold_six_new_locales.py
+      - name: Apply 41-locale scaffolding
+        run: python3 scripts/scaffold_41_new_locales.py
+      - name: Download generated locale catalogs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: production-locales-*
+          path: build/generated-locales
+          merge-multiple: true
+      - name: Install generated locale catalogs
+        run: cp build/generated-locales/*.kt app/src/main/java/com/example/ui/
+      - name: Normalize Kotlin locale sources
+        run: |
+          python3 scripts/repair_generated_locale_sources.py
+          python3 scripts/repair_build_blockers.py
+      - name: Verify generator regression
+        run: python3 scripts/verify_production_locale_generator.py
+      - name: Verify pt-BR readiness
+        run: python3 scripts/verify_ptbr_ready.py
+      - name: Verify existing six locales
+        run: python3 scripts/verify_six_new_locales.py
+      - name: Verify 41 new locales readiness
+        run: python3 scripts/verify_41_new_locales.py
+      - name: Verify RTL locales
+        run: python3 scripts/verify_rtl_locales.py
+      - name: Audit existing source catalogs
+        run: python3 scripts/audit_localization.py
+      - name: Audit 41 source catalogs
+        run: python3 scripts/audit_41_locales.py
+      - name: Verify existing effective localization
+        run: python3 scripts/verify_localization_repair.py
+      - name: Persist generated locale implementation
+        run: |
+          git config user.name "harmony-localization-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/MainActivity.kt
+          git add app/src/main/java/com/example/ui/Language.kt
+          git add app/src/main/java/com/example/ui/TranslationCatalog.kt
+          git add app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt
+          git add app/src/main/java/com/example/ui/*Content.kt
+          if ! git diff --cached --quiet; then
+            git commit -m "Add 41 complete production locale catalogs"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon

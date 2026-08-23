@@ -2,16 +2,15 @@ package com.example.widget
 
 import android.content.Context
 
-/** Persisted settings for the home-screen PicShare widget. */
 data class PicShareWidgetSettings(
     val caption: String = "",
     val showCaption: Boolean = true,
     val showStatus: Boolean = true,
-    val shufflePictures: Boolean = true
+    val shufflePictures: Boolean = false
 )
 
 object PicShareWidgetPreferences {
-    private const val PREFS = "picshare_widget_preferences"
+    private const val PREFS = "picshare_widget_settings"
     private const val KEY_CAPTION = "caption"
     private const val KEY_SHOW_CAPTION = "show_caption"
     private const val KEY_SHOW_STATUS = "show_status"
@@ -23,7 +22,7 @@ object PicShareWidgetPreferences {
             caption = prefs.getString(KEY_CAPTION, "").orEmpty(),
             showCaption = prefs.getBoolean(KEY_SHOW_CAPTION, true),
             showStatus = prefs.getBoolean(KEY_SHOW_STATUS, true),
-            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, true)
+            shufflePictures = prefs.getBoolean(KEY_SHUFFLE, false)
         )
     }
 

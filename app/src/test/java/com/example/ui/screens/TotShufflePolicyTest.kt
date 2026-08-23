@@ -6,27 +6,62 @@ import org.junit.Test
 
 class TotShufflePolicyTest {
     @Test
-    fun `shuffle frames use only options from the active pack and exclude visible pair`() {
+    fun `shuffle transition ends on the next real pair instead of the outgoing pair`() {
+        val currentPair = "Vanille" to "Schokolade"
+        val nextPair = "Erdbeere" to "Pistazie"
         val frames = buildTotShuffleFrames(
             allPairs = listOf(
-                "Vanille" to "Schokolade",
-                "Erdbeere" to "Pistazie",
+                currentPair,
+                nextPair,
                 "Mango" to "Zitrone"
             ),
-            visiblePair = "Vanille" to "Schokolade",
+            visiblePair = currentPair,
             count = 4,
             random = java.util.Random(7)
         )
 
-        assertEquals(4, frames.size)
-        assertTrue(frames.all { it in setOf("Erdbeere", "Pistazie", "Mango", "Zitrone") })
+        assertEquals(listOf(nextPair.first, nextPair.second), frames.takeLast(2))
+        assertTrue(frames.dropLast(2).none { it in setOf(currentPair.first, currentPair.second, nextPair.first, nextPair.second) })
     }
 
     @Test
-    fun `shuffle frames do not invent images when pack has no alternative options`() {
+    fun `transition plan exposes exactly the next pair as its final visual state`() {
+        val currentPair = "Vanille" to "Schokolade"
+        val nextPair = "Erdbeere" to "Pistazie"
+        val plan = buildTotShufflePlan(
+            allPairs = listOf(
+                currentPair,
+                nextPair,
+                "Mango" to "Zitrone"
+            ),
+            visiblePair = currentPair,
+            random = java.util.Random(7)
+        )
+
+        assertEquals(nextPair, plan.finalPair)
+        assertTrue(plan.shuffleKeys.size <= 2)
+        assertTrue(plan.shuffleKeys.none { it in setOf(currentPair.first, currentPair.second, nextPair.first, nextPair.second) })
+    }
+
+    @Test
+    fun `last pair keeps itself as final state before results`() {
+        val firstPair = "Vanille" to "Schokolade"
+        val lastPair = "Mango" to "Zitrone"
+        val plan = buildTotShufflePlan(
+            allPairs = listOf(firstPair, lastPair),
+            visiblePair = lastPair,
+            random = java.util.Random(7)
+        )
+
+        assertEquals(lastPair, plan.finalPair)
+    }
+
+    @Test
+    fun `single pair pack does not invent shuffle images`() {
+        val pair = "Vanille" to "Schokolade"
         val frames = buildTotShuffleFrames(
-            allPairs = listOf("Vanille" to "Schokolade"),
-            visiblePair = "Vanille" to "Schokolade",
+            allPairs = listOf(pair),
+            visiblePair = pair,
             count = 4,
             random = java.util.Random(7)
         )

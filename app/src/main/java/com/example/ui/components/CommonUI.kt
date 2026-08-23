@@ -2,6 +2,7 @@ package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import com.example.util.LanguageManager
+import com.example.ui.LocalAppLanguage
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -16,6 +17,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +37,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
-import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -83,6 +85,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -102,6 +105,7 @@ import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyTeal
 import com.example.ui.theme.HarmonyText
+import com.example.R
 import com.example.ui.theme.topicAccentColor
 import com.example.data.model.QuestionPack
 import coil.compose.AsyncImage
@@ -119,6 +123,7 @@ fun HarmonyTopBar(
     partnerAvatarPath: String? = null,
     onProfileClick: () -> Unit,
     onRefresh: () -> Unit = {},
+    showMemoryMark: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -129,16 +134,30 @@ fun HarmonyTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "HARMONY",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 3.sp,
-            style = MaterialTheme.typography.titleLarge.copy(
-                brush = Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple))
-            ),
-            modifier = Modifier.testTag("brand_title")
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "HARMONY",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 3.sp,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    brush = Brush.horizontalGradient(listOf(HarmonyPink, HarmonyPurple))
+                ),
+                modifier = Modifier.testTag("brand_title")
+            )
+            if (showMemoryMark) {
+                Spacer(Modifier.width(8.dp))
+                Image(
+                    painter = painterResource(R.drawable.ic_launcher_full),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(34.dp)
+                        .clip(RoundedCornerShape(11.dp))
+                        .testTag("memory_topbar_logo")
+                )
+            }
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -228,8 +247,7 @@ fun HarmonyBottomNav(
             Triple(1, LanguageManager.tr("Spiele", appLanguage), Icons.Default.Psychology),
             Triple(2, LanguageManager.tr("Chat", appLanguage), Icons.Default.ChatBubble),
             Triple(3, LanguageManager.tr("Momente", appLanguage), Icons.Default.PhotoLibrary),
-            Triple(4, LanguageManager.tr("Profil", appLanguage), Icons.Default.Favorite),
-            Triple(5, "Dev", Icons.Default.Build)
+            Triple(4, LanguageManager.tr("Merken", appLanguage), Icons.Default.Bookmarks)
         )
 
         navItems.forEach { (index, label, icon) ->
@@ -284,21 +302,40 @@ fun HarmonyBottomNav(
 
 @Composable
 fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
-    val category = com.example.data.model.HarmonyPacksData.CATEGORIES.find { 
-        it.id.equals(tag, ignoreCase = true) || it.name.equals(tag, ignoreCase = true) 
+    val appLanguage = LocalAppLanguage.current.code
+    val category = com.example.data.model.HarmonyPacksData.CATEGORIES.find {
+        it.id.equals(tag, ignoreCase = true) || it.name.equals(tag, ignoreCase = true)
     }
-    
+
     val (bg, fg, label) = if (category != null) {
         val catColor = Color(category.tagColorHex)
-        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${category.name}")
+        val localizedCategory = LanguageManager.translateCategory(category, appLanguage)
+        Triple(catColor.copy(alpha = 0.22f), catColor, "${category.emoji} ${localizedCategory.name}")
     } else {
+        val normalized = when (tag.lowercase()) {
+            "unterhaltung", "entertainment" -> "Unterhaltung"
+            "dasoderdas", "tot", "oder" -> "Das oder das"
+            "hochzeit" -> "Hochzeit"
+            "kinder" -> "Kinder"
+            "reden" -> "Reden vor..."
+            "tiere" -> "Tiere"
+            "fürpaare", "fuerpaare" -> "Für Paare"
+            "party" -> "Party"
+            "wer", "werwuerde" -> "Wer würde eher?"
+            "ichhabenochnie" -> "Ich habe noch nie"
+            "essen" -> "Essen & Genuss"
+            "zuhause" -> "Zuhause & Alltag"
+            "games" -> "Spiele"
+            else -> tag.replaceFirstChar { it.uppercase() }
+        }
+        val localized = LanguageManager.tr(normalized, appLanguage)
         when (tag.lowercase()) {
-            "unterhaltung" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, "Unterhaltung")
-            "dasoderdas", "tot" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, "Das oder das")
-            "hochzeit" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, "Hochzeit")
-            "kinder" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, "Kinder")
-            "reden" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, "Reden vor...")
-            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, tag.replaceFirstChar { it.uppercase() })
+            "unterhaltung", "entertainment" -> Triple(HarmonyPink.copy(alpha = 0.16f), HarmonyPinkSoft, localized)
+            "dasoderdas", "tot", "oder" -> Triple(HarmonyPurple.copy(alpha = 0.18f), HarmonyPurpleLight, localized)
+            "hochzeit" -> Triple(HarmonyGold.copy(alpha = 0.16f), HarmonyGold, localized)
+            "kinder" -> Triple(HarmonyTeal.copy(alpha = 0.16f), HarmonyTeal, localized)
+            "reden" -> Triple(HarmonyBlue.copy(alpha = 0.16f), HarmonyBlue, localized)
+            else -> Triple(Color.White.copy(alpha = 0.12f), HarmonyText, localized)
         }
     }
 
@@ -310,11 +347,11 @@ fun CategoryTag(tag: String, modifier: Modifier = Modifier) {
             .padding(horizontal = 9.dp, vertical = 4.dp)
     ) {
         Text(
-            text = label.uppercase(Locale.GERMAN),
+            text = label.uppercase(Locale.ROOT),
             fontSize = 9.5.sp,
             fontWeight = FontWeight.ExtraBold,
             color = fg,
-            letterSpacing = 0.8.sp
+            letterSpacing = 0.4.sp
         )
     }
 }

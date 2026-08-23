@@ -114,6 +114,24 @@ private val QUESTION_FLOW_COLORS = listOf(
 )
 
 private const val QUESTION_FLOW_TWO_PI = 6.2831855f
+private const val PIZZA_BURGER_TENSION_QUESTION =
+    "Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?"
+
+private fun compactPizzaBurgerQuestion(rawQuestion: String, localizedQuestion: String): String {
+    if (rawQuestion != PIZZA_BURGER_TENSION_QUESTION) return localizedQuestion
+
+    val colonIndex = listOf(
+        localizedQuestion.indexOf(':'),
+        localizedQuestion.indexOf('：')
+    ).filter { it >= 0 }.minOrNull() ?: return localizedQuestion
+
+    val questionMark = localizedQuestion.lastOrNull { it == '?' || it == '؟' || it == '？' } ?: '?'
+    val stem = localizedQuestion
+        .substring(0, colonIndex)
+        .trim()
+        .trimEnd('?', '؟', '？')
+    return "$stem$questionMark"
+}
 
 private fun questionFlowColor(phase: Float): Color {
     val normalized = ((phase % 1f) + 1f) % 1f
@@ -230,9 +248,35 @@ private fun QuestionColorFlowBackdrop(
     }
 }
 
+private val CINEMATIC_GLITCH_GLYPHS = charArrayOf('█', '▓', '▒', '░', '▌', '▐', '◆', '◇')
+
+private fun cinematicGlitchText(text: String, amount: Float): String {
+    val strength = amount.coerceIn(0f, 1f)
+    if (strength < 0.035f) return text
+    val phase = (strength * 29f).toInt()
+    return buildString(text.length) {
+        text.forEachIndexed { index, char ->
+            if (char.isWhitespace()) {
+                append(char)
+            } else {
+                val gate = ((index * 37 + phase * 19) % 100) / 100f
+                if (gate < strength * 0.62f) {
+                    append(CINEMATIC_GLITCH_GLYPHS[(index + phase) % CINEMATIC_GLITCH_GLYPHS.size])
+                } else {
+                    append(char)
+                }
+            }
+        }
+    }
+}
+
+private fun cinematicLerp(start: Float, end: Float, fraction: Float): Float =
+    start + (end - start) * fraction.coerceIn(0f, 1f)
+
 @Composable
 private fun AnimatedQuestionCard(
     question: String,
+    glitchAmount: Float = 0f,
     modifier: Modifier = Modifier
 ) {
     val transition = rememberInfiniteTransition(label = "question_spotlight")
@@ -255,6 +299,8 @@ private fun AnimatedQuestionCard(
         label = "question_spotlight_glow"
     )
     val shape = RoundedCornerShape(24.dp)
+    val glitch = glitchAmount.coerceIn(0f, 1f)
+    val displayedQuestion = cinematicGlitchText(question, glitch)
 
     Box(
         modifier = modifier
@@ -287,13 +333,235 @@ private fun AnimatedQuestionCard(
             )
             .padding(horizontal = 19.dp, vertical = 21.dp)
     ) {
+        if (glitch > 0.025f) {
+            Text(
+                text = displayedQuestion,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF7CF7FF).copy(alpha = glitch * 0.48f),
+                lineHeight = 31.sp,
+                modifier = Modifier.graphicsLayer {
+                    translationX = 11f * glitch + sin(glitch * 41f) * 5f
+                    translationY = sin(glitch * 27f) * 3f
+                }
+            )
+            Text(
+                text = displayedQuestion,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFFFF63D6).copy(alpha = glitch * 0.42f),
+                lineHeight = 31.sp,
+                modifier = Modifier.graphicsLayer {
+                    translationX = -10f * glitch + sin(glitch * 33f) * 4f
+                    translationY = -sin(glitch * 23f) * 2.5f
+                }
+            )
+        }
         Text(
-            text = question,
+            text = displayedQuestion,
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold,
             color = Color.White,
-            lineHeight = 31.sp
+            lineHeight = 31.sp,
+            modifier = Modifier.graphicsLayer {
+                translationX = sin(glitch * 52f) * 4.5f * glitch
+                translationY = sin(glitch * 37f) * 1.8f * glitch
+            }
         )
+    }
+}
+
+@Composable
+private fun CinematicSandMaterialize(
+    animationKey: Any,
+    delayMillis: Int,
+    totalDurationMillis: Int,
+    particleCount: Int,
+    accentColor: Color,
+    flowDirection: Float,
+    shape: RoundedCornerShape,
+    modifier: Modifier = Modifier,
+    content: @Composable (Float) -> Unit
+) {
+    val progress = remember { Animatable(0f) }
+
+    LaunchedEffect(animationKey) {
+        progress.snapTo(0f)
+        if (delayMillis > 0) delay(delayMillis.toLong())
+        progress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = totalDurationMillis, easing = LinearEasing)
+        )
+    }
+
+    val p = progress.value.coerceIn(0f, 1f)
+    val contentAlpha = ((p - 0.72f) / 0.28f).coerceIn(0f, 1f)
+    val settle = FastOutSlowInEasing.transform(contentAlpha)
+    val glitchPulse = (0.5f + 0.5f * sin(p * 83f)).coerceIn(0f, 1f)
+    val glitchAmount = ((1f - settle) * (0.28f + glitchPulse * 0.34f)).coerceIn(0f, 0.62f)
+
+    Box(
+        modifier = modifier.graphicsLayer {
+            rotationY = flowDirection * 2.8f * (1f - settle)
+            rotationX = -1.8f * (1f - settle)
+            scaleX = 0.992f + settle * 0.008f
+            scaleY = 0.992f + settle * 0.008f
+            cameraDistance = 34f * density
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    alpha = contentAlpha
+                    translationX = sin(p * 69f) * 1.8f * (1f - settle)
+                }
+        ) {
+            content(glitchAmount)
+        }
+
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            if (p >= 0.995f) return@Canvas
+
+            fun hash01(index: Int, salt: Int): Float {
+                var x = index * 0x45D9F3B + salt * 0x119DE1F3
+                x = x xor (x ushr 16)
+                x *= 0x45D9F3B
+                x = x xor (x ushr 16)
+                return (x and 0x7FFFFFFF) / 2147483647f
+            }
+
+            fun smoothstep(value: Float): Float {
+                val t = value.coerceIn(0f, 1f)
+                return t * t * (3f - 2f * t)
+            }
+
+            val fadeToSurface = (1f - contentAlpha * 0.94f).coerceIn(0f, 1f)
+            val width = size.width.coerceAtLeast(1f)
+            val height = size.height.coerceAtLeast(1f)
+            val direction = if (flowDirection >= 0f) 1f else -1f
+
+            repeat(particleCount) { index ->
+                val h1 = hash01(index, 1)
+                val h2 = hash01(index, 2)
+                val h3 = hash01(index, 3)
+                val h4 = hash01(index, 4)
+                val h5 = hash01(index, 5)
+                val h6 = hash01(index, 6)
+                val h7 = hash01(index, 7)
+                val h8 = hash01(index, 8)
+
+                val borderParticle = h8 > 0.86f
+                val targetX: Float
+                val targetY: Float
+                if (borderParticle) {
+                    when ((h7 * 4f).toInt().coerceIn(0, 3)) {
+                        0 -> {
+                            targetX = h1 * width
+                            targetY = 1.1f + h2 * 1.8f
+                        }
+                        1 -> {
+                            targetX = h1 * width
+                            targetY = height - 1.1f - h2 * 1.8f
+                        }
+                        2 -> {
+                            targetX = 1.1f + h1 * 1.8f
+                            targetY = h2 * height
+                        }
+                        else -> {
+                            targetX = width - 1.1f - h1 * 1.8f
+                            targetY = h2 * height
+                        }
+                    }
+                } else {
+                    targetX = h1 * width
+                    targetY = h2 * height
+                }
+
+                val localDelay = h3 * 0.43f
+                val localRaw = ((p - localDelay) / (0.79f - localDelay).coerceAtLeast(0.14f)).coerceIn(0f, 1f)
+                val local = smoothstep(localRaw)
+                if (local <= 0f) return@repeat
+
+                val mostlyMainSide = if (h4 > 0.91f) -direction else direction
+                val startX = if (mostlyMainSide > 0f) {
+                    -width * (0.16f + h5 * 0.78f)
+                } else {
+                    width * (1.16f + h5 * 0.78f)
+                }
+                val startY = targetY + (h6 - 0.5f) * height * 1.45f
+
+                val inv = 1f - local
+                val turbulence = sin(index * 0.173f + p * 37f + h4 * 6.2831855f)
+                val crossTurbulence = cos(index * 0.117f + p * 29f + h5 * 6.2831855f)
+                val streamArc = sin(local * 3.1415927f + h6 * 6.2831855f)
+
+                var x = cinematicLerp(startX, targetX, local)
+                var y = cinematicLerp(startY, targetY, local)
+                x += turbulence * width * (0.035f + h7 * 0.055f) * inv
+                y += crossTurbulence * height * (0.045f + h8 * 0.075f) * inv
+                y += streamArc * height * 0.13f * inv * direction
+
+                val microGlitchGate = hash01(index, 10)
+                if (microGlitchGate > 0.965f && p in 0.34f..0.84f) {
+                    x += sin(p * 151f + index) * (4f + h5 * 12f)
+                }
+
+                val gradientMix = (targetX / width).coerceIn(0f, 1f)
+                val baseColor = lerp(accentColor, HarmonyPurple, 0.22f + gradientMix * 0.48f)
+                val particleColor = when {
+                    h7 > 0.975f -> Color.White
+                    h7 > 0.942f -> Color(0xFF7CF7FF)
+                    h7 > 0.915f -> Color(0xFFFF63D6)
+                    else -> baseColor
+                }
+
+                val arrivalBrightness = 0.30f + local * 0.70f
+                val alpha = (fadeToSurface * arrivalBrightness * (0.30f + h4 * 0.68f)).coerceIn(0f, 1f)
+                val particleRadius = 0.65f + hash01(index, 5) * 1.35f
+
+                if (local < 0.985f && index % 5 == 0) {
+                    val trailX = x - (targetX - startX) * 0.010f * inv
+                    val trailY = y - (targetY - startY) * 0.010f * inv
+                    drawCircle(
+                        color = particleColor.copy(alpha = alpha * 0.18f),
+                        radius = particleRadius * 0.72f,
+                        center = androidx.compose.ui.geometry.Offset(trailX, trailY)
+                    )
+                }
+
+                drawCircle(
+                    color = particleColor.copy(alpha = alpha),
+                    radius = particleRadius,
+                    center = androidx.compose.ui.geometry.Offset(x, y)
+                )
+
+                if (index % 149 == 0 && p in 0.38f..0.88f) {
+                    val streak = 3f + h6 * 8f
+                    drawLine(
+                        color = particleColor.copy(alpha = alpha * 0.38f),
+                        start = androidx.compose.ui.geometry.Offset(x - streak * direction, y),
+                        end = androidx.compose.ui.geometry.Offset(x + streak * 0.35f * direction, y),
+                        strokeWidth = 0.8f
+                    )
+                }
+            }
+
+            if (p in 0.48f..0.90f) {
+                val wave = ((p - 0.48f) / 0.42f).coerceIn(0f, 1f)
+                val waveX = if (direction > 0f) {
+                    cinematicLerp(-width * 0.12f, width * 1.08f, wave)
+                } else {
+                    cinematicLerp(width * 1.12f, -width * 0.08f, wave)
+                }
+                drawLine(
+                    color = Color.White.copy(alpha = (1f - contentAlpha) * 0.10f),
+                    start = androidx.compose.ui.geometry.Offset(waveX, 0f),
+                    end = androidx.compose.ui.geometry.Offset(waveX, height),
+                    strokeWidth = 0.7f
+                )
+            }
+        }
     }
 }
 
@@ -661,6 +929,9 @@ fun QuizRunnerScreen(
                         val q = pack.questions.getOrNull(activeRun.currentIndex)
                         val selectedAns = activeRun.currentAnswers[activeRun.currentIndex]
                         val scrollState = rememberScrollState()
+                        val isIntimacyPack = pack.id == "naehe" && pack.topic == "sex"
+                        val questionAnimationKey = "${pack.id}_${activeRun.currentIndex}_question"
+                        val imageChoiceKind = harmonyImageChoiceKind(pack.id, activeRun.currentIndex)
 
                         Column(
                             modifier = Modifier
@@ -671,42 +942,119 @@ fun QuizRunnerScreen(
                             CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "unterhaltung"))
                             Spacer(modifier = Modifier.height(14.dp))
 
-                            AnimatedQuestionCard(question = contentText(q?.q ?: ""))
-                            Spacer(modifier = Modifier.height(26.dp))
-
-                            
-                            val rawOptions = q?.options ?: emptyList()
-                            val processedOptions = rawOptions.map { 
-                                it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
+                            if (imageChoiceKind != null) {
+                                HarmonyImageChoiceQuestion(
+                                    kind = imageChoiceKind,
+                                    question = q?.q ?: "",
+                                    options = q?.options ?: emptyList(),
+                                    selectedAnswer = selectedAns,
+                                    onPick = { answer ->
+                                        triggerMiniVibration(context, 40L)
+                                        onPickAnswer(answer)
+                                    }
+                                )
+                            } else if (isIntimacyPack) {
+                                CinematicSandMaterialize(
+                                    animationKey = questionAnimationKey,
+                                    delayMillis = 0,
+                                    totalDurationMillis = 1_900,
+                                    particleCount = 3_000,
+                                    accentColor = HarmonyPink,
+                                    flowDirection = 1f,
+                                    shape = RoundedCornerShape(24.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) { glitchAmount ->
+                                    AnimatedQuestionCard(
+                                        question = compactPizzaBurgerQuestion(
+                                            rawQuestion = q?.q ?: "",
+                                            localizedQuestion = contentText(q?.q ?: "")
+                                        ),
+                                        glitchAmount = glitchAmount
+                                    )
+                                }
+                            } else {
+                                AnimatedQuestionCard(
+                                    question = compactPizzaBurgerQuestion(
+                                        rawQuestion = q?.q ?: "",
+                                        localizedQuestion = contentText(q?.q ?: "")
+                                    )
+                                )
                             }
-                            val isNie = pack.cat == "nie"
-                            val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
-                            val options = processedOptions + fallbackText
+                            Spacer(modifier = Modifier.height(if (imageChoiceKind == null) 26.dp else 12.dp))
 
-
-                            options.forEachIndexed { optIdx, optText ->
-                                val isOwn = optIdx == options.size - 1
-                                val isSelected = if (isOwn) {
-                                    selectedAns != null && selectedAns !in (q?.options ?: emptyList())
+                            if (imageChoiceKind == null) {
+                                val isPizzaBurgerTensionQuestion = q?.q == PIZZA_BURGER_TENSION_QUESTION
+                                val rawOptions = q?.options ?: emptyList()
+                                val processedOptions = rawOptions.map {
+                                    it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
+                                }
+                                val isNie = pack.cat == "nie"
+                                val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
+                                val options = if (isPizzaBurgerTensionQuestion) {
+                                    processedOptions.take(2)
                                 } else {
-                                    selectedAns == optText
+                                    processedOptions + fallbackText
                                 }
 
-                                QuizOptionButton(
-                                    number = optIdx + 1,
-                                    text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
-                                    isSelected = isSelected,
-                                    isOwn = isOwn,
-                                    onClick = {
-                                        triggerMiniVibration(context, 40L)
-                                        if (isOwn) {
-                                            onOpenOwnAnswerDialog(activeRun.currentIndex, null)
-                                        } else {
-                                            onPickAnswer(optText)
+                                options.forEachIndexed { optIdx, optText ->
+                                    val isOwn = !isPizzaBurgerTensionQuestion && optIdx == options.size - 1
+                                    val isSelected = if (isOwn) {
+                                        selectedAns != null && selectedAns !in (q?.options ?: emptyList())
+                                    } else {
+                                        selectedAns == optText
+                                    }
+
+                                    val optionButton: @Composable (Float) -> Unit = { glitchAmount ->
+                                        QuizOptionButton(
+                                            number = optIdx + 1,
+                                            text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
+                                            isSelected = isSelected,
+                                            isOwn = isOwn,
+                                            onClick = {
+                                                triggerMiniVibration(context, 40L)
+                                                if (isOwn) {
+                                                    onOpenOwnAnswerDialog(activeRun.currentIndex, null)
+                                                } else {
+                                                    onPickAnswer(optText)
+                                                }
+                                            },
+                                            glitchAmount = glitchAmount
+                                        )
+                                    }
+
+                                    if (isIntimacyPack) {
+                                        CinematicSandMaterialize(
+                                            animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
+                                            delayMillis = 760 + optIdx * 500,
+                                            totalDurationMillis = 2_400,
+                                            particleCount = 1_000,
+                                            accentColor = optionAccentColor(optIdx + 1),
+                                            flowDirection = if (optIdx % 2 == 0) 1f else -1f,
+                                            shape = RoundedCornerShape(18.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(bottom = 11.dp)
+                                        ) { glitchAmount ->
+                                            optionButton(glitchAmount)
                                         }
-                                    },
-                                    modifier = Modifier.padding(bottom = 11.dp)
-                                )
+                                    } else {
+                                        QuizOptionButton(
+                                            number = optIdx + 1,
+                                            text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
+                                            isSelected = isSelected,
+                                            isOwn = isOwn,
+                                            onClick = {
+                                                triggerMiniVibration(context, 40L)
+                                                if (isOwn) {
+                                                    onOpenOwnAnswerDialog(activeRun.currentIndex, null)
+                                                } else {
+                                                    onPickAnswer(optText)
+                                                }
+                                            },
+                                            modifier = Modifier.padding(bottom = 11.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -876,6 +1224,14 @@ fun QuizRunnerScreen(
     }
 }
 
+private fun optionAccentColor(number: Int): Color = when (number) {
+    1 -> Color(0xFF4AA8FF)
+    2 -> Color(0xFFFFC857)
+    3 -> Color(0xFF4ED69A)
+    4 -> Color(0xFFA978FF)
+    else -> Color(0xFFFF6B9D)
+}
+
 @Composable
 fun QuizOptionButton(
     number: Int,
@@ -883,15 +1239,10 @@ fun QuizOptionButton(
     isSelected: Boolean,
     isOwn: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    glitchAmount: Float = 0f
 ) {
-    val optionAccent = when (number) {
-        1 -> Color(0xFF4AA8FF)
-        2 -> Color(0xFFFFC857)
-        3 -> Color(0xFF4ED69A)
-        4 -> Color(0xFFA978FF)
-        else -> Color(0xFFFF6B9D)
-    }
+    val optionAccent = optionAccentColor(number)
     val optionLabel = ('A'.code + number - 1).toChar().toString()
     val transition = rememberInfiniteTransition(label = "quiz_option_color_$number")
     val glow by transition.animateFloat(
@@ -907,6 +1258,14 @@ fun QuizOptionButton(
         label = "quiz_option_glow_$number"
     )
     val shape = RoundedCornerShape(18.dp)
+    val glitch = glitchAmount.coerceIn(0f, 1f)
+    val displayedText = cinematicGlitchText(text, glitch)
+    val displayedLabel = if (glitch > 0.42f && ((number * 7 + (glitch * 23f).toInt()) % 3 != 0)) {
+        CINEMATIC_GLITCH_GLYPHS[(number + (glitch * 17f).toInt()) % CINEMATIC_GLITCH_GLYPHS.size].toString()
+    } else {
+        optionLabel
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -947,22 +1306,73 @@ fun QuizOptionButton(
                     .border(1.dp, Color.White.copy(alpha = 0.50f + glow * 0.30f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
+                if (glitch > 0.03f) {
+                    Text(
+                        text = displayedLabel,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF7CF7FF).copy(alpha = glitch * 0.55f),
+                        modifier = Modifier.graphicsLayer { translationX = 4.5f * glitch }
+                    )
+                    Text(
+                        text = displayedLabel,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFFFF63D6).copy(alpha = glitch * 0.46f),
+                        modifier = Modifier.graphicsLayer { translationX = -4f * glitch }
+                    )
+                }
                 Text(
-                    text = optionLabel,
+                    text = displayedLabel,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier.graphicsLayer {
+                        translationX = sin(glitch * 43f) * 2f * glitch
+                    }
                 )
             }
             Spacer(modifier = Modifier.width(13.dp))
-            Text(
-                text = text,
-                fontSize = 14.5.sp,
-                fontWeight = FontWeight.Medium,
-                color = if (isOwn && !isSelected) Color.White.copy(alpha = 0.72f) else Color.White,
-                fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal,
-                lineHeight = 19.sp
-            )
+            Box(modifier = Modifier.weight(1f)) {
+                if (glitch > 0.025f) {
+                    Text(
+                        text = displayedText,
+                        fontSize = 14.5.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF7CF7FF).copy(alpha = glitch * 0.43f),
+                        fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal,
+                        lineHeight = 19.sp,
+                        modifier = Modifier.graphicsLayer {
+                            translationX = 8f * glitch + sin(glitch * 39f) * 3f
+                            translationY = sin(glitch * 24f) * 2f
+                        }
+                    )
+                    Text(
+                        text = displayedText,
+                        fontSize = 14.5.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFFFF63D6).copy(alpha = glitch * 0.37f),
+                        fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal,
+                        lineHeight = 19.sp,
+                        modifier = Modifier.graphicsLayer {
+                            translationX = -7f * glitch + sin(glitch * 31f) * 2.5f
+                            translationY = -sin(glitch * 28f) * 1.8f
+                        }
+                    )
+                }
+                Text(
+                    text = displayedText,
+                    fontSize = 14.5.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = if (isOwn && !isSelected) Color.White.copy(alpha = 0.72f) else Color.White,
+                    fontStyle = if (isOwn) FontStyle.Italic else FontStyle.Normal,
+                    lineHeight = 19.sp,
+                    modifier = Modifier.graphicsLayer {
+                        translationX = sin(glitch * 51f) * 3.5f * glitch
+                        translationY = sin(glitch * 34f) * 1.4f * glitch
+                    }
+                )
+            }
         }
     }
 }
@@ -992,10 +1402,42 @@ fun TotCardPairView(
     val oderScale = remember { Animatable(1f) }
 
     var isAnimating by remember { mutableStateOf(false) }
+    var skipNextTotEntrance by remember { mutableStateOf(false) }
     var topShuffleKey by remember(firstText, secondText) { mutableStateOf(firstText) }
     var bottomShuffleKey by remember(firstText, secondText) { mutableStateOf(secondText) }
 
     LaunchedEffect(firstText, secondText) {
+        if (skipNextTotEntrance) {
+            topOffsetY.snapTo(0f)
+            bottomOffsetY.snapTo(0f)
+            topTilt.snapTo(0f)
+            bottomTilt.snapTo(0f)
+            oderScale.snapTo(1f)
+            topFlip.snapTo(0f)
+            bottomFlip.snapTo(0f)
+            skipNextTotEntrance = false
+
+            // Continue the final shuffle momentum on the same rotationY axis only.
+            // No extra Z tilt or positional wobble: just a small, damped rotational settle.
+            coroutineScope {
+                launch { topFlip.animateTo(2.0f, tween(120, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-2.0f, tween(120, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topFlip.animateTo(-1.0f, tween(150, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(1.0f, tween(150, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topFlip.animateTo(0.35f, tween(130, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(-0.35f, tween(130, easing = FastOutSlowInEasing)) }
+            }
+            coroutineScope {
+                launch { topFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+                launch { bottomFlip.animateTo(0f, tween(180, easing = FastOutSlowInEasing)) }
+            }
+            return@LaunchedEffect
+        }
+
         topOffsetY.snapTo(-windDistancePx)
         bottomOffsetY.snapTo(windDistancePx)
         topTilt.snapTo(0f)
@@ -1030,18 +1472,13 @@ fun TotCardPairView(
                     launch { bottomFlip.animateTo(0f, tween(115, easing = FastOutSlowInEasing)) }
                 }
             }
-            coroutineScope {
-                launch { topOffsetY.animateTo(52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { bottomOffsetY.animateTo(-52f, tween(540, easing = CubicBezierEasing(0.16f, 0.78f, 0.2f, 1f))) }
-                launch { topTilt.animateTo(-3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { bottomTilt.animateTo(3.6f, tween(540, easing = FastOutSlowInEasing)) }
-                launch { oderScale.animateTo(0f, tween(260, easing = FastOutSlowInEasing)) }
-            }
-            delay(360)
+            // The shuffle already ends on the incoming pair. Keep it in place.
+            // Do not converge the cards or replay the wind entrance after the index update.
+            skipNextTotEntrance = true
             onPick(option)
-            topShuffleKey = firstText
-            bottomShuffleKey = secondText
             isAnimating = false
+            // tot_settle_wobble: the incoming pair is already clickable while its tiny
+            // inertial settle runs in the keyed LaunchedEffect above.
         }
     }
 
