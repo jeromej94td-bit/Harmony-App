@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.core.content.ContextCompat
 import coil.Coil
 import coil.ImageLoader
-import com.example.ui.components.MarkenAlltagImages
 
 /**
  * Installs Coil before the first Activity is created.
@@ -20,11 +19,6 @@ class ReliableImageLoaderProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         val appContext = context?.applicationContext ?: return false
-
-        // Register the local "Marken & Alltag" artwork before the UI renders.
-        // DeveloperDataManager may later overwrite individual keys with user-selected images.
-        MarkenAlltagImages.installAsDefaults()
-
         val fallback = ContextCompat.getDrawable(appContext, R.drawable.tot_image_fallback)
 
         Coil.setImageLoader(
