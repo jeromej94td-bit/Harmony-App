@@ -1,4 +1,4 @@
-name: Memory Widget Task CI
+name: Memory Widget Final Gate
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  task-tests:
+  final-gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,16 +23,28 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.1'
-      - name: Run Memory widget task tests
+      - name: Run all Memory widget and ViewModel tests
         run: |
           gradle :app:testDebugUnitTest \
-            --tests 'com.example.widget.MemoryWidgetLogicTest' \
-            --tests 'com.example.widget.MemoryWidgetPreferencesTest' \
-            --tests 'com.example.widget.MemoryWidgetIntentsTest' \
-            --tests 'com.example.widget.MemoryWidgetProviderTest' \
-            --tests 'com.example.widget.MemoryWidgetRegistrationTest' \
+            --tests 'com.example.widget.*' \
+            --tests 'com.example.ui.memory.MemoryViewModelTest' \
             --no-daemon
-      - name: Process Memory widget resources
+      - name: Run existing Memory regression tests
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests 'com.example.ui.MemoryPinboardUiTest' \
+            --tests 'com.example.ui.MemoryPinboardScreenshotTest' \
+            --tests 'com.example.data.db.MemoryMigrationTest' \
+            --no-daemon
+      - name: Process Android resources
         run: gradle :app:processDebugResources --no-daemon
-      - name: Compile Memory widget source
+      - name: Compile debug Kotlin
         run: gradle :app:compileDebugKotlin --no-daemon
+      - name: Assemble installable debug APK
+        run: gradle :app:assembleDebug --no-daemon
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: harmony-memory-widget-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
