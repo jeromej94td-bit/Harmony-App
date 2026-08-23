@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel as composeViewModel
 import com.example.data.OkHttpLinkPreviewResolver
@@ -361,6 +363,26 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         onCloseOwnAnswerDialog = { viewModel.closeOwnAnswerDialog() },
                         onSaveOwnAnswer = { ansText -> viewModel.saveOwnAnswer(ansText) }
                     )
+
+                    if (
+                        activeRun.pack.type == "tot" &&
+                        !activeRun.isFinished &&
+                        !uiState.isExitConfirmOpen &&
+                        !uiState.isOwnAnswerDialogOpen
+                    ) {
+                        val totalQuestions = activeRun.pack.pairs.size.coerceAtLeast(1)
+                        val currentQuestion = (activeRun.currentIndex + 1).coerceIn(1, totalQuestions)
+                        androidx.compose.material3.Text(
+                            text = "$currentQuestion/$totalQuestions",
+                            fontSize = 12.sp,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                            color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.92f),
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .statusBarsPadding()
+                                .padding(top = 19.dp, end = 18.dp)
+                        )
+                    }
                 }
 
                 if (isIntrospectionOpen) {
