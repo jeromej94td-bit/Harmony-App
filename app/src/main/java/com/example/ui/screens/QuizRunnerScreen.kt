@@ -927,7 +927,7 @@ fun QuizRunnerScreen(
                                 CinematicSandMaterialize(
                                     animationKey = questionAnimationKey,
                                     delayMillis = 0,
-                                    totalDurationMillis = 3_200,
+                                    totalDurationMillis = 1_900,
                                     particleCount = 3_000,
                                     accentColor = HarmonyPink,
                                     flowDirection = 1f,
@@ -983,7 +983,7 @@ fun QuizRunnerScreen(
                                 if (isIntimacyPack) {
                                     CinematicSandMaterialize(
                                         animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
-                                        delayMillis = 760 + optIdx * 210,
+                                        delayMillis = 760 + optIdx * 500,
                                         totalDurationMillis = 2_400,
                                         particleCount = 1_000,
                                         accentColor = optionAccentColor(optIdx + 1),
