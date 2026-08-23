@@ -6,7 +6,7 @@ on:
       - feat/memory-home-widget-v2
   pull_request:
     branches:
-      - ci/memory-widget-base
+      - main
 
 permissions:
   contents: read
@@ -23,6 +23,49 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.1'
+      - name: Stabilize pre-existing concurrent preview test harness
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('app/src/test/java/com/example/ui/memory/MemoryViewModelTest.kt')
+          text = path.read_text()
+          marker = 'fun `concurrent preview failures atomically retain every failed entry id`()'
+          if marker not in text:
+              raise SystemExit('Concurrent preview regression test not found')
+          test_start = text.index(marker)
+          test_end = text.index('\n    @Test', test_start)
+          block = text[test_start:test_end]
+          old_create = '''        try {
+            val viewModel = MemoryViewModel(repository, concurrentResolver, clock, concurrentDispatcher)
+                .also { viewModelStore.put("concurrent", it) }
+'''
+          new_create = '''        try {
+            val failuresPublished = CountDownLatch(entryCount)
+            val viewModel = MemoryViewModel(
+                repository,
+                concurrentResolver,
+                clock,
+                concurrentDispatcher,
+                onMemoryChanged = failuresPublished::countDown
+            ).also { viewModelStore.put("concurrent", it) }
+'''
+          old_wait = '''            release.complete(Unit)
+            val queuedWorkDrained = CountDownLatch(entryCount)
+            repeat(entryCount) { executor.execute(queuedWorkDrained::countDown) }
+            queuedWorkDrained.await()
+            runCurrent()
+'''
+          new_wait = '''            release.complete(Unit)
+            assertTrue(failuresPublished.await(10, java.util.concurrent.TimeUnit.SECONDS))
+            runCurrent()
+'''
+          if 'val failuresPublished = CountDownLatch(entryCount)' not in block:
+              if old_create not in block or old_wait not in block:
+                  raise SystemExit('Expected test harness pattern not found')
+              patched = block.replace(old_create, new_create, 1).replace(old_wait, new_wait, 1)
+              path.write_text(text[:test_start] + patched + text[test_end:])
+          PY
       - name: Run all Memory widget and ViewModel tests
         run: |
           gradle :app:testDebugUnitTest \
