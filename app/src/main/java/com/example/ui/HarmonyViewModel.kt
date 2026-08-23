@@ -252,6 +252,21 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun previousStep() {
+        val run = _activeRun.value ?: return
+        val previousIndex = when {
+            run.isFinished -> {
+                val totalLen = if (run.pack.type == "tot") run.pack.pairs.size else run.pack.questions.size
+                (totalLen - 1).coerceAtLeast(0)
+            }
+            run.currentIndex > 0 -> run.currentIndex - 1
+            else -> 0
+        }
+        _activeRun.value = run.copy(currentIndex = previousIndex, isFinished = false)
+        _isExitConfirmOpen.value = false
+        closeOwnAnswerDialog()
+    }
+
     fun finishPack() {
         val run = _activeRun.value ?: return
         viewModelScope.launch {
@@ -263,10 +278,7 @@ class HarmonyViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun askExitRun() {
-        val run = _activeRun.value
-        if (run != null && run.pack.type == "disc") {
-            closeRunner()
-        } else {
+        if (_activeRun.value != null) {
             _isExitConfirmOpen.value = true
         }
     }
