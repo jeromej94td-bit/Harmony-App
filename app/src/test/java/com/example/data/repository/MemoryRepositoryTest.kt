@@ -42,7 +42,7 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    fun `ensure defaults repairs a partial set and remains idempotent in stable order`() = runTest {
+    fun `ensure defaults merges film and series without losing entries and remains idempotent`() = runTest {
         database.memoryDao().insertCategory(
             MemoryCategoryEntity(
                 id = MemoryDefaults.FILMS_ID,
@@ -54,6 +54,20 @@ class MemoryRepositoryTest {
                 updatedAt = 50L
             )
         )
+        database.memoryDao().insertCategory(
+            MemoryCategoryEntity(
+                id = MemoryDefaults.SERIES_ID,
+                systemKey = "Serien",
+                colorKey = "pink",
+                iconKey = "tv",
+                sortOrder = 1,
+                createdAt = 60L,
+                updatedAt = 60L
+            )
+        )
+        repository.insertEntries(
+            listOf(entry(id = "series-entry", categoryId = MemoryDefaults.SERIES_ID, updatedAt = 70L))
+        )
 
         repository.ensureDefaultCategories(nowMillis = 100L)
         val firstSeed = repository.categories.first()
@@ -62,12 +76,13 @@ class MemoryRepositoryTest {
 
         assertEquals(MemoryDefaults.orderedIds, firstSeed.map { it.id })
         assertEquals(firstSeed, secondSeed)
-        assertEquals(listOf("Filme", "Serien", "Ideen", "Orte", "Sonstiges"), firstSeed.map { it.systemKey })
-        assertEquals(listOf(0, 1, 2, 3, 4), firstSeed.map { it.sortOrder })
+        assertEquals(listOf("Filme & Serien", "Ideen", "Orte", "Sonstiges"), firstSeed.map { it.systemKey })
+        assertEquals(listOf(0, 1, 2, 3), firstSeed.map { it.sortOrder })
         assertEquals(50L, firstSeed.first().createdAt)
-        assertEquals(50L, firstSeed.first().updatedAt)
-        assertEquals(List(4) { 100L }, firstSeed.drop(1).map { it.createdAt })
-        assertEquals(List(4) { 100L }, firstSeed.drop(1).map { it.updatedAt })
+        assertEquals(100L, firstSeed.first().updatedAt)
+        assertEquals(List(3) { 100L }, firstSeed.drop(1).map { it.createdAt })
+        assertEquals(List(3) { 100L }, firstSeed.drop(1).map { it.updatedAt })
+        assertEquals(MemoryDefaults.FILMS_ID, repository.getEntry("series-entry")?.categoryId)
         firstSeed.forEach { category ->
             assertNotNull(category.colorKey)
             assertNotNull(category.iconKey)
@@ -98,7 +113,7 @@ class MemoryRepositoryTest {
                 nowMillis = 130L
             )
         }
-        assertEquals("Filme", repository.categories.first().first().systemKey)
+        assertEquals("Filme & Serien", repository.categories.first().first().systemKey)
     }
 
     @Test
@@ -115,18 +130,21 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    fun `delete custom category rejects default categories`() = runTest {
+    fun `delete default category moves entries and does not resurrect it on next seed`() = runTest {
         repository.ensureDefaultCategories(nowMillis = 100L)
+        repository.insertEntries(
+            listOf(entry(id = "film-entry", categoryId = MemoryDefaults.FILMS_ID, updatedAt = 110L))
+        )
 
-        assertIllegalArgument {
-            repository.deleteCustomCategory(
-                MemoryDefaults.FILMS_ID,
-                MemoryDefaults.OTHER_ID,
-                nowMillis = 200L
-            )
-        }
+        repository.deleteCustomCategory(
+            MemoryDefaults.FILMS_ID,
+            MemoryDefaults.OTHER_ID,
+            nowMillis = 200L
+        )
+        repository.ensureDefaultCategories(nowMillis = 300L)
 
-        assertEquals(MemoryDefaults.orderedIds, repository.categories.first().map { it.id })
+        assertNull(repository.categories.first().find { it.id == MemoryDefaults.FILMS_ID })
+        assertEquals(MemoryDefaults.OTHER_ID, repository.getEntry("film-entry")?.categoryId)
     }
 
     @Test

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -93,6 +96,7 @@ fun MemoryEditorSheet(
         listLines.lineSequence().map(String::trim).filter(String::isNotEmpty).toList()
     }
     val validUrl = remember(url) { isValidHttpUrl(url) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val canSave = selectedCategoryId.isNotBlank() && when (selectedMode) {
         MemoryEditorMode.NOTE -> title.isNotBlank()
         MemoryEditorMode.LIST -> normalizedLines.isNotEmpty()
@@ -101,7 +105,10 @@ fun MemoryEditorSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = modifier.testTag("memory_editor_sheet"),
+        sheetState = sheetState,
+        modifier = modifier
+            .fillMaxSize()
+            .testTag("memory_editor_sheet"),
         containerColor = HarmonySurface.copy(alpha = 0.98f),
         contentColor = HarmonyText,
         scrimColor = Color.Black.copy(alpha = 0.66f),
@@ -117,7 +124,7 @@ fun MemoryEditorSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 720.dp)
+                .fillMaxHeight(0.94f)
                 .verticalScroll(rememberScrollState())
                 .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
         ) {
@@ -128,7 +135,10 @@ fun MemoryEditorSheet(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = LanguageManager.tr("Notiz hinzufügen", appLanguage),
+                        text = LanguageManager.tr(
+                            if (initialEntry == null) "Notiz hinzufügen" else "Notiz bearbeiten",
+                            appLanguage
+                        ),
                         color = HarmonyText,
                         fontSize = 23.sp,
                         fontWeight = FontWeight.ExtraBold

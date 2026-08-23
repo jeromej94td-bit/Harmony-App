@@ -9,11 +9,12 @@ enum class MemoryEntryKind { NOTE, LINK }
 
 object MemoryDefaults {
     const val FILMS_ID = "system-films"
+    /** Kept for the one-time migration into [FILMS_ID]. */
     const val SERIES_ID = "system-series"
     const val IDEAS_ID = "system-ideas"
     const val PLACES_ID = "system-places"
     const val OTHER_ID = "system-other"
-    val orderedIds = listOf(FILMS_ID, SERIES_ID, IDEAS_ID, PLACES_ID, OTHER_ID)
+    val orderedIds = listOf(FILMS_ID, IDEAS_ID, PLACES_ID, OTHER_ID)
 }
 
 fun interface MemoryClock {
@@ -33,7 +34,8 @@ data class MemoryCategoryEntity(
     val iconKey: String,
     val sortOrder: Int,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val isVisible: Boolean = true
 )
 
 @Entity(

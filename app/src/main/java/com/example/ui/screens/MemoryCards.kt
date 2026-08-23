@@ -2,6 +2,8 @@ package com.example.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -86,6 +88,7 @@ import com.example.ui.theme.HarmonyText
 import com.example.util.LanguageManager
 import java.net.URI
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MemoryEntryCard(
     item: MemoryEntryUi,
@@ -96,6 +99,11 @@ fun MemoryEntryCard(
     onRestore: (String) -> Unit,
     onRetryPreview: (String) -> Unit,
     onDeleteRequest: (String) -> Unit,
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit,
+    onLongPress: () -> Unit,
+    onOpen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val entry = item.entity
@@ -108,6 +116,11 @@ fun MemoryEntryCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .combinedClickable(
+                onClick = { if (selectionMode) onToggleSelection() else onOpen() },
+                onLongClick = { if (selectionMode) onToggleSelection() else onLongPress() }
+            )
+            .testTag("memory_entry_${entry.id}")
             .then(
                 if (isCompleted) {
                     Modifier.semantics { stateDescription = "completed" }
@@ -151,7 +164,10 @@ fun MemoryEntryCard(
                     onComplete = onComplete,
                     onRestore = onRestore,
                     onRetryPreview = onRetryPreview,
-                    onOpenMenu = { menuExpanded = true }
+                    onOpenMenu = { menuExpanded = true },
+                    selectionMode = selectionMode,
+                    selected = selected,
+                    onToggleSelection = onToggleSelection
                 )
             } else {
                 MemoryNoteCardContent(
@@ -162,7 +178,10 @@ fun MemoryEntryCard(
                     appLanguage = appLanguage,
                     onComplete = onComplete,
                     onRestore = onRestore,
-                    onOpenMenu = { menuExpanded = true }
+                    onOpenMenu = { menuExpanded = true },
+                    selectionMode = selectionMode,
+                    selected = selected,
+                    onToggleSelection = onToggleSelection
                 )
             }
 
@@ -197,14 +216,17 @@ private fun MemoryNoteCardContent(
     appLanguage: String,
     onComplete: (String) -> Unit,
     onRestore: (String) -> Unit,
-    onOpenMenu: () -> Unit
+    onOpenMenu: () -> Unit,
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit
 ) {
     val entry = item.entity
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 190.dp)
-            .padding(18.dp)
+            .heightIn(min = 164.dp)
+            .padding(16.dp)
     ) {
         MemoryCardTopRow(
             entryId = entry.id,
@@ -213,7 +235,10 @@ private fun MemoryNoteCardContent(
             accent = accent,
             appLanguage = appLanguage,
             onComplete = onComplete,
-            onOpenMenu = onOpenMenu
+            onOpenMenu = onOpenMenu,
+            selectionMode = selectionMode,
+            selected = selected,
+            onToggleSelection = onToggleSelection
         )
         Spacer(Modifier.height(12.dp))
         Text(
@@ -261,7 +286,10 @@ private fun MemoryLinkCardContent(
     onComplete: (String) -> Unit,
     onRestore: (String) -> Unit,
     onRetryPreview: (String) -> Unit,
-    onOpenMenu: () -> Unit
+    onOpenMenu: () -> Unit,
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit
 ) {
     val entry = item.entity
     var imageFailed by remember(entry.previewImageUrl) { mutableStateOf(false) }
@@ -270,14 +298,14 @@ private fun MemoryLinkCardContent(
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val horizontal = maxWidth >= 340.dp
         if (horizontal) {
-            Row(modifier = Modifier.fillMaxWidth().heightIn(min = 210.dp)) {
+            Row(modifier = Modifier.fillMaxWidth().heightIn(min = 164.dp)) {
                 MemoryLinkVisual(
                     imageModel = entry.previewImageUrl,
                     title = entry.previewTitle ?: entry.title,
                     showImage = showImage,
                     accent = accent,
                     onImageError = { imageFailed = true },
-                    modifier = Modifier.width(142.dp).fillMaxHeight()
+                    modifier = Modifier.width(136.dp).fillMaxHeight()
                 )
                 MemoryLinkText(
                     item = item,
@@ -290,6 +318,9 @@ private fun MemoryLinkCardContent(
                     onRestore = onRestore,
                     onRetryPreview = onRetryPreview,
                     onOpenMenu = onOpenMenu,
+                    selectionMode = selectionMode,
+                    selected = selected,
+                    onToggleSelection = onToggleSelection,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -312,7 +343,10 @@ private fun MemoryLinkCardContent(
                     previewFailed = previewFailed || imageFailed,
                     onComplete = onComplete,
                     onRestore = onRestore,
-                    onRetryPreview = onRetryPreview
+                    onRetryPreview = onRetryPreview,
+                    selectionMode = selectionMode,
+                    selected = selected,
+                    onToggleSelection = onToggleSelection
                 )
             }
         }
@@ -387,10 +421,13 @@ private fun MemoryLinkText(
     onRestore: (String) -> Unit,
     onRetryPreview: (String) -> Unit,
     onOpenMenu: () -> Unit = {},
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val entry = item.entity
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
         MemoryCardTopRow(
             entryId = entry.id,
             item = item,
@@ -399,43 +436,71 @@ private fun MemoryLinkText(
             appLanguage = appLanguage,
             onComplete = onComplete,
             onOpenMenu = onOpenMenu,
+            selectionMode = selectionMode,
+            selected = selected,
+            onToggleSelection = onToggleSelection,
             compact = true
         )
+        val siteLabel = entry.previewSiteName ?: safeHost(entry.url) ?: LanguageManager.tr("Link", appLanguage)
+        val personalNote = entry.body?.trim().orEmpty()
+        val primaryText = personalNote.ifBlank {
+            entry.previewTitle?.trim().orEmpty().ifBlank { siteLabel }
+        }
+        val previewTitle = entry.previewTitle
+            ?.trim()
+            ?.takeIf { it.isNotBlank() && it != primaryText }
+
         Text(
-            text = entry.previewSiteName ?: safeHost(entry.url) ?: LanguageManager.tr("Link", appLanguage),
+            text = siteLabel,
             color = accent,
-            fontSize = 11.sp,
+            fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.8.sp,
             maxLines = 1
         )
         Spacer(Modifier.height(6.dp))
         Text(
-            text = entry.previewTitle ?: entry.title,
+            text = primaryText,
             color = HarmonyText,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
+            fontSize = 17.sp,
+            lineHeight = 21.sp,
             fontWeight = FontWeight.Bold,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.testTag("memory_entry_${entry.id}_primary")
         )
-        (entry.previewDescription ?: entry.body)?.takeIf { it.isNotBlank() }?.let { description ->
+        previewTitle?.let { title ->
             Spacer(Modifier.height(6.dp))
             Text(
-                text = description,
-                color = HarmonyMuted,
-                fontSize = 13.sp,
-                lineHeight = 18.sp,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        entry.url?.let { url ->
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = safeHost(url) ?: url,
+                text = title,
                 color = HarmonyMuted,
                 fontSize = 12.sp,
+                lineHeight = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.testTag("memory_entry_${entry.id}_preview_title")
+            )
+        }
+        entry.previewDescription
+            ?.trim()
+            ?.takeIf { it.isNotBlank() && personalNote.isBlank() && it != primaryText }
+            ?.let { description ->
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = description,
+                    color = HarmonyMuted,
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        entry.url?.let { url ->
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = url,
+                color = HarmonyMuted,
+                fontSize = 10.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -473,6 +538,9 @@ private fun MemoryCardTopRow(
     appLanguage: String,
     onComplete: (String) -> Unit,
     onOpenMenu: () -> Unit,
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit,
     compact: Boolean = false
 ) {
     Row(
@@ -494,7 +562,29 @@ private fun MemoryCardTopRow(
                 modifier = Modifier.size(if (compact) 20.dp else 23.dp)
             )
         }
-        when (item.bucket) {
+        if (selectionMode) {
+            IconButton(
+                onClick = onToggleSelection,
+                modifier = Modifier
+                    .size(48.dp)
+                    .testTag("memory_entry_${entryId}_select")
+            ) {
+                Icon(
+                    imageVector = if (selected) Icons.Default.CheckCircle else Icons.Default.Check,
+                    contentDescription = LanguageManager.tr(
+                        if (selected) "Auswahl aufheben" else "Auswählen",
+                        appLanguage
+                    ),
+                    tint = if (selected) HarmonyPinkSoft else HarmonyMuted,
+                    modifier = Modifier
+                        .size(28.dp)
+                        .then(
+                            if (selected) Modifier
+                            else Modifier.border(1.5.dp, HarmonyMuted, CircleShape).padding(5.dp)
+                        )
+                )
+            }
+        } else when (item.bucket) {
             MemoryBucket.CURRENT_OPEN -> IconButton(
                 onClick = { onComplete(entryId) },
                 modifier = Modifier

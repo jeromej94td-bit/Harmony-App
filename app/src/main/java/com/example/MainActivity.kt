@@ -108,7 +108,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
     }
 
     val isQuizActive = uiState.activeRun != null
-    val isMemoryOverlayActive = memoryState.editorMode != null || memoryState.pendingDeleteEntryId != null
+    val isMemoryOverlayActive = memoryState.editorMode != null ||
+        memoryState.pendingDeleteEntryIds.isNotEmpty() || memoryState.selectionMode
     val isSheetOrDialogActive = uiState.isProfileSheetOpen || uiState.isAddMomentOpen || isMemoryOverlayActive
     val isNotHomeTab = uiState.selectedTab != 0
 
@@ -137,11 +138,14 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
             uiState.isAddMomentOpen -> {
                 viewModel.closeAddMomentDialog()
             }
-            memoryState.pendingDeleteEntryId != null -> {
+            memoryState.pendingDeleteEntryIds.isNotEmpty() -> {
                 memoryViewModel.dismissPermanentDelete()
             }
             memoryState.editorMode != null -> {
                 memoryViewModel.closeEditor()
+            }
+            memoryState.selectionMode -> {
+                memoryViewModel.clearSelection()
             }
             uiState.selectedTab == 6 -> { // PackListScreen
                 viewModel.selectTab(1) // Back to GamesScreen
@@ -244,10 +248,19 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         MemoryScreen(
                             state = memoryState,
                             appLanguage = uiState.appLanguage,
+                            userName = uiState.profile.userName,
+                            partnerName = uiState.profile.partnerName,
+                            userAvatarPath = uiState.profile.userAvatarPath,
+                            partnerAvatarPath = uiState.profile.partnerAvatarPath,
                             onSelectTab = memoryViewModel::selectTab,
                             onQueryChange = memoryViewModel::setQuery,
                             onCategoryFilter = memoryViewModel::setCategoryFilter,
                             onOpenEditor = memoryViewModel::openEditor,
+                            onStartSelection = memoryViewModel::startSelection,
+                            onToggleEntrySelection = memoryViewModel::toggleEntrySelection,
+                            onSelectAllEntries = memoryViewModel::selectAllVisibleEntries,
+                            onClearSelection = memoryViewModel::clearSelection,
+                            onDeleteSelectedRequest = memoryViewModel::requestSelectedDelete,
                             onComplete = memoryViewModel::complete,
                             onRestore = memoryViewModel::restore,
                             onRetryPreview = memoryViewModel::retryPreview,

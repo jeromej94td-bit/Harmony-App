@@ -162,13 +162,44 @@ fun MemoryCategoryDialog(
                 )
 
                 if (isDefault) {
-                    Text(
-                        text = memoryCategoryLabel(category, appLanguage),
-                        color = memoryCategoryColor(category?.colorKey),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                            .padding(horizontal = 22.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = memoryCategoryLabel(category, appLanguage),
+                            color = memoryCategoryColor(category?.colorKey),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        if (entryCount > 0) {
+                            CategoryFieldTitle(LanguageManager.tr("Einträge verschieben nach", appLanguage))
+                            moveTargets.forEach { target ->
+                                CategoryMoveTarget(
+                                    target = target,
+                                    selected = moveTargetId == target.id,
+                                    appLanguage = appLanguage,
+                                    onClick = { moveTargetId = target.id }
+                                )
+                            }
+                        }
+                        TextButton(
+                            enabled = moveTargetId.isNotBlank(),
+                            onClick = { category?.let { onDelete(it.id, moveTargetId) } },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .testTag("memory_category_delete")
+                        ) {
+                            Icon(Icons.Default.DeleteForever, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.size(6.dp))
+                            Text(LanguageManager.tr("Löschen", appLanguage))
+                        }
+                    }
                 } else {
                     Column(
                         modifier = Modifier
@@ -511,4 +542,44 @@ private fun CategoryFieldTitle(text: String) {
         fontSize = 13.sp,
         fontWeight = FontWeight.Bold
     )
+}
+
+@Composable
+private fun CategoryMoveTarget(
+    target: MemoryCategoryEntity,
+    selected: Boolean,
+    appLanguage: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .background(
+                if (selected) memoryCategoryColor(target.colorKey).copy(alpha = 0.20f) else HarmonySurface2,
+                RoundedCornerShape(14.dp)
+            )
+            .border(
+                width = if (selected) 2.dp else 1.dp,
+                color = if (selected) memoryCategoryColor(target.colorKey) else HarmonyLine,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
+            .testTag("memory_category_move_${target.id}")
+            .semantics { this.selected = selected }
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Icon(
+            memoryCategoryIcon(target.iconKey),
+            contentDescription = null,
+            tint = if (selected) memoryCategoryColor(target.colorKey) else HarmonyMuted,
+            modifier = Modifier.size(18.dp)
+        )
+        Text(
+            text = memoryCategoryLabel(target, appLanguage),
+            color = if (selected) HarmonyText else HarmonyMuted
+        )
+    }
 }

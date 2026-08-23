@@ -83,6 +83,7 @@ class MemoryPinboardScreenshotTest {
                                             title = "Sternwarte im Harz",
                                             kind = MemoryEntryKind.LINK,
                                             url = "https://example.invalid/sternwarte",
+                                            body = "Diesen Ort wollen wir uns für ein Wochenende merken.",
                                             previewTitle = "Sternennacht über dem Brocken",
                                             previewDescription = "Ein stiller Ort für unsere nächste klare Nacht.",
                                             previewImageUrl = "android.resource://$packageName/${R.drawable.tokyo_tower_zojoji}",
@@ -125,6 +126,7 @@ class MemoryPinboardScreenshotTest {
                                 title = "Sternwarte im Harz",
                                 kind = MemoryEntryKind.LINK,
                                 url = "https://example.invalid/sternwarte",
+                                body = "Diesen Ort wollen wir uns für ein Wochenende merken.",
                                 previewTitle = "Sternennacht über dem Brocken",
                                 previewDescription = "Ein stiller Ort für unsere nächste klare Nacht.",
                                 previewImageUrl = "android.resource://$packageName/${R.drawable.tokyo_tower_zojoji}",
@@ -202,7 +204,7 @@ class MemoryPinboardScreenshotTest {
                             ),
                             entry(
                                 id = "archive-series",
-                                categoryId = MemoryDefaults.SERIES_ID,
+                                categoryId = MemoryDefaults.FILMS_ID,
                                 title = "Die kleine Küstenserie",
                                 body = "Perfekt für verregnete Sonntage.",
                                 bucket = MemoryBucket.ARCHIVED,
@@ -319,6 +321,8 @@ class MemoryPinboardScreenshotTest {
         MemoryScreen(
             state = state,
             appLanguage = "de",
+            userName = "Mia",
+            partnerName = "Noah",
             onSelectTab = {},
             onQueryChange = {},
             onCategoryFilter = {},
@@ -372,11 +376,10 @@ class MemoryPinboardScreenshotTest {
         const val FIXED_NOW = 1_750_000_000_000L
 
         val categories = listOf(
-            category(MemoryDefaults.FILMS_ID, "Filme", null, "violet", "movie", 0),
-            category(MemoryDefaults.SERIES_ID, "Serien", null, "pink", "tv", 1),
-            category(MemoryDefaults.IDEAS_ID, "Ideen", null, "gold", "lightbulb", 2),
-            category(MemoryDefaults.PLACES_ID, "Orte", null, "blue", "place", 3),
-            category(MemoryDefaults.OTHER_ID, "Sonstiges", null, "teal", "bookmark", 4)
+            category(MemoryDefaults.FILMS_ID, "Filme & Serien", null, "violet", "movie", 0),
+            category(MemoryDefaults.IDEAS_ID, "Ideen", null, "gold", "lightbulb", 1),
+            category(MemoryDefaults.PLACES_ID, "Orte", null, "blue", "place", 2),
+            category(MemoryDefaults.OTHER_ID, "Sonstiges", null, "teal", "bookmark", 3)
         )
 
         fun category(
