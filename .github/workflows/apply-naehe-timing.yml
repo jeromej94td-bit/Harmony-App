@@ -1,0 +1,69 @@
+name: Apply Nähe Timing
+
+on:
+  push:
+    branches:
+      - fix/naehe-animation-1-9s
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/naehe-animation-1-9s
+          fetch-depth: 0
+      - name: Apply requested timing changes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt')
+          source = path.read_text(encoding='utf-8')
+
+          old_question = '''animationKey = questionAnimationKey,
+                                    delayMillis = 0,
+                                    totalDurationMillis = 3_200,
+                                    particleCount = 3_000,'''
+          new_question = '''animationKey = questionAnimationKey,
+                                    delayMillis = 0,
+                                    totalDurationMillis = 1_900,
+                                    particleCount = 3_000,'''
+
+          old_answers = '''delayMillis = 760 + optIdx * 210,
+                                        totalDurationMillis = 2_400,'''
+          new_answers = '''delayMillis = 760 + optIdx * 500,
+                                        totalDurationMillis = 2_400,'''
+
+          if old_question not in source:
+              raise SystemExit('Expected 3.2s intimacy question timing block not found')
+          if old_answers not in source:
+              raise SystemExit('Expected 210ms answer stagger timing block not found')
+
+          source = source.replace(old_question, new_question, 1)
+          source = source.replace(old_answers, new_answers, 1)
+          path.write_text(source, encoding='utf-8')
+          PY
+      - name: Verify requested timing
+        run: python3 scripts/verify_naehe_question_duration.py
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Compile debug Kotlin
+        run: gradle :app:compileDebugKotlin --no-daemon
+      - name: Commit verified source only
+        run: |
+          git config user.name "harmony-timing-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt
+          git rm -f .github/workflows/apply-naehe-timing.yml .github/workflows/verify-naehe-duration.yml scripts/verify_naehe_question_duration.py
+          git commit -m "fix: shorten intimacy materialization timing"
+          git push origin HEAD:fix/naehe-animation-1-9s
