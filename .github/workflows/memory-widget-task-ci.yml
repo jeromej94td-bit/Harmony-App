@@ -34,3 +34,5 @@ jobs:
             --no-daemon
       - name: Process Memory widget resources
         run: gradle :app:processDebugResources --no-daemon
+      - name: Compile Memory widget source
+        run: gradle :app:compileDebugKotlin --no-daemon
