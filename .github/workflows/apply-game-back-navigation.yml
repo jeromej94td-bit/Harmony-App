@@ -1,0 +1,133 @@
+name: Apply game back navigation patch
+
+on:
+  push:
+    branches:
+      - fix/game-back-navigation
+
+permissions:
+  contents: write
+
+jobs:
+  patch-introspection-navigation:
+    if: ${{ !contains(github.event.head_commit.message, 'Align introspection back navigation') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/game-back-navigation
+          fetch-depth: 0
+
+      - name: Patch introspection navigation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt')
+          text = path.read_text()
+
+          old_back = '''    // Auto-stop recording on leave / exit
+    BackHandler {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        if (screenState != ScreenState.ENTRY && screenState != ScreenState.RESULTS) {
+            showLeaveDialog = true
+        } else {
+            mediaController.releaseAll()
+            onExit()
+        }
+    }
+'''
+          new_back = '''    // The Android system back action always asks before leaving the game.
+    BackHandler {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        showLeaveDialog = true
+    }
+'''
+          if old_back not in text:
+              raise SystemExit('Expected BackHandler block not found')
+          text = text.replace(old_back, new_back, 1)
+
+          anchor = '''    fun continueExistingRun() {
+        screenState = if (progress.completed) ScreenState.RESULTS
+        else if (progress.stage == IntrospectionStage.REVELATION) ScreenState.REVELATION
+        else ScreenState.QUESTION
+        mediaController.startBackgroundMusic()
+    }
+'''
+          addition = anchor + '''
+    fun goBackOneQuestion() {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        mediaController.stopNarrator()
+        mediaController.stopAnswerAudio()
+
+        val previousStage = when (progress.stage) {
+            IntrospectionStage.ANIMAL -> IntrospectionStage.COLOR
+            IntrospectionStage.WATER -> IntrospectionStage.ANIMAL
+            IntrospectionStage.REVELATION,
+            IntrospectionStage.RESULTS -> IntrospectionStage.WATER
+            IntrospectionStage.COLOR -> return
+        }
+
+        val previousProgress = progress.copy(
+            stage = previousStage,
+            completed = false,
+            updatedAt = System.currentTimeMillis()
+        )
+        progress = previousProgress
+        store.save(previousProgress)
+        screenState = ScreenState.QUESTION
+    }
+'''
+          if anchor not in text:
+              raise SystemExit('continueExistingRun anchor not found')
+          text = text.replace(anchor, addition, 1)
+
+          old_question = '''                        onConfirm = { submitCurrentAnswer() },
+                        onBackRequest = {
+                            if (isRecording) {
+                                mediaController.stopRecording()
+                            }
+                            showLeaveDialog = true
+                        }
+'''
+          new_question = '''                        onConfirm = { submitCurrentAnswer() },
+                        onBackRequest = { goBackOneQuestion() }
+'''
+          if old_question not in text:
+              raise SystemExit('Question back callback not found')
+          text = text.replace(old_question, new_question, 1)
+
+          old_revelation = '''                    RevelationScreen(
+                        appLang = appLang,
+                        onBackRequest = {
+                            showLeaveDialog = true
+                        }
+                    )
+'''
+          new_revelation = '''                    RevelationScreen(
+                        appLang = appLang,
+                        onBackRequest = { goBackOneQuestion() }
+                    )
+'''
+          if old_revelation not in text:
+              raise SystemExit('Revelation back callback not found')
+          text = text.replace(old_revelation, new_revelation, 1)
+
+          path.write_text(text)
+          PY
+
+      - name: Remove branch-local workflow and commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -f .github/workflows/apply-game-back-navigation.yml
+          git add app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt
+          git diff --cached --check
+          git commit -m "Align introspection back navigation"
+          git push origin HEAD:fix/game-back-navigation
