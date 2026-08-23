@@ -6,6 +6,12 @@ on:
       - fix/introspection-real-audio-final
     paths:
       - '.github/workflows/verify-merlin-theme.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'app/src/main/res/raw/merlin_theme.mp3'
+      - '.github/workflows/verify-merlin-theme.yml'
 
 permissions:
   contents: read
