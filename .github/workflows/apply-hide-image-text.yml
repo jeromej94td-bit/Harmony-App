@@ -1,25 +1,26 @@
-name: Dev Studio Export Verification
+name: Apply Dev Studio image text fix
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - fix/devstudio-hide-image-text
 
 permissions:
   contents: write
 
 jobs:
-  apply-and-test-hide-image-text:
+  apply-and-test:
+    if: ${{ !contains(github.event.head_commit.message, 'fix: keep image when hiding Dev Studio text') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout PR head
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: fix/devstudio-hide-image-text
           fetch-depth: 0
 
-      - name: Apply Dev Studio image-text fix
+      - name: Apply source edit
         run: python .github/scripts/apply_hide_image_text.py
 
       - name: Set up JDK 21
@@ -36,14 +37,12 @@ jobs:
       - name: Run unit tests
         run: gradle :app:test --stacktrace
 
-      - name: Commit tested production fix
+      - name: Commit production fix
         run: |
-          git fetch origin main
-          git checkout origin/main -- .github/workflows/devstudio-export-verify.yml
           rm -f .github/scripts/apply_hide_image_text.py
           rm -f .github/workflows/apply-hide-image-text.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "fix: keep Drive images when labels change or hide"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git commit -m "fix: keep image when hiding Dev Studio text"
+          git push origin HEAD:fix/devstudio-hide-image-text
