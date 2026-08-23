@@ -109,3 +109,4 @@ quiz = quiz.replace(old_options, new_options, 1)
 models_path.write_text(models, encoding="utf-8")
 quiz_path.write_text(quiz, encoding="utf-8")
 print("Applied binary Pizza/Burger tension question update")
+# Trigger the branch workflow after its default-branch definition was installed.
