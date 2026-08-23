@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -29,6 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -72,6 +74,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -83,6 +86,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -195,6 +199,74 @@ fun HarmonyTopBar(
     }
 }
 
+private data class BottomNavGameVisualSpec(
+    val categoryId: String,
+    val accent: Color,
+    val displayDurationMillis: Long
+)
+
+private val bottomNavGameVisuals = listOf(
+    BottomNavGameVisualSpec("zeich", Color(0xFF9E59BD), 10_000L),
+    BottomNavGameVisualSpec("tot", Color(0xFFFFC46B), 17_000L),
+    BottomNavGameVisualSpec("zust", Color(0xFF9DB2FF), 10_000L),
+    BottomNavGameVisualSpec("foto", Color(0xFF7BD8CB), 10_000L),
+    BottomNavGameVisualSpec("tief", Color(0xFF9DB2FF), 10_000L),
+    BottomNavGameVisualSpec("reden", Color(0xFFFFC46B), 10_000L),
+    BottomNavGameVisualSpec("wer", Color(0xFFFF2E63), 10_000L),
+    BottomNavGameVisualSpec("nie", Color(0xFFFF6B8F), 10_000L),
+    BottomNavGameVisualSpec("lieber", Color(0xFFC89BE0), 10_000L)
+)
+
+@Composable
+private fun BottomNavGameCarouselIcon(
+    paused: Boolean,
+    modifier: Modifier = Modifier
+) {
+    var visualIndex by remember { mutableIntStateOf(0) }
+    val cardFlip = remember { Animatable(0f) }
+    val density = LocalDensity.current.density
+
+    LaunchedEffect(paused) {
+        if (paused) {
+            cardFlip.snapTo(0f)
+            return@LaunchedEffect
+        }
+
+        while (true) {
+            delay(bottomNavGameVisuals[visualIndex].displayDurationMillis)
+            cardFlip.animateTo(88f, tween(durationMillis = 360, easing = FastOutSlowInEasing))
+            visualIndex = (visualIndex + 1) % bottomNavGameVisuals.size
+            cardFlip.snapTo(-88f)
+            cardFlip.animateTo(0f, tween(durationMillis = 360, easing = FastOutSlowInEasing))
+        }
+    }
+
+    val visual = bottomNavGameVisuals[visualIndex]
+    Box(
+        modifier = modifier
+            .size(34.dp)
+            .graphicsLayer {
+                rotationY = cardFlip.value
+                cameraDistance = 18f * density
+                shadowElevation = if (paused) 5f else 8f
+            }
+            .testTag("nav_games_visual_${visual.categoryId}_${if (paused) "paused" else "running"}"),
+        contentAlignment = Alignment.Center
+    ) {
+        GameCategoryVisual(
+            categoryId = visual.categoryId,
+            accent = visual.accent,
+            animationEnabled = !paused,
+            modifier = Modifier
+                .requiredSize(84.dp)
+                .graphicsLayer {
+                    scaleX = 0.42f
+                    scaleY = 0.42f
+                }
+        )
+    }
+}
+
 @Composable
 fun HarmonyBottomNav(
     selectedTab: Int,
@@ -213,15 +285,35 @@ fun HarmonyBottomNav(
         label = "active_nav_glow"
     )
 
+    val navigationShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(HarmonySurface.copy(alpha = 0.95f))
-            .background(Brush.verticalGradient(listOf(HarmonySurface.copy(alpha = 0.96f), Color(0xFF08030F).copy(alpha = 0.98f))))
-            .border(1.dp, HarmonyPurpleLight.copy(alpha = 0.26f), RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .clip(navigationShape)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        HarmonySurface2.copy(alpha = 0.97f),
+                        Color(0xFF12091B).copy(alpha = 0.985f),
+                        Color(0xFF07020D).copy(alpha = 0.99f)
+                    )
+                )
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    listOf(
+                        HarmonyPink.copy(alpha = 0.20f),
+                        HarmonyPurpleLight.copy(alpha = 0.46f),
+                        HarmonyPinkSoft.copy(alpha = 0.20f)
+                    )
+                ),
+                shape = navigationShape
+            )
             .navigationBarsPadding()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
+            .padding(horizontal = 4.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         val navItems = listOf(
@@ -234,41 +326,73 @@ fun HarmonyBottomNav(
 
         navItems.forEach { (index, label, icon) ->
             val isSelected = selectedTab == index
+            val itemShape = RoundedCornerShape(15.dp)
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .weight(1f)
+                    .padding(horizontal = 3.dp)
+                    .clip(itemShape)
                     .background(
-                        if (isSelected) Brush.radialGradient(
-                            listOf(HarmonyNavActive.copy(alpha = 0.20f), Color.Transparent)
+                        if (isSelected) Brush.verticalGradient(
+                            listOf(
+                                HarmonyNavActive.copy(alpha = 0.17f),
+                                HarmonyPurple.copy(alpha = 0.12f),
+                                Color(0xFF110817).copy(alpha = 0.38f)
+                            )
                         ) else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
                     )
                     .border(
                         if (isSelected) 1.dp else 0.dp,
                         HarmonyNavActive.copy(alpha = if (isSelected) activeGlow else 0f),
-                        RoundedCornerShape(12.dp)
+                        itemShape
                     )
                     .clickable { onTabSelected(index) }
-                    .padding(horizontal = 14.dp, vertical = 6.dp)
+                    .padding(vertical = 4.dp)
                     .testTag("nav_item_$index"),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = label,
-                    tint = if (isSelected) HarmonyNavActive else HarmonyNavInactive,
-                    modifier = Modifier.size(22.dp)
-                )
-                Spacer(modifier = Modifier.height(3.dp))
+                Box(
+                    modifier = Modifier.size(34.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (index == 1) {
+                        BottomNavGameCarouselIcon(paused = isSelected)
+                    } else {
+                        if (isSelected) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(
+                                        Brush.radialGradient(
+                                            listOf(
+                                                HarmonyNavActive.copy(alpha = activeGlow * 0.25f),
+                                                HarmonyPurple.copy(alpha = 0.10f),
+                                                Color.Transparent
+                                            )
+                                        )
+                                    )
+                            )
+                        }
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = label,
+                            tint = if (isSelected) HarmonyNavActive else HarmonyNavInactive,
+                            modifier = Modifier.size(if (isSelected) 25.dp else 24.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = label,
                     fontSize = 10.sp,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                     color = if (isSelected) HarmonyNavActive else HarmonyNavInactive
                 )
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Box(
                     modifier = Modifier
-                        .width(if (isSelected) 18.dp else 4.dp)
+                        .width(if (isSelected) 22.dp else 4.dp)
                         .height(2.dp)
                         .clip(CircleShape)
                         .background(
