@@ -1,5 +1,6 @@
 package com.example
 
+import android.content.Intent
 import android.os.Bundle
 import android.graphics.Color as AndroidColor
 import androidx.activity.compose.BackHandler
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +36,7 @@ import com.example.data.repository.RoomMemoryRepository
 import com.example.ui.AppLanguage
 import com.example.ui.HarmonyViewModel
 import com.example.ui.LocalAppLanguage
+import com.example.ui.memory.MemoryTab
 import com.example.ui.memory.MemoryViewModel
 import com.example.ui.memory.MemoryViewModelFactory
 import com.example.ui.components.AmbientBackground
@@ -54,14 +57,19 @@ import com.example.ui.screens.PandaEitherOrScreen
 import com.example.ui.screens.ProfileSheet
 import com.example.ui.screens.QuizRunnerScreen
 import com.example.ui.theme.HarmonyTheme
+import com.example.widget.MemoryWidgetOpenRequest
+import com.example.widget.MemoryWidgetProvider
 import com.example.widget.PicShareWidgetProvider
+import com.example.widget.parseMemoryWidgetOpenRequest
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: HarmonyViewModel by viewModels()
+    private var memoryWidgetOpenRequest by mutableStateOf<MemoryWidgetOpenRequest?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        memoryWidgetOpenRequest = parseMemoryWidgetOpenRequest(intent)
         enableEdgeToEdge()
         window.navigationBarColor = AndroidColor.TRANSPARENT
         window.statusBarColor = AndroidColor.TRANSPARENT
@@ -77,27 +85,56 @@ class MainActivity : ComponentActivity() {
                 LocalLayoutDirection provides if (currentLanguage.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
             ) {
                 HarmonyTheme(darkTheme = uiState.isDarkMode) {
-                    HarmonyApp(viewModel = viewModel)
+                    HarmonyApp(
+                        viewModel = viewModel,
+                        memoryWidgetOpenRequest = memoryWidgetOpenRequest,
+                        onMemoryWidgetRequestConsumed = { memoryWidgetOpenRequest = null }
+                    )
                 }
             }
         }
     }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        memoryWidgetOpenRequest = parseMemoryWidgetOpenRequest(intent)
+    }
 }
 
 @Composable
-fun HarmonyApp(viewModel: HarmonyViewModel) {
+fun HarmonyApp(
+    viewModel: HarmonyViewModel,
+    memoryWidgetOpenRequest: MemoryWidgetOpenRequest? = null,
+    onMemoryWidgetRequestConsumed: () -> Unit = {}
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val memoryFactory = remember(context.applicationContext) {
         MemoryViewModelFactory(
             repository = RoomMemoryRepository(HarmonyDatabase.getInstance(context.applicationContext)),
-            linkPreviewResolver = OkHttpLinkPreviewResolver()
+            linkPreviewResolver = OkHttpLinkPreviewResolver(),
+            onMemoryChanged = { MemoryWidgetProvider.refreshAll(context.applicationContext) }
         )
     }
     val memoryViewModel: MemoryViewModel = composeViewModel(factory = memoryFactory)
     val memoryState by memoryViewModel.uiState.collectAsStateWithLifecycle()
     var isIntrospectionOpen by remember { mutableStateOf(false) }
     var isPandaEitherOrOpen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(memoryWidgetOpenRequest) {
+        val request = memoryWidgetOpenRequest ?: return@LaunchedEffect
+        viewModel.selectTab(4)
+        if (request.entryId != null) {
+            memoryViewModel.openEntryFromWidget(request.entryId)
+        } else {
+            memoryViewModel.selectTab(MemoryTab.CURRENT)
+            memoryViewModel.setCategoryFilter(null)
+            memoryViewModel.setQuery("")
+            memoryViewModel.closeEditor()
+        }
+        onMemoryWidgetRequestConsumed()
+    }
 
     fun openPack(packId: String) {
         if (packId == PANDA_EITHER_OR_PACK_ID) {

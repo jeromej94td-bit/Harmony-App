@@ -6,4 +6,13 @@
     <string name="picshare_widget_image">Geteiltes Harmony-Bild</string>
     <string name="picshare_widget_empty">Noch kein geteiltes Bild</string>
     <string name="picshare_widget_description">Zeigt das zuletzt über Harmony geteilte Bild.</string>
+    <string name="memory_widget_name">Harmony · Merken</string>
+    <string name="memory_widget_description">Zeigt bis zu drei Dinge, die ihr euch merken möchtet.</string>
+    <string name="memory_widget_auto">Automatisch</string>
+    <string name="memory_widget_pinned">Bestimmte auswählen</string>
+    <string name="memory_widget_count">Anzahl</string>
+    <string name="memory_widget_save">Widget hinzufügen</string>
+    <string name="memory_widget_empty">Noch nichts gemerkt · Harmony öffnen</string>
+    <string name="memory_widget_link">Link</string>
+    <string name="memory_widget_preview_image">Link-Vorschau</string>
 </resources>

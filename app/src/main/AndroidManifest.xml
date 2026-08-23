@@ -27,6 +27,23 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".widget.MemoryWidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyApplication" />
+
+        <receiver
+            android:name=".widget.MemoryWidgetProvider"
+            android:exported="false"
+            android:label="@string/memory_widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/memory_widget_info" />
+        </receiver>
+
         <receiver
             android:name=".widget.PicShareWidgetProvider"
             android:exported="false">
