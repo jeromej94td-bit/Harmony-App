@@ -30,5 +30,6 @@ jobs:
             --tests 'com.example.widget.MemoryWidgetPreferencesTest' \
             --tests 'com.example.widget.MemoryWidgetIntentsTest' \
             --tests 'com.example.widget.MemoryWidgetProviderTest' \
-            --tests 'com.example.ui.memory.MemoryViewModelTest' \
             --no-daemon
+      - name: Process Memory widget resources
+        run: gradle :app:processDebugResources --no-daemon
