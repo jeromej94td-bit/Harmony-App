@@ -1,0 +1,27 @@
+name: Memory Race Baseline
+
+on:
+  push:
+    branches:
+      - ci/memory-race-baseline
+
+permissions:
+  contents: read
+
+jobs:
+  race-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Run baseline concurrent preview test
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests 'com.example.ui.memory.MemoryViewModelTest.concurrent preview failures atomically retain every failed entry id' \
+            --no-daemon
