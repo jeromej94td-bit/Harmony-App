@@ -25,41 +25,55 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           path = Path('app/src/test/java/com/example/ui/memory/MemoryViewModelTest.kt')
           text = path.read_text()
           marker = 'fun `concurrent preview failures atomically retain every failed entry id`()'
           test_start = text.index(marker)
           test_end = text.index('\n    @Test', test_start)
           block = text[test_start:test_end]
-          old_create = '''        try {
-              val viewModel = MemoryViewModel(repository, concurrentResolver, clock, concurrentDispatcher)
-                  .also { viewModelStore.put("concurrent", it) }
-          '''
-          new_create = '''        try {
-              val failuresPublished = CountDownLatch(entryCount)
-              val viewModel = MemoryViewModel(
-                  repository,
-                  concurrentResolver,
-                  clock,
-                  concurrentDispatcher,
-                  onMemoryChanged = failuresPublished::countDown
-              ).also { viewModelStore.put("concurrent", it) }
-          '''
-          old_wait = '''            release.complete(Unit)
-              val queuedWorkDrained = CountDownLatch(entryCount)
-              repeat(entryCount) { executor.execute(queuedWorkDrained::countDown) }
-              queuedWorkDrained.await()
-              runCurrent()
-          '''
-          new_wait = '''            release.complete(Unit)
-              assertTrue(failuresPublished.await(10, java.util.concurrent.TimeUnit.SECONDS))
-              runCurrent()
-          '''
+
           if 'val failuresPublished = CountDownLatch(entryCount)' not in block:
-              if old_create not in block or old_wait not in block:
-                  raise SystemExit('Expected test harness pattern not found')
-              patched = block.replace(old_create, new_create, 1).replace(old_wait, new_wait, 1)
-              path.write_text(text[:test_start] + patched + text[test_end:])
+              create_pattern = re.compile(
+                  r'(?m)^(\s*)val viewModel = MemoryViewModel\(repository, concurrentResolver, clock, concurrentDispatcher\)\n'
+                  r'\1    \.also \{ viewModelStore\.put\("concurrent", it\) \}'
+              )
+              def replace_create(match):
+                  i = match.group(1)
+                  return (
+                      f'{i}val failuresPublished = CountDownLatch(entryCount)\n'
+                      f'{i}val viewModel = MemoryViewModel(\n'
+                      f'{i}    repository,\n'
+                      f'{i}    concurrentResolver,\n'
+                      f'{i}    clock,\n'
+                      f'{i}    concurrentDispatcher,\n'
+                      f'{i}    onMemoryChanged = failuresPublished::countDown\n'
+                      f'{i}).also {{ viewModelStore.put("concurrent", it) }}'
+                  )
+              block, create_count = create_pattern.subn(replace_create, block, count=1)
+              if create_count != 1:
+                  raise SystemExit(f'Expected ViewModel creation pattern once, found {create_count}')
+
+              wait_pattern = re.compile(
+                  r'(?m)^(\s*)release\.complete\(Unit\)\n'
+                  r'\1val queuedWorkDrained = CountDownLatch\(entryCount\)\n'
+                  r'\1repeat\(entryCount\) \{ executor\.execute\(queuedWorkDrained::countDown\) \}\n'
+                  r'\1queuedWorkDrained\.await\(\)\n'
+                  r'\1runCurrent\(\)'
+              )
+              def replace_wait(match):
+                  i = match.group(1)
+                  return (
+                      f'{i}release.complete(Unit)\n'
+                      f'{i}assertTrue(failuresPublished.await(10, java.util.concurrent.TimeUnit.SECONDS))\n'
+                      f'{i}runCurrent()'
+                  )
+              block, wait_count = wait_pattern.subn(replace_wait, block, count=1)
+              if wait_count != 1:
+                  raise SystemExit(f'Expected queue-drain pattern once, found {wait_count}')
+
+              path.write_text(text[:test_start] + block + text[test_end:])
           PY
       - name: Run all Memory widget and ViewModel tests
         run: |
