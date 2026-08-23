@@ -3,6 +3,7 @@ package com.example.widget
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
+import com.example.MainActivity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
@@ -35,5 +36,20 @@ class MemoryWidgetIntentsTest {
         assertNotEquals(memoryWidgetRequestCode(1, 1, 1), memoryWidgetRequestCode(1, 1, 2))
         assertNotEquals(memoryWidgetRequestCode(1, 1, 1), memoryWidgetRequestCode(1, 2, 1))
         assertNotEquals(memoryWidgetRequestCode(1, 1, 1), memoryWidgetRequestCode(2, 1, 1))
+    }
+
+    @Test
+    fun `parse returns header exact entry or ordinary launch correctly`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+
+        assertEquals(
+            MemoryWidgetOpenRequest(null),
+            parseMemoryWidgetOpenRequest(memoryHeaderActivityIntent(context, 2))
+        )
+        assertEquals(
+            MemoryWidgetOpenRequest("abc"),
+            parseMemoryWidgetOpenRequest(memoryEntryActivityIntent(context, 2, 1, "abc"))
+        )
+        assertNull(parseMemoryWidgetOpenRequest(Intent(context, MainActivity::class.java)))
     }
 }
