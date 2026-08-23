@@ -931,6 +931,7 @@ fun QuizRunnerScreen(
                         val scrollState = rememberScrollState()
                         val isIntimacyPack = pack.id == "naehe" && pack.topic == "sex"
                         val questionAnimationKey = "${pack.id}_${activeRun.currentIndex}_question"
+                        val imageChoiceKind = harmonyImageChoiceKind(pack.id, activeRun.currentIndex)
 
                         Column(
                             modifier = Modifier
@@ -941,7 +942,18 @@ fun QuizRunnerScreen(
                             CategoryTag(tag = contentText(pack.tags.firstOrNull() ?: "unterhaltung"))
                             Spacer(modifier = Modifier.height(14.dp))
 
-                            if (isIntimacyPack) {
+                            if (imageChoiceKind != null) {
+                                HarmonyImageChoiceQuestion(
+                                    kind = imageChoiceKind,
+                                    question = q?.q ?: "",
+                                    options = q?.options ?: emptyList(),
+                                    selectedAnswer = selectedAns,
+                                    onPick = { answer ->
+                                        triggerMiniVibration(context, 40L)
+                                        onPickAnswer(answer)
+                                    }
+                                )
+                            } else if (isIntimacyPack) {
                                 CinematicSandMaterialize(
                                     animationKey = questionAnimationKey,
                                     delayMillis = 0,
@@ -968,78 +980,80 @@ fun QuizRunnerScreen(
                                     )
                                 )
                             }
-                            Spacer(modifier = Modifier.height(26.dp))
+                            Spacer(modifier = Modifier.height(if (imageChoiceKind == null) 26.dp else 12.dp))
 
-                            val isPizzaBurgerTensionQuestion = q?.q == PIZZA_BURGER_TENSION_QUESTION
-                            val rawOptions = q?.options ?: emptyList()
-                            val processedOptions = rawOptions.map {
-                                it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
-                            }
-                            val isNie = pack.cat == "nie"
-                            val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
-                            val options = if (isPizzaBurgerTensionQuestion) {
-                                processedOptions.take(2)
-                            } else {
-                                processedOptions + fallbackText
-                            }
-
-                            options.forEachIndexed { optIdx, optText ->
-                                val isOwn = !isPizzaBurgerTensionQuestion && optIdx == options.size - 1
-                                val isSelected = if (isOwn) {
-                                    selectedAns != null && selectedAns !in (q?.options ?: emptyList())
+                            if (imageChoiceKind == null) {
+                                val isPizzaBurgerTensionQuestion = q?.q == PIZZA_BURGER_TENSION_QUESTION
+                                val rawOptions = q?.options ?: emptyList()
+                                val processedOptions = rawOptions.map {
+                                    it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
+                                }
+                                val isNie = pack.cat == "nie"
+                                val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
+                                val options = if (isPizzaBurgerTensionQuestion) {
+                                    processedOptions.take(2)
                                 } else {
-                                    selectedAns == optText
+                                    processedOptions + fallbackText
                                 }
 
-                                val optionButton: @Composable (Float) -> Unit = { glitchAmount ->
-                                    QuizOptionButton(
-                                        number = optIdx + 1,
-                                        text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
-                                        isSelected = isSelected,
-                                        isOwn = isOwn,
-                                        onClick = {
-                                            triggerMiniVibration(context, 40L)
-                                            if (isOwn) {
-                                                onOpenOwnAnswerDialog(activeRun.currentIndex, null)
-                                            } else {
-                                                onPickAnswer(optText)
-                                            }
-                                        },
-                                        glitchAmount = glitchAmount
-                                    )
-                                }
-
-                                if (isIntimacyPack) {
-                                    CinematicSandMaterialize(
-                                        animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
-                                        delayMillis = 760 + optIdx * 500,
-                                        totalDurationMillis = 2_400,
-                                        particleCount = 1_000,
-                                        accentColor = optionAccentColor(optIdx + 1),
-                                        flowDirection = if (optIdx % 2 == 0) 1f else -1f,
-                                        shape = RoundedCornerShape(18.dp),
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(bottom = 11.dp)
-                                    ) { glitchAmount ->
-                                        optionButton(glitchAmount)
+                                options.forEachIndexed { optIdx, optText ->
+                                    val isOwn = !isPizzaBurgerTensionQuestion && optIdx == options.size - 1
+                                    val isSelected = if (isOwn) {
+                                        selectedAns != null && selectedAns !in (q?.options ?: emptyList())
+                                    } else {
+                                        selectedAns == optText
                                     }
-                                } else {
-                                    QuizOptionButton(
-                                        number = optIdx + 1,
-                                        text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
-                                        isSelected = isSelected,
-                                        isOwn = isOwn,
-                                        onClick = {
-                                            triggerMiniVibration(context, 40L)
-                                            if (isOwn) {
-                                                onOpenOwnAnswerDialog(activeRun.currentIndex, null)
-                                            } else {
-                                                onPickAnswer(optText)
-                                            }
-                                        },
-                                        modifier = Modifier.padding(bottom = 11.dp)
-                                    )
+
+                                    val optionButton: @Composable (Float) -> Unit = { glitchAmount ->
+                                        QuizOptionButton(
+                                            number = optIdx + 1,
+                                            text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
+                                            isSelected = isSelected,
+                                            isOwn = isOwn,
+                                            onClick = {
+                                                triggerMiniVibration(context, 40L)
+                                                if (isOwn) {
+                                                    onOpenOwnAnswerDialog(activeRun.currentIndex, null)
+                                                } else {
+                                                    onPickAnswer(optText)
+                                                }
+                                            },
+                                            glitchAmount = glitchAmount
+                                        )
+                                    }
+
+                                    if (isIntimacyPack) {
+                                        CinematicSandMaterialize(
+                                            animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
+                                            delayMillis = 760 + optIdx * 500,
+                                            totalDurationMillis = 2_400,
+                                            particleCount = 1_000,
+                                            accentColor = optionAccentColor(optIdx + 1),
+                                            flowDirection = if (optIdx % 2 == 0) 1f else -1f,
+                                            shape = RoundedCornerShape(18.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(bottom = 11.dp)
+                                        ) { glitchAmount ->
+                                            optionButton(glitchAmount)
+                                        }
+                                    } else {
+                                        QuizOptionButton(
+                                            number = optIdx + 1,
+                                            text = if (isSelected && isOwn) contentText(selectedAns ?: optText) else contentText(optText),
+                                            isSelected = isSelected,
+                                            isOwn = isOwn,
+                                            onClick = {
+                                                triggerMiniVibration(context, 40L)
+                                                if (isOwn) {
+                                                    onOpenOwnAnswerDialog(activeRun.currentIndex, null)
+                                                } else {
+                                                    onPickAnswer(optText)
+                                                }
+                                            },
+                                            modifier = Modifier.padding(bottom = 11.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
