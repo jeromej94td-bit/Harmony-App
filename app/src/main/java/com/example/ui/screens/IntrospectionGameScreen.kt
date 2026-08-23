@@ -137,17 +137,12 @@ fun IntrospectionExperienceScreen(
 
     val combinedErrorMessage = permissionDeniedMessage ?: mediaErrorMessage
 
-    // Auto-stop recording on leave / exit
+    // The Android system back action always asks before leaving the game.
     BackHandler {
         if (isRecording) {
             mediaController.stopRecording()
         }
-        if (screenState != ScreenState.ENTRY && screenState != ScreenState.RESULTS) {
-            showLeaveDialog = true
-        } else {
-            mediaController.releaseAll()
-            onExit()
-        }
+        showLeaveDialog = true
     }
 
     // Permission Launcher
@@ -226,6 +221,31 @@ fun IntrospectionExperienceScreen(
         else if (progress.stage == IntrospectionStage.REVELATION) ScreenState.REVELATION
         else ScreenState.QUESTION
         mediaController.startBackgroundMusic()
+    }
+
+    fun goBackOneQuestion() {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        mediaController.stopNarrator()
+        mediaController.stopAnswerAudio()
+
+        val previousStage = when (progress.stage) {
+            IntrospectionStage.ANIMAL -> IntrospectionStage.COLOR
+            IntrospectionStage.WATER -> IntrospectionStage.ANIMAL
+            IntrospectionStage.REVELATION,
+            IntrospectionStage.RESULTS -> IntrospectionStage.WATER
+            IntrospectionStage.COLOR -> return
+        }
+
+        val previousProgress = progress.copy(
+            stage = previousStage,
+            completed = false,
+            updatedAt = System.currentTimeMillis()
+        )
+        progress = previousProgress
+        store.save(previousProgress)
+        screenState = ScreenState.QUESTION
     }
 
     fun submitCurrentAnswer() {
@@ -349,21 +369,14 @@ fun IntrospectionExperienceScreen(
                             }
                         },
                         onConfirm = { submitCurrentAnswer() },
-                        onBackRequest = {
-                            if (isRecording) {
-                                mediaController.stopRecording()
-                            }
-                            showLeaveDialog = true
-                        }
+                        onBackRequest = { goBackOneQuestion() }
                     )
                 }
 
                 ScreenState.REVELATION -> {
                     RevelationScreen(
                         appLang = appLang,
-                        onBackRequest = {
-                            showLeaveDialog = true
-                        }
+                        onBackRequest = { goBackOneQuestion() }
                     )
                 }
 
