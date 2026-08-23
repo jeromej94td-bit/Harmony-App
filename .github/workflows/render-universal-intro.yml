@@ -8,14 +8,25 @@ on:
       - 'tools/remotion/universal-intro/**'
       - '.github/scripts/apply_universal_intro.py'
       - '.github/workflows/render-universal-intro.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tools/remotion/universal-intro/**'
+      - '.github/scripts/apply_universal_intro.py'
+      - '.github/workflows/render-universal-intro.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: universal-intro-render-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   render-integrate-test:
-    if: ${{ !contains(github.event.head_commit.message, 'feat: integrate rendered Universal intro') }}
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, 'feat: integrate rendered Universal intro') }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
