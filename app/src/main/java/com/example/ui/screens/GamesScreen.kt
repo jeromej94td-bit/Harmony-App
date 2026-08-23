@@ -414,8 +414,13 @@ fun GamesScreen(
             ) {
                 items(HarmonyPacksData.CATEGORIES) { category ->
                     val translatedCategory = LanguageManager.translateCategory(category, appLanguage)
+                    val displayCategory = if (category.id == "unterbewusstsein" && appLanguage == "de") {
+                        translatedCategory.copy(name = "Tauche ins Selbstbewusstsein ein")
+                    } else {
+                        translatedCategory
+                    }
                     CategoryRailCard(
-                        category = translatedCategory,
+                        category = displayCategory,
                         onClick = { onCategoryClick(category.id) }
                     )
                 }
@@ -686,7 +691,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
     )
     Box(
         modifier = Modifier
-            .size(width = 124.dp, height = 136.dp)
+            .size(width = 124.dp, height = if (isPortalCategory) 154.dp else 136.dp)
             .graphicsLayer {
                 scaleX = breathe
                 scaleY = breathe
@@ -733,7 +738,7 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
         ) {
             if (isPortalCategory) {
                 IntrospectionPortal(
-                    size = 72.dp,
+                    size = 64.dp,
                     isRevelation = true,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -746,10 +751,10 @@ fun CategoryRailCard(category: Category, onClick: () -> Unit) {
             }
             Text(
                 text = category.name,
-                fontSize = if (isPortalCategory) 12.5.sp else 12.sp,
+                fontSize = if (isPortalCategory) 11.5.sp else 12.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = HarmonyText,
-                lineHeight = 15.sp,
+                lineHeight = if (isPortalCategory) 14.sp else 15.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
