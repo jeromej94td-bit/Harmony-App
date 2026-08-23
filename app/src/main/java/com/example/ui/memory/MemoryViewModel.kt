@@ -77,14 +77,17 @@ class MemoryViewModel(
 
         MemoryUiState(
             categories = categories,
+            categoryEntryCounts = entries.groupingBy { it.categoryId }.eachCount(),
             visibleEntries = visible,
             selectedTab = local.selectedTab,
             selectedCategoryId = local.selectedCategoryId,
             query = local.query,
             editorMode = local.editorMode,
             editorEntryId = local.editorEntryId,
+            selectionMode = local.selectionMode,
+            selectedEntryIds = local.selectedEntryIds,
             failedPreviewIds = local.failedPreviewIds,
-            pendingDeleteEntryId = local.pendingDeleteEntryId,
+            pendingDeleteEntryIds = local.pendingDeleteEntryIds,
             errorKey = local.errorKey
         )
     }.stateIn(
@@ -117,6 +120,34 @@ class MemoryViewModel(
 
     fun closeEditor() {
         updateLocal { copy(editorMode = null, editorEntryId = null) }
+    }
+
+    fun startSelection(entryId: String? = null) {
+        updateLocal {
+            copy(
+                selectionMode = true,
+                selectedEntryIds = entryId?.let { selectedEntryIds + it } ?: selectedEntryIds
+            )
+        }
+    }
+
+    fun toggleEntrySelection(entryId: String) {
+        updateLocal {
+            copy(
+                selectionMode = true,
+                selectedEntryIds = if (entryId in selectedEntryIds) selectedEntryIds - entryId
+                else selectedEntryIds + entryId
+            )
+        }
+    }
+
+    fun selectAllVisibleEntries() {
+        val visibleIds = uiState.value.visibleEntries.mapTo(linkedSetOf()) { it.entity.id }
+        updateLocal { copy(selectionMode = true, selectedEntryIds = visibleIds) }
+    }
+
+    fun clearSelection() {
+        updateLocal { copy(selectionMode = false, selectedEntryIds = emptySet()) }
     }
 
     fun saveNote(entryId: String?, categoryId: String, title: String, body: String?) {
@@ -283,24 +314,34 @@ class MemoryViewModel(
     }
 
     fun requestPermanentDelete(entryId: String) {
-        updateLocal { copy(pendingDeleteEntryId = entryId) }
+        updateLocal { copy(pendingDeleteEntryIds = setOf(entryId)) }
+    }
+
+    fun requestSelectedDelete() {
+        val selected = localState.value.selectedEntryIds
+        if (selected.isNotEmpty()) updateLocal { copy(pendingDeleteEntryIds = selected) }
     }
 
     fun dismissPermanentDelete() {
-        updateLocal { copy(pendingDeleteEntryId = null) }
+        updateLocal { copy(pendingDeleteEntryIds = emptySet()) }
     }
 
     fun confirmPermanentDelete() {
-        val entryId = localState.value.pendingDeleteEntryId ?: return
-        val request = beginEntryRequest(entryId)
-        launchEntryOperation(request, ERROR_DELETE_ENTRY) {
-            request.guard.rowMutex.withLock {
-                if (!request.isLatest()) return@withLock
-                repository.deleteEntry(entryId)
-                if (!request.isLatest()) return@withLock
-                request.updateFailedState { it - entryId }
-                updateLocal {
-                    if (pendingDeleteEntryId == entryId) copy(pendingDeleteEntryId = null) else this
+        val entryIds = localState.value.pendingDeleteEntryIds
+        if (entryIds.isEmpty()) return
+        entryIds.forEach(::beginEntryRequest)
+        launchOperation(ERROR_DELETE_ENTRY) {
+            repository.deleteEntries(entryIds)
+            updateFailedPreviewIds { it - entryIds }
+            updateLocal {
+                if (pendingDeleteEntryIds == entryIds) {
+                    copy(
+                        pendingDeleteEntryIds = emptySet(),
+                        selectionMode = false,
+                        selectedEntryIds = selectedEntryIds - entryIds
+                    )
+                } else {
+                    this
                 }
             }
         }
@@ -438,8 +479,10 @@ private data class MemoryLocalState(
     val query: String = "",
     val editorMode: MemoryEditorMode? = null,
     val editorEntryId: String? = null,
+    val selectionMode: Boolean = false,
+    val selectedEntryIds: Set<String> = emptySet(),
     val failedPreviewIds: Set<String> = emptySet(),
-    val pendingDeleteEntryId: String? = null,
+    val pendingDeleteEntryIds: Set<String> = emptySet(),
     val nowMillis: Long,
     val errorKey: String? = null
 )

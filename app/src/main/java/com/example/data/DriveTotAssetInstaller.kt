@@ -6,6 +6,7 @@ import com.example.data.model.HarmonyPacksData
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
+import java.util.zip.ZipException
 import java.util.zip.ZipInputStream
 
 /**
@@ -15,7 +16,8 @@ import java.util.zip.ZipInputStream
  */
 object DriveTotAssetInstaller {
     private const val DRIVE_ASSET_ZIP = "drive_tot_assets.zip"
-    private const val OUTPUT_DIR = "drive_tot_assets_v2"
+    private const val OUTPUT_DIR = "drive_tot_assets_v3"
+    private const val INSTALL_MARKER = ".install-complete"
 
     private val BRAND_ASSET_CHUNKS = listOf(
         "brand_everyday_assets_01.b64",
@@ -160,18 +162,27 @@ object DriveTotAssetInstaller {
         HarmonyPacksData.setDynamicPacks(current.map { if (it.id == "ringe") updated else it })
     }
 
-    private fun extractZip(input: InputStream, outputDir: File, expectedFiles: Set<String>) {
-        ZipInputStream(input.buffered()).use { zip ->
-            while (true) {
-                val entry = zip.nextEntry ?: break
-                if (!entry.isDirectory) {
-                    val name = entry.name.substringAfterLast('/')
-                    if (name in expectedFiles) {
-                        File(outputDir, name).outputStream().buffered().use { out -> zip.copyTo(out) }
+    private fun extractZip(input: InputStream, outputDir: File, expectedFiles: Set<String>): Boolean {
+        val extractedFiles = mutableListOf<File>()
+        return try {
+            ZipInputStream(input.buffered()).use { zip ->
+                while (true) {
+                    val entry = zip.nextEntry ?: break
+                    if (!entry.isDirectory) {
+                        val name = entry.name.substringAfterLast('/')
+                        if (name in expectedFiles) {
+                            val outputFile = File(outputDir, name)
+                            extractedFiles += outputFile
+                            outputFile.outputStream().buffered().use { out -> zip.copyTo(out) }
+                        }
                     }
+                    zip.closeEntry()
                 }
-                zip.closeEntry()
             }
+            true
+        } catch (_: ZipException) {
+            extractedFiles.forEach { it.delete() }
+            false
         }
     }
 
@@ -189,8 +200,9 @@ object DriveTotAssetInstaller {
         applyEngagementRingPack()
 
         val outputDir = File(context.filesDir, OUTPUT_DIR).apply { mkdirs() }
+        val installMarker = File(outputDir, INSTALL_MARKER)
         val expectedFiles = (driveOptionToFile.values + brandOptionToFile.values + ringOptionToFile.values).toSet()
-        val needsInstall = expectedFiles.any { !File(outputDir, it).isFile }
+        val needsInstall = !installMarker.isFile
 
         if (needsInstall) {
             outputDir.listFiles()?.forEach { it.delete() }
@@ -201,6 +213,7 @@ object DriveTotAssetInstaller {
             ByteArrayInputStream(decodeChunkedZip(context, ENGAGEMENT_RING_CHUNKS)).use {
                 extractZip(it, outputDir, expectedFiles)
             }
+            installMarker.writeText("1")
         }
 
         val result = LinkedHashMap<String, String>()

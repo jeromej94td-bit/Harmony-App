@@ -64,7 +64,34 @@ class MemoryMigrationTest {
         migrated.close()
     }
 
+    @Test
+    fun `migration from version 3 keeps existing categories visible`() {
+        helper.createDatabase(TEST_DB_V3, 3).apply {
+            execSQL(
+                """
+                INSERT INTO memory_categories(
+                    id, systemKey, customName, colorKey, iconKey, sortOrder, createdAt, updatedAt
+                ) VALUES ('system-films', 'Filme', NULL, 'violet', 'movie', 0, 1, 1)
+                """.trimIndent()
+            )
+            close()
+        }
+
+        val migrated = helper.runMigrationsAndValidate(
+            TEST_DB_V3,
+            4,
+            true,
+            HarmonyDatabase.MIGRATION_3_4
+        )
+        migrated.query("SELECT isVisible FROM memory_categories WHERE id = 'system-films'").use { cursor ->
+            assertTrue(cursor.moveToFirst())
+            assertEquals(1, cursor.getInt(0))
+        }
+        migrated.close()
+    }
+
     private companion object {
         const val TEST_DB = "memory-migration-test"
+        const val TEST_DB_V3 = "memory-migration-v3-test"
     }
 }

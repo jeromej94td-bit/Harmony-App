@@ -98,7 +98,7 @@ interface CoupleStatsDao {
         MemoryCategoryEntity::class,
         MemoryEntryEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 abstract class HarmonyDatabase : RoomDatabase() {
@@ -121,7 +121,7 @@ abstract class HarmonyDatabase : RoomDatabase() {
                     HarmonyDatabase::class.java,
                     "harmony_database"
                 )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                 INSTANCE = instance
                 instance
@@ -189,6 +189,14 @@ abstract class HarmonyDatabase : RoomDatabase() {
                 )
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_memory_entries_categoryId ON memory_entries(categoryId)")
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_memory_entries_completedAt ON memory_entries(completedAt)")
+            }
+        }
+
+        internal val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE memory_categories ADD COLUMN isVisible INTEGER NOT NULL DEFAULT 1"
+                )
             }
         }
     }

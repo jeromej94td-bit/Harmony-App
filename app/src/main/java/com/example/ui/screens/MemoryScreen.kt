@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -28,7 +29,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddLink
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Checklist
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.DoneAll
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -55,6 +59,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -66,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.MemoryCategoryEntity
 import com.example.data.model.MemoryEntryKind
+import com.example.R
 import com.example.ui.components.AmbientBackground
 import com.example.ui.memory.MemoryEditorMode
 import com.example.ui.memory.MemoryTab
@@ -79,15 +86,26 @@ import com.example.ui.theme.HarmonySurface
 import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 import com.example.util.LanguageManager
+import coil.compose.AsyncImage
+import java.io.File
 
 @Composable
 fun MemoryScreen(
     state: MemoryUiState,
     appLanguage: String,
+    userName: String = "",
+    partnerName: String = "",
+    userAvatarPath: String? = null,
+    partnerAvatarPath: String? = null,
     onSelectTab: (MemoryTab) -> Unit,
     onQueryChange: (String) -> Unit,
     onCategoryFilter: (String?) -> Unit,
     onOpenEditor: (MemoryEditorMode, String?) -> Unit,
+    onStartSelection: (String?) -> Unit = {},
+    onToggleEntrySelection: (String) -> Unit = {},
+    onSelectAllEntries: () -> Unit = {},
+    onClearSelection: () -> Unit = {},
+    onDeleteSelectedRequest: () -> Unit = {},
     onComplete: (String) -> Unit,
     onRestore: (String) -> Unit,
     onRetryPreview: (String) -> Unit,
@@ -127,6 +145,10 @@ fun MemoryScreen(
                     MemoryPinboardHeader(
                         state = state,
                         appLanguage = appLanguage,
+                        userName = userName,
+                        partnerName = partnerName,
+                        userAvatarPath = userAvatarPath,
+                        partnerAvatarPath = partnerAvatarPath,
                         onSelectTab = onSelectTab,
                         onQueryChange = onQueryChange,
                         onCategoryFilter = onCategoryFilter,
@@ -137,7 +159,11 @@ fun MemoryScreen(
                         onEditCategory = { category ->
                             categoryDialogTargetId = category.id
                             showCategoryDialog = true
-                        }
+                        },
+                        onStartSelection = { onStartSelection(null) },
+                        onSelectAllEntries = onSelectAllEntries,
+                        onClearSelection = onClearSelection,
+                        onDeleteSelectedRequest = onDeleteSelectedRequest
                     )
                 }
 
@@ -162,7 +188,18 @@ fun MemoryScreen(
                             onComplete = onComplete,
                             onRestore = onRestore,
                             onRetryPreview = onRetryPreview,
-                            onDeleteRequest = onDeleteRequest
+                            onDeleteRequest = onDeleteRequest,
+                            selectionMode = state.selectionMode,
+                            selected = item.entity.id in state.selectedEntryIds,
+                            onToggleSelection = { onToggleEntrySelection(item.entity.id) },
+                            onLongPress = { onStartSelection(item.entity.id) },
+                            onOpen = {
+                                onOpenEditor(
+                                    if (item.entity.kind == MemoryEntryKind.LINK) MemoryEditorMode.LINK
+                                    else MemoryEditorMode.NOTE,
+                                    item.entity.id
+                                )
+                            }
                         )
                     }
                 }
@@ -230,7 +267,7 @@ fun MemoryScreen(
             category = categoryDialogTarget,
             categories = state.categories,
             entryCount = categoryDialogTarget?.let { target ->
-                state.visibleEntries.count { it.entity.categoryId == target.id }
+                state.categoryEntryCounts[target.id] ?: 0
             } ?: 0,
             appLanguage = appLanguage,
             onDismiss = {
@@ -254,7 +291,7 @@ fun MemoryScreen(
         )
     }
 
-    if (state.pendingDeleteEntryId != null) {
+    if (state.pendingDeleteEntryIds.isNotEmpty()) {
         AlertDialog(
             onDismissRequest = onDeleteDismiss,
             containerColor = HarmonySurface,
@@ -272,7 +309,11 @@ fun MemoryScreen(
             text = {
                 Text(
                     LanguageManager.tr(
-                        "Möchtest du diesen Eintrag endgültig löschen?",
+                        if (state.pendingDeleteEntryIds.size == 1) {
+                            "Möchtest du diesen Eintrag endgültig löschen?"
+                        } else {
+                            "Möchtest du die ausgewählten Einträge endgültig löschen?"
+                        },
                         appLanguage
                     ),
                     color = HarmonyMuted
@@ -302,52 +343,96 @@ fun MemoryScreen(
 private fun MemoryPinboardHeader(
     state: MemoryUiState,
     appLanguage: String,
+    userName: String,
+    partnerName: String,
+    userAvatarPath: String?,
+    partnerAvatarPath: String?,
     onSelectTab: (MemoryTab) -> Unit,
     onQueryChange: (String) -> Unit,
     onCategoryFilter: (String?) -> Unit,
     onAddCategory: () -> Unit,
-    onEditCategory: (MemoryCategoryEntity) -> Unit
+    onEditCategory: (MemoryCategoryEntity) -> Unit,
+    onStartSelection: () -> Unit,
+    onSelectAllEntries: () -> Unit,
+    onClearSelection: () -> Unit,
+    onDeleteSelectedRequest: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_full),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(58.dp)
-                    .clip(RoundedCornerShape(19.dp))
-                    .background(
-                        Brush.linearGradient(
-                            listOf(HarmonyPink.copy(alpha = 0.34f), HarmonyPurple.copy(alpha = 0.38f))
-                        )
-                    )
-                    .border(1.dp, HarmonyPinkSoft.copy(alpha = 0.62f), RoundedCornerShape(19.dp)),
-                contentAlignment = Alignment.Center
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(28.dp))
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = LanguageManager.tr("Das müssen wir uns merken", appLanguage),
+                color = HarmonyText,
+                fontSize = 27.sp,
+                lineHeight = 31.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(10.dp))
+            MemoryCoupleAvatars(
+                userName = userName,
+                partnerName = partnerName,
+                userAvatarPath = userAvatarPath,
+                partnerAvatarPath = partnerAvatarPath
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = LanguageManager.tr("Gemeinsam sammeln. Nie vergessen.", appLanguage),
+                color = HarmonyMuted,
+                fontSize = 13.sp,
+                lineHeight = 17.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        if (state.selectionMode) {
+            Spacer(Modifier.height(14.dp))
+            Surface(
+                color = HarmonySurface2.copy(alpha = 0.92f),
+                shape = RoundedCornerShape(18.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, HarmonyPinkSoft.copy(alpha = 0.56f))
             ) {
-                Icon(
-                    Icons.Default.Bookmarks,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(31.dp)
-                )
-            }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = LanguageManager.tr("Das müssen wir uns merken", appLanguage),
-                    color = HarmonyText,
-                    fontSize = 28.sp,
-                    lineHeight = 32.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(Modifier.height(3.dp))
-                Text(
-                    text = LanguageManager.tr("Gemeinsam sammeln. Nie vergessen.", appLanguage),
-                    color = HarmonyMuted,
-                    fontSize = 13.sp,
-                    lineHeight = 17.sp
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = LanguageManager.tr("${state.selectedEntryIds.size} ausgewählt", appLanguage),
+                        color = HarmonyText,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f).padding(start = 6.dp)
+                    )
+                    IconButton(
+                        onClick = onSelectAllEntries,
+                        modifier = Modifier.testTag("memory_selection_all")
+                    ) {
+                        Icon(Icons.Default.DoneAll, contentDescription = LanguageManager.tr("Alle auswählen", appLanguage), tint = HarmonyPinkSoft)
+                    }
+                    IconButton(
+                        onClick = onDeleteSelectedRequest,
+                        enabled = state.selectedEntryIds.isNotEmpty(),
+                        modifier = Modifier.testTag("memory_selection_delete")
+                    ) {
+                        Icon(Icons.Default.DeleteSweep, contentDescription = LanguageManager.tr("Auswahl löschen", appLanguage), tint = HarmonyPinkSoft)
+                    }
+                    IconButton(
+                        onClick = onClearSelection,
+                        modifier = Modifier.testTag("memory_selection_close")
+                    ) {
+                        Icon(Icons.Default.Close, contentDescription = LanguageManager.tr("Auswahl schließen", appLanguage), tint = HarmonyMuted)
+                    }
+                }
             }
         }
 
@@ -381,6 +466,18 @@ private fun MemoryPinboardHeader(
             singleLine = true,
             leadingIcon = {
                 Icon(Icons.Default.Search, contentDescription = null, tint = HarmonyPinkSoft)
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = onStartSelection,
+                    modifier = Modifier.testTag("memory_selection_start")
+                ) {
+                    Icon(
+                        Icons.Default.DoneAll,
+                        contentDescription = LanguageManager.tr("Notizen auswählen", appLanguage),
+                        tint = HarmonyPinkSoft
+                    )
+                }
             },
             placeholder = {
                 Text(LanguageManager.tr("Suchen", appLanguage), color = HarmonyMuted)
@@ -420,24 +517,12 @@ private fun MemoryPinboardHeader(
                     icon = memoryCategoryIcon(category.iconKey),
                     selected = state.selectedCategoryId == category.id,
                     accent = memoryCategoryColor(category.colorKey),
-                    onClick = { onCategoryFilter(category.id) },
+                    onClick = {
+                        if (state.selectedCategoryId == category.id) onEditCategory(category)
+                        else onCategoryFilter(category.id)
+                    },
                     modifier = Modifier.testTag("memory_category_${category.id}")
                 )
-                if (category.systemKey == null) {
-                    IconButton(
-                        onClick = { onEditCategory(category) },
-                        modifier = Modifier
-                            .size(48.dp)
-                            .testTag("memory_category_${category.id}_edit")
-                    ) {
-                        Icon(
-                            Icons.Default.Edit,
-                            contentDescription = LanguageManager.tr("Kategorie bearbeiten", appLanguage),
-                            tint = memoryCategoryColor(category.colorKey),
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
             }
             MemoryCategoryChip(
                 label = LanguageManager.tr("Kategorie hinzufügen", appLanguage),
@@ -449,6 +534,69 @@ private fun MemoryPinboardHeader(
             )
         }
         Spacer(Modifier.height(4.dp))
+    }
+}
+
+@Composable
+private fun MemoryCoupleAvatars(
+    userName: String,
+    partnerName: String,
+    userAvatarPath: String?,
+    partnerAvatarPath: String?
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        MemoryPinboardAvatar(
+            name = userName,
+            path = userAvatarPath,
+            colors = listOf(HarmonyPink, HarmonyPinkSoft)
+        )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 3.dp)
+                .size(24.dp)
+                .clip(CircleShape)
+                .background(HarmonyPink),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Default.Favorite,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(13.dp)
+            )
+        }
+        MemoryPinboardAvatar(
+            name = partnerName,
+            path = partnerAvatarPath,
+            colors = listOf(HarmonyPurple, Color(0xFF7567FF))
+        )
+    }
+}
+
+@Composable
+private fun MemoryPinboardAvatar(name: String, path: String?, colors: List<Color>) {
+    Box(
+        modifier = Modifier
+            .size(48.dp)
+            .clip(CircleShape)
+            .background(Brush.linearGradient(colors))
+            .border(2.dp, Color.White.copy(alpha = 0.72f), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        if (!path.isNullOrBlank()) {
+            AsyncImage(
+                model = File(path),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            Text(
+                text = name.take(1).ifBlank { "H" }.uppercase(),
+                color = Color.White,
+                fontWeight = FontWeight.ExtraBold
+            )
+        }
     }
 }
 

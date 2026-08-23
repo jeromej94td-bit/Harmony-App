@@ -21,6 +21,7 @@ interface MemoryRepository {
     suspend fun updateEntry(entry: MemoryEntryEntity)
     suspend fun setCompleted(id: String, completedAt: Long?, updatedAt: Long)
     suspend fun deleteEntry(id: String)
+    suspend fun deleteEntries(ids: Set<String>)
 }
 
 class RoomMemoryRepository(
@@ -34,6 +35,16 @@ class RoomMemoryRepository(
     override suspend fun ensureDefaultCategories(nowMillis: Long) {
         database.withTransaction {
             dao.insertCategories(defaultCategories(nowMillis))
+            dao.updateSystemCategory(
+                id = MemoryDefaults.FILMS_ID,
+                systemKey = "Filme & Serien",
+                sortOrder = 0,
+                updatedAt = nowMillis
+            )
+            dao.getCategory(MemoryDefaults.SERIES_ID)?.let {
+                dao.moveEntries(MemoryDefaults.SERIES_ID, MemoryDefaults.FILMS_ID, nowMillis)
+                dao.hideCategory(MemoryDefaults.SERIES_ID, nowMillis)
+            }
         }
     }
 
@@ -78,11 +89,18 @@ class RoomMemoryRepository(
     }
 
     override suspend fun deleteCustomCategory(id: String, moveToId: String, nowMillis: Long) {
-        requireCustomCategory(id)
         require(id != moveToId) { "A category cannot be moved to itself." }
         database.withTransaction {
+            val existing = requireNotNull(dao.getCategory(id)) { "Category does not exist." }
+            requireNotNull(dao.getCategory(moveToId)?.takeIf { it.isVisible }) {
+                "Move target does not exist."
+            }
             dao.moveEntries(id, moveToId, nowMillis)
-            dao.deleteCategory(id)
+            if (existing.systemKey != null) {
+                dao.hideCategory(id, nowMillis)
+            } else {
+                dao.deleteCategory(id)
+            }
         }
     }
 
@@ -104,6 +122,10 @@ class RoomMemoryRepository(
         dao.deleteEntry(id)
     }
 
+    override suspend fun deleteEntries(ids: Set<String>) {
+        if (ids.isNotEmpty()) dao.deleteEntries(ids)
+    }
+
     private fun requireCustomCategory(id: String) {
         require(id !in MemoryDefaults.orderedIds) { "System categories cannot be changed." }
     }
@@ -111,19 +133,10 @@ class RoomMemoryRepository(
     private fun defaultCategories(nowMillis: Long) = listOf(
         MemoryCategoryEntity(
             id = MemoryDefaults.FILMS_ID,
-            systemKey = "Filme",
+            systemKey = "Filme & Serien",
             colorKey = "violet",
             iconKey = "movie",
             sortOrder = 0,
-            createdAt = nowMillis,
-            updatedAt = nowMillis
-        ),
-        MemoryCategoryEntity(
-            id = MemoryDefaults.SERIES_ID,
-            systemKey = "Serien",
-            colorKey = "pink",
-            iconKey = "tv",
-            sortOrder = 1,
             createdAt = nowMillis,
             updatedAt = nowMillis
         ),
@@ -132,7 +145,7 @@ class RoomMemoryRepository(
             systemKey = "Ideen",
             colorKey = "orange",
             iconKey = "lightbulb",
-            sortOrder = 2,
+            sortOrder = 1,
             createdAt = nowMillis,
             updatedAt = nowMillis
         ),
@@ -141,7 +154,7 @@ class RoomMemoryRepository(
             systemKey = "Orte",
             colorKey = "blue",
             iconKey = "place",
-            sortOrder = 3,
+            sortOrder = 2,
             createdAt = nowMillis,
             updatedAt = nowMillis
         ),
@@ -150,7 +163,7 @@ class RoomMemoryRepository(
             systemKey = "Sonstiges",
             colorKey = "teal",
             iconKey = "bookmark",
-            sortOrder = 4,
+            sortOrder = 3,
             createdAt = nowMillis,
             updatedAt = nowMillis
         )

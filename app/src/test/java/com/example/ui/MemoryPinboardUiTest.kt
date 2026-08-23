@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -12,6 +14,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.longClick
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click as viewClick
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -75,6 +79,109 @@ class MemoryPinboardUiTest {
         composeRule.onNodeWithTag("memory_add_button").performClick()
         composeRule.onNodeWithTag("memory_mode_list").assertExists().performClick()
         assertEquals(MemoryEditorMode.LIST, editorMode)
+    }
+
+    @Test
+    fun `tapping a note card opens its full editor`() {
+        var openedMode: MemoryEditorMode? = null
+        var openedId: String? = null
+        setScreen(
+            state = memoryState(
+                entries = listOf(memoryEntry("editable-note", title = "Sterne beobachten"))
+            ),
+            onOpenEditor = { mode, id ->
+                openedMode = mode
+                openedId = id
+            }
+        )
+
+        composeRule.onNodeWithText("Sterne beobachten").performClick()
+
+        assertEquals(MemoryEditorMode.NOTE, openedMode)
+        assertEquals("editable-note", openedId)
+    }
+
+    @Test
+    fun `link card puts the couples note before preview metadata`() {
+        val link = memoryEntry(
+            id = "watch-link",
+            title = "https://m.youtube.com/watch?v=abc",
+            kind = MemoryEntryKind.LINK,
+            url = "https://m.youtube.com/watch?v=abc"
+        ).let { item ->
+            item.copy(
+                entity = item.entity.copy(
+                    body = "Diesen Film wollen wir zusammen anschauen",
+                    previewTitle = "Offizieller Trailer",
+                    previewDescription = "Automatisch geladene Beschreibung"
+                )
+            )
+        }
+        setScreen(state = memoryState(entries = listOf(link)))
+
+        composeRule.onNodeWithTag("memory_entry_watch-link_primary", useUnmergedTree = true)
+            .assertTextEquals("Diesen Film wollen wir zusammen anschauen")
+        composeRule.onNodeWithTag("memory_entry_watch-link_preview_title", useUnmergedTree = true)
+            .assertTextEquals("Offizieller Trailer")
+    }
+
+    @Test
+    fun `long press selects several notes for one delete request`() {
+        var deleteRequests = 0
+        var state by mutableStateOf(
+            memoryState(
+                entries = listOf(
+                    memoryEntry("first", title = "Erste Notiz"),
+                    memoryEntry("second", title = "Zweite Notiz")
+                )
+            )
+        )
+        composeRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                MemoryScreen(
+                    state = state,
+                    appLanguage = "de",
+                    onSelectTab = {},
+                    onQueryChange = {},
+                    onCategoryFilter = {},
+                    onOpenEditor = { _, _ -> },
+                    onStartSelection = { id ->
+                        state = state.copy(
+                            selectionMode = true,
+                            selectedEntryIds = id?.let { state.selectedEntryIds + it } ?: state.selectedEntryIds
+                        )
+                    },
+                    onToggleEntrySelection = { id ->
+                        state = state.copy(
+                            selectedEntryIds = if (id in state.selectedEntryIds) {
+                                state.selectedEntryIds - id
+                            } else {
+                                state.selectedEntryIds + id
+                            }
+                        )
+                    },
+                    onSelectAllEntries = {},
+                    onClearSelection = {},
+                    onDeleteSelectedRequest = { deleteRequests += 1 },
+                    onComplete = {},
+                    onRestore = {},
+                    onRetryPreview = {},
+                    onDeleteRequest = {},
+                    onDeleteConfirm = {},
+                    onDeleteDismiss = {},
+                    onCreateCategory = { _, _, _ -> },
+                    onUpdateCategory = { _, _, _, _ -> },
+                    onDeleteCategory = { _, _ -> }
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag("memory_entry_first").performTouchInput { longClick() }
+        composeRule.onNodeWithTag("memory_entry_second").performClick()
+        composeRule.runOnIdle { assertEquals(setOf("first", "second"), state.selectedEntryIds) }
+
+        composeRule.onNodeWithTag("memory_selection_delete").performClick()
+        composeRule.runOnIdle { assertEquals(1, deleteRequests) }
     }
 
     @Test
@@ -153,13 +260,13 @@ class MemoryPinboardUiTest {
                     onRetryPreview = {},
                     onDeleteRequest = {
                         requestedId = it
-                        state = state.copy(pendingDeleteEntryId = it)
+                        state = state.copy(pendingDeleteEntryIds = setOf(it))
                     },
                     onDeleteConfirm = {
                         confirmCalls += 1
-                        state = state.copy(pendingDeleteEntryId = null)
+                        state = state.copy(pendingDeleteEntryIds = emptySet())
                     },
-                    onDeleteDismiss = { state = state.copy(pendingDeleteEntryId = null) },
+                    onDeleteDismiss = { state = state.copy(pendingDeleteEntryIds = emptySet()) },
                     onCreateCategory = { _, _, _ -> },
                     onUpdateCategory = { _, _, _, _ -> },
                     onDeleteCategory = { _, _ -> }
@@ -235,7 +342,41 @@ class MemoryPinboardUiTest {
     }
 
     @Test
-    fun `default category dialog exposes no delete action`() {
+    fun `existing note opens as a fully populated editing sheet`() {
+        val existing = MemoryEntryEntity(
+            id = "editable",
+            categoryId = MemoryDefaults.FILMS_ID,
+            kind = MemoryEntryKind.NOTE,
+            title = "The Bear",
+            body = "Gemeinsam weiterschauen",
+            createdAt = 1L,
+            updatedAt = 2L
+        )
+        composeRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                MemoryEditorSheet(
+                    mode = MemoryEditorMode.NOTE,
+                    categories = testCategories,
+                    appLanguage = "de",
+                    onModeChange = {},
+                    onDismiss = {},
+                    onSaveNote = { _, _, _, _ -> },
+                    onSaveList = { _, _ -> },
+                    onSaveLink = { _, _, _, _ -> },
+                    initialEntry = existing
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Notiz bearbeiten").assertExists()
+        composeRule.onNodeWithTag("memory_editor_title").assertTextContains("The Bear", substring = true)
+        composeRule.onNodeWithTag("memory_editor_body")
+            .assertTextContains("Gemeinsam weiterschauen", substring = true)
+    }
+
+    @Test
+    fun `default category dialog allows moving entries before deletion`() {
+        var deletedTarget: String? = null
         composeRule.setContent {
             HarmonyTheme(darkTheme = true) {
                 MemoryCategoryDialog(
@@ -246,11 +387,13 @@ class MemoryPinboardUiTest {
                     onDismiss = {},
                     onCreate = { _, _, _ -> },
                     onUpdate = { _, _, _, _ -> },
-                    onDelete = { _, _ -> }
+                    onDelete = { _, target -> deletedTarget = target }
                 )
             }
         }
-        composeRule.onNodeWithTag("memory_category_delete").assertDoesNotExist()
+        composeRule.onNodeWithTag("memory_category_move_${MemoryDefaults.OTHER_ID}").performClick()
+        composeRule.onNodeWithTag("memory_category_delete").assertIsEnabled().performClick()
+        composeRule.runOnIdle { assertEquals(MemoryDefaults.OTHER_ID, deletedTarget) }
     }
 
     @Test
@@ -386,7 +529,7 @@ class MemoryPinboardUiTest {
 
     private companion object {
         val testCategories = listOf(
-            category(MemoryDefaults.FILMS_ID, "Filme", null, "violet", "movie"),
+            category(MemoryDefaults.FILMS_ID, "Filme & Serien", null, "violet", "movie"),
             category(MemoryDefaults.OTHER_ID, "Sonstiges", null, "teal", "bookmark")
         )
 

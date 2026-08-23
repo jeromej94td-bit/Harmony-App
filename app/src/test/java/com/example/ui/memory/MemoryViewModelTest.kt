@@ -80,7 +80,7 @@ class MemoryViewModelTest {
         val viewModel = viewModel()
         runCurrent()
 
-        viewModel.saveList(MemoryDefaults.SERIES_ID, "  Dark  \n\nSeverance\nDark")
+        viewModel.saveList(MemoryDefaults.FILMS_ID, "  Dark  \n\nSeverance\nDark")
         runCurrent()
 
         assertEquals(listOf("Dark", "Severance", "Dark"), repository.inserted.map { it.title })
@@ -131,7 +131,7 @@ class MemoryViewModelTest {
     fun `category and query filters match searchable entry content`() = runMemoryTest {
         repository.seedEntries(
             entry("film", categoryId = MemoryDefaults.FILMS_ID, title = "Arrival", body = "Language"),
-            entry("series", categoryId = MemoryDefaults.SERIES_ID, title = "Dark", body = "Winden")
+            entry("series", categoryId = MemoryDefaults.IDEAS_ID, title = "Dark", body = "Winden")
         )
         val viewModel = viewModel()
         runCurrent()
@@ -510,6 +510,34 @@ class MemoryViewModelTest {
     }
 
     @Test
+    fun `selection deletes every marked note together and keeps unselected notes`() = runMemoryTest {
+        repository.seedEntries(entry("first"), entry("second"), entry("third"))
+        val viewModel = viewModel()
+        runCurrent()
+
+        viewModel.startSelection("first")
+        viewModel.toggleEntrySelection("second")
+        runCurrent()
+
+        assertTrue(viewModel.uiState.value.selectionMode)
+        assertEquals(setOf("first", "second"), viewModel.uiState.value.selectedEntryIds)
+
+        viewModel.requestSelectedDelete()
+        runCurrent()
+        assertEquals(setOf("first", "second"), viewModel.uiState.value.pendingDeleteEntryIds)
+
+        viewModel.confirmPermanentDelete()
+        runCurrent()
+
+        assertNull(repository.getEntry("first"))
+        assertNull(repository.getEntry("second"))
+        assertNotNull(repository.getEntry("third"))
+        assertFalse(viewModel.uiState.value.selectionMode)
+        assertTrue(viewModel.uiState.value.selectedEntryIds.isEmpty())
+        assertTrue(viewModel.uiState.value.pendingDeleteEntryIds.isEmpty())
+    }
+
+    @Test
     fun `retry clears failed state for missing and non link entries`() = runMemoryTest {
         repository.seedEntries(
             entry("missing", kind = MemoryEntryKind.LINK, url = "https://missing.example/"),
@@ -549,11 +577,11 @@ class MemoryViewModelTest {
 
         viewModel.requestPermanentDelete("first")
         runCurrent()
-        assertEquals("first", viewModel.uiState.value.pendingDeleteEntryId)
+        assertEquals(setOf("first"), viewModel.uiState.value.pendingDeleteEntryIds)
         assertNotNull(repository.getEntry("first"))
         viewModel.dismissPermanentDelete()
         runCurrent()
-        assertNull(viewModel.uiState.value.pendingDeleteEntryId)
+        assertTrue(viewModel.uiState.value.pendingDeleteEntryIds.isEmpty())
         assertNotNull(repository.getEntry("first"))
 
         viewModel.requestPermanentDelete("first")
@@ -561,7 +589,7 @@ class MemoryViewModelTest {
         runCurrent()
         assertNull(repository.getEntry("first"))
         assertNotNull(repository.getEntry("second"))
-        assertNull(viewModel.uiState.value.pendingDeleteEntryId)
+        assertTrue(viewModel.uiState.value.pendingDeleteEntryIds.isEmpty())
     }
 
     @Test
@@ -776,6 +804,11 @@ private class FakeMemoryRepository : MemoryRepository {
     override suspend fun deleteEntry(id: String) {
         failIfRequested()
         entryState.value = entryState.value.filterNot { it.id == id }
+    }
+
+    override suspend fun deleteEntries(ids: Set<String>) {
+        failIfRequested()
+        entryState.value = entryState.value.filterNot { it.id in ids }
     }
 
     fun seedEntries(vararg entries: MemoryEntryEntity) {
