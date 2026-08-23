@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/memory_widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/widget_memory_background">
+
+    <LinearLayout
+        android:id="@+id/memory_widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:text="♥"
+            android:textColor="#FFFF2E63"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="6dp">
+
+            <TextView
+                android:id="@+id/memory_widget_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Das müssen wir uns merken"
+                android:textColor="#FFF9F4FF"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HARMONY · FÜR EUCH"
+                android:textColor="#FFB98BFF"
+                android:textSize="9sp"
+                android:letterSpacing="0.12"
+                android:maxLines="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/memory_widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Noch nichts gemerkt · Harmony öffnen"
+        android:textColor="#FFB7A7C8"
+        android:textSize="13sp"
+        android:maxLines="2" />
+
+    <LinearLayout
+        android:id="@+id/memory_slot_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@drawable/widget_memory_slot_background">
+
+        <ImageView
+            android:id="@+id/memory_slot_1_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:background="#22170F22"
+            android:src="@drawable/widget_memory_link_fallback"
+            android:contentDescription="Link-Vorschau" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/memory_slot_1_site"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFC89BE0"
+                android:textSize="9sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_1_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF9F4FF"
+                android:textSize="13sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_1_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="#FFB7A7C8"
+                android:textSize="10sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/memory_slot_1_check"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:background="@drawable/widget_memory_check_background"
+            android:text="✓"
+            android:textColor="#FFFF6B8F"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/memory_slot_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@drawable/widget_memory_slot_background">
+
+        <ImageView
+            android:id="@+id/memory_slot_2_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:background="#22170F22"
+            android:src="@drawable/widget_memory_link_fallback"
+            android:contentDescription="Link-Vorschau" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/memory_slot_2_site"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFC89BE0"
+                android:textSize="9sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_2_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF9F4FF"
+                android:textSize="13sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_2_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="#FFB7A7C8"
+                android:textSize="10sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/memory_slot_2_check"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:background="@drawable/widget_memory_check_background"
+            android:text="✓"
+            android:textColor="#FFFF6B8F"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/memory_slot_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@drawable/widget_memory_slot_background">
+
+        <ImageView
+            android:id="@+id/memory_slot_3_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:background="#22170F22"
+            android:src="@drawable/widget_memory_link_fallback"
+            android:contentDescription="Link-Vorschau" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/memory_slot_3_site"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFC89BE0"
+                android:textSize="9sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_3_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFF9F4FF"
+                android:textSize="13sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/memory_slot_3_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="#FFB7A7C8"
+                android:textSize="10sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/memory_slot_3_check"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:background="@drawable/widget_memory_check_background"
+            android:text="✓"
+            android:textColor="#FFFF6B8F"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+</LinearLayout>
