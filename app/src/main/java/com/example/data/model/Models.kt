@@ -308,7 +308,24 @@ object HarmonyPacksData {
                 Question("Wie viel wollen wir insgesamt ausgeben?", listOf("Unter 1000", "1000 bis 3000", "3000 bis 5000", "Open End")),
                 Question("Lieber durchgeplant oder spontan?", listOf("Durchgeplant", "Spontan", "Beides")),
                 Question("Wie viel Zeit wollen wir getrennt verbringen?", listOf("Viel getrennt", "Ein paar Stunden", "Am liebsten alles zusammen")),
-                Question("Was ist für jeden von uns das absolute Highlight?", listOf("Kultur & Sehenswürdigkeiten", "Entspannung", "Abenteuer", "Gutes Essen"))
+                Question("Was ist für jeden von uns das absolute Highlight?", listOf("Kultur & Sehenswürdigkeiten", "Entspannung", "Abenteuer", "Gutes Essen")),
+                Question(
+                    "Wie sieht deine Traumreise aus?",
+                    listOf(
+                        "Strand & Sonne – Relaxen, Meer & Cocktails",
+                        "Städtetrip & Kultur – Museen, Architektur & Flanieren",
+                        "Abenteuer & Trekking – Berge, Wandern & Grenzen testen",
+                        "Safari & Wildtiere – Naturbeobachtungen, Abenteuer & Wildnis",
+                        "Kultur & Geschichte – Vergangenheit entdecken, Ruinen & Wissen",
+                        "Kreuzfahrt – Häfen entdecken, Meerblick & Entspannung pur",
+                        "Roadtrip & Freiheit – Vanlife, Entdecken & Unabhängigkeit",
+                        "Wellness & Entspannung – Spa, Erholung & Seele baumeln lassen",
+                        "Inselhüpfen & Bootstrip – Viele Orte, Boot fahren & Schnorcheln",
+                        "Camping & Natur – Natur erleben, Lagerfeuer & Sterne",
+                        "Gourmet & Foodie – Kulinarische Entdeckungen, Restaurants & Genuss",
+                        "Festival & Musik – Energie, Konzerte & Feiern"
+                    )
+                )
             )
         ),
 
@@ -864,6 +881,40 @@ object HarmonyPacksData {
                         "{partner}",
                         "Wir brauchen ewig",
                         "Wir bestellen einfach beides"
+                    )
+                ),
+                Question(
+                    "Wie möchtest du dein Ei am liebsten?",
+                    listOf(
+                        "4 Minuten – Sehr flüssig",
+                        "5 Minuten – Flüssig",
+                        "6 Minuten – Weich & cremig",
+                        "7 Minuten – Weiches Eigelb",
+                        "8 Minuten – Cremiges Eigelb",
+                        "9 Minuten – Fast fest",
+                        "10 Minuten – Vollständig fest",
+                        "11 Minuten – Fest",
+                        "12 Minuten – Sehr fest",
+                        "13 Minuten – Trocken",
+                        "14 Minuten – Sehr trocken",
+                        "15 Minuten – Übergart"
+                    )
+                ),
+                Question(
+                    "Wie willst du dein Steak?",
+                    listOf(
+                        "Roh – Kaltes Herz, roh",
+                        "Fast roh – Sehr kühler Kern, rot",
+                        "Sehr blutig – Kühler Kern, rot",
+                        "Blutig (Blue-Rare) – Kühler roter Kern",
+                        "Sehr englisch (Rare) – Warmer roter Kern",
+                        "Englisch (Rare) – Warmer Kern, zart",
+                        "Halb rosa – Rosa Center, saftig",
+                        "Rosa (Medium-Rare) – Rosa Kern, zart",
+                        "Medium – Rosa Center, saftig",
+                        "Halb durch (Medium-Well) – Teils rosa Center",
+                        "Durch (Well-Done) – Kein Rosa, fest",
+                        "Übergart – Ganz trocken & fest"
                     )
                 )
             )

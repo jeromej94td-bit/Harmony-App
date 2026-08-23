@@ -23,3 +23,43 @@ Viewport: Pixel 8, 1078 x 2399 px.
 - Default and custom categories are managed by selecting a category and tapping the selected chip again. This keeps the reference's clean chip rail without adding a permanent pencil button.
 
 final result: passed
+
+---
+
+# Harmony Image Choice Questions Design QA
+
+Date: 2026-08-23
+
+Source references:
+
+- Egg and Harmony styling: `1-Photo-1.jpg` (592 x 1280)
+- Travel content: `2-Photo-2.jpg` (720 x 1280)
+- Steak content: `3-Photo-3.jpg` (720 x 1280)
+
+Implementation captures:
+
+- `app/build/harmony-image-choice-preview/egg-question.png`
+- `app/build/harmony-image-choice-preview/steak-question.png`
+- `app/build/harmony-image-choice-preview/travel-question.png`
+- Combined evidence: `app/build/harmony-image-choice-preview/design-qa/`
+
+Capture context: 411 dp wide extended mobile viewport, dark Harmony theme, animations advanced by 2200 ms. The travel capture includes the first card selected.
+
+## Result
+
+- The three views consistently use Harmony's dark violet glass, pink-purple glow, rounded cards, luminous selected border, and heart/check affordances.
+- The 12 source motifs are preserved in the correct order and presented as a 3 x 4 grid, matching the approved domino sequence.
+- The travel title is exactly `Wie sieht deine Traumreise aus?`; all option labels describe travel types rather than destinations.
+- Typography is intentionally changed from the condensed poster lettering to Harmony's native Compose hierarchy for consistency and accessibility.
+- Long German labels fit without ellipsis in the final full-scroll captures. Image crops contain no baked-in source labels or placeholder art.
+- Selection is visibly distinct through a 2 dp pink border, pink check, and lifted pink-purple surface tint.
+
+## Iteration history
+
+- P2: Pixel 8 capture clipped the first or last edge of the long 3 x 4 component. Fixed with an extended mobile QA viewport; the production screen remains vertically scrollable.
+- P2: Travel selection did not initially produce a stable captured state. Fixed by exposing the selected semantic tag and advancing the recomposition frame before capture.
+- P2: Initial egg and steak crops retained fragments of poster text. Re-cropped the affected source cells and verified all 36 final assets.
+- P2: Long travel detail lines needed more room. Increased card height and allowed three detail lines.
+- P3: A Roborazzi multi-test render omitted the reused steak header vector once. An isolated re-record rendered the production icon correctly; no application-code defect reproduced.
+
+Status: passed for local preview and implementation handoff. No open P0, P1, or P2 findings.
