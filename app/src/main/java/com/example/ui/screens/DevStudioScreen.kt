@@ -6,7 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +58,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,14 +65,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
@@ -866,28 +859,6 @@ private fun EditPackSheet(
     var imageTarget by remember { mutableStateOf<String?>(null) }
     var imageVersion by remember { mutableStateOf(0) }
     var busyText by remember { mutableStateOf<String?>(null) }
-    val slotBounds = remember { mutableStateMapOf<String, Rect>() }
-    var draggingSlot by remember { mutableStateOf<String?>(null) }
-    var dragPosition by remember { mutableStateOf(Offset.Zero) }
-
-    fun keyForSlot(slotId: String): String? {
-        val pairIndex = slotId.substringBefore(':').toIntOrNull() ?: return null
-        val side = slotId.substringAfter(':').toIntOrNull() ?: return null
-        val pair = pairs.getOrNull(pairIndex) ?: return null
-        return if (side == 0) pair.first else pair.second
-    }
-
-    fun finishImageDrag() {
-        val source = draggingSlot
-        val target = slotBounds.entries.firstOrNull { (_, bounds) -> bounds.contains(dragPosition) }?.key
-        draggingSlot = null
-        if (source == null || target == null || source == target) return
-        val sourceKey = keyForSlot(source).orEmpty()
-        val targetKey = keyForSlot(target).orEmpty()
-        if (sourceKey.isBlank() || targetKey.isBlank()) return
-        DeveloperDataManager.swapOptionImages(context, sourceKey, targetKey)
-        imageVersion++
-    }
 
     val imagePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -1089,7 +1060,7 @@ private fun EditPackSheet(
                     if (type == "tot") {
                         item {
                             Text(
-                                "Paare — tippen = Bild ändern · lange drücken & ziehen = Bilder tauschen",
+                                "Paare — tippe auf ein Bild, um es zu tauschen",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = HarmonyPurpleLight,
@@ -1101,15 +1072,6 @@ private fun EditPackSheet(
                                 index = index,
                                 pair = pair,
                                 imageVersion = imageVersion,
-                                draggingSlot = draggingSlot,
-                                onSlotBounds = { slotId, bounds -> slotBounds[slotId] = bounds },
-                                onDragStart = { slotId, rootPosition ->
-                                    draggingSlot = slotId
-                                    dragPosition = rootPosition
-                                },
-                                onDragMove = { delta -> dragPosition += delta },
-                                onDragEnd = { finishImageDrag() },
-                                onDragCancel = { draggingSlot = null },
                                 onChange = { newPair -> pairs[index] = newPair },
                                 onDelete = { pairs.removeAt(index) },
                                 onPickImage = { name ->
@@ -1204,12 +1166,6 @@ private fun PairEditor(
     index: Int,
     pair: Pair<String, String>,
     imageVersion: Int,
-    draggingSlot: String?,
-    onSlotBounds: (String, Rect) -> Unit,
-    onDragStart: (String, Offset) -> Unit,
-    onDragMove: (Offset) -> Unit,
-    onDragEnd: () -> Unit,
-    onDragCancel: () -> Unit,
     onChange: (Pair<String, String>) -> Unit,
     onDelete: () -> Unit,
     onPickImage: (String) -> Unit
@@ -1233,18 +1189,9 @@ private fun PairEditor(
         }
         Spacer(Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            val leftSlot = "$index:0"
-            val rightSlot = "$index:1"
             OptionSlot(
-                slotId = leftSlot,
                 text = pair.first,
                 imageVersion = imageVersion,
-                isDragging = draggingSlot == leftSlot,
-                onSlotBounds = onSlotBounds,
-                onDragStart = onDragStart,
-                onDragMove = onDragMove,
-                onDragEnd = onDragEnd,
-                onDragCancel = onDragCancel,
                 onTextChange = { onChange(it to pair.second) },
                 onPickImage = {
                     val key = if (pair.first.isBlank()) "img_${System.currentTimeMillis()}_a" else pair.first
@@ -1254,15 +1201,8 @@ private fun PairEditor(
                 modifier = Modifier.weight(1f)
             )
             OptionSlot(
-                slotId = rightSlot,
                 text = pair.second,
                 imageVersion = imageVersion,
-                isDragging = draggingSlot == rightSlot,
-                onSlotBounds = onSlotBounds,
-                onDragStart = onDragStart,
-                onDragMove = onDragMove,
-                onDragEnd = onDragEnd,
-                onDragCancel = onDragCancel,
                 onTextChange = { onChange(pair.first to it) },
                 onPickImage = {
                     val key = if (pair.second.isBlank()) "img_${System.currentTimeMillis()}_b" else pair.second
@@ -1277,53 +1217,23 @@ private fun PairEditor(
 
 @Composable
 private fun OptionSlot(
-    slotId: String,
     text: String,
     imageVersion: Int,
-    isDragging: Boolean,
-    onSlotBounds: (String, Rect) -> Unit,
-    onDragStart: (String, Offset) -> Unit,
-    onDragMove: (Offset) -> Unit,
-    onDragEnd: () -> Unit,
-    onDragCancel: () -> Unit,
     onTextChange: (String) -> Unit,
     onPickImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val isUserFacing = DevAssetStore.isUserFacingLabel(text)
     val displayValue = if (isUserFacing) text else ""
-    var currentBounds by remember(slotId) { mutableStateOf(Rect.Zero) }
 
     Column(modifier = modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(92.dp)
-                .onGloballyPositioned { coordinates ->
-                    currentBounds = coordinates.boundsInRoot()
-                    onSlotBounds(slotId, currentBounds)
-                }
-                .pointerInput(slotId, text) {
-                    detectDragGesturesAfterLongPress(
-                        onDragStart = { localPosition ->
-                            onDragStart(slotId, currentBounds.topLeft + localPosition)
-                        },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            onDragMove(dragAmount)
-                        },
-                        onDragEnd = onDragEnd,
-                        onDragCancel = onDragCancel
-                    )
-                }
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.Black)
-                .border(
-                    if (isDragging) 3.dp else 1.dp,
-                    if (isDragging) HarmonyGold else HarmonyLine,
-                    RoundedCornerShape(10.dp)
-                )
+                .border(1.dp, HarmonyLine, RoundedCornerShape(10.dp))
                 .clickable { onPickImage() }
         ) {
             if (text.isNotBlank()) {
@@ -1344,21 +1254,13 @@ private fun OptionSlot(
                     .background(Color.Black.copy(alpha = 0.65f))
                     .padding(horizontal = 6.dp, vertical = 3.dp)
             ) {
-                Text(if (isDragging) "Ziehen…" else "Bild ändern", fontSize = 9.5.sp, color = Color.White)
+                Text("Bild ändern", fontSize = 9.5.sp, color = Color.White)
             }
         }
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = displayValue,
-            onValueChange = { newValue ->
-                onTextChange(
-                    DeveloperDataManager.renameOptionKeepingImage(
-                        context = context,
-                        oldKey = text,
-                        newLabel = newValue
-                    )
-                )
-            },
+            onValueChange = onTextChange,
             placeholder = { Text("Name (optional)", fontSize = 11.5.sp, color = HarmonyMuted) },
             singleLine = false,
             maxLines = 3,
@@ -1370,22 +1272,6 @@ private fun OptionSlot(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         )
-        if (isUserFacing && text.isNotBlank()) {
-            TextButton(
-                onClick = {
-                    onTextChange(
-                        DeveloperDataManager.renameOptionKeepingImage(
-                            context = context,
-                            oldKey = text,
-                            newLabel = ""
-                        )
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Bildtext nicht anzeigen", color = HarmonyMuted, fontSize = 10.5.sp)
-            }
-        }
     }
 }
 
