@@ -27,6 +27,12 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name=".ReliableImageLoaderProvider"
+            android:authorities="${applicationId}.reliableimages"
+            android:exported="false"
+            android:initOrder="100" />
+
         <receiver
             android:name=".widget.PicShareWidgetProvider"
             android:exported="false">

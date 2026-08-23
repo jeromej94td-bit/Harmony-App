@@ -17,15 +17,14 @@ import java.util.Locale
 /**
  * Verwaltet alle Bilder, die der Entwickler in die App lädt.
  *
- * Wichtig: Bilder werden beim Import SOFORT in den internen Speicher kopiert
- * (files/dev_assets). Damit überleben sie Neustarts — anders als content://-URIs
- * aus der Galerie, deren Berechtigung nach dem Beenden der App verfällt.
+ * Für die App wird weiterhin eine optimierte JPEG-Arbeitskopie gespeichert.
+ * Für AI-Studio-Export v2 bleibt zusätzlich die unveränderte Originaldatei
+ * samt Original-Dateiname erhalten.
  */
 object DevAssetStore {
 
     private const val DIR_NAME = "dev_assets"
-
-    /** Anzeigegröße in der App. Groß genug für Vollbild-Karten. */
+    private const val ORIGINAL_DIR_NAME = "dev_assets_original"
     private const val STORE_MAX_DIM = 1080
     private const val STORE_QUALITY = 84
 
@@ -35,9 +34,20 @@ object DevAssetStore {
         return d
     }
 
-    // ---------------------------------------------------------------
-    // Namen / Slugs
-    // ---------------------------------------------------------------
+    private fun originalRoot(context: Context): File {
+        val d = File(context.filesDir, ORIGINAL_DIR_NAME)
+        if (!d.exists()) d.mkdirs()
+        return d
+    }
+
+    private fun originalKeyDir(context: Context, key: String): File {
+        val d = File(originalRoot(context), slug(key))
+        if (!d.exists()) d.mkdirs()
+        return d
+    }
+
+    fun originalFileFor(context: Context, key: String, originalFileName: String): File =
+        File(originalKeyDir(context, key), DevExportLogic.safeBaseName(originalFileName))
 
     fun slug(raw: String): String {
         val lower = raw.trim().lowercase(Locale.GERMAN)
@@ -51,14 +61,14 @@ object DevAssetStore {
     }
 
     fun fileFor(context: Context, key: String): File = File(dir(context), "${slug(key)}.jpg")
-
     fun pathFor(context: Context, key: String): String = fileFor(context, key).absolutePath
-
     fun hasImage(context: Context, key: String): Boolean = fileFor(context, key).exists()
 
     fun deleteImage(context: Context, key: String) {
         val f = fileFor(context, key)
         if (f.exists()) f.delete()
+        File(originalRoot(context), slug(key)).deleteRecursively()
+        DevExportStateStore.removeOriginalFileName(context, key)
     }
 
     fun listAll(context: Context): List<File> =
@@ -66,14 +76,29 @@ object DevAssetStore {
 
     fun totalBytes(context: Context): Long = listAll(context).sumOf { it.length() }
 
-    // ---------------------------------------------------------------
-    // Import
-    // ---------------------------------------------------------------
-
-    /** Kopiert ein Bild aus einer beliebigen Uri in den internen Speicher. Gibt den Pfad zurück. */
+    /**
+     * Importiert ein Bild. Die unveränderte Quelldatei wird für spätere Exporte
+     * gesichert; die App selbst arbeitet mit einer optimierten JPEG-Kopie.
+     */
     fun importFromUri(context: Context, uri: Uri, key: String): String? {
+        val originalFileName = displayNameOf(context, uri)
         val bmp = decodeScaled(context, uri, STORE_MAX_DIM) ?: return null
-        return saveBitmap(context, bmp, key)
+        val path = saveBitmap(context, bmp, key)
+
+        val keyDir = originalKeyDir(context, key)
+        keyDir.listFiles()?.forEach { it.delete() }
+        try {
+            val target = originalFileFor(context, key, originalFileName)
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(target).use { output -> input.copyTo(output) }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Die optimierte Arbeitskopie bleibt trotzdem nutzbar.
+        }
+
+        DevExportStateStore.recordOriginalFileName(context, key, originalFileName)
+        return path
     }
 
     fun saveBitmap(context: Context, bmp: Bitmap, key: String): String {
@@ -84,7 +109,6 @@ object DevAssetStore {
         return target.absolutePath
     }
 
-    /** Liest ein Bild herunterskaliert und dreht es laut EXIF gerade. */
     fun decodeScaled(context: Context, uri: Uri, maxDim: Int): Bitmap? {
         return try {
             val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -146,18 +170,13 @@ object DevAssetStore {
             val rotated = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, m, true)
             if (rotated != bmp) bmp.recycle()
             rotated
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             bmp
         }
     }
 
-    // ---------------------------------------------------------------
-    // Ordner auslesen (SAF, ohne Extra-Dependency)
-    // ---------------------------------------------------------------
-
     data class PickedFile(val uri: Uri, val displayName: String)
 
-    /** Listet alle Bilddateien in einem per OpenDocumentTree gewählten Ordner. */
     fun listImagesInTree(context: Context, treeUri: Uri): List<PickedFile> {
         val result = mutableListOf<PickedFile>()
         try {
@@ -196,7 +215,6 @@ object DevAssetStore {
                 n.endsWith(".webp") || n.endsWith(".heic") || n.endsWith(".bmp")
     }
 
-    /** Dateiname für eine einzelne per Galerie gewählte Uri ermitteln. */
     fun displayNameOf(context: Context, uri: Uri): String {
         try {
             context.contentResolver.query(uri, null, null, null, null)?.use { c ->
@@ -212,7 +230,6 @@ object DevAssetStore {
         return uri.lastPathSegment ?: "bild"
     }
 
-    /** "01_vanille-bourbon.jpg" -> "Vanille Bourbon", or "" for numeric ID filenames */
     fun labelFromFileName(fileName: String, stripPairMarker: Boolean): String {
         var s = fileName.substringBeforeLast('.')
         s = s.replace(Regex("^[0-9]+[\\s._-]+"), "")
@@ -222,14 +239,15 @@ object DevAssetStore {
             s = s.replace(Regex("[\\s._-][abAB]$"), "")
         }
         s = s.replace('_', ' ').replace('-', ' ').replace(Regex("\\s+"), " ").trim()
-        if (s.isEmpty() || s.matches(Regex("^[0-9]+$")) || s.uppercase().startsWith("IMG ") || s.uppercase().startsWith("PXL ")) return ""
+        if (s.isEmpty() || s.matches(Regex("^[0-9]+$")) ||
+            s.uppercase().startsWith("IMG ") || s.uppercase().startsWith("PXL ")
+        ) return ""
         return s.split(" ").joinToString(" ") { word ->
             if (word.isEmpty()) word
             else word.substring(0, 1).uppercase(Locale.GERMAN) + word.substring(1)
         }
     }
 
-    /** Prpüft ob ein Text für den Nutzer als Label/Overlay sichtbar sein soll oder ein interner Bild-Schlüssel ist. */
     fun isUserFacingLabel(text: String): Boolean {
         val t = text.trim()
         if (t.isEmpty()) return false
@@ -239,7 +257,6 @@ object DevAssetStore {
         return true
     }
 
-    /** Sortiert "bild2" vor "bild10". */
     object NaturalOrder : Comparator<String> {
         override fun compare(a: String, b: String): Int {
             var i = 0
@@ -248,8 +265,8 @@ object DevAssetStore {
                 val ca = a[i]
                 val cb = b[j]
                 if (ca.isDigit() && cb.isDigit()) {
-                    var si = i
-                    var sj = j
+                    val si = i
+                    val sj = j
                     while (i < a.length && a[i].isDigit()) i++
                     while (j < b.length && b[j].isDigit()) j++
                     val na = a.substring(si, i).trimStart('0').ifEmpty { "0" }
@@ -268,11 +285,6 @@ object DevAssetStore {
         }
     }
 
-    // ---------------------------------------------------------------
-    // Base64 (für den AI-Studio-Export)
-    // ---------------------------------------------------------------
-
-    /** Re-komprimiert ein gespeichertes Bild kleiner und gibt Base64 zurück. */
     fun toBase64(path: String, maxDim: Int, quality: Int): String? {
         return try {
             val original = BitmapFactory.decodeFile(path) ?: return null
@@ -287,7 +299,6 @@ object DevAssetStore {
         }
     }
 
-    /** Schreibt ein Base64-Bild aus dem generierten Code zurück auf die Platte. */
     fun writeBase64(context: Context, key: String, base64: String): String? {
         return try {
             val bytes = Base64.decode(base64, Base64.DEFAULT)

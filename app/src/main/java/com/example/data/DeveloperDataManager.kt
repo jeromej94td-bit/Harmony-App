@@ -15,12 +15,12 @@ import java.util.Locale
 /**
  * Das Gehirn hinter dem Dev Studio.
  *
- * Drei Ebenen von Inhalten, die zusammengeführt werden:
- *   - DEFAULT   : fest im Code (Models.kt)
- *   - GENERATED : aus GeneratedHarmonyContent.kt (per Export erzeugt)
- *   - CUSTOM    : im Dev Studio angelegt, liegt in SharedPreferences
+ * Drei Ebenen von Inhalten werden zusammengeführt:
+ * DEFAULT aus Models.kt, GENERATED aus GeneratedHarmonyContent.kt und
+ * CUSTOM aus SharedPreferences. CUSTOM gewinnt vor GENERATED vor DEFAULT.
  *
- * CUSTOM gewinnt immer, dann GENERATED, dann DEFAULT.
+ * Seit Export v2 wird die Reihenfolge der selbst verwalteten Spiele separat
+ * persistiert, damit Bearbeiten/Export/AI-Studio-Import dieselbe Position behalten.
  */
 object DeveloperDataManager {
 
@@ -46,7 +46,6 @@ object DeveloperDataManager {
     private val generatedLinkPacks = mutableListOf<LinkEngine.LinkPack>()
     private val generatedImages = mutableMapOf<String, String>()
 
-    /** Ein Bild, das gleich in ein Paket wandern soll — noch nicht gespeichert. */
     data class StagedImage(
         val sourceUri: Uri? = null,
         val existingPath: String? = null,
@@ -58,17 +57,14 @@ object DeveloperDataManager {
     // ===============================================================
 
     fun init(context: Context) {
+        DevExportStateStore.init(context)
         loadData(context)
         migrateRefreshedChoicePacks()
         installGenerated(context)
+        DevExportStateStore.reconcileAndPersist(context, rawOwnPacksById().keys.toList())
         syncWithHarmonyData()
     }
 
-    /**
-     * The three built-in visual choice packs were deliberately redesigned.
-     * If an older Dev Studio export persisted the former four-pair version,
-     * let the refreshed default pack take over without affecting other custom content.
-     */
     private fun migrateRefreshedChoicePacks() {
         val refreshedIds = setOf("traumhaus", "aussen", "ringe")
         customPacks.removeAll { it.id in refreshedIds && it.pairs.size < 12 }
@@ -77,8 +73,15 @@ object DeveloperDataManager {
     private fun prefs(context: Context) =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    private fun rawOwnPacksById(): LinkedHashMap<String, QuestionPack> {
+        val byId = LinkedHashMap<String, QuestionPack>()
+        generatedPacks.forEach { byId[it.id] = it }
+        customPacks.forEach { byId[it.id] = it }
+        return byId
+    }
+
     // ===============================================================
-    // Generierter Content (aus dem AI-Studio-Export)
+    // Generierter Content
     // ===============================================================
 
     private fun installGenerated(context: Context) {
@@ -87,10 +90,10 @@ object DeveloperDataManager {
         generatedLinkPacks.clear()
         generatedImages.clear()
 
-        GeneratedHarmonyContent.CATEGORIES.forEach { gc ->
+        GeneratedContentRegistry.CATEGORIES.forEach { gc ->
             generatedCategories.add(Category(gc.id, gc.name, gc.emoji, gc.color))
         }
-        GeneratedHarmonyContent.PACKS.forEach { gp ->
+        GeneratedContentRegistry.PACKS.forEach { gp ->
             generatedPacks.add(
                 QuestionPack(
                     id = gp.id,
@@ -99,12 +102,15 @@ object DeveloperDataManager {
                     cat = gp.cat,
                     topic = gp.topic,
                     type = gp.type,
-                    questions = gp.questions.map { Question(q = it.q, options = it.options) },
-                    pairs = gp.pairs
+                    questions = gp.questions.map {
+                        Question(q = it.q, options = it.options, defaultMine = it.defaultMine)
+                    },
+                    pairs = gp.pairs,
+                    emoji = gp.emoji
                 )
             )
         }
-        GeneratedHarmonyContent.LINK_PACKS.forEach { glp ->
+        GeneratedContentRegistry.LINK_PACKS.forEach { glp ->
             generatedLinkPacks.add(
                 LinkEngine.LinkPack(
                     id = glp.id,
@@ -135,23 +141,29 @@ object DeveloperDataManager {
             )
         }
 
+        GeneratedContentRegistry.ASSETS.forEach { asset ->
+            DevExportStateStore.recordOriginalFileName(
+                context = context,
+                optionKey = asset.optionKey,
+                fileName = asset.originalFileName
+            )
+        }
+
         val p = prefs(context)
         val storedVersion = p.getLong(KEY_GEN_VERSION, -1L)
-
         val storedImagePaths = try {
             JSONObject(p.getString(KEY_GEN_IMAGES, "{}") ?: "{}")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JSONObject()
         }
-        val needsImageRepair = GeneratedHarmonyContent.IMAGES.keys.any { key ->
+        val needsImageRepair = GeneratedContentRegistry.IMAGES.keys.any { key ->
             val path = storedImagePaths.optString(key, "")
             path.isBlank() || !File(path).exists()
         }
 
-        if (storedVersion != GeneratedHarmonyContent.VERSION || needsImageRepair) {
-            // Neue oder fehlende Bilder: Base64 erneut sicher auf die Platte schreiben.
+        if (storedVersion != GeneratedContentRegistry.VERSION || needsImageRepair) {
             val written = JSONObject()
-            GeneratedHarmonyContent.IMAGES.forEach { (name, base64) ->
+            GeneratedContentRegistry.IMAGES.forEach { (name, base64) ->
                 val path = DevAssetStore.writeBase64(context, "gen_${DevAssetStore.slug(name)}", base64)
                 if (path != null) {
                     generatedImages[name] = path
@@ -159,11 +171,10 @@ object DeveloperDataManager {
                 }
             }
             p.edit()
-                .putLong(KEY_GEN_VERSION, GeneratedHarmonyContent.VERSION)
+                .putLong(KEY_GEN_VERSION, GeneratedContentRegistry.VERSION)
                 .putString(KEY_GEN_IMAGES, written.toString())
                 .apply()
         } else {
-            // Vorhandene, gültige Pfade laden.
             storedImagePaths.keys().forEach { key ->
                 generatedImages[key] = storedImagePaths.getString(key)
             }
@@ -198,9 +209,7 @@ object DeveloperDataManager {
         customPacks.clear()
         try {
             val array = JSONArray(p.getString(KEY_CUSTOM_PACKS, "[]") ?: "[]")
-            for (i in 0 until array.length()) {
-                customPacks.add(packFromJson(array.getJSONObject(i)))
-            }
+            for (i in 0 until array.length()) customPacks.add(packFromJson(array.getJSONObject(i)))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -271,11 +280,11 @@ object DeveloperDataManager {
 
     private fun packToJson(pack: QuestionPack): JSONObject {
         val obj = JSONObject()
-        obj.put("id", pack.id)
-        obj.put("title", pack.title)
-        obj.put("cat", pack.cat)
-        obj.put("topic", pack.topic)
-        obj.put("type", pack.type)
+            .put("id", pack.id)
+            .put("title", pack.title)
+            .put("cat", pack.cat)
+            .put("topic", pack.topic)
+            .put("type", pack.type)
         if (pack.emoji.isNotBlank()) obj.put("emoji", pack.emoji)
 
         val tagsArr = JSONArray()
@@ -284,8 +293,7 @@ object DeveloperDataManager {
 
         val qArr = JSONArray()
         pack.questions.forEach { q ->
-            val qObj = JSONObject()
-            qObj.put("q", q.q)
+            val qObj = JSONObject().put("q", q.q)
             val oArr = JSONArray()
             q.options.forEach { oArr.put(it) }
             qObj.put("options", oArr)
@@ -296,10 +304,7 @@ object DeveloperDataManager {
 
         val pArr = JSONArray()
         pack.pairs.forEach { pair ->
-            val pObj = JSONObject()
-            pObj.put("first", pair.first)
-            pObj.put("second", pair.second)
-            pArr.put(pObj)
+            pArr.put(JSONObject().put("first", pair.first).put("second", pair.second))
         }
         obj.put("pairs", pArr)
         return obj
@@ -319,10 +324,8 @@ object DeveloperDataManager {
 
         val packArray = JSONArray()
         customPacks.forEach { packArray.put(packToJson(it)) }
-
         val linkPackArray = JSONArray()
         customLinkPacks.forEach { linkPackArray.put(LinkEngine.packToJson(it)) }
-
         val imgObj = JSONObject()
         imageOverrides.forEach { (key, value) -> imgObj.put(key, value) }
 
@@ -343,26 +346,28 @@ object DeveloperDataManager {
             if (idx >= 0) mergedCats[idx] = cc else mergedCats.add(cc)
         }
 
-        // 1. Reguläre Pakete zusammenführen
-        val basePacks = HarmonyPacksData.PACKS.filter { !LinkEngine.isLinkPack(it.id) }.toMutableList()
-        val mergedPacks = generatedPacks.toMutableList()
-        customPacks.forEach { cp ->
-            val idx = mergedPacks.indexOfFirst { it.id == cp.id }
-            if (idx >= 0) mergedPacks[idx] = cp else mergedPacks.add(0, cp)
-        }
+        val mergedPacks = getAllOwnPacks()
+        val basePacks = HarmonyPacksData.DEFAULT_PACKS
+            .filter { !LinkEngine.isLinkPack(it.id) }
+            .toMutableList()
 
-        // 2. Ketten-Pakete materialisieren (Bauanleitung -> echtes Paket)
         val allLinkPacks = (customLinkPacks + generatedLinkPacks).distinctBy { it.id }
-        val availablePacksForLinking = basePacks + mergedPacks
+        val availableById = LinkedHashMap<String, QuestionPack>()
+        basePacks.forEach { availableById[it.id] = it }
+        mergedPacks.forEach { availableById[it.id] = it }
+
         LinkEngine.clearCaptions()
         val materializedPacks = allLinkPacks.map { lp ->
-            LinkEngine.materialize(lp, availablePacksForLinking)
+            LinkEngine.materialize(lp, availableById.values.toList())
         }
 
         val finalPacks = mergedPacks + materializedPacks
 
         HarmonyPacksData.setDynamicCategories(mergedCats)
-        HarmonyPacksData.setDynamicPacks(finalPacks)
+        // Models.kt fügt dynamische, neue Packs aktuell jeweils vorne ein.
+        // Deshalb geben wir die gewünschte Reihenfolge rückwärts hinein, damit
+        // die tatsächlich sichtbare Reihenfolge exakt dem Dev Studio entspricht.
+        HarmonyPacksData.setDynamicPacks(finalPacks.asReversed())
 
         TotImageProvider.clearGeneratedImages()
         generatedImages.forEach { (name, path) -> TotImageProvider.setGeneratedImage(name, path) }
@@ -370,7 +375,7 @@ object DeveloperDataManager {
     }
 
     // ===============================================================
-    // Lesen
+    // Lesen / Reihenfolge
     // ===============================================================
 
     fun getCustomLinkPacks(): List<LinkEngine.LinkPack> = customLinkPacks.toList()
@@ -396,28 +401,30 @@ object DeveloperDataManager {
     fun getGeneratedPacks(): List<QuestionPack> = generatedPacks.toList()
     fun getGeneratedCategories(): List<Category> = generatedCategories.toList()
 
-    /** Alle selbst erzeugten Pakete, ohne Doppelte. Eigene schlagen generierte. */
+    /** Alle selbst erzeugten Pakete in exakt gespeicherter Dev-Studio-Reihenfolge. */
     fun getAllOwnPacks(): List<QuestionPack> {
-        val byId = LinkedHashMap<String, QuestionPack>()
-        generatedPacks.forEach { byId[it.id] = it }
-        customPacks.forEach { byId[it.id] = it }
-        return byId.values.toList()
+        val byId = rawOwnPacksById()
+        val order = DevExportStateStore.orderedIds(byId.keys.toList())
+        return order.mapNotNull { byId[it] }
     }
 
-    /** true, wenn der Nutzer für diese Option selbst ein Bild gesetzt hat. */
-    fun hasUserImage(optionName: String): Boolean =
-        imageOverrides.containsKey(optionName.trim())
+    fun getPackOrder(): List<String> = getAllOwnPacks().map { it.id }
+
+    fun movePack(context: Context, packId: String, delta: Int) {
+        DevExportStateStore.movePack(context, packId, delta, rawOwnPacksById().keys.toList())
+        syncWithHarmonyData()
+    }
+
+    fun hasUserImage(optionName: String): Boolean = imageOverrides.containsKey(optionName.trim())
     fun getImageOverrides(): Map<String, String> = imageOverrides.toMap()
     fun getGeneratedImages(): Map<String, String> = generatedImages.toMap()
+    fun getOriginalFileNames(): Map<String, String> = DevExportStateStore.originalFileNames()
 
-    fun isEditable(packId: String): Boolean =
-        customPacks.any { it.id == packId }
+    fun isEditable(packId: String): Boolean = customPacks.any { it.id == packId }
 
-    /** Bildquelle für eine Option: erst eigene, dann generierte. Sonst null. */
     fun imagePathFor(optionName: String): String? =
         imageOverrides[optionName.trim()] ?: generatedImages[optionName.trim()]
 
-    /** Alle Optionstexte aus allen Paketen — Basis für den Bilder-Manager. */
     fun allOptionNames(): List<String> {
         val set = LinkedHashSet<String>()
         HarmonyPacksData.PACKS.forEach { pack ->
@@ -431,10 +438,9 @@ object DeveloperDataManager {
         return set.toList()
     }
 
-    /** Optionstexte nur aus den selbst angelegten Paketen. */
     fun customOptionNames(): List<String> {
         val set = LinkedHashSet<String>()
-        (customPacks + generatedPacks).forEach { pack ->
+        getAllOwnPacks().forEach { pack ->
             pack.pairs.forEach { (a, b) ->
                 set.add(a)
                 set.add(b)
@@ -490,18 +496,30 @@ object DeveloperDataManager {
 
     fun deleteCategory(context: Context, categoryId: String) {
         customCategories.removeAll { it.id == categoryId }
+        val removedIds = customPacks.filter { it.cat == categoryId }.map { it.id }
         customPacks.removeAll { it.cat == categoryId }
+        removedIds.forEach { DevExportStateStore.removePack(context, it) }
+        DevExportStateStore.reconcileAndPersist(context, rawOwnPacksById().keys.toList())
         saveData(context)
     }
 
     fun savePack(context: Context, pack: QuestionPack) {
+        val wasKnown = rawOwnPacksById().containsKey(pack.id)
         customPacks.removeAll { it.id == pack.id }
         customPacks.add(0, pack)
+        val availableIds = rawOwnPacksById().keys.toList()
+        if (wasKnown) {
+            DevExportStateStore.ensurePack(context, pack.id, availableIds)
+        } else {
+            DevExportStateStore.registerNewPack(context, pack.id, availableIds)
+        }
         saveData(context)
     }
 
     fun deletePack(context: Context, packId: String) {
         customPacks.removeAll { it.id == packId }
+        DevExportStateStore.removePack(context, packId)
+        DevExportStateStore.reconcileAndPersist(context, rawOwnPacksById().keys.toList())
         saveData(context)
     }
 
@@ -520,7 +538,6 @@ object DeveloperDataManager {
         saveData(context)
     }
 
-    /** Bild aus Galerie/Dateien für eine Option übernehmen. Kopiert es fest in die App. */
     fun setImageFromUri(context: Context, optionName: String, uri: Uri): String? {
         val key = optionName.trim()
         if (key.isEmpty()) return null
@@ -585,15 +602,9 @@ object DeveloperDataManager {
     }
 
     // ===============================================================
-    // Ordner-Import: Bilder rein -> Paket raus
+    // Ordner-Import
     // ===============================================================
 
-    /**
-     * Nimmt eine geordnete Liste von Bildern und macht daraus ein spielbereites
-     * "Das oder Das"-Paket. Je zwei aufeinanderfolgende Bilder werden ein Paar.
-     *
-     * Ein einzelnes übriges Bild am Ende wird ignoriert.
-     */
     fun commitImagePack(
         context: Context,
         categoryName: String,
@@ -605,9 +616,9 @@ object DeveloperDataManager {
         onProgress: ((Int, Int) -> Unit)? = null
     ): QuestionPack {
         val category = addOrUpdateCategory(context, categoryName, categoryEmoji, categoryColorHex)
-
         val resolved = mutableListOf<String>()
         val packId = makePackId(packTitle)
+        val wasKnown = rawOwnPacksById().containsKey(packId)
 
         items.forEachIndexed { index, item ->
             onProgress?.invoke(index + 1, items.size)
@@ -648,6 +659,12 @@ object DeveloperDataManager {
 
         customPacks.removeAll { it.id == pack.id }
         customPacks.add(0, pack)
+        val availableIds = rawOwnPacksById().keys.toList()
+        if (wasKnown) {
+            DevExportStateStore.ensurePack(context, pack.id, availableIds)
+        } else {
+            DevExportStateStore.registerNewPack(context, pack.id, availableIds)
+        }
         saveData(context)
         return pack
     }
@@ -659,15 +676,12 @@ object DeveloperDataManager {
         return "$base $n"
     }
 
-    /**
-     * Erkennt, ob die Dateinamen einem Paar-Schema folgen (01a / 01b, a_ / b_).
-     * Wenn ja, werden sie so sortiert, dass Paare direkt nebeneinander liegen.
-     */
     fun orderForPairing(files: List<DevAssetStore.PickedFile>): List<DevAssetStore.PickedFile> {
         val markerRegex = Regex("^(\\d+)[\\s._-]?([abAB])(?![a-zA-Z])")
         val matched = files.mapNotNull { f ->
             val m = markerRegex.find(f.displayName.substringBeforeLast('.'))
-            if (m == null) null else Triple(m.groupValues[1].toIntOrNull() ?: 0, m.groupValues[2].lowercase(), f)
+            if (m == null) null
+            else Triple(m.groupValues[1].toIntOrNull() ?: 0, m.groupValues[2].lowercase(), f)
         }
         if (matched.size >= files.size && files.size >= 2) {
             return matched.sortedWith(compareBy({ it.first }, { it.second })).map { it.third }
@@ -682,7 +696,7 @@ object DeveloperDataManager {
     }
 
     // ===============================================================
-    // Text-Batch-Import (unverändert nutzbar)
+    // Text-Batch-Import
     // ===============================================================
 
     fun importBatchPack(
@@ -696,7 +710,6 @@ object DeveloperDataManager {
     ): QuestionPack {
         val cat = addOrUpdateCategory(context, categoryName, categoryEmoji)
         val lines = rawText.lines().map { it.trim() }.filter { it.isNotEmpty() }
-
         val pairs = mutableListOf<Pair<String, String>>()
         val questions = mutableListOf<Question>()
 
@@ -716,7 +729,6 @@ object DeveloperDataManager {
                 }
                 if (split != null) pairs.add(split[0] to split[1])
             }
-
             if (pairs.isEmpty() && lines.size >= 2) {
                 var i = 0
                 while (i < lines.size - 1) {
@@ -749,19 +761,18 @@ object DeveloperDataManager {
             pairs = pairs,
             emoji = packEmoji.ifBlank { categoryEmoji }
         )
-
         savePack(context, pack)
         return pack
     }
 
     // ===============================================================
-    // Vollständiges Backup & Einspielen (JSON inkl. Base64 & Ketten)
+    // Backup / Restore
     // ===============================================================
 
     fun exportProjectJson(context: Context, includeImages: Boolean = true): String {
         val root = JSONObject()
         root.put("format", "harmony-dev-studio")
-        root.put("version", 3)
+        root.put("version", 4)
 
         val cats = JSONArray()
         val exportCats = (customCategories + generatedCategories).distinctBy { it.id }
@@ -774,8 +785,16 @@ object DeveloperDataManager {
         root.put("categories", cats)
 
         val packs = JSONArray()
-        customPacks.forEach { packs.put(packToJson(it)) }
+        getAllOwnPacks().forEach { packs.put(packToJson(it)) }
         root.put("packs", packs)
+
+        val order = JSONArray()
+        getPackOrder().forEach { order.put(it) }
+        root.put("packOrder", order)
+
+        val originalNames = JSONObject()
+        DevExportStateStore.originalFileNames().forEach { (key, name) -> originalNames.put(key, name) }
+        root.put("originalFileNames", originalNames)
 
         val linkPacksArr = JSONArray()
         getAllLinkPacks().forEach { linkPacksArr.put(LinkEngine.packToJson(it)) }
@@ -783,7 +802,6 @@ object DeveloperDataManager {
 
         val imgsObj = JSONObject()
         val imgB64Obj = JSONObject()
-
         val allOverrides = LinkedHashMap<String, String>()
         imageOverrides.forEach { (k, v) -> allOverrides[k] = v }
         generatedImages.forEach { (k, v) -> if (!allOverrides.containsKey(k)) allOverrides[k] = v }
@@ -792,16 +810,11 @@ object DeveloperDataManager {
             imgsObj.put(key, path)
             if (includeImages && path.startsWith("/") && File(path).exists()) {
                 val b64 = DevAssetStore.toBase64(path, maxDim = 720, quality = 75)
-                if (b64 != null) {
-                    imgB64Obj.put(key, b64)
-                }
+                if (b64 != null) imgB64Obj.put(key, b64)
             }
         }
         root.put("images", imgsObj)
-        if (includeImages) {
-            root.put("imagesBase64", imgB64Obj)
-        }
-
+        if (includeImages) root.put("imagesBase64", imgB64Obj)
         return root.toString(2)
     }
 
@@ -817,6 +830,8 @@ object DeveloperDataManager {
         }
 
         var totalPacksRestored = 0
+        var restoredOrder: List<String> = emptyList()
+        val restoredOriginalNames = linkedMapOf<String, String>()
 
         if (cleanText.startsWith("{")) {
             try {
@@ -845,6 +860,13 @@ object DeveloperDataManager {
                     }
                 }
 
+                root.optJSONArray("packOrder")?.let { arr ->
+                    restoredOrder = (0 until arr.length()).map { arr.optString(it) }.filter { it.isNotBlank() }
+                }
+                root.optJSONObject("originalFileNames")?.let { obj ->
+                    obj.keys().forEach { key -> restoredOriginalNames[key] = obj.optString(key) }
+                }
+
                 root.optJSONArray("linkPacks")?.let { arr ->
                     for (i in 0 until arr.length()) {
                         val lp = LinkEngine.packFromJson(arr.getJSONObject(i))
@@ -854,12 +876,9 @@ object DeveloperDataManager {
                     }
                 }
 
-                // Restore Base64 images directly to local dev_assets files!
-                val b64Obj = root.optJSONObject("imagesBase64")
-                if (b64Obj != null) {
+                root.optJSONObject("imagesBase64")?.let { b64Obj ->
                     b64Obj.keys().forEach { key ->
-                        val b64 = b64Obj.getString(key)
-                        val savedPath = DevAssetStore.writeBase64(context, key, b64)
+                        val savedPath = DevAssetStore.writeBase64(context, key, b64Obj.getString(key))
                         if (savedPath != null) {
                             imageOverrides[key] = savedPath
                             TotImageProvider.setCustomImage(key, savedPath)
@@ -867,12 +886,13 @@ object DeveloperDataManager {
                     }
                 }
 
-                // Fallback for image paths/URLs if file exists
                 root.optJSONObject("images")?.let { obj ->
                     obj.keys().forEach { key ->
                         val path = obj.getString(key)
                         if (!imageOverrides.containsKey(key)) {
-                            if (path.startsWith("http://") || path.startsWith("https://") || (path.startsWith("/") && File(path).exists())) {
+                            if (path.startsWith("http://") || path.startsWith("https://") ||
+                                (path.startsWith("/") && File(path).exists())
+                            ) {
                                 imageOverrides[key] = path
                                 TotImageProvider.setCustomImage(key, path)
                             }
@@ -881,14 +901,18 @@ object DeveloperDataManager {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Try parsing as Kotlin export text if JSON parsing fails
                 totalPacksRestored = importFromKotlinExportText(context, cleanText)
             }
         } else {
-            // User pasted Kotlin export file (.txt)
             totalPacksRestored = importFromKotlinExportText(context, cleanText)
         }
 
+        val availableIds = rawOwnPacksById().keys.toList()
+        if (restoredOrder.isNotEmpty() || restoredOriginalNames.isNotEmpty()) {
+            DevExportStateStore.restore(context, restoredOrder, restoredOriginalNames, availableIds)
+        } else {
+            DevExportStateStore.reconcileAndPersist(context, availableIds)
+        }
         saveData(context)
         return totalPacksRestored
     }
@@ -896,7 +920,6 @@ object DeveloperDataManager {
     private fun importFromKotlinExportText(context: Context, text: String): Int {
         var count = 0
         try {
-            // 1. Extract function definitions: i0() -> base64
             val fnMap = mutableMapOf<String, String>()
             val fnRegex = Regex("private\\s+fun\\s+(i\\d+)\\(\\):\\s*String\\s*=\\s*buildString\\s*\\{([\\s\\S]*?)\\}")
             fnRegex.findAll(text).forEach { match ->
@@ -904,20 +927,14 @@ object DeveloperDataManager {
                 val body = match.groupValues[2]
                 val appendRegex = Regex("append\\(\"([^\"]+)\"\\)")
                 val b64Builder = StringBuilder()
-                appendRegex.findAll(body).forEach { app ->
-                    b64Builder.append(app.groupValues[1])
-                }
-                if (b64Builder.isNotEmpty()) {
-                    fnMap[fnName] = b64Builder.toString()
-                }
+                appendRegex.findAll(body).forEach { app -> b64Builder.append(app.groupValues[1]) }
+                if (b64Builder.isNotEmpty()) fnMap[fnName] = b64Builder.toString()
             }
 
-            // 2. Extract IMAGES map entries: "Option" to i0()
             val imgMapRegex = Regex("\"([^\"]+)\"\\s*to\\s*(i\\d+)\\(\\)")
             imgMapRegex.findAll(text).forEach { match ->
                 val name = match.groupValues[1]
-                val fnName = match.groupValues[2]
-                val b64 = fnMap[fnName]
+                val b64 = fnMap[match.groupValues[2]]
                 if (b64 != null) {
                     val path = DevAssetStore.writeBase64(context, name, b64)
                     if (path != null) {
@@ -927,7 +944,6 @@ object DeveloperDataManager {
                 }
             }
 
-            // 3. Extract GenPack entries
             val packTitleRegex = Regex("title\\s*=\\s*\"([^\"]+)\"")
             val pairsRegex = Regex("\"([^\"]+)\"\\s+to\\s+\"([^\"]+)\"")
             val genPackBlocks = text.split("GenPack(").drop(1)
@@ -964,8 +980,10 @@ object DeveloperDataManager {
     fun resetAll(context: Context) {
         customCategories.clear()
         customPacks.clear()
+        customLinkPacks.clear()
         imageOverrides.keys.toList().forEach { DevAssetStore.deleteImage(context, it) }
         imageOverrides.clear()
+        DevExportStateStore.clear(context)
         saveData(context)
     }
 }
