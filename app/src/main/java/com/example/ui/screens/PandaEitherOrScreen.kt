@@ -103,6 +103,12 @@ fun PandaEitherOrScreen(
     val displayPair = questionIndex?.let(displayPack.pairs::get)
     val isMatch = userChoice != null && userChoice == partnerChoice
     val remaining = questionOrder.size - orderPosition
+    val overallCurrent = if (questionIndex == null) {
+        rawPack.pairs.size
+    } else {
+        (completedBeforeStart.size + orderPosition + 1)
+            .coerceAtMost(rawPack.pairs.size)
+    }
 
     fun localizedTemplate(source: String, vararg values: Pair<String, String>): String {
         var result = LanguageManager.tr(source, appLanguage)
@@ -130,6 +136,12 @@ fun PandaEitherOrScreen(
                 }
                 Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("🐼 ${LanguageManager.tr("Entweder oder", appLanguage)}", color = HarmonyText, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(
+                        text = "$overallCurrent/${rawPack.pairs.size}",
+                        color = HarmonyPink,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                     Text(
                         if (questionIndex == null) LanguageManager.tr("Alle Fragen beantwortet", appLanguage)
                         else localizedTemplate("{count} offen · keine Wiederholungen", "count" to remaining.toString()),
