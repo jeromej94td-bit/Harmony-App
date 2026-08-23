@@ -6,7 +6,8 @@ package com.example.data
  *
  * Ältere GeneratedHarmonyContent-Dateien besitzen noch keine ASSETS-Metadaten.
  * Deshalb stammen die Asset-Metadaten ausschließlich aus den neuen additiven
- * Imports; bestehende PACKS/IMAGES bleiben vollständig erhalten.
+ * Imports; bestehende PACKS/IMAGES bleiben vollständig erhalten. Bereits auf
+ * main verwaltete Standard-Assets bleiben bewusst bei ihren aktuellen Installern.
  */
 object GeneratedContentRegistry {
     val VERSION: Long =
