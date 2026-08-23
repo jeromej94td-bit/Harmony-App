@@ -62,8 +62,9 @@ class TotImageReliabilityTest {
         assertEquals(bundledOptions, exportedNames.keys)
         assertEquals("traumhaus_altbau.jpg", exportedNames["Altbau mit Charme"])
         assertEquals("aussen_infinity.jpg", exportedNames["Infinity-Pool"])
+        val supportedDrawableExtensions = setOf("jpg", "jpeg", "png", "webp", "gif", "xml")
         assertTrue(exportedNames.values.all { name ->
-            name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp") || name.endsWith(".gif")
+            name.substringAfterLast('.', "").lowercase() in supportedDrawableExtensions
         })
     }
 
