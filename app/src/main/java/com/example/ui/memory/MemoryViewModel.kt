@@ -35,7 +35,8 @@ class MemoryViewModel(
     private val repository: MemoryRepository,
     private val linkPreviewResolver: LinkPreviewResolver,
     private val clock: MemoryClock = SystemMemoryClock,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val onMemoryChanged: () -> Unit = {}
 ) : ViewModel() {
     private val localState = MutableStateFlow(MemoryLocalState(nowMillis = clock.nowMillis()))
     private val entryGuards = ConcurrentHashMap<String, MemoryEntryGuard>()
@@ -119,6 +120,21 @@ class MemoryViewModel(
         updateLocal { copy(editorMode = null, editorEntryId = null) }
     }
 
+    fun openEntryFromWidget(entryId: String) {
+        viewModelScope.launch(ioDispatcher) {
+            val entry = repository.getEntry(entryId) ?: return@launch
+            updateLocal {
+                copy(
+                    selectedTab = MemoryTab.CURRENT,
+                    selectedCategoryId = null,
+                    query = "",
+                    editorMode = if (entry.kind == MemoryEntryKind.LINK) MemoryEditorMode.LINK else MemoryEditorMode.NOTE,
+                    editorEntryId = entry.id
+                )
+            }
+        }
+    }
+
     fun saveNote(entryId: String?, categoryId: String, title: String, body: String?) {
         val targetId = entryId ?: UUID.randomUUID().toString()
         val request = beginEntryRequest(targetId)
@@ -152,7 +168,10 @@ class MemoryViewModel(
                     updatedAt = now
                 )
                 if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
-                if (request.isLatest()) request.updateFailedState { it - targetId }
+                if (request.isLatest()) {
+                    request.updateFailedState { it - targetId }
+                    onMemoryChanged()
+                }
             }
         }
     }
@@ -174,7 +193,10 @@ class MemoryViewModel(
                     )
                 }
                 .toList()
-            if (entries.isNotEmpty()) repository.insertEntries(entries)
+            if (entries.isNotEmpty()) {
+                repository.insertEntries(entries)
+                onMemoryChanged()
+            }
         }
     }
 
@@ -220,6 +242,7 @@ class MemoryViewModel(
                 if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
                 if (!request.isLatest()) return@withLock false
                 request.updateFailedState { it - targetId }
+                onMemoryChanged()
                 true
             }
             if (saved) resolvePreview(request, normalizedUrl)
@@ -229,18 +252,21 @@ class MemoryViewModel(
     fun createCategory(name: String, colorKey: String, iconKey: String) {
         launchOperation(ERROR_CREATE_CATEGORY) {
             repository.createCategory(name.trim(), colorKey, iconKey, clock.nowMillis())
+            onMemoryChanged()
         }
     }
 
     fun updateCategory(id: String, name: String, colorKey: String, iconKey: String) {
         launchOperation(ERROR_UPDATE_CATEGORY) {
             repository.updateCategory(id, name.trim(), colorKey, iconKey, clock.nowMillis())
+            onMemoryChanged()
         }
     }
 
     fun deleteCategory(id: String, moveToId: String) {
         launchOperation(ERROR_DELETE_CATEGORY) {
             repository.deleteCustomCategory(id, moveToId, clock.nowMillis())
+            onMemoryChanged()
             updateLocal {
                 if (selectedCategoryId == id) copy(selectedCategoryId = null) else this
             }
@@ -270,6 +296,7 @@ class MemoryViewModel(
             entryGuard(entryId).rowMutex.withLock {
                 val now = clock.nowMillis()
                 repository.setCompleted(entryId, completedAt = now, updatedAt = now)
+                onMemoryChanged()
             }
         }
     }
@@ -278,6 +305,7 @@ class MemoryViewModel(
         launchOperation(ERROR_RESTORE) {
             entryGuard(entryId).rowMutex.withLock {
                 repository.setCompleted(entryId, completedAt = null, updatedAt = clock.nowMillis())
+                onMemoryChanged()
             }
         }
     }
@@ -299,6 +327,7 @@ class MemoryViewModel(
                 repository.deleteEntry(entryId)
                 if (!request.isLatest()) return@withLock
                 request.updateFailedState { it - entryId }
+                onMemoryChanged()
                 updateLocal {
                     if (pendingDeleteEntryId == entryId) copy(pendingDeleteEntryId = null) else this
                 }
@@ -331,12 +360,18 @@ class MemoryViewModel(
                                 previewFetchedAt = clock.nowMillis()
                             )
                         )
-                        if (request.isLatest()) request.updateFailedState { it - request.entryId }
+                        if (request.isLatest()) {
+                            request.updateFailedState { it - request.entryId }
+                            onMemoryChanged()
+                        }
                     }
 
                     is LinkPreviewResult.Failure -> {
                         repository.updateEntry(current.withoutPreview())
-                        if (request.isLatest()) request.markPreviewFailed()
+                        if (request.isLatest()) {
+                            request.markPreviewFailed()
+                            onMemoryChanged()
+                        }
                     }
                 }
             }
@@ -423,12 +458,18 @@ class MemoryViewModel(
 class MemoryViewModelFactory(
     private val repository: MemoryRepository,
     private val linkPreviewResolver: LinkPreviewResolver,
-    private val clock: MemoryClock = SystemMemoryClock
+    private val clock: MemoryClock = SystemMemoryClock,
+    private val onMemoryChanged: () -> Unit = {}
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         require(modelClass == MemoryViewModel::class.java)
         @Suppress("UNCHECKED_CAST")
-        return MemoryViewModel(repository, linkPreviewResolver, clock) as T
+        return MemoryViewModel(
+            repository = repository,
+            linkPreviewResolver = linkPreviewResolver,
+            clock = clock,
+            onMemoryChanged = onMemoryChanged
+        ) as T
     }
 }
 
