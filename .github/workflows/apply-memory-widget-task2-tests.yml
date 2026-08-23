@@ -1,0 +1,31 @@
+name: Apply Memory Widget Task 2 Tests
+
+on:
+  push:
+    branches:
+      - feat/memory-home-widget-v2
+    paths:
+      - '.github/scripts/apply_memory_widget_task2_tests.py'
+      - '.github/workflows/apply-memory-widget-task2-tests.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/memory-home-widget-v2
+          fetch-depth: 0
+      - name: Apply failing tests
+        run: python .github/scripts/apply_memory_widget_task2_tests.py
+      - name: Commit tests and remove helper
+        run: |
+          git config user.name "harmony-widget-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm .github/scripts/apply_memory_widget_task2_tests.py .github/workflows/apply-memory-widget-task2-tests.yml
+          git add app/src/test/java/com/example/ui/memory/MemoryViewModelTest.kt
+          git commit -m "test: define Memory widget ViewModel hooks"
+          git push origin HEAD:feat/memory-home-widget-v2
