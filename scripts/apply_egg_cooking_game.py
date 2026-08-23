@@ -1,5 +1,6 @@
 from pathlib import Path
 import base64
+import hashlib
 
 ROOT = Path('.')
 models_path = ROOT / 'app/src/main/java/com/example/data/model/Models.kt'
@@ -7,10 +8,24 @@ runner_path = ROOT / 'app/src/main/java/com/example/ui/screens/QuizRunnerScreen.
 asset_path = ROOT / 'app/src/main/res/drawable-nodpi/egg_cooking_guide.webp'
 
 # Rebuild the generated artwork without relying on binary GitHub content writes.
+expected_hashes = [
+    '215871df58eaa756dba67a21fa0bb416abc1d51240c9f4153342ee5a26ad6424',
+    'dcb044857ee8be62b77cefdc53620651d980c8c56363d381760d59ea769196d2',
+    'a76286769ab566a8b3574fa749901e64f772e239dfa83413c58bb6f2843f325f',
+    'd8708247bd88d1ae5b72e40565f2cebf284144e021a5e60500071a8361451392',
+    '97a44edf8775cd875dc98c2f4fdccd7ec2bffbf3ded659838346302570e84043',
+    'd8e59ce9481ea5b8f2f9f000fee958903e474aae5ef765ac82cc70e521a6baaf',
+    '1777bda2dea59045d78b2ed5a8b7b6e2538016ddac9b3b50027ee55eefcbb719',
+]
 parts = []
 for index in range(6):
     parts.append((ROOT / f'scripts/egg_asset_chunks/part{index:02d}.txt').read_text(encoding='utf-8').strip())
 parts.append(bytes.fromhex((ROOT / 'scripts/egg_asset_chunks/part06.hex.txt').read_text(encoding='utf-8').strip()).decode('utf-8'))
+for index, part in enumerate(parts):
+    digest = hashlib.sha256(part.encode('utf-8')).hexdigest()
+    print(f'chunk {index}: len={len(part)} first_equals={part.find("=")} sha256={digest}')
+    if digest != expected_hashes[index]:
+        raise RuntimeError(f'egg artwork chunk {index} checksum mismatch')
 asset_bytes = base64.b64decode(''.join(parts), validate=True)
 if len(asset_bytes) < 20_000:
     raise RuntimeError(f'egg artwork unexpectedly small: {len(asset_bytes)} bytes')
