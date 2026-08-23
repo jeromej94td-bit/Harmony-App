@@ -17,6 +17,12 @@ interface MemoryDao {
     @Query("SELECT * FROM memory_entries ORDER BY updatedAt DESC")
     fun observeEntries(): Flow<List<MemoryEntryEntity>>
 
+    @Query("SELECT * FROM memory_entries WHERE completedAt IS NULL ORDER BY updatedAt DESC, createdAt DESC")
+    suspend fun getOpenEntriesForWidget(): List<MemoryEntryEntity>
+
+    @Query("SELECT * FROM memory_categories ORDER BY sortOrder, createdAt")
+    suspend fun getCategoriesForWidget(): List<MemoryCategoryEntity>
+
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertCategory(category: MemoryCategoryEntity)
 
