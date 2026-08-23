@@ -1,0 +1,14 @@
+{
+  "name": "harmony-universal-intro",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "render": "remotion render src/index.ts UniversalStudiosIntro out/universal_studios_intro.mp4 --codec=h264 --crf=18 --pixel-format=yuv420p"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.506",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.506"
+  }
+}
