@@ -1,153 +1,104 @@
 from pathlib import Path
+import re
 
-screen_path = Path('app/src/main/java/com/example/ui/screens/DevStudioScreen.kt')
-data_path = Path('app/src/main/java/com/example/data/DeveloperDataManager.kt')
+models_path = Path("app/src/main/java/com/example/data/model/Models.kt")
+quiz_path = Path("app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt")
 
-screen = screen_path.read_text()
-data = data_path.read_text()
+models = models_path.read_text(encoding="utf-8")
+quiz = quiz_path.read_text(encoding="utf-8")
 
-old = '''private fun OptionSlot(
-    text: String,
-    imageVersion: Int,
-    onTextChange: (String) -> Unit,
-    onPickImage: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val isUserFacing = DevAssetStore.isUserFacingLabel(text)
-    val displayValue = if (isUserFacing) text else ""
-'''
-new = '''private fun OptionSlot(
-    text: String,
-    imageVersion: Int,
-    onTextChange: (String) -> Unit,
-    onPickImage: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val isUserFacing = DevAssetStore.isUserFacingLabel(text)
-    val displayValue = if (isUserFacing) text else ""
-'''
-assert old in screen, 'OptionSlot header not found'
-screen = screen.replace(old, new, 1)
-
-old = '''        OutlinedTextField(
-            value = displayValue,
-            onValueChange = onTextChange,
-            placeholder = { Text("Name (optional)", fontSize = 11.5.sp, color = HarmonyMuted) },
-            singleLine = false,
-            maxLines = 3,
-            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.5.sp, color = HarmonyText),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = HarmonyPurpleLight,
-                unfocusedBorderColor = HarmonyLine
-            ),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.fillMaxWidth()
-        )
-'''
-new = '''        OutlinedTextField(
-            value = displayValue,
-            onValueChange = { newValue ->
-                onTextChange(
-                    DeveloperDataManager.renameOptionKeepingImage(
-                        context = context,
-                        oldKey = text,
-                        newLabel = newValue
+models_pattern = re.compile(
+    r'''Question\(\s*"Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger\?"\s*,\s*listOf\(\s*"Nie wieder Pizza"\s*,\s*"Nie wieder Burger"\s*,\s*"Beides wäre schlimm"\s*,\s*"Ich finde eine Alternative"\s*\)\s*\)''',
+    re.MULTILINE,
+)
+models_replacement = '''Question(
+                    "Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?",
+                    listOf(
+                        "Nie wieder Pizza",
+                        "Nie wieder Burger"
                     )
-                )
-            },
-            placeholder = { Text("Name (optional)", fontSize = 11.5.sp, color = HarmonyMuted) },
-            singleLine = false,
-            maxLines = 3,
-            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.5.sp, color = HarmonyText),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = HarmonyPurpleLight,
-                unfocusedBorderColor = HarmonyLine
-            ),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(Modifier.height(4.dp))
-        OutlinedButton(
-            onClick = {
-                if (text.isNotBlank()) {
-                    onTextChange(
-                        DeveloperDataManager.renameOptionKeepingImage(
-                            context = context,
-                            oldKey = text,
-                            newLabel = ""
-                        )
-                    )
-                }
-            },
-            enabled = text.isNotBlank() && isUserFacing,
-            shape = RoundedCornerShape(9.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                "Bildtext nicht anzeigen",
-                fontSize = 10.5.sp,
-                color = HarmonyPurpleLight
-            )
-        }
-'''
-assert old in screen, 'OptionSlot text field not found'
-screen = screen.replace(old, new, 1)
+                )'''
+models, count = models_pattern.subn(models_replacement, models, count=1)
+assert count == 1, f"Expected exactly one Pizza/Burger question block, found {count}"
 
-old = '''    fun setImageFromUri(context: Context, optionName: String, uri: Uri): String? {
-        val key = optionName.trim()
-        if (key.isEmpty()) return null
-        val path = DevAssetStore.importFromUri(context, uri, key) ?: return null
-        imageOverrides[key] = path
-        saveData(context)
-        return path
-    }
-'''
-new = '''    fun setImageFromUri(context: Context, optionName: String, uri: Uri): String? {
-        val key = optionName.trim()
-        if (key.isEmpty()) return null
-        val path = DevAssetStore.importFromUri(context, uri, key) ?: return null
-        imageOverrides[key] = path
-        saveData(context)
-        return path
-    }
+anchor = '''private const val QUESTION_FLOW_TWO_PI = 6.2831855f
 
-    /**
-     * Changes only the visible label while preserving the image identity.
-     * Drive/gallery imports are copied under the new internal lookup key, so
-     * typing a new name or hiding the text cannot detach the image anymore.
-     */
-    fun renameOptionKeepingImage(context: Context, oldKey: String, newLabel: String): String {
-        val sourceKey = oldKey.trim()
-        val typedLabel = newLabel.trim()
+private fun questionFlowColor(phase: Float): Color {'''
+helper = '''private const val QUESTION_FLOW_TWO_PI = 6.2831855f
+private const val PIZZA_BURGER_TENSION_QUESTION =
+    "Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?"
 
-        if (sourceKey.isEmpty()) return typedLabel
-        if (typedLabel.equals(sourceKey, ignoreCase = false)) return sourceKey
-        if (typedLabel.isEmpty() && !DevAssetStore.isUserFacingLabel(sourceKey)) return sourceKey
+private fun compactPizzaBurgerQuestion(rawQuestion: String, localizedQuestion: String): String {
+    if (rawQuestion != PIZZA_BURGER_TENSION_QUESTION) return localizedQuestion
 
-        val targetKey = if (typedLabel.isNotEmpty()) {
-            typedLabel
-        } else {
-            "img_hidden_${System.currentTimeMillis()}_${DevAssetStore.slug(sourceKey).take(24)}"
-        }
+    val colonIndex = listOf(
+        localizedQuestion.indexOf(':'),
+        localizedQuestion.indexOf('：')
+    ).filter { it >= 0 }.minOrNull() ?: return localizedQuestion
 
-        val path = imagePathFor(sourceKey)
-        if (!path.isNullOrBlank()) {
-            // Keep the old mapping for backward compatibility/other packs and
-            // mirror the same physical image under the new display/internal key.
-            imageOverrides[targetKey] = path
-            TotImageProvider.setCustomImage(targetKey, path)
-        } else {
-            // Built-in images and URL mappings can use the provider alias directly.
-            TotImageProvider.setAlias(targetKey, sourceKey)
-        }
+    val questionMark = localizedQuestion.lastOrNull { it == '?' || it == '؟' || it == '？' } ?: '?'
+    val stem = localizedQuestion
+        .substring(0, colonIndex)
+        .trim()
+        .trimEnd('?', '؟', '？')
+    return "$stem$questionMark"
+}
 
-        return targetKey
-    }
-'''
-assert old in data, 'setImageFromUri not found'
-data = data.replace(old, new, 1)
+private fun questionFlowColor(phase: Float): Color {'''
+assert anchor in quiz, "Question-flow anchor not found"
+quiz = quiz.replace(anchor, helper, 1)
 
-screen_path.write_text(screen)
-data_path.write_text(data)
-print('Applied Dev Studio image-label decoupling fix')
+old_render = '''                                    AnimatedQuestionCard(
+                                        question = contentText(q?.q ?: ""),
+                                        glitchAmount = glitchAmount
+                                    )
+                                }
+                            } else {
+                                AnimatedQuestionCard(question = contentText(q?.q ?: ""))
+                            }
+                            Spacer(modifier = Modifier.height(26.dp))'''
+new_render = '''                                    AnimatedQuestionCard(
+                                        question = compactPizzaBurgerQuestion(
+                                            rawQuestion = q?.q ?: "",
+                                            localizedQuestion = contentText(q?.q ?: "")
+                                        ),
+                                        glitchAmount = glitchAmount
+                                    )
+                                }
+                            } else {
+                                AnimatedQuestionCard(
+                                    question = compactPizzaBurgerQuestion(
+                                        rawQuestion = q?.q ?: "",
+                                        localizedQuestion = contentText(q?.q ?: "")
+                                    )
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(26.dp))'''
+assert old_render in quiz, "Question-card render block not found"
+quiz = quiz.replace(old_render, new_render, 1)
+
+old_options = '''                            val rawOptions = q?.options ?: emptyList()
+                            val processedOptions = rawOptions.map { 
+                                it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
+                            }
+                            val isNie = pack.cat == "nie"
+                            val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
+                            val options = processedOptions + fallbackText'''
+new_options = '''                            val isPizzaBurgerTensionQuestion = q?.q == PIZZA_BURGER_TENSION_QUESTION
+                            val rawOptions = q?.options ?: emptyList()
+                            val processedOptions = rawOptions.map {
+                                it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
+                            }
+                            val isNie = pack.cat == "nie"
+                            val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
+                            val options = if (isPizzaBurgerTensionQuestion) {
+                                processedOptions.take(2)
+                            } else {
+                                processedOptions + fallbackText
+                            }'''
+assert old_options in quiz, "Quiz options block not found"
+quiz = quiz.replace(old_options, new_options, 1)
+
+models_path.write_text(models, encoding="utf-8")
+quiz_path.write_text(quiz, encoding="utf-8")
+print("Applied binary Pizza/Burger tension question update")
