@@ -114,6 +114,24 @@ private val QUESTION_FLOW_COLORS = listOf(
 )
 
 private const val QUESTION_FLOW_TWO_PI = 6.2831855f
+private const val PIZZA_BURGER_TENSION_QUESTION =
+    "Was wäre für dich schlimmer: nie wieder Pizza oder nie wieder Burger?"
+
+private fun compactPizzaBurgerQuestion(rawQuestion: String, localizedQuestion: String): String {
+    if (rawQuestion != PIZZA_BURGER_TENSION_QUESTION) return localizedQuestion
+
+    val colonIndex = listOf(
+        localizedQuestion.indexOf(':'),
+        localizedQuestion.indexOf('：')
+    ).filter { it >= 0 }.minOrNull() ?: return localizedQuestion
+
+    val questionMark = localizedQuestion.lastOrNull { it == '?' || it == '؟' || it == '？' } ?: '?'
+    val stem = localizedQuestion
+        .substring(0, colonIndex)
+        .trim()
+        .trimEnd('?', '؟', '？')
+    return "$stem$questionMark"
+}
 
 private fun questionFlowColor(phase: Float): Color {
     val normalized = ((phase % 1f) + 1f) % 1f
@@ -927,7 +945,7 @@ fun QuizRunnerScreen(
                                 CinematicSandMaterialize(
                                     animationKey = questionAnimationKey,
                                     delayMillis = 0,
-                                    totalDurationMillis = 3_200,
+                                    totalDurationMillis = 1_900,
                                     particleCount = 3_000,
                                     accentColor = HarmonyPink,
                                     flowDirection = 1f,
@@ -935,27 +953,38 @@ fun QuizRunnerScreen(
                                     modifier = Modifier.fillMaxWidth()
                                 ) { glitchAmount ->
                                     AnimatedQuestionCard(
-                                        question = contentText(q?.q ?: ""),
+                                        question = compactPizzaBurgerQuestion(
+                                            rawQuestion = q?.q ?: "",
+                                            localizedQuestion = contentText(q?.q ?: "")
+                                        ),
                                         glitchAmount = glitchAmount
                                     )
                                 }
                             } else {
-                                AnimatedQuestionCard(question = contentText(q?.q ?: ""))
+                                AnimatedQuestionCard(
+                                    question = compactPizzaBurgerQuestion(
+                                        rawQuestion = q?.q ?: "",
+                                        localizedQuestion = contentText(q?.q ?: "")
+                                    )
+                                )
                             }
                             Spacer(modifier = Modifier.height(26.dp))
 
-                            
+                            val isPizzaBurgerTensionQuestion = q?.q == PIZZA_BURGER_TENSION_QUESTION
                             val rawOptions = q?.options ?: emptyList()
-                            val processedOptions = rawOptions.map { 
+                            val processedOptions = rawOptions.map {
                                 it.replace("{user}", profile.userName).replace("{partner}", profile.partnerName)
                             }
                             val isNie = pack.cat == "nie"
                             val fallbackText = if (isNie) tr("Überspringen", "Skip") else tr("Schreibe deine eigene Antwort", "Write your own answer")
-                            val options = processedOptions + fallbackText
-
+                            val options = if (isPizzaBurgerTensionQuestion) {
+                                processedOptions.take(2)
+                            } else {
+                                processedOptions + fallbackText
+                            }
 
                             options.forEachIndexed { optIdx, optText ->
-                                val isOwn = optIdx == options.size - 1
+                                val isOwn = !isPizzaBurgerTensionQuestion && optIdx == options.size - 1
                                 val isSelected = if (isOwn) {
                                     selectedAns != null && selectedAns !in (q?.options ?: emptyList())
                                 } else {
@@ -983,7 +1012,7 @@ fun QuizRunnerScreen(
                                 if (isIntimacyPack) {
                                     CinematicSandMaterialize(
                                         animationKey = "${pack.id}_${activeRun.currentIndex}_option_$optIdx",
-                                        delayMillis = 760 + optIdx * 210,
+                                        delayMillis = 760 + optIdx * 500,
                                         totalDurationMillis = 2_400,
                                         particleCount = 1_000,
                                         accentColor = optionAccentColor(optIdx + 1),
