@@ -17,7 +17,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Apply egg cooking implementation
-        run: python3 scripts/apply_egg_cooking_game.py
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply_egg_cooking_game.py')
+          text = path.read_text(encoding='utf-8')
+          old = "parts.append(bytes.fromhex((ROOT / 'scripts/egg_asset_chunks/part06.hex.txt').read_text(encoding='utf-8').strip()).decode('utf-8'))"
+          new = "tail_hex = (ROOT / 'scripts/egg_asset_chunks/part06a.hex.txt').read_text(encoding='utf-8').strip() + (ROOT / 'scripts/egg_asset_chunks/part06b.hex.txt').read_text(encoding='utf-8').strip()\nparts.append(bytes.fromhex(tail_hex).decode('utf-8'))"
+          if old not in text:
+              raise SystemExit('final chunk reader anchor missing')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          python3 scripts/apply_egg_cooking_game.py
       - name: Verify egg cooking game invariants
         run: python3 scripts/verify_egg_cooking_game.py
       - name: Set up Java 21
