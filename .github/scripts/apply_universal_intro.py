@@ -143,3 +143,4 @@ assert "mediaPlayer.isLooping = false" in text
 
 path.write_text(text, encoding="utf-8")
 print("Applied Universal Studios one-shot intro integration")
+# render-pipeline-trigger: default-branch workflow is now installed
