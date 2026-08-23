@@ -601,6 +601,43 @@ class MemoryViewModelTest {
     }
 
     @Test
+    fun `successful complete invokes Memory widget refresh callback`() = runMemoryTest {
+        repository.seedEntries(entry("entry-1"))
+        var refreshes = 0
+        val viewModel = viewModel(onMemoryChanged = { refreshes++ })
+        runCurrent()
+
+        viewModel.complete("entry-1")
+        runCurrent()
+
+        assertEquals(1, refreshes)
+    }
+
+    @Test
+    fun `widget link open clears filters and opens link editor`() = runMemoryTest {
+        repository.seedEntries(
+            entry(
+                id = "link-1",
+                kind = MemoryEntryKind.LINK,
+                url = "https://example.com/"
+            )
+        )
+        val viewModel = viewModel()
+        runCurrent()
+        viewModel.setQuery("hidden")
+        viewModel.setCategoryFilter(MemoryDefaults.FILMS_ID)
+
+        viewModel.openEntryFromWidget("link-1")
+        runCurrent()
+
+        assertEquals(MemoryTab.CURRENT, viewModel.uiState.value.selectedTab)
+        assertNull(viewModel.uiState.value.selectedCategoryId)
+        assertEquals("", viewModel.uiState.value.query)
+        assertEquals(MemoryEditorMode.LINK, viewModel.uiState.value.editorMode)
+        assertEquals("link-1", viewModel.uiState.value.editorEntryId)
+    }
+
+    @Test
     fun `factory rejects model classes other than memory view model`() {
         val factory = MemoryViewModelFactory(repository, resolver, clock)
 
@@ -609,8 +646,9 @@ class MemoryViewModelTest {
         }
     }
 
-    private fun viewModel() = MemoryViewModel(repository, resolver, clock, dispatcher)
-        .also { viewModelStore.put(UUID.randomUUID().toString(), it) }
+    private fun viewModel(onMemoryChanged: () -> Unit = {}) =
+        MemoryViewModel(repository, resolver, clock, dispatcher, onMemoryChanged)
+            .also { viewModelStore.put(UUID.randomUUID().toString(), it) }
 
     private fun runMemoryTest(testBody: suspend TestScope.() -> Unit) = runTest(scheduler) {
         try {
