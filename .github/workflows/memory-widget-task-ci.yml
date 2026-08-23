@@ -25,9 +25,9 @@ jobs:
           gradle-version: '9.3.1'
       - name: Run Memory widget task tests
         run: |
-          # Task 2 RED/GREEN gate includes MemoryViewModel behavior.
           gradle :app:testDebugUnitTest \
             --tests 'com.example.widget.MemoryWidgetLogicTest' \
             --tests 'com.example.widget.MemoryWidgetPreferencesTest' \
+            --tests 'com.example.widget.MemoryWidgetIntentsTest' \
             --tests 'com.example.ui.memory.MemoryViewModelTest' \
             --no-daemon
