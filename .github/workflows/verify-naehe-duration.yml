@@ -26,24 +26,15 @@ jobs:
           path = Path('app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt')
           source = path.read_text(encoding='utf-8')
 
-          old_question = '''animationKey = questionAnimationKey,
-                                    delayMillis = 0,
-                                    totalDurationMillis = 3_200,
-                                    particleCount = 3_000,'''
-          new_question = '''animationKey = questionAnimationKey,
-                                    delayMillis = 0,
-                                    totalDurationMillis = 1_900,
-                                    particleCount = 3_000,'''
+          old_question = 'totalDurationMillis = 3_200,'
+          new_question = 'totalDurationMillis = 1_900,'
+          old_answers = 'delayMillis = 760 + optIdx * 210,'
+          new_answers = 'delayMillis = 760 + optIdx * 500,'
 
-          old_answers = '''delayMillis = 760 + optIdx * 210,
-                                        totalDurationMillis = 2_400,'''
-          new_answers = '''delayMillis = 760 + optIdx * 500,
-                                        totalDurationMillis = 2_400,'''
-
-          if old_question not in source:
-              raise SystemExit('Expected 3.2s intimacy question timing block not found')
-          if old_answers not in source:
-              raise SystemExit('Expected 210ms answer stagger timing block not found')
+          if source.count(old_question) != 1:
+              raise SystemExit(f'Expected exactly one 3.2s question duration, found {source.count(old_question)}')
+          if source.count(old_answers) != 1:
+              raise SystemExit(f'Expected exactly one 210ms answer stagger, found {source.count(old_answers)}')
 
           source = source.replace(old_question, new_question, 1)
           source = source.replace(old_answers, new_answers, 1)
