@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - feat/egg-cooking-game
+  pull_request:
+    branches:
+      - main
 
 jobs:
   verify:
