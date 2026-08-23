@@ -28,4 +28,5 @@ jobs:
           gradle :app:testDebugUnitTest \
             --tests 'com.example.widget.MemoryWidgetLogicTest' \
             --tests 'com.example.widget.MemoryWidgetPreferencesTest' \
+            --tests 'com.example.ui.memory.MemoryViewModelTest' \
             --no-daemon
