@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   patch-introspection-navigation:
+    if: ${{ !contains(github.event.head_commit.message, 'Align introspection back navigation') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,37 +27,37 @@ jobs:
           text = path.read_text()
 
           old_back = '''    // Auto-stop recording on leave / exit
-              BackHandler {
-                  if (isRecording) {
-                      mediaController.stopRecording()
-                  }
-                  if (screenState != ScreenState.ENTRY && screenState != ScreenState.RESULTS) {
-                      showLeaveDialog = true
-                  } else {
-                      mediaController.releaseAll()
-                      onExit()
-                  }
-              }
-          '''.replace('              ', '    ')
+    BackHandler {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        if (screenState != ScreenState.ENTRY && screenState != ScreenState.RESULTS) {
+            showLeaveDialog = true
+        } else {
+            mediaController.releaseAll()
+            onExit()
+        }
+    }
+'''
           new_back = '''    // The Android system back action always asks before leaving the game.
-              BackHandler {
-                  if (isRecording) {
-                      mediaController.stopRecording()
-                  }
-                  showLeaveDialog = true
-              }
-          '''.replace('              ', '    ')
+    BackHandler {
+        if (isRecording) {
+            mediaController.stopRecording()
+        }
+        showLeaveDialog = true
+    }
+'''
           if old_back not in text:
               raise SystemExit('Expected BackHandler block not found')
           text = text.replace(old_back, new_back, 1)
 
           anchor = '''    fun continueExistingRun() {
-              screenState = if (progress.completed) ScreenState.RESULTS
-              else if (progress.stage == IntrospectionStage.REVELATION) ScreenState.REVELATION
-              else ScreenState.QUESTION
-              mediaController.startBackgroundMusic()
-          }
-          '''.replace('          ', '    ')
+        screenState = if (progress.completed) ScreenState.RESULTS
+        else if (progress.stage == IntrospectionStage.REVELATION) ScreenState.REVELATION
+        else ScreenState.QUESTION
+        mediaController.startBackgroundMusic()
+    }
+'''
           addition = anchor + '''
     fun goBackOneQuestion() {
         if (isRecording) {
@@ -121,11 +122,11 @@ jobs:
           path.write_text(text)
           PY
 
-      - name: Remove temporary workflow and commit patch
+      - name: Remove branch-local workflow and commit patch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/apply-game-back-navigation.yml
+          git rm -f .github/workflows/apply-game-back-navigation.yml
           git add app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt
           git diff --cached --check
           git commit -m "Align introspection back navigation"
