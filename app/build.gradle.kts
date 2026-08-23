@@ -1,9 +1,101 @@
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
+import java.util.Base64
+import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.google.devtools.ksp)
   alias(libs.plugins.roborazzi)
 //  alias(libs.plugins.google.services)
+}
+
+abstract class ReconstructMerlinThemeTask : DefaultTask() {
+  @get:InputFiles
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val chunks: ConfigurableFileCollection
+
+  @get:OutputFile
+  abstract val outputFile: RegularFileProperty
+
+  @get:Input
+  abstract val expectedSize: Property<Int>
+
+  @get:Input
+  abstract val expectedSha256: Property<String>
+
+  @TaskAction
+  fun reconstruct() {
+    val expectedNames = (1..12).map { "merlin_theme_%02d.b64".format(it) }
+    val chunkFiles = chunks.files.sortedBy { it.name }
+    val actualNames = chunkFiles.map { it.name }
+    if (actualNames != expectedNames) {
+      throw GradleException(
+        "Unexpected Merlin chunks: expected $expectedNames, got $actualNames"
+      )
+    }
+
+    val encoded = chunkFiles
+      .joinToString(separator = "") { it.readText(Charsets.US_ASCII) }
+      .filterNot { it.isWhitespace() }
+    val decoded = try {
+      Base64.getDecoder().decode(encoded)
+    } catch (error: IllegalArgumentException) {
+      throw GradleException("Merlin Base64 assets are invalid", error)
+    }
+
+    val actualSize = decoded.size
+    if (actualSize != expectedSize.get()) {
+      throw GradleException(
+        "Merlin theme has $actualSize bytes; expected ${expectedSize.get()}"
+      )
+    }
+
+    val actualSha256 = MessageDigest.getInstance("SHA-256")
+      .digest(decoded)
+      .joinToString(separator = "") { "%02x".format(it) }
+    if (actualSha256 != expectedSha256.get()) {
+      throw GradleException(
+        "Merlin theme SHA-256 is $actualSha256; expected ${expectedSha256.get()}"
+      )
+    }
+
+    val output = outputFile.get().asFile.toPath()
+    Files.createDirectories(output.parent)
+    val temporary = Files.createTempFile(output.parent, "merlin_theme_", ".tmp")
+    try {
+      Files.write(temporary, decoded)
+      try {
+        Files.move(
+          temporary,
+          output,
+          StandardCopyOption.ATOMIC_MOVE,
+          StandardCopyOption.REPLACE_EXISTING
+        )
+      } catch (_: AtomicMoveNotSupportedException) {
+        Files.move(temporary, output, StandardCopyOption.REPLACE_EXISTING)
+      }
+    } finally {
+      Files.deleteIfExists(temporary)
+    }
+
+    logger.lifecycle(
+      "Merlin theme reconstructed: $actualSize bytes, sha256=$actualSha256"
+    )
+  }
 }
 
 android {
@@ -63,6 +155,23 @@ android {
 
 ksp {
   arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+val reconstructMerlinTheme by tasks.registering(ReconstructMerlinThemeTask::class) {
+  group = "build"
+  description = "Reconstructs and verifies the Merlin background theme from Base64 assets."
+  chunks.from(
+    fileTree("src/main/assets/introspection") {
+      include("merlin_theme_*.b64")
+    }
+  )
+  outputFile.set(layout.projectDirectory.file("src/main/res/raw/merlin_theme.ogg"))
+  expectedSize.set(134_361)
+  expectedSha256.set("43a81cfc7254d69dce6027d7fadbdef32f3ce70c27d7d99507a20fe02127de24")
+}
+
+tasks.named("preBuild").configure {
+  dependsOn(reconstructMerlinTheme)
 }
 
 // googleServices { missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN }
