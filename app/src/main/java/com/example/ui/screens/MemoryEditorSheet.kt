@@ -1,7 +1,9 @@
 package com.example.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -20,11 +23,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLink
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -44,15 +53,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.MemoryCategoryEntity
+import com.example.data.model.MemoryChecklistCodec
+import com.example.data.model.MemoryChecklistItem
 import com.example.data.model.MemoryEntryEntity
+import com.example.data.model.MemoryEntryKind
 import com.example.ui.memory.MemoryEditorMode
 import com.example.ui.theme.HarmonyLine
 import com.example.ui.theme.HarmonyMuted
@@ -64,6 +83,7 @@ import com.example.ui.theme.HarmonySurface2
 import com.example.ui.theme.HarmonyText
 import com.example.util.LanguageManager
 import java.net.URI
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +94,7 @@ fun MemoryEditorSheet(
     onModeChange: (MemoryEditorMode) -> Unit,
     onDismiss: () -> Unit,
     onSaveNote: (String?, String, String, String?) -> Unit,
-    onSaveList: (String, String) -> Unit,
+    onSaveList: (String?, String, String, List<MemoryChecklistItem>) -> Unit,
     onSaveLink: (String?, String, String, String?) -> Unit,
     modifier: Modifier = Modifier,
     initialEntry: MemoryEntryEntity? = null
@@ -85,26 +105,59 @@ fun MemoryEditorSheet(
     }
     var title by rememberSaveable(initialEntry?.id) { mutableStateOf(initialEntry?.title.orEmpty()) }
     var body by rememberSaveable(initialEntry?.id) { mutableStateOf(initialEntry?.body.orEmpty()) }
-    var listLines by rememberSaveable(initialEntry?.id) { mutableStateOf("") }
+    var listItems by remember(initialEntry?.id) {
+        mutableStateOf(
+            initialEntry
+                ?.takeIf { it.kind == MemoryEntryKind.LIST }
+                ?.let { MemoryChecklistCodec.decode(it.body) }
+                ?.takeIf { it.isNotEmpty() }
+                ?: listOf(newChecklistItem())
+        )
+    }
     var url by rememberSaveable(initialEntry?.id) { mutableStateOf(initialEntry?.url.orEmpty()) }
     var linkNote by rememberSaveable(initialEntry?.id) { mutableStateOf(initialEntry?.body.orEmpty()) }
     var titleTouched by rememberSaveable(initialEntry?.id) { mutableStateOf(false) }
     var listTouched by rememberSaveable(initialEntry?.id) { mutableStateOf(false) }
     var urlTouched by rememberSaveable(initialEntry?.id) { mutableStateOf(false) }
 
-    val normalizedLines = remember(listLines) {
-        listLines.lineSequence().map(String::trim).filter(String::isNotEmpty).toList()
+    val normalizedItems = remember(listItems) {
+        val clean = listItems.mapNotNull { item ->
+            val text = item.text.trim()
+            if (text.isEmpty()) null else item.copy(text = text)
+        }
+        clean.filterNot { it.completed } + clean.filter { it.completed }
     }
     val validUrl = remember(url) { isValidHttpUrl(url) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val configuration = LocalConfiguration.current
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var focusedFieldKey by remember(initialEntry?.id) { mutableStateOf<String?>(null) }
+    val onFieldFocusChange: (String, Boolean) -> Unit = { key, focused ->
+        if (focused) focusedFieldKey = key else if (focusedFieldKey == key) focusedFieldKey = null
+    }
     val canSave = selectedCategoryId.isNotBlank() && when (selectedMode) {
         MemoryEditorMode.NOTE -> title.isNotBlank()
-        MemoryEditorMode.LIST -> normalizedLines.isNotEmpty()
+        MemoryEditorMode.LIST -> normalizedItems.isNotEmpty()
         MemoryEditorMode.LINK -> validUrl
     }
 
+    BackHandler(enabled = focusedFieldKey != null) {
+        keyboardController?.hide()
+        focusManager.clearFocus(force = true)
+        focusedFieldKey = null
+    }
+
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            if (focusedFieldKey != null) {
+                keyboardController?.hide()
+                focusManager.clearFocus(force = true)
+                focusedFieldKey = null
+            } else {
+                onDismiss()
+            }
+        },
         sheetState = sheetState,
         modifier = modifier
             .fillMaxSize()
@@ -124,7 +177,8 @@ fun MemoryEditorSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.94f)
+                .height((configuration.screenHeightDp * 0.9f).dp)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
         ) {
@@ -211,7 +265,9 @@ fun MemoryEditorSheet(
                         label = LanguageManager.tr("Titel", appLanguage),
                         modifier = Modifier.testTag("memory_editor_title"),
                         singleLine = true,
-                        isError = titleTouched && title.isBlank()
+                        isError = titleTouched && title.isBlank(),
+                        focusKey = "note-title",
+                        onFocusChange = onFieldFocusChange
                     )
                     if (titleTouched && title.isBlank()) {
                         ValidationMessage(LanguageManager.tr("Bitte gib einen Titel ein", appLanguage))
@@ -222,24 +278,33 @@ fun MemoryEditorSheet(
                         onValueChange = { body = it },
                         label = LanguageManager.tr("Beschreibung", appLanguage),
                         modifier = Modifier.testTag("memory_editor_body"),
-                        minLines = 3
+                        minLines = 3,
+                        focusKey = "note-body",
+                        onFocusChange = onFieldFocusChange
                     )
                 }
 
                 MemoryEditorMode.LIST -> {
                     MemoryTextField(
-                        value = listLines,
-                        onValueChange = {
-                            listLines = it
+                        value = title,
+                        onValueChange = { title = it },
+                        label = LanguageManager.tr("Titel", appLanguage),
+                        modifier = Modifier.testTag("memory_editor_title"),
+                        singleLine = true,
+                        focusKey = "list-title",
+                        onFocusChange = onFieldFocusChange
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    MemoryChecklistEditor(
+                        items = listItems,
+                        onItemsChange = {
+                            listItems = it
                             listTouched = true
                         },
-                        label = LanguageManager.tr("Liste", appLanguage),
-                        modifier = Modifier.testTag("memory_editor_list_lines"),
-                        minLines = 6,
-                        isError = listTouched && normalizedLines.isEmpty(),
-                        supportingText = LanguageManager.tr("Eine Notiz pro Zeile", appLanguage)
+                        appLanguage = appLanguage,
+                        onFocusChange = onFieldFocusChange
                     )
-                    if (listTouched && normalizedLines.isEmpty()) {
+                    if (listTouched && normalizedItems.isEmpty()) {
                         ValidationMessage(LanguageManager.tr("Bitte gib mindestens einen Eintrag ein", appLanguage))
                     }
                 }
@@ -255,7 +320,9 @@ fun MemoryEditorSheet(
                         modifier = Modifier.testTag("memory_editor_url"),
                         singleLine = true,
                         isError = urlTouched && !validUrl,
-                        keyboardType = KeyboardType.Uri
+                        keyboardType = KeyboardType.Uri,
+                        focusKey = "link-url",
+                        onFocusChange = onFieldFocusChange
                     )
                     if (urlTouched && !validUrl) {
                         ValidationMessage(
@@ -271,7 +338,9 @@ fun MemoryEditorSheet(
                         onValueChange = { linkNote = it },
                         label = LanguageManager.tr("Notiz", appLanguage),
                         modifier = Modifier.testTag("memory_editor_link_note"),
-                        minLines = 3
+                        minLines = 3,
+                        focusKey = "link-note",
+                        onFocusChange = onFieldFocusChange
                     )
                 }
             }
@@ -335,8 +404,10 @@ fun MemoryEditorSheet(
                         )
 
                         MemoryEditorMode.LIST -> onSaveList(
+                            initialEntry?.id,
                             selectedCategoryId,
-                            normalizedLines.joinToString("\n")
+                            title.trim(),
+                            normalizedItems
                         )
 
                         MemoryEditorMode.LINK -> onSaveLink(
@@ -401,6 +472,174 @@ private fun EditorModeChip(
     )
 }
 
+private fun newChecklistItem() = MemoryChecklistItem(
+    id = UUID.randomUUID().toString(),
+    text = "",
+    completed = false
+)
+
+@Composable
+private fun MemoryChecklistEditor(
+    items: List<MemoryChecklistItem>,
+    onItemsChange: (List<MemoryChecklistItem>) -> Unit,
+    appLanguage: String,
+    onFocusChange: (String, Boolean) -> Unit
+) {
+    val activeItems = items.filterNot { it.completed }
+    val completedItems = items.filter { it.completed }
+    var showCompleted by rememberSaveable { mutableStateOf(true) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(HarmonySurface2.copy(alpha = 0.42f), RoundedCornerShape(20.dp))
+            .border(1.dp, HarmonyLine, RoundedCornerShape(20.dp))
+            .padding(horizontal = 10.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        activeItems.forEachIndexed { index, item ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = false,
+                    onCheckedChange = {
+                        onItemsChange(items.map { candidate ->
+                            if (candidate.id == item.id) candidate.copy(completed = true) else candidate
+                        })
+                    },
+                    modifier = Modifier.testTag("memory_checklist_active_item_${index}_toggle"),
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = HarmonyPink,
+                        uncheckedColor = HarmonyMuted,
+                        checkmarkColor = Color.White
+                    )
+                )
+                OutlinedTextField(
+                    value = item.text,
+                    onValueChange = { text ->
+                        onItemsChange(items.map { candidate ->
+                            if (candidate.id == item.id) candidate.copy(text = text) else candidate
+                        })
+                    },
+                    placeholder = {
+                        Text(LanguageManager.tr("Listeneintrag", appLanguage), color = HarmonyMuted)
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            if (index == activeItems.lastIndex && item.text.isNotBlank()) {
+                                onItemsChange(items + newChecklistItem())
+                            }
+                        }
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("memory_checklist_active_item_${index}_text")
+                        .onFocusChanged { onFocusChange("checklist-${item.id}", it.isFocused) },
+                    shape = RoundedCornerShape(14.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedTextColor = HarmonyText,
+                        unfocusedTextColor = HarmonyText,
+                        focusedIndicatorColor = HarmonyPinkSoft,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = HarmonyPinkSoft
+                    )
+                )
+                IconButton(
+                    onClick = {
+                        val remaining = items.filterNot { it.id == item.id }
+                        onItemsChange(if (remaining.isEmpty()) listOf(newChecklistItem()) else remaining)
+                    },
+                    modifier = Modifier.testTag("memory_checklist_active_item_${index}_delete")
+                ) {
+                    Icon(
+                        Icons.Default.DeleteOutline,
+                        contentDescription = LanguageManager.tr("Eintrag löschen", appLanguage),
+                        tint = HarmonyMuted
+                    )
+                }
+            }
+        }
+
+        TextButton(
+            onClick = { onItemsChange(items + newChecklistItem()) },
+            modifier = Modifier.testTag("memory_checklist_add")
+        ) {
+            Icon(Icons.Default.Add, contentDescription = null, tint = HarmonyPinkSoft)
+            Spacer(Modifier.size(8.dp))
+            Text(
+                LanguageManager.tr("Listeneintrag", appLanguage),
+                color = HarmonyText,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
+        if (completedItems.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showCompleted = !showCompleted }
+                    .padding(horizontal = 4.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    if (showCompleted) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = HarmonyMuted
+                )
+                Spacer(Modifier.size(6.dp))
+                Text(
+                    text = if (completedItems.size == 1) {
+                        LanguageManager.tr("1 erledigter Eintrag", appLanguage)
+                    } else {
+                        LanguageManager.tr("${completedItems.size} erledigte Einträge", appLanguage)
+                    },
+                    color = HarmonyMuted,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+            if (showCompleted) {
+                completedItems.forEachIndexed { index, item ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 48.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = true,
+                            onCheckedChange = {
+                                onItemsChange(items.map { candidate ->
+                                    if (candidate.id == item.id) candidate.copy(completed = false) else candidate
+                                })
+                            },
+                            modifier = Modifier.testTag("memory_checklist_completed_item_${index}_toggle"),
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = HarmonyMuted,
+                                checkmarkColor = HarmonySurface
+                            )
+                        )
+                        Text(
+                            text = item.text,
+                            color = HarmonyMuted.copy(alpha = 0.68f),
+                            textDecoration = TextDecoration.LineThrough,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 12.dp)
+                                .testTag("memory_checklist_completed_item_${index}_text")
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun MemoryTextField(
     value: String,
@@ -411,7 +650,9 @@ private fun MemoryTextField(
     minLines: Int = 1,
     isError: Boolean = false,
     supportingText: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    focusKey: String,
+    onFocusChange: (String, Boolean) -> Unit
 ) {
     OutlinedTextField(
         value = value,
@@ -422,7 +663,9 @@ private fun MemoryTextField(
         minLines = minLines,
         isError = isError,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .onFocusChanged { onFocusChange(focusKey, it.isFocused) },
         shape = RoundedCornerShape(18.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = HarmonySurface2.copy(alpha = 0.88f),

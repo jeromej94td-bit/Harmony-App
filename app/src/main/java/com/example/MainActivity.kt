@@ -168,7 +168,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                         userAvatarPath = uiState.profile.userAvatarPath,
                         partnerAvatarPath = uiState.profile.partnerAvatarPath,
                         onProfileClick = { viewModel.openProfileSheet() },
-                        onRefresh = { viewModel.refreshData() }
+                        onRefresh = { viewModel.refreshData() },
+                        showMemoryMark = uiState.selectedTab == 4
                     )
                 }
             },
@@ -285,8 +286,8 @@ fun HarmonyApp(viewModel: HarmonyViewModel) {
                                     memoryViewModel.saveNote(entryId, categoryId, title, body)
                                     memoryViewModel.closeEditor()
                                 },
-                                onSaveList = { categoryId, lines ->
-                                    memoryViewModel.saveList(categoryId, lines)
+                                onSaveList = { entryId, categoryId, title, items ->
+                                    memoryViewModel.saveList(entryId, categoryId, title, items)
                                     memoryViewModel.closeEditor()
                                 },
                                 onSaveLink = { entryId, categoryId, url, note ->

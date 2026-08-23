@@ -7,6 +7,8 @@ import com.example.data.LinkPreviewResolver
 import com.example.data.LinkPreviewResult
 import com.example.data.MemoryBucket
 import com.example.data.model.MemoryCategoryEntity
+import com.example.data.model.MemoryChecklistCodec
+import com.example.data.model.MemoryChecklistItem
 import com.example.data.model.MemoryClock
 import com.example.data.model.MemoryDefaults
 import com.example.data.model.MemoryEntryEntity
@@ -76,15 +78,27 @@ class MemoryViewModelTest {
     }
 
     @Test
-    fun `list input creates one entry per nonblank line preserving duplicates and order`() = runMemoryTest {
+    fun `list input creates one checklist entry preserving item state and order`() = runMemoryTest {
         val viewModel = viewModel()
         runCurrent()
 
-        viewModel.saveList(MemoryDefaults.FILMS_ID, "  Dark  \n\nSeverance\nDark")
+        val items = listOf(
+            MemoryChecklistItem(id = "dark", text = "Dark", completed = false),
+            MemoryChecklistItem(id = "severance", text = "Severance", completed = true)
+        )
+        viewModel.saveList(
+            entryId = null,
+            categoryId = MemoryDefaults.FILMS_ID,
+            title = "Watchlist",
+            items = items
+        )
         runCurrent()
 
-        assertEquals(listOf("Dark", "Severance", "Dark"), repository.inserted.map { it.title })
-        assertEquals(listOf(START, START, START), repository.inserted.map { it.createdAt })
+        val saved = repository.inserted.single()
+        assertEquals(MemoryEntryKind.LIST, saved.kind)
+        assertEquals("Watchlist", saved.title)
+        assertEquals(items, MemoryChecklistCodec.decode(saved.body))
+        assertEquals(START, saved.createdAt)
     }
 
     @Test

@@ -24,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckBox
+import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Event
@@ -64,12 +66,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.data.MemoryBucket
 import com.example.data.model.MemoryCategoryEntity
+import com.example.data.model.MemoryChecklistCodec
 import com.example.data.model.MemoryEntryKind
 import com.example.ui.memory.MemoryEntryUi
 import com.example.ui.theme.HarmonyBlue
@@ -153,8 +157,8 @@ fun MemoryEntryCard(
                     .background(accent, RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp))
             )
 
-            if (entry.kind == MemoryEntryKind.LINK) {
-                MemoryLinkCardContent(
+            when (entry.kind) {
+                MemoryEntryKind.LINK -> MemoryLinkCardContent(
                     item = item,
                     category = category,
                     categoryLabel = categoryLabel,
@@ -169,8 +173,20 @@ fun MemoryEntryCard(
                     selected = selected,
                     onToggleSelection = onToggleSelection
                 )
-            } else {
-                MemoryNoteCardContent(
+                MemoryEntryKind.LIST -> MemoryChecklistCardContent(
+                    item = item,
+                    category = category,
+                    categoryLabel = categoryLabel,
+                    accent = accent,
+                    appLanguage = appLanguage,
+                    onComplete = onComplete,
+                    onRestore = onRestore,
+                    onOpenMenu = { menuExpanded = true },
+                    selectionMode = selectionMode,
+                    selected = selected,
+                    onToggleSelection = onToggleSelection
+                )
+                MemoryEntryKind.NOTE -> MemoryNoteCardContent(
                     item = item,
                     category = category,
                     categoryLabel = categoryLabel,
@@ -517,6 +533,97 @@ private fun MemoryLinkText(
                 Text(LanguageManager.tr("Vorschau erneut laden", appLanguage))
             }
         }
+        MemoryCardFooter(
+            item = item,
+            entryId = entry.id,
+            categoryLabel = categoryLabel,
+            category = category,
+            accent = accent,
+            appLanguage = appLanguage,
+            onRestore = onRestore
+        )
+    }
+}
+
+@Composable
+private fun MemoryChecklistCardContent(
+    item: MemoryEntryUi,
+    category: MemoryCategoryEntity?,
+    categoryLabel: String,
+    accent: Color,
+    appLanguage: String,
+    onComplete: (String) -> Unit,
+    onRestore: (String) -> Unit,
+    onOpenMenu: () -> Unit,
+    selectionMode: Boolean,
+    selected: Boolean,
+    onToggleSelection: () -> Unit
+) {
+    val entry = item.entity
+    val checklistItems = remember(entry.body) { MemoryChecklistCodec.decode(entry.body) }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 184.dp)
+            .padding(16.dp)
+    ) {
+        MemoryCardTopRow(
+            entryId = entry.id,
+            item = item,
+            category = category,
+            accent = accent,
+            appLanguage = appLanguage,
+            onComplete = onComplete,
+            onOpenMenu = onOpenMenu,
+            selectionMode = selectionMode,
+            selected = selected,
+            onToggleSelection = onToggleSelection
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = entry.title,
+            color = HarmonyText,
+            fontSize = 17.sp,
+            lineHeight = 21.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(Modifier.height(10.dp))
+        checklistItems.take(5).forEach { checklistItem ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 3.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = if (checklistItem.completed) Icons.Default.CheckBox else Icons.Default.CheckBoxOutlineBlank,
+                    contentDescription = null,
+                    tint = if (checklistItem.completed) HarmonyMuted.copy(alpha = 0.7f) else accent,
+                    modifier = Modifier.size(21.dp)
+                )
+                Spacer(Modifier.width(9.dp))
+                Text(
+                    text = checklistItem.text,
+                    color = if (checklistItem.completed) HarmonyMuted.copy(alpha = 0.68f) else HarmonyText,
+                    fontSize = 14.sp,
+                    lineHeight = 18.sp,
+                    textDecoration = if (checklistItem.completed) TextDecoration.LineThrough else TextDecoration.None,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+        if (checklistItems.size > 5) {
+            Text(
+                text = "+${checklistItems.size - 5}",
+                color = HarmonyMuted,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 30.dp, top = 2.dp)
+            )
+        }
+        Spacer(Modifier.height(12.dp))
         MemoryCardFooter(
             item = item,
             entryId = entry.id,

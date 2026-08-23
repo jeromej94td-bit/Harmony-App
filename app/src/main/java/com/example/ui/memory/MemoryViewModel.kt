@@ -8,6 +8,8 @@ import com.example.data.LinkPreviewResult
 import com.example.data.MemoryArchivePolicy
 import com.example.data.MemoryBucket
 import com.example.data.normalizeHttpUrl
+import com.example.data.model.MemoryChecklistCodec
+import com.example.data.model.MemoryChecklistItem
 import com.example.data.model.MemoryClock
 import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.MemoryEntryKind
@@ -188,24 +190,51 @@ class MemoryViewModel(
         }
     }
 
-    fun saveList(categoryId: String, rawLines: String) {
-        launchOperation(ERROR_SAVE_LIST) {
-            val now = clock.nowMillis()
-            val entries = rawLines.lineSequence()
-                .map(String::trim)
-                .filter(String::isNotEmpty)
-                .map { title ->
-                    MemoryEntryEntity(
-                        id = UUID.randomUUID().toString(),
-                        categoryId = categoryId,
-                        kind = MemoryEntryKind.NOTE,
-                        title = title,
-                        createdAt = now,
-                        updatedAt = now
-                    )
-                }
-                .toList()
-            if (entries.isNotEmpty()) repository.insertEntries(entries)
+    fun saveList(
+        entryId: String?,
+        categoryId: String,
+        title: String,
+        items: List<MemoryChecklistItem>
+    ) {
+        val normalizedItems = items.mapNotNull { item ->
+            val text = item.text.trim()
+            if (item.id.isBlank() || text.isEmpty()) null else item.copy(text = text)
+        }
+        if (normalizedItems.isEmpty()) return
+
+        val targetId = entryId ?: UUID.randomUUID().toString()
+        val request = beginEntryRequest(targetId)
+        launchEntryOperation(request, ERROR_SAVE_LIST) {
+            request.guard.rowMutex.withLock {
+                if (!request.isLatest()) return@withLock
+                val now = clock.nowMillis()
+                val existing = entryId?.let { repository.getEntry(it) }
+                if (!request.isLatest()) return@withLock
+                if (entryId != null && existing == null) error("Memory entry no longer exists.")
+                val entry = existing?.copy(
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.LIST,
+                    title = title.trim().ifBlank { normalizedItems.first().text },
+                    body = MemoryChecklistCodec.encode(normalizedItems),
+                    url = null,
+                    previewTitle = null,
+                    previewDescription = null,
+                    previewImageUrl = null,
+                    previewSiteName = null,
+                    previewFetchedAt = null,
+                    updatedAt = now
+                ) ?: MemoryEntryEntity(
+                    id = targetId,
+                    categoryId = categoryId,
+                    kind = MemoryEntryKind.LIST,
+                    title = title.trim().ifBlank { normalizedItems.first().text },
+                    body = MemoryChecklistCodec.encode(normalizedItems),
+                    createdAt = now,
+                    updatedAt = now
+                )
+                if (existing == null) repository.insertEntries(listOf(entry)) else repository.updateEntry(entry)
+                if (request.isLatest()) request.updateFailedState { it - targetId }
+            }
         }
     }
 

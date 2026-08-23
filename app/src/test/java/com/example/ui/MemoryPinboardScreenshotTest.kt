@@ -19,6 +19,8 @@ import com.example.data.model.MemoryCategoryEntity
 import com.example.data.model.MemoryDefaults
 import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.MemoryEntryKind
+import com.example.data.model.MemoryChecklistCodec
+import com.example.data.model.MemoryChecklistItem
 import com.example.ui.components.AmbientBackground
 import com.example.ui.components.HarmonyBottomNav
 import com.example.ui.components.HarmonyTopBar
@@ -61,7 +63,8 @@ class MemoryPinboardScreenshotTest {
                                 userName = "Mia",
                                 partnerName = "Noah",
                                 onProfileClick = {},
-                                onRefresh = {}
+                                onRefresh = {},
+                                showMemoryMark = true
                             )
                         },
                         bottomBar = {
@@ -142,7 +145,14 @@ class MemoryPinboardScreenshotTest {
                                 id = "list-weekend",
                                 categoryId = MemoryDefaults.OTHER_ID,
                                 title = "Fürs Wochenende",
-                                body = "• Flohmarkt besuchen\n• Fotos entwickeln lassen\n• Oma anrufen"
+                                body = MemoryChecklistCodec.encode(
+                                    listOf(
+                                        MemoryChecklistItem("market", "Flohmarkt besuchen"),
+                                        MemoryChecklistItem("photos", "Fotos entwickeln lassen"),
+                                        MemoryChecklistItem("grandma", "Oma anrufen", completed = true)
+                                    )
+                                ),
+                                kind = MemoryEntryKind.LIST
                             )
                         )
                     )
@@ -223,20 +233,33 @@ class MemoryPinboardScreenshotTest {
     }
 
     @Test
-    fun addNoteSheet() {
+    fun checklistEditorSheet() {
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
             MemoryScreenshotTheme {
                 AmbientBackground {
                     MemoryEditorSheet(
-                        mode = MemoryEditorMode.NOTE,
+                        mode = MemoryEditorMode.LIST,
                         categories = categories,
                         appLanguage = "de",
                         onModeChange = {},
                         onDismiss = {},
                         onSaveNote = { _, _, _, _ -> },
-                        onSaveList = { _, _ -> },
-                        onSaveLink = { _, _, _, _ -> }
+                        onSaveList = { _, _, _, _ -> },
+                        onSaveLink = { _, _, _, _ -> },
+                        initialEntry = entry(
+                            id = "list-editor",
+                            categoryId = MemoryDefaults.OTHER_ID,
+                            title = "Einkauf für Sonntag",
+                            body = MemoryChecklistCodec.encode(
+                                listOf(
+                                    MemoryChecklistItem("milk", "Milch"),
+                                    MemoryChecklistItem("bread", "Brot"),
+                                    MemoryChecklistItem("berries", "Erdbeeren", completed = true)
+                                )
+                            ),
+                            kind = MemoryEntryKind.LIST
+                        ).entity
                     )
                 }
             }
@@ -244,7 +267,7 @@ class MemoryPinboardScreenshotTest {
         composeRule.mainClock.advanceTimeBy(1_000L)
 
         composeRule.onAllNodes(isRoot()).onLast().captureRoboImage(
-            filePath = "build/outputs/roborazzi/memory-pinboard/04-add-sheet.png"
+            filePath = "build/outputs/roborazzi/memory-pinboard/04-checklist-editor.png"
         )
     }
 

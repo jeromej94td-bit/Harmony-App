@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.assertTextContains
@@ -17,6 +18,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.longClick
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click as viewClick
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.typeText
@@ -24,6 +26,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import com.example.data.MemoryBucket
 import com.example.data.model.MemoryCategoryEntity
+import com.example.data.model.MemoryChecklistItem
 import com.example.data.model.MemoryDefaults
 import com.example.data.model.MemoryEntryEntity
 import com.example.data.model.MemoryEntryKind
@@ -283,9 +286,11 @@ class MemoryPinboardUiTest {
     }
 
     @Test
-    fun `list editor rejects blanks and saves only non-empty lines`() {
+    fun `list editor keeps items in one checklist and moves checked rows to completed`() {
+        var savedEntryId: String? = "not-called"
         var savedCategory: String? = null
-        var savedLines: String? = null
+        var savedTitle: String? = null
+        var savedItems: List<MemoryChecklistItem> = emptyList()
         composeRule.setContent {
             HarmonyTheme(darkTheme = true) {
                 MemoryEditorSheet(
@@ -295,9 +300,11 @@ class MemoryPinboardUiTest {
                     onModeChange = {},
                     onDismiss = {},
                     onSaveNote = { _, _, _, _ -> },
-                    onSaveList = { categoryId, lines ->
+                    onSaveList = { entryId, categoryId, title, items ->
+                        savedEntryId = entryId
                         savedCategory = categoryId
-                        savedLines = lines
+                        savedTitle = title
+                        savedItems = items
                     },
                     onSaveLink = { _, _, _, _ -> }
                 )
@@ -305,12 +312,46 @@ class MemoryPinboardUiTest {
         }
 
         composeRule.onNodeWithTag("memory_editor_save").assertIsNotEnabled()
-        composeRule.onNodeWithTag("memory_editor_list_lines")
-            .performTextInput("Milch\n\n  Brot  ")
+        composeRule.onNodeWithTag("memory_editor_title").performTextInput("Einkauf")
+        composeRule.onNodeWithTag("memory_checklist_active_item_0_text").performTextInput("Milch")
+        composeRule.onNodeWithTag("memory_checklist_add").performClick()
+        composeRule.onNodeWithTag("memory_checklist_active_item_1_text").performTextInput("Brot")
+        composeRule.onNodeWithTag("memory_checklist_active_item_0_toggle").performClick()
+        composeRule.onNodeWithTag("memory_checklist_completed_item_0_text")
+            .assertTextContains("Milch", substring = true)
         composeRule.onNodeWithTag("memory_editor_save").performScrollTo().assertIsEnabled().performClick()
 
+        assertEquals(null, savedEntryId)
         assertEquals(MemoryDefaults.FILMS_ID, savedCategory)
-        assertEquals("Milch\nBrot", savedLines)
+        assertEquals("Einkauf", savedTitle)
+        assertEquals(listOf("Brot", "Milch"), savedItems.map { it.text })
+        assertEquals(listOf(false, true), savedItems.map { it.completed })
+    }
+
+    @Test
+    fun `first back press clears editor focus without dismissing the note`() {
+        var dismissCalls = 0
+        composeRule.setContent {
+            HarmonyTheme(darkTheme = true) {
+                MemoryEditorSheet(
+                    mode = MemoryEditorMode.NOTE,
+                    categories = testCategories,
+                    appLanguage = "de",
+                    onModeChange = {},
+                    onDismiss = { dismissCalls += 1 },
+                    onSaveNote = { _, _, _, _ -> },
+                    onSaveList = { _, _, _, _ -> },
+                    onSaveLink = { _, _, _, _ -> }
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag("memory_editor_title").performClick().assertIsFocused()
+        pressBack()
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithTag("memory_editor_sheet").assertExists()
+        assertEquals(0, dismissCalls)
     }
 
     @Test
@@ -325,7 +366,7 @@ class MemoryPinboardUiTest {
                     onModeChange = {},
                     onDismiss = {},
                     onSaveNote = { _, _, _, _ -> },
-                    onSaveList = { _, _ -> },
+                    onSaveList = { _, _, _, _ -> },
                     onSaveLink = { _, _, _, _ -> saved = true }
                 )
             }
@@ -361,7 +402,7 @@ class MemoryPinboardUiTest {
                     onModeChange = {},
                     onDismiss = {},
                     onSaveNote = { _, _, _, _ -> },
-                    onSaveList = { _, _ -> },
+                    onSaveList = { _, _, _, _ -> },
                     onSaveLink = { _, _, _, _ -> },
                     initialEntry = existing
                 )

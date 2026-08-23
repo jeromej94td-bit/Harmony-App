@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-enum class MemoryEntryKind { NOTE, LINK }
+enum class MemoryEntryKind { NOTE, LIST, LINK }
 
 object MemoryDefaults {
     const val FILMS_ID = "system-films"
