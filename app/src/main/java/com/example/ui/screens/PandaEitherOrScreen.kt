@@ -28,7 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -110,6 +110,14 @@ fun PandaEitherOrScreen(
         return result
     }
 
+    fun goBackOneQuestion() {
+        if (orderPosition <= 0) return
+        orderPosition -= 1
+        userChoice = null
+        partnerChoice = null
+        step = CoupleGameStep.USER_CHOICE
+    }
+
     LaunchedEffect(reactionKey) {
         if (reactionKey > 0 && isMatch) {
             delay(610)
@@ -125,8 +133,12 @@ fun PandaEitherOrScreen(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onExit) {
-                    Icon(Icons.Default.Close, contentDescription = LanguageManager.tr("Spiel schließen", appLanguage), tint = HarmonyText)
+                IconButton(onClick = { goBackOneQuestion() }) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = LanguageManager.tr("Eine Frage zurück", appLanguage),
+                        tint = HarmonyText
+                    )
                 }
                 Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("🐼 ${LanguageManager.tr("Entweder oder", appLanguage)}", color = HarmonyText, fontSize = 21.sp, fontWeight = FontWeight.ExtraBold)
