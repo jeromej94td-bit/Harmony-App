@@ -2,6 +2,7 @@ package com.example.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -64,6 +65,7 @@ import kotlin.math.sin
 fun GameCategoryVisual(
     categoryId: String,
     accent: Color,
+    animationEnabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     when (categoryId) {
@@ -71,6 +73,7 @@ fun GameCategoryVisual(
             drawableRes = R.drawable.panda_thinking_harmony,
             accent = accent,
             animationLabel = "thinking_panda",
+            animationEnabled = animationEnabled,
             modifier = modifier
         )
 
@@ -78,16 +81,18 @@ fun GameCategoryVisual(
             drawableRes = R.drawable.panda_never_harmony,
             accent = accent,
             animationLabel = "never_panda",
+            animationEnabled = animationEnabled,
             modifier = modifier
         )
 
-        "tot" -> AnimatedHarmonyCards(accent = accent, modifier = modifier)
-        "zeich" -> AnimatedPaletteCategoryIcon(accent = accent, modifier = modifier)
+        "tot" -> AnimatedHarmonyCards(accent = accent, animationEnabled = animationEnabled, modifier = modifier)
+        "zeich" -> AnimatedPaletteCategoryIcon(accent = accent, animationEnabled = animationEnabled, modifier = modifier)
         "zust" -> AnimatedCategoryGlyph(
             primary = Icons.Default.CheckCircle,
             secondary = Icons.Default.Close,
             accent = accent,
             animationLabel = "agree_disagree",
+            animationEnabled = animationEnabled,
             modifier = modifier
         )
         "lieber" -> AnimatedCategoryGlyph(
@@ -95,6 +100,7 @@ fun GameCategoryVisual(
             secondary = Icons.Default.Favorite,
             accent = accent,
             animationLabel = "preference_balance",
+            animationEnabled = animationEnabled,
             modifier = modifier
         )
         "foto" -> AnimatedCategoryGlyph(
@@ -102,29 +108,49 @@ fun GameCategoryVisual(
             secondary = Icons.Default.FlashOn,
             accent = accent,
             animationLabel = "photo_flash",
+            animationEnabled = animationEnabled,
             modifier = modifier
         )
-        "tief" -> DeepConversationVisual(accent = accent, modifier = modifier)
-        "reden" -> TalkBeforeVisual(accent = accent, modifier = modifier)
+        "tief" -> DeepConversationVisual(accent = accent, animationEnabled = animationEnabled, modifier = modifier)
+        "reden" -> TalkBeforeVisual(accent = accent, animationEnabled = animationEnabled, modifier = modifier)
         else -> HarmonyCategoryIcon(categoryId = categoryId, accent = accent, modifier = modifier)
     }
 }
 
 @Composable
-private fun AnimatedPaletteCategoryIcon(accent: Color, modifier: Modifier = Modifier) {
-    val transition = rememberInfiniteTransition(label = "animated_palette")
-    val glow by transition.animateFloat(
-        initialValue = 0.42f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(1800, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "palette_glow"
+private fun optionalVisualMotion(
+    animationEnabled: Boolean,
+    initialValue: Float,
+    targetValue: Float,
+    durationMillis: Int,
+    easing: Easing,
+    repeatMode: RepeatMode,
+    staticValue: Float,
+    label: String
+): Float {
+    if (!animationEnabled) return staticValue
+
+    val transition = rememberInfiniteTransition(label = label)
+    val value by transition.animateFloat(
+        initialValue = initialValue,
+        targetValue = targetValue,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = durationMillis, easing = easing),
+            repeatMode = repeatMode
+        ),
+        label = "${label}_value"
     )
-    val tilt by transition.animateFloat(
-        initialValue = -7f,
-        targetValue = 7f,
-        animationSpec = infiniteRepeatable(tween(3200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "palette_tilt"
-    )
+    return value
+}
+
+@Composable
+private fun AnimatedPaletteCategoryIcon(
+    accent: Color,
+    animationEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val glow = optionalVisualMotion(animationEnabled, 0.42f, 1f, 1_800, FastOutSlowInEasing, RepeatMode.Reverse, 0.72f, "palette_glow")
+    val tilt = optionalVisualMotion(animationEnabled, -7f, 7f, 3_200, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "palette_tilt")
     val shape = RoundedCornerShape(24.dp)
     Box(
         modifier = modifier
@@ -161,20 +187,13 @@ private fun AnimatedPaletteCategoryIcon(accent: Color, modifier: Modifier = Modi
 }
 
 @Composable
-private fun DeepConversationVisual(accent: Color, modifier: Modifier = Modifier) {
-    val transition = rememberInfiniteTransition(label = "deep_conversation_premium")
-    val motion by transition.animateFloat(
-        initialValue = -1f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(4200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "deep_conversation_exchange"
-    )
-    val glow by transition.animateFloat(
-        initialValue = 0.46f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "deep_conversation_glow"
-    )
+private fun DeepConversationVisual(
+    accent: Color,
+    animationEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val motion = optionalVisualMotion(animationEnabled, -1f, 1f, 4_200, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "deep_conversation_exchange")
+    val glow = optionalVisualMotion(animationEnabled, 0.46f, 1f, 2_200, FastOutSlowInEasing, RepeatMode.Reverse, 0.72f, "deep_conversation_glow")
     val shape = RoundedCornerShape(24.dp)
     Box(
         modifier = modifier
@@ -264,26 +283,14 @@ private fun DeepConversationVisual(accent: Color, modifier: Modifier = Modifier)
 }
 
 @Composable
-private fun TalkBeforeVisual(accent: Color, modifier: Modifier = Modifier) {
-    val transition = rememberInfiniteTransition(label = "talk_before_premium")
-    val clockPhase by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(12_000, easing = LinearEasing), RepeatMode.Restart),
-        label = "talk_before_clock"
-    )
-    val motion by transition.animateFloat(
-        initialValue = -1f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(3600, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "talk_before_conversation"
-    )
-    val glow by transition.animateFloat(
-        initialValue = 0.44f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2100, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "talk_before_glow"
-    )
+private fun TalkBeforeVisual(
+    accent: Color,
+    animationEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val clockPhase = optionalVisualMotion(animationEnabled, 0f, 1f, 12_000, LinearEasing, RepeatMode.Restart, 0.12f, "talk_before_clock")
+    val motion = optionalVisualMotion(animationEnabled, -1f, 1f, 3_600, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "talk_before_conversation")
+    val glow = optionalVisualMotion(animationEnabled, 0.44f, 1f, 2_100, FastOutSlowInEasing, RepeatMode.Reverse, 0.72f, "talk_before_glow")
     val gold = Color(0xFFFFD36B)
     val shape = RoundedCornerShape(24.dp)
     Box(
@@ -378,21 +385,11 @@ private fun AnimatedCategoryGlyph(
     secondary: ImageVector,
     accent: Color,
     animationLabel: String,
+    animationEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val transition = rememberInfiniteTransition(label = animationLabel)
-    val motion by transition.animateFloat(
-        initialValue = -1f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(2700, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "${animationLabel}_motion"
-    )
-    val glow by transition.animateFloat(
-        initialValue = 0.38f,
-        targetValue = 0.96f,
-        animationSpec = infiniteRepeatable(tween(1900, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-        label = "${animationLabel}_glow"
-    )
+    val motion = optionalVisualMotion(animationEnabled, -1f, 1f, 2_700, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "${animationLabel}_motion")
+    val glow = optionalVisualMotion(animationEnabled, 0.38f, 0.96f, 1_900, FastOutSlowInEasing, RepeatMode.Reverse, 0.70f, "${animationLabel}_glow")
     val shape = RoundedCornerShape(24.dp)
     Box(
         modifier = modifier
@@ -446,36 +443,12 @@ private fun PandaArtworkIcon(
     @DrawableRes drawableRes: Int,
     accent: Color,
     animationLabel: String,
+    animationEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val transition = rememberInfiniteTransition(label = animationLabel)
-    val tilt by transition.animateFloat(
-        initialValue = -1.6f,
-        targetValue = 1.6f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 11_000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "${animationLabel}_tilt"
-    )
-    val breathe by transition.animateFloat(
-        initialValue = 0.985f,
-        targetValue = 1.025f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3_200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "${animationLabel}_breathe"
-    )
-    val glow by transition.animateFloat(
-        initialValue = 0.44f,
-        targetValue = 0.88f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 2_400, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "${animationLabel}_glow"
-    )
+    val tilt = optionalVisualMotion(animationEnabled, -1.6f, 1.6f, 11_000, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "${animationLabel}_tilt")
+    val breathe = optionalVisualMotion(animationEnabled, 0.985f, 1.025f, 3_200, FastOutSlowInEasing, RepeatMode.Reverse, 1f, "${animationLabel}_breathe")
+    val glow = optionalVisualMotion(animationEnabled, 0.44f, 0.88f, 2_400, FastOutSlowInEasing, RepeatMode.Reverse, 0.68f, "${animationLabel}_glow")
 
     Box(
         modifier = modifier
@@ -514,6 +487,7 @@ private fun PandaArtworkIcon(
 @Composable
 private fun AnimatedHarmonyCards(
     accent: Color,
+    animationEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current.density
@@ -526,27 +500,14 @@ private fun AnimatedHarmonyCards(
             Icons.Default.Movie to Icons.Default.Palette
         )
     }
-    val floatTransition = rememberInfiniteTransition(label = "harmony_cards_float")
-    val floatPhase by floatTransition.animateFloat(
-        initialValue = -1f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3_200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "harmony_cards_float_phase"
-    )
-    val glow by floatTransition.animateFloat(
-        initialValue = 0.50f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 2_200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "harmony_cards_glow"
-    )
+    val floatPhase = optionalVisualMotion(animationEnabled, -1f, 1f, 3_200, FastOutSlowInEasing, RepeatMode.Reverse, 0f, "harmony_cards_float_phase")
+    val glow = optionalVisualMotion(animationEnabled, 0.50f, 1f, 2_200, FastOutSlowInEasing, RepeatMode.Reverse, 0.74f, "harmony_cards_glow")
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(animationEnabled) {
+        if (!animationEnabled) {
+            flip.snapTo(0f)
+            return@LaunchedEffect
+        }
         while (true) {
             delay(3_400)
             flip.animateTo(90f, tween(520, easing = FastOutSlowInEasing))
