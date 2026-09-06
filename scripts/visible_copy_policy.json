@@ -1,0 +1,60 @@
+{
+  "exclude_path_globs": [
+    "app/src/main/java/com/example/ui/screens/DevStudioScreen.kt",
+    "app/src/main/java/com/example/data/Dev*.kt",
+    "app/src/main/java/com/example/data/DeveloperDataManager.kt",
+    "app/src/main/java/com/example/ui/*Content.kt",
+    "app/src/main/java/com/example/ui/*Overrides.kt",
+    "app/src/main/java/com/example/ui/LocalizationUpdates.kt",
+    "app/src/main/java/com/example/ui/TranslationCatalog.kt",
+    "app/src/main/java/com/example/ui/Language.kt",
+    "app/src/main/java/com/example/ui/GeneratedLocaleSupport.kt",
+    "app/src/main/res/values-*/**"
+  ],
+  "excluded_exact_visible_text": [
+    "Entwickler Studio Öffnen",
+    "Entwickler-Modus",
+    "🛠️ Entwickler-Modus",
+    "Spiele & Städte bearbeiten, Ordner reinladen, Bilder anpassen"
+  ],
+  "internal_exact_literals": [
+    "aufwaermen",
+    "dasoderdas",
+    "ichhabenochnie",
+    "werwuerde",
+    "tot",
+    "wer",
+    "nie",
+    "tief",
+    "reden",
+    "zeich",
+    "zust",
+    "lieber",
+    "foto"
+  ],
+  "brand_literals": [
+    "Harmony",
+    "Coca-Cola",
+    "Pepsi",
+    "Netflix",
+    "McDonald’s",
+    "Burger King",
+    "PlayStation",
+    "Xbox",
+    "iPhone",
+    "Android",
+    "Nike",
+    "Adidas",
+    "Spotify",
+    "YouTube Music",
+    "IKEA",
+    "Amazon",
+    "Disney",
+    "Studio Ghibli"
+  ],
+  "technical_literal_patterns": [
+    "^[a-z0-9_.-]+$",
+    "^https?://",
+    "^[A-Fa-f0-9]{16,}$"
+  ]
+}

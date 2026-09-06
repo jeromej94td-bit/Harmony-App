@@ -256,7 +256,7 @@ fun GamesScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
-                                    contentDescription = "Suchfeld löschen",
+                                    contentDescription = LanguageManager.tr("Suchfeld löschen", appLanguage),
                                     tint = HarmonyMuted,
                                     modifier = Modifier.size(20.dp)
                                 )
@@ -271,7 +271,7 @@ fun GamesScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Suche schließen",
+                                    contentDescription = LanguageManager.tr("Suche schließen", appLanguage),
                                     tint = HarmonyMuted,
                                     modifier = Modifier.size(20.dp)
                                 )

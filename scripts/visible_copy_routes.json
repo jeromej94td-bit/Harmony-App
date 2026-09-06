@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {"id": "home", "source_paths": ["app/src/main/java/com/example/ui/screens/HomeScreen.kt"]},
+    {"id": "games", "source_paths": ["app/src/main/java/com/example/ui/screens/GamesScreen.kt"]},
+    {"id": "pack-list", "source_paths": ["app/src/main/java/com/example/ui/screens/PackListScreen.kt"]},
+    {"id": "quiz-runner", "source_paths": ["app/src/main/java/com/example/ui/screens/QuizRunnerScreen.kt"]},
+    {"id": "panda-either-or", "source_paths": ["app/src/main/java/com/example/ui/screens/PandaEitherOrScreen.kt"]},
+    {"id": "introspection", "source_paths": ["app/src/main/java/com/example/ui/screens/IntrospectionGameScreen.kt", "app/src/main/java/com/example/ui/introspection/IntrospectionStrings.kt"]},
+    {"id": "chat", "source_paths": ["app/src/main/java/com/example/ui/screens/ChatScreen.kt"]},
+    {"id": "moments", "source_paths": ["app/src/main/java/com/example/ui/screens/MomentsScreen.kt"]},
+    {"id": "profile", "source_paths": ["app/src/main/java/com/example/ui/screens/ProfileSheet.kt"]},
+    {"id": "navigation", "source_paths": ["app/src/main/java/com/example/MainActivity.kt", "app/src/main/java/com/example/ui/components/CommonUI.kt"]},
+    {"id": "dialogs", "source_paths": ["app/src/main/java/com/example/ui/components/CommonUI.kt", "app/src/main/java/com/example/ui/screens/GamesScreen.kt", "app/src/main/java/com/example/ui/screens/ProfileSheet.kt"]},
+    {"id": "widgets-notifications", "source_paths": ["app/src/main/java/com/example/widget/PicShareWidgetProvider.kt"]}
+  ]
+}

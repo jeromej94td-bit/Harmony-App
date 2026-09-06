@@ -1,0 +1,30 @@
+{
+  "text_bearing_assets": [],
+  "brand_only_assets": [],
+  "reviewed_text_free_assets": [
+    {"path": "app/src/main/assets/aurora-glass/aurora_glass_motion.svg"},
+    {"path": "app/src/main/assets/aurora-glass/harmony_aurora_glass.svg"},
+    {"path": "app/src/main/assets/aurora-glass/moral_balance.svg"},
+    {"path": "app/src/main/assets/aurora-glass/question_color_flow.svg"},
+    {"path": "app/src/main/res/drawable-nodpi/panda_never_harmony.png"},
+    {"path": "app/src/main/res/drawable-nodpi/panda_thinking_harmony.png"}
+  ],
+  "reviewed_text_free_globs": [
+    "app/src/main/res/drawable/aussen_*.jpg",
+    "app/src/main/res/drawable/it_*.png",
+    "app/src/main/res/drawable/pl_*.jpg",
+    "app/src/main/res/drawable/ring_*.jpg",
+    "app/src/main/res/drawable/tokyo_tower_zojoji.jpg",
+    "app/src/main/res/drawable/traumhaus_*.jpg",
+    "app/src/main/res/drawable/vespucci_*.png",
+    "app/src/main/res/mipmap-*/ic_launcher.webp",
+    "app/src/main/res/mipmap-*/ic_launcher_round.webp"
+  ],
+  "bundled_brand_sources": [
+    {
+      "path": "app/src/main/java/com/example/data/DriveTotAssetInstaller.kt",
+      "map": "brandOptionToFile",
+      "rule": "brand names/logos remain unchanged; non-brand surrounding option copy remains translatable"
+    }
+  ]
+}

@@ -168,7 +168,7 @@ fun HarmonyTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Refresh,
-                    contentDescription = "Refresh",
+                    contentDescription = LanguageManager.tr("Refresh", LocalAppLanguage.current.code),
                     tint = HarmonyText
                 )
             }

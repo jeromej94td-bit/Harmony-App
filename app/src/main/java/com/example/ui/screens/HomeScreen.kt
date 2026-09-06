@@ -225,8 +225,8 @@ private fun PicShareHomeCard(
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("PicShare für euch", color = HarmonyText, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
-                    Text("${pics.size} Bilder · auf diesem Gerät bereit", color = HarmonyMuted, fontSize = 11.5.sp)
+                    Text(com.example.ui.contentText("PicShare für euch"), color = HarmonyText, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(com.example.ui.contentText("${pics.size} Bilder · auf diesem Gerät bereit"), color = HarmonyMuted, fontSize = 11.5.sp)
                     pics.firstOrNull()?.caption?.takeIf { it.isNotBlank() }?.let { currentCaption ->
                         Text(
                             "„$currentCaption“",
@@ -261,7 +261,7 @@ private fun PicShareHomeCard(
             }
             Spacer(Modifier.height(9.dp))
             Text(
-                "Partner-Synchronisierung folgt mit der späteren Verknüpfung · beide dürfen bearbeiten",
+                com.example.ui.contentText("Partner-Synchronisierung folgt mit der späteren Verknüpfung · beide dürfen bearbeiten"),
                 color = HarmonyPinkSoft,
                 fontSize = 10.5.sp,
                 lineHeight = 14.sp
@@ -306,8 +306,8 @@ private fun PicShareManagerDialog(
         modifier = Modifier.testTag("picshare_manager_dialog"),
         title = {
             Column {
-                Text("PicShare Widget", fontWeight = FontWeight.ExtraBold)
-                Text("Kompakt einrichten · Wechsel alle 6 Sekunden", color = HarmonyMuted, fontSize = 11.sp)
+                Text(com.example.ui.contentText("PicShare Widget"), fontWeight = FontWeight.ExtraBold)
+                Text(com.example.ui.contentText("Kompakt einrichten · Wechsel alle 6 Sekunden"), color = HarmonyMuted, fontSize = 11.sp)
             }
         },
         text = {
@@ -321,14 +321,14 @@ private fun PicShareManagerDialog(
                     Text("●", color = Color(0xFF65E8B2), fontSize = 19.sp)
                     Spacer(Modifier.width(7.dp))
                     Column {
-                        Text("$selectedCount von ${pics.size} Bildern im Widget", fontWeight = FontWeight.Bold)
-                        Text("${profile.partnerName}: Verknüpfung folgt später", color = HarmonyMuted, fontSize = 11.sp)
+                        Text(com.example.ui.contentText("$selectedCount von ${pics.size} Bildern im Widget"), fontWeight = FontWeight.Bold)
+                        Text(com.example.ui.contentText("${profile.partnerName}: Verknüpfung folgt später"), color = HarmonyMuted, fontSize = 11.sp)
                     }
                 }
                 if (pics.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))
-                    Text("Bilder auswählen", color = HarmonyText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text("Antippen, um ein Bild ein- oder auszublenden", color = HarmonyMuted, fontSize = 10.5.sp)
+                    Text(com.example.ui.contentText("Bilder auswählen"), color = HarmonyText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(com.example.ui.contentText("Antippen, um ein Bild ein- oder auszublenden"), color = HarmonyMuted, fontSize = 10.5.sp)
                     Spacer(Modifier.height(7.dp))
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         pics.take(8).forEach { pic ->
@@ -345,7 +345,7 @@ private fun PicShareManagerDialog(
                             ) {
                                 AsyncImage(
                                     model = File(pic.filePath),
-                                    contentDescription = "PicShare Bild auswählen",
+                                    contentDescription = com.example.ui.contentText("PicShare Bild auswählen"),
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier.fillMaxSize()
                                 )
@@ -368,8 +368,8 @@ private fun PicShareManagerDialog(
                     OutlinedTextField(
                         value = caption,
                         onValueChange = { caption = it },
-                        label = { Text("Widget-Text") },
-                        supportingText = { Text("Dieser Text gilt für alle rotierenden Bilder.", fontSize = 10.sp) },
+                        label = { Text(com.example.ui.contentText("Widget-Text")) },
+                        supportingText = { Text(com.example.ui.contentText("Dieser Text gilt für alle rotierenden Bilder."), fontSize = 10.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = false,
                         maxLines = 2,
@@ -386,7 +386,7 @@ private fun PicShareManagerDialog(
                     PicShareSettingToggle("Harmony-Statuszeile anzeigen", showStatus) { showStatus = it }
                     PicShareSettingToggle("Bildreihenfolge mischen", shufflePictures) { shufflePictures = it }
                     Spacer(Modifier.height(8.dp))
-                    Text("Ziel nach der Verknüpfung", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(com.example.ui.contentText("Ziel nach der Verknüpfung"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                         TargetChip("Startbildschirm", target == "partner_home") { target = "partner_home" }
                         TargetChip("Sperrbildschirm", target == "partner_lock") { target = "partner_lock" }
@@ -414,9 +414,9 @@ private fun PicShareManagerDialog(
                     onDismiss()
                 },
                 modifier = Modifier.testTag("save_picshare_widget_settings")
-            ) { Text("Speichern", color = HarmonyPink, fontWeight = FontWeight.ExtraBold) }
+            ) { Text(com.example.ui.contentText("Speichern"), color = HarmonyPink, fontWeight = FontWeight.ExtraBold) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Abbrechen", color = HarmonyMuted) } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(com.example.ui.contentText("Abbrechen"), color = HarmonyMuted) } }
     )
 }
 
@@ -428,7 +428,7 @@ private fun PicShareSettingToggle(label: String, checked: Boolean, onCheckedChan
             .padding(vertical = 1.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, color = HarmonyText, fontSize = 11.5.sp, modifier = Modifier.weight(1f))
+        Text(com.example.ui.contentText(label), color = HarmonyText, fontSize = 11.5.sp, modifier = Modifier.weight(1f))
         Switch(checked = checked, onCheckedChange = onCheckedChange, modifier = Modifier.size(width = 48.dp, height = 30.dp))
     }
 }
@@ -436,7 +436,7 @@ private fun PicShareSettingToggle(label: String, checked: Boolean, onCheckedChan
 @Composable
 private fun TargetChip(label: String, selected: Boolean, onClick: () -> Unit) {
     Text(
-        text = label,
+        text = com.example.ui.contentText(label),
         color = if (selected) Color.White else HarmonyMuted,
         fontSize = 10.5.sp,
         modifier = Modifier
@@ -460,7 +460,7 @@ private fun CompactAction(label: String, icon: androidx.compose.ui.graphics.vect
     ) {
         Icon(icon, contentDescription = null, tint = HarmonyPinkSoft, modifier = Modifier.size(15.dp))
         Spacer(Modifier.width(5.dp))
-        Text(label, color = HarmonyText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        Text(com.example.ui.contentText(label), color = HarmonyText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -496,20 +496,20 @@ private fun AnswerHistoryDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Beantwortete Fragen", fontWeight = FontWeight.ExtraBold) },
+        title = { Text(com.example.ui.contentText("Beantwortete Fragen"), fontWeight = FontWeight.ExtraBold) },
         text = {
             if (answers.isEmpty()) {
-                Text("Noch keine Antworten gespeichert.", color = HarmonyMuted)
+                Text(com.example.ui.contentText("Noch keine Antworten gespeichert."), color = HarmonyMuted)
             } else {
                 LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 470.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                     items(answers.sortedByDescending { it.timestamp }, key = { "${it.packId}-${it.questionIndex}" }) { answer ->
                         val rawPack = HarmonyPacksData.PACKS.firstOrNull { it.id == answer.packId }
                         val pack = rawPack?.let { LanguageManager.translatePack(it, appLanguage) }
                         val question = when {
-                            pack == null -> "Frage ${answer.questionIndex + 1}"
+                            pack == null -> com.example.ui.contentText("Frage ${answer.questionIndex + 1}")
                             pack.type == "tot" -> pack.pairs.getOrNull(answer.questionIndex)?.let { "${it.first}  ↔  ${it.second}" }
                             else -> pack.questions.getOrNull(answer.questionIndex)?.q
-                        } ?: "Frage ${answer.questionIndex + 1}"
+                        } ?: com.example.ui.contentText("Frage ${answer.questionIndex + 1}")
                         val coupleChoice = EitherOrAnswerCodec.decode(answer.answerText)
                         Column(
                             modifier = Modifier
@@ -522,8 +522,8 @@ private fun AnswerHistoryDialog(
                             Text(question, color = HarmonyText, fontSize = 13.5.sp, fontWeight = FontWeight.Bold, lineHeight = 18.sp)
                             Spacer(Modifier.height(6.dp))
                             if (coupleChoice != null) {
-                                Text("${profile.userName}: ${coupleChoice.userChoice}", color = HarmonyMuted, fontSize = 12.sp)
-                                Text("${profile.partnerName}: ${coupleChoice.partnerChoice}", color = HarmonyMuted, fontSize = 12.sp)
+                                Text("${profile.userName}: ${LanguageManager.tr(coupleChoice.userChoice, appLanguage)}", color = HarmonyMuted, fontSize = 12.sp)
+                                Text("${profile.partnerName}: ${LanguageManager.tr(coupleChoice.partnerChoice, appLanguage)}", color = HarmonyMuted, fontSize = 12.sp)
                             } else {
                                 Text(answer.answerText, color = HarmonyMuted, fontSize = 12.sp)
                             }
@@ -532,7 +532,7 @@ private fun AnswerHistoryDialog(
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Schließen", color = HarmonyPink) } }
+        confirmButton = { TextButton(onClick = onDismiss) { Text(com.example.ui.contentText("Schließen"), color = HarmonyPink) } }
     )
 }
 
@@ -624,7 +624,7 @@ fun StatCard(value: String, label: String, modifier: Modifier = Modifier, onClic
             Text(value, color = HarmonyText, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
             Spacer(Modifier.height(4.dp))
             Text(label, color = HarmonyMuted, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
-            if (onClick != null) Text("Liste öffnen", color = HarmonyPinkSoft, fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
+            if (onClick != null) Text(com.example.ui.contentText("Liste öffnen"), color = HarmonyPinkSoft, fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
